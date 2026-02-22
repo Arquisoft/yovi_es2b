@@ -10,7 +10,7 @@ include::src/config.adoc[]
 :revnumber: 8.2 EN
 :revdate: January 2023
 :revremark: (based upon AsciiDoc version)
-:toc: left		  
+:toc: left
 // toc-title definition MUST follow document title without blank line!
 :toc-title: Table of Contents
 
@@ -51,55 +51,55 @@ endif::arc42help[]
 :numbered:
 
 <<<<
-// 1. Introduction and Goals
+// 1. Introducción y objetivos
 include::src/01_introduction_and_goals.adoc[]
 
 <<<<
-// 2. Architecture Constraints
+// 2. Restricciones
 include::src/02_architecture_constraints.adoc[]
 
 <<<<
-// 3. Context and Scope
+// 3. Contexto y alcance
 include::src/03_context_and_scope.adoc[]
 
 <<<<
-// 4. Solution Strategy
+// 4. Estrategia de solución
 include::src/04_solution_strategy.adoc[]
 
 <<<<
-// 5. Building Block View
+// 5. Vista de bloques
 include::src/05_building_block_view.adoc[]
 
 <<<<
-// 6. Runtime View
+// 6. Vista en tiempo de ejecución
 include::src/06_runtime_view.adoc[]
 
 <<<<
-// 7. Deployment View
+// 7. Vista de despliegue
 include::src/07_deployment_view.adoc[]
 
 <<<<
-// 8. Concepts
+// 8. Conceptos transversales
 include::src/08_concepts.adoc[]
 
 <<<<
-// 9. Architecture Decisions
+// 9. Decisiones arquitectónicas
 include::src/09_architecture_decisions.adoc[]
 
 <<<<
-// 10. Quality Requirements
+// 10. Requisitos de calidad
 include::src/10_quality_requirements.adoc[]
 
 <<<<
-// 11. Technical Risks
+// 11. Riesgos y deuda técnica
 include::src/11_technical_risks.adoc[]
 
 <<<<
-// 12. Glossary
+// 12. Tests
 include::src/12_testing.adoc[]
 
 <<<<
-// 13. Glossary
+// 13. Glosario
 include::src/13_glossary.adoc[]
 
 

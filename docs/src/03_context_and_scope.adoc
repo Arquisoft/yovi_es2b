@@ -1,80 +1,32 @@
 ifndef::imagesdir[:imagesdir: ../images]
 
 [[section-context-and-scope]]
-== Context and Scope
+== Contexto y Alcance
 
+=== Contexto general
 
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Contents
-Context and scope - as the name suggests - delimits your system (i.e. your scope) from all its communication partners
-(neighboring systems and users, i.e. the context of your system). It thereby specifies the external interfaces.
+YOVI es una plataforma web diseñada por la empresa Micrati para jugar a diferentes variantes del JUEGO Y, inspiradas en juegos de tablero estratégicos como Go o Hex, permitiendo a los usuarios enfrentarse entre sí o contra la máquina, con un tablero de tamaño variable y reglas específicas según la variante seleccionada.
 
-If necessary, differentiate the business context (domain specific inputs and outputs) from the technical context (channels, protocols, hardware).
+El sistema gestiona usuarios registrados, permite consultar estadísticas de partidas, y soporta la selección de estrategias y niveles de dificultad para el juego contra la máquina.
 
-.Motivation
-The domain interfaces and technical interfaces to communication partners are among your system's most critical aspects. Make sure that you completely understand them.
+Los principales objetivos de YOVI son los siguientes:
 
-.Form
-Various options:
+* Proporcionar una experiencia de juego fluida y coherente, garantizando que cada acción del jugador se valide correctamente y se refleje en el estado del tablero de forma inmediata.
+* Fomentar enfrentamientos amistosos con partidas multijugador (2 jugadores) y con un ranking de usuarios a partir de la puntuación obtenida.
+* Contribuir al entretenimiento y al desarrollo estratégico por las reglas del juego, fácil de entender gracias a la interfaz.
 
-* Context diagrams
-* Lists of communication partners and their interfaces.
+El alcance inicial del sistema se centra en la versión clásica del juego Y, con partidas de un jugador contra la máquina y soporte para diferentes estrategias y niveles de dificultad. No se incluyen funcionalidades avanzadas como partidas simultáneas con varios jugadores, chat en tiempo real o ranking complejo de usuarios, aunque la arquitectura se plantea de forma que estas funcionalidades puedan incorporarse en futuras versiones sin necesidad de reestructurar el sistema.
 
+=== Contexto técnico
 
-.Further Information
+YOVI se desarrolla como una aplicación web compuesta por distintos módulos y múltiples tecnologías.
 
-See https://docs.arc42.org/section-3/[Context and Scope] in the arc42 documentation.
+Los componentes principales de la aplicación son:
 
-****
-endif::arc42help[]
+* **El frontend web:** desarrollado en React, se ejecuta en el navegador del usuario y se encarga de la presentación visual del tablero, la gestión de interacciones de los jugadores y la comunicación con el backend.
+* **El backend:** implementado en Rust, centraliza toda la lógica de juego. Su responsabilidad incluye validar movimientos, controlar los turnos, calcular capturas y determinar el resultado final de la partida. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.
+* **La persistencia de datos:** se realiza mediante MongoDB, que almacena información estructurada de usuarios, partidas y resultados. Elegimos el modelo racional por la facilidad de despliegue y la capacidad de ver los datos en tiempo real.
+* **La comunicación entre frontend y backend:** se realiza mediante mensajes JSON siguiendo la notación YEN. Esta notación permite representar de manera precisa la situación de cada partida en un instante dado, facilitando tanto la interacción con la interfaz web como la integración con bots a través del API.
+* **El sistema se despliega en un entorno contenerizado:** mediante Docker, lo que asegura reproducibilidad y consistencia en el entorno de ejecución. La aplicación se ejecuta en una máquina virtual en la nube, proporcionando disponibilidad remota y facilitando el acceso para usuarios y pruebas. 
 
-=== Business Context
-
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Contents
-Specification of *all* communication partners (users, IT-systems, ...) with explanations of domain specific inputs and outputs or interfaces.
-Optionally you can add domain specific formats or communication protocols.
-
-.Motivation
-All stakeholders should understand which data are exchanged with the environment of the system.
-
-.Form
-All kinds of diagrams that show the system as a black box and specify the domain interfaces to communication partners.
-
-Alternatively (or additionally) you can use a table.
-The title of the table is the name of your system, the three columns contain the name of the communication partner, the inputs, and the outputs.
-
-****
-endif::arc42help[]
-
-**<Diagram or Table>**
-
-**<optionally: Explanation of external domain interfaces>**
-
-=== Technical Context
-
-ifdef::arc42help[]
-[role="arc42help"]
-****
-.Contents
-Technical interfaces (channels and transmission media) linking your system to its environment. In addition a mapping of domain specific input/output to the channels, i.e. an explanation which I/O uses which channel.
-
-.Motivation
-Many stakeholders make architectural decision based on the technical interfaces between the system and its context. Especially infrastructure or hardware designers decide these technical interfaces.
-
-.Form
-E.g. UML deployment diagram describing channels to neighboring systems,
-together with a mapping table showing the relationships between channels and input/output.
-
-****
-endif::arc42help[]
-
-**<Diagram or Table>**
-
-**<optionally: Explanation of technical interfaces>**
-
-**<Mapping Input/Output to Channels>**
+Esta arquitectura modular y distribuida permite que el sistema sea escalable y extensible para futuras versiones que incluyan variantes adicionales del juego, soporte para varios jugadores o funcionalidades opcionales avanzadas.
