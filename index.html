@@ -445,10 +445,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#section-introduction-and-goals">1. Introduction and Goals</a>
+<li><a href="#section-introduction-and-goals">1. Introducción y Objetivos</a>
 <ul class="sectlevel2">
-<li><a href="#_requirements_overview">1.1. Requirements Overview</a></li>
-<li><a href="#_quality_goals">1.2. Quality Goals</a></li>
+<li><a href="#_resumen_de_requisitos">1.1. Resumen de Requisitos</a></li>
+<li><a href="#_objetivos_de_calidad">1.2. Objetivos de Calidad</a></li>
 <li><a href="#_stakeholders">1.3. Stakeholders</a></li>
 </ul>
 </li>
@@ -551,134 +551,57 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-introduction-and-goals">1. Introduction and Goals</h2>
+<h2 id="section-introduction-and-goals">1. Introducción y Objetivos</h2>
 <div class="sectionbody">
-<div class="sidebarblock arc42help">
-<div class="content">
 <div class="paragraph">
-<p>Describes the relevant requirements and the driving forces that software architects and development team must consider.
-These include</p>
+<p>La empresa de desarrollo de juegos <strong>Micrati</strong> ha decidido apostar por el desarrollo de juegos basados en el "Juego Y", los cuales llevarán el nombre de <strong>YOVI</strong>.</p>
 </div>
-<div class="ulist">
-<ul>
-<li>
-<p>underlying business goals,</p>
-</li>
-<li>
-<p>essential features,</p>
-</li>
-<li>
-<p>essential functional requirements,</p>
-</li>
-<li>
-<p>quality goals for the architecture and</p>
-</li>
-<li>
-<p>relevant stakeholders and their expectations</p>
-</li>
-</ul>
+<div class="sect2">
+<h3 id="_resumen_de_requisitos">1.1. Resumen de Requisitos</h3>
+<div class="paragraph">
+<p>El sistema contará con un frontend web que permitirá a los usuarios jugar partidas del juego Y. La aplicación deberá estar desplegada y accesible a través de la Web.</p>
 </div>
+<div class="paragraph">
+<p><strong>Funcionalidades principales:</strong>
+* <strong>Versión Clásica:</strong> Implementación del juego contra la máquina con tamaño de tablero variable.
+* <strong>Estrategias de IA:</strong> El juego contra la computadora dispondrá de múltiples estrategias y niveles de dificultad seleccionables por el jugador.
+* <strong>Gestión de Usuarios:</strong> Registro de usuarios y consulta de histórico (partidas jugadas, estadísticas de victorias/derrotas, etc.).
+* <strong>API del Sistema:</strong> <strong> Permite la interacción de bots para gestionar información de usuarios y partidas.
+</strong> API documentada para permitir que un bot juegue contra la aplicación mediante el método <code>play</code> (notación YEN).</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_requirements_overview">1.1. Requirements Overview</h3>
-<div class="sidebarblock arc42help">
-<div class="content">
+<h3 id="_objetivos_de_calidad">1.2. Objetivos de Calidad</h3>
 <div class="paragraph">
-<div class="title">Contents</div>
-<p>Short description of the functional requirements, driving forces, extract (or abstract)
-of requirements. Link to (hopefully existing) requirements documents
-(with version number and information where to find it).</p>
+<p>Los siguientes objetivos de calidad son prioritarios para la arquitectura de YOVI:</p>
 </div>
-<div class="paragraph">
-<div class="title">Motivation</div>
-<p>From the point of view of the end users a system is created or modified to
-improve support of a business activity and/or improve the quality.</p>
-</div>
-<div class="paragraph">
-<div class="title">Form</div>
-<p>Short textual description, probably in tabular use-case format.
-If requirements documents exist this overview should refer to these documents.</p>
-</div>
-<div class="paragraph">
-<p>Keep these excerpts as short as possible. Balance readability of this document with potential redundancy w.r.t to requirements documents.</p>
-</div>
-<div class="paragraph">
-<div class="title">Further Information</div>
-<p>See <a href="https://docs.arc42.org/section-1/">Introduction and Goals</a> in the arc42 documentation.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_quality_goals">1.2. Quality Goals</h3>
-<div class="sidebarblock arc42help">
-<div class="content">
-<div class="paragraph">
-<div class="title">Contents</div>
-<p>The top three (max five) quality goals for the architecture whose fulfillment is of highest importance to the major stakeholders.
-We really mean quality goals for the architecture. Don&#8217;t confuse them with project goals.
-They are not necessarily identical.</p>
-</div>
-<div class="paragraph">
-<p>Consider this overview of potential topics (based upon the ISO 25010 standard):</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/01_2_iso-25010-topics-EN.drawio.png" alt="Categories of Quality Requirements">
-</div>
-</div>
-<div class="paragraph">
-<div class="title">Motivation</div>
-<p>You should know the quality goals of your most important stakeholders, since they will influence fundamental architectural decisions.
-Make sure to be very concrete about these qualities, avoid buzzwords.
-If you as an architect do not know how the quality of your work will be judged&#8230;&#8203;</p>
-</div>
-<div class="paragraph">
-<div class="title">Form</div>
-<p>A table with quality goals and concrete scenarios, ordered by priorities</p>
-</div>
-</div>
-</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Objetivo</th>
+<th class="tableblock halign-left valign-top">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Funcionalidad</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El sistema cumple con las necesidades esperadas, permitiendo una experiencia de juego completa y gestión de estadísticas.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Mantenibilidad</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El sistema se puede adaptar y/o modificar fácilmente de acuerdo con cambios en el entorno o en los requisitos futuros de Micrati.</p></td>
+</tr>
+</tbody>
+</table>
 </div>
 <div class="sect2">
 <h3 id="_stakeholders">1.3. Stakeholders</h3>
-<div class="sidebarblock arc42help">
-<div class="content">
 <div class="paragraph">
-<div class="title">Contents</div>
-<p>Explicit overview of stakeholders of the system, i.e. all person, roles or organizations that</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>should know the architecture</p>
-</li>
-<li>
-<p>have to be convinced of the architecture</p>
-</li>
-<li>
-<p>have to work with the architecture or with code</p>
-</li>
-<li>
-<p>need the documentation of the architecture for their work</p>
-</li>
-<li>
-<p>have to come up with decisions about the system or its development</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<div class="title">Motivation</div>
-<p>You should know all parties involved in development of the system or affected by the system.
-Otherwise, you may get nasty surprises later in the development process.
-These stakeholders determine the extent and the level of detail of your work and its results.</p>
-</div>
-<div class="paragraph">
-<div class="title">Form</div>
-<p>Table with role names, person names, and their expectations with respect to the architecture and its documentation.</p>
-</div>
-</div>
+<p>A continuación se detallan las partes interesadas en el resultado de la aplicación:</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -688,21 +611,31 @@ These stakeholders determine the extent and the level of detail of your work and
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Role/Name</th>
-<th class="tableblock halign-left valign-top">Contact</th>
-<th class="tableblock halign-left valign-top">Expectations</th>
+<th class="tableblock halign-left valign-top">Rol/Nombre</th>
+<th class="tableblock halign-left valign-top">Contacto</th>
+<th class="tableblock halign-left valign-top">Expectativas</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Role-1&gt;</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Contact-1&gt;</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Expectation-1a&gt;</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Equipo de desarrolladores</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Iyán Iglesias, Jimena Vázquez, Sara Naredo, Carolina González</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Desarrollar con herramientas adecuadas el juego YOVI, asegurando que los usuarios puedan competir y obtener puntuaciones.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Role-2&gt;</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Contact-2&gt;</em></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><em>&lt;Expectation-2&gt;</em></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Compañía (Micrati)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Micrati</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Cumplir y dictar los requisitos del juego para presentar la aplicación final.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usuarios</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Futuros jugadores de YOVI</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Aprender y disfrutar del juego, logrando entretenimiento y competición sana.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Equipo de supervisión</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">José Emilio Labra Gayo, Celia Melendi Lavandera</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluar el resultado académico y aconsejar durante el desarrollo de la aplicación.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1877,7 +1810,7 @@ more precisely down to a level of scenarios that can be discussed and evaluated.
 <div id="footer">
 <div id="footer-text">
 Version 8.2 EN<br>
-Last updated 2026-02-22 20:24:48 +0100
+Last updated 2026-02-22 20:34:36 +0100
 </div>
 </div>
 </body>
