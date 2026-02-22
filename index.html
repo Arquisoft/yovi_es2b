@@ -554,27 +554,44 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <h2 id="section-introduction-and-goals">1. Introducción y Objetivos</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>La empresa de desarrollo de juegos <strong>Micrati</strong> ha decidido apostar por el desarrollo de juegos basados en el "Juego Y", los cuales llevarán el nombre de <strong>YOVI</strong>.</p>
+<p>La empresa de desarrollo de juegos <strong>Micrati</strong> ha decidido apostar por el desarrollo de juegos basados en el "Juego Y", los cuales tendrán el nombre de <strong>YOVI</strong>. [cite: 2]</p>
 </div>
 <div class="sect2">
 <h3 id="_resumen_de_requisitos">1.1. Resumen de Requisitos</h3>
 <div class="paragraph">
-<p>El sistema contará con un frontend web que permitirá a los usuarios jugar partidas del juego Y. La aplicación deberá estar desplegada y accesible a través de la Web.</p>
+<p>El sistema debe cumplir con las siguientes funcionalidades principales: [cite: 2, 3]</p>
 </div>
-<div class="paragraph">
-<p><strong>Funcionalidades principales:</strong>
-* <strong>Versión Clásica:</strong> Implementación del juego contra la máquina con tamaño de tablero variable.
-* <strong>Estrategias de IA:</strong> El juego contra la computadora dispondrá de múltiples estrategias y niveles de dificultad seleccionables por el jugador.
-* <strong>Gestión de Usuarios:</strong> Registro de usuarios y consulta de histórico (partidas jugadas, estadísticas de victorias/derrotas, etc.).
-* <strong>API del Sistema:</strong> <strong> Permite la interacción de bots para gestionar información de usuarios y partidas.
-</strong> API documentada para permitir que un bot juegue contra la aplicación mediante el método <code>play</code> (notación YEN).</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong class="cite_start">Frontend Web:</strong> Permitir a las personas jugar partidas del juego Y a través del navegador. [cite: 11]</p>
+</li>
+<li>
+<p><strong>Versión Clásica:</strong> Implementar el juego contra la máquina con un tamaño de tablero variable. [cite: 11]</p>
+</li>
+<li>
+<p><strong>Estrategias de IA:</strong> El juego contra la computadora debe implementar más de una estrategia seleccionable. [cite: 11]</p>
+</li>
+<li>
+<p><strong>Niveles de Dificultad:</strong> El jugador podrá elegir el nivel de dificultad de las estrategias. [cite: 11]</p>
+</li>
+<li>
+<p><strong>Despliegue:</strong> La aplicación deberá estar desplegada y ser accesible de forma pública en la Web. [cite: 11]</p>
+</li>
+<li>
+<p><strong>Gestión de Usuarios:</strong> Registro en el sistema y consulta de histórico (partidas, estadísticas, etc.). [cite: 11]</p>
+</li>
+<li>
+<p><strong>API Documentada:</strong> Una interfaz que permita a bots interactuar con la gestión de usuarios y partidas. [cite: 11]</p>
+</li>
+<li>
+<p><strong class="cite_start">Modo Bot:</strong> El API expondrá un método <code>play</code> con notación YEN para que un bot juegue contra la aplicación. [cite: 11]</p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_objetivos_de_calidad">1.2. Objetivos de Calidad</h3>
-<div class="paragraph">
-<p>Los siguientes objetivos de calidad son prioritarios para la arquitectura de YOVI:</p>
-</div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 25%;">
@@ -589,20 +606,17 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Funcionalidad</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">El sistema cumple con las necesidades esperadas, permitiendo una experiencia de juego completa y gestión de estadísticas.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El sistema cumple con las necesidades esperadas de juego y gestión. [cite: 11]</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Mantenibilidad</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">El sistema se puede adaptar y/o modificar fácilmente de acuerdo con cambios en el entorno o en los requisitos futuros de Micrati.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El sistema se puede adaptar y/o modificar fácilmente ante cambios en el entorno o requisitos. [cite: 11]</p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <div class="sect2">
 <h3 id="_stakeholders">1.3. Stakeholders</h3>
-<div class="paragraph">
-<p>A continuación se detallan las partes interesadas en el resultado de la aplicación:</p>
-</div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 20%;">
@@ -611,31 +625,49 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </colgroup>
 <thead>
 <tr>
-<th class="tableblock halign-left valign-top">Rol/Nombre</th>
-<th class="tableblock halign-left valign-top">Contacto</th>
+<th class="tableblock halign-left valign-top">Rol</th>
+<th class="tableblock halign-left valign-top">Nombre / Contacto</th>
 <th class="tableblock halign-left valign-top">Expectativas</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Equipo de desarrolladores</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Iyán Iglesias, Jimena Vázquez, Sara Naredo, Carolina González</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Desarrollar con herramientas adecuadas el juego YOVI, asegurando que los usuarios puedan competir y obtener puntuaciones.</p></td>
+<td class="tableblock halign-left valign-top" rowspan="4"><p class="tableblock"><strong>Equipo de desarrolladores</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Iyán Iglesias Ibaseta (<a href="https://github.com/iyaniglesias" class="bare">https://github.com/iyaniglesias</a>)</p></td>
+<td class="tableblock halign-left valign-top"></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Compañía (Micrati)</strong></p></td>
+<td class="tableblock halign-left valign-top" rowspan="4"><p class="tableblock">Desarrollar YOVI con las herramientas adecuadas, cumpliendo los requisitos y permitiendo a los usuarios competir y obtener puntuación. [cite: 15]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Jimena Vázquez Suárez</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sara Naredo Fernández (<a href="https://github.com/saranaredo" class="bare">https://github.com/saranaredo</a>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Carolina González García (<a href="https://github.com/arigl-gh" class="bare">https://github.com/arigl-gh</a>)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Compañía</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Micrati</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Cumplir y dictar los requisitos del juego para presentar la aplicación final.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[cite_start]Cumplir y dictar los requisitos del juego para presentar la aplicación. [cite: 11]</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usuarios</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Futuros jugadores de YOVI</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Aprender y disfrutar del juego, logrando entretenimiento y competición sana.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Equipo de supervisión</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">José Emilio Labra Gayo, Celia Melendi Lavandera</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluar el resultado académico y aconsejar durante el desarrollo de la aplicación.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Aprender y disfrutar del juego, logrando entretenimiento y competición sana. [cite: 11]</p></td>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock"><strong>Equipo de supervisión</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">José Emilio Labra Gayo</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">[cite_start].2+</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Evaluar el resultado y aconsejar durante el desarrollo de la aplicación. [cite: 11]</p></td>
 </tr>
 </tbody>
 </table>
