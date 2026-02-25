@@ -11,7 +11,8 @@ let client;
  */
 async function connectDB() {
   console.log("intento conectar");
-  if (!uri) {
+  console.log(uri);
+  if (uri == null) {
     console.log("URI error");
     throw new Error("MONGO_URI mal definida -> Habla con Jimena");
   }
