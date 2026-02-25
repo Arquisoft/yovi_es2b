@@ -12,6 +12,7 @@ app.use(metricsMiddleware);
 // necesidades para tener la base de datos
 require('dotenv').config();
 const { connectDB, getDB } = require('./db');
+const { createUser } = require('./dbFunctions');
 
 try {
   const swaggerDocument = YAML.load(fs.readFileSync('./openapi.yaml', 'utf8'));
