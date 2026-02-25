@@ -33,8 +33,6 @@ jobs:
           npm ci
 
       - name: Run tests
-        env:
-          MONGO_URI: ${{ secrets.MONGO_URI }}
         run: |
           cd ${{ matrix.service }}
           npm test
@@ -149,6 +147,8 @@ jobs:
     needs: [docker-push-users, docker-push-webapp, docker-push-gamey]
     steps:
       - name: Deploy over SSH
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
         uses: fifsky/ssh-action@master
         with:
           host: ${{ secrets.DEPLOY_HOST }}
