@@ -31,6 +31,14 @@ app.use((req, res, next) => {
 app.use(express.json());
 
 app.post('/createuser', async (req, res) => {
+
+  // si no se ha conectado la bd, lo hace
+  if(!global.__bdConectada) {
+    await connectDB();
+    global.__dbConnected = true;
+    console.log('✅ DB conectada (auto al importar)');
+  }
+
   const username = req.body && req.body.username;
   console.log('🚀 Recibido username:', username); // log de debug
   try {
