@@ -8,6 +8,7 @@ async function createUser(users, username) {
     }
 
     await users.insertOne({ username, createdAt: new Date() });
+    console.log('🎉 Usuario creado');
 
 }
 

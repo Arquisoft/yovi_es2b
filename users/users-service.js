@@ -32,10 +32,13 @@ app.use(express.json());
 
 app.post('/createuser', async (req, res) => {
   const username = req.body && req.body.username;
+  console.log('🚀 Recibido username:', username); // log de debug
   try {
     // primero, traemos la base de datos
     const db = getDB();
+    console.log('✅ DB obtenida');
     const users = db.collection("users");
+    console.log('🔹 Colección users obtenida');
 
     // creamos y añadimo el usuario a la base de datos
     // mirar /users/db.js
