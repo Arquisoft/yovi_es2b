@@ -159,5 +159,5 @@ jobs:
             docker compose down
             export MONGO_URI=${{ secrets.MONGO_URI }}
             docker compose up -d --pull always
-            docker compose up -d --build-arg MONGO_URI=${{ secrets.MONGO_URI }}
+            docker compose build --build-arg MONGO_URI=${{ secrets.MONGO_URI }}
             docker compose up -d
