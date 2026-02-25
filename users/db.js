@@ -2,15 +2,17 @@ const { MongoClient } = require("mongodb");
 
 const uri = process.env.MONGO_URI;
 
-const client = new MongoClient(uri);
 
 let db;
+let client;
 
 /*
  * Conectarse a la base de datos
  */
 async function connectDB() {
   if (!uri) throw new Error("MONGO_URI mal definida -> Habla con Jimena");
+
+  client = new MongoClient(uri);
 
   try {
     await client.connect();
