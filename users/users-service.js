@@ -10,7 +10,6 @@ const metricsMiddleware = promBundle({includeMethod: true});
 app.use(metricsMiddleware);
 
 // necesidades para tener la base de datos
-require('dotenv').config();
 const { connectDB, getDB } = require('./db');
 const { createUser } = require('./dbFunctions');
 

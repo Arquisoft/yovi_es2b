@@ -5,6 +5,8 @@ services:
     image: ghcr.io/arquisoft/yovi_es2b-users:latest
     ports:
       - "3000:3000"
+    environment:
+      - MONGO_URI=${{ secrets.MONGO_URI }}
     networks:
       - monitor-net
 
