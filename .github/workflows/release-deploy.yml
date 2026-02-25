@@ -156,8 +156,6 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           command: |
             wget https://raw.githubusercontent.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/master/docker-compose.yml -O docker-compose.yml
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
             docker compose down
-            export MONGO_URI=${{ secrets.MONGO_URI }}
             docker compose up -d --pull always
-            docker compose build --build-arg MONGO_URI=${{ secrets.MONGO_URI }}
-            docker compose up -d
