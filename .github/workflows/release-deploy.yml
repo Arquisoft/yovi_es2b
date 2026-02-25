@@ -36,6 +36,8 @@ jobs:
         run: |
           cd ${{ matrix.service }}
           npm test
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
 
   test-rust:
     name: Run rust (gamey) tests
