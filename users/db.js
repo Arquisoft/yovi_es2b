@@ -10,7 +10,11 @@ let client;
  * Conectarse a la base de datos
  */
 async function connectDB() {
-  if (!uri) throw new Error("MONGO_URI mal definida -> Habla con Jimena");
+  console.log("intento conectar");
+  if (!uri) {
+    console.log("URI error");
+    throw new Error("MONGO_URI mal definida -> Habla con Jimena");
+  }
 
   client = new MongoClient(uri);
 
@@ -18,6 +22,7 @@ async function connectDB() {
     await client.connect();
     db = client.db("yovi_es2bJ");
     console.log("MongoDB conectado");
+    global.__dbConnected = true;
   } catch (err) {
     console.error(err);
     process.exit(1);

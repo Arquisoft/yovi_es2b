@@ -35,7 +35,6 @@ app.post('/createuser', async (req, res) => {
   // si no se ha conectado la bd, lo hace
   if(!global.__bdConectada) {
     await connectDB();
-    global.__dbConnected = true;
     console.log('✅ DB conectada (auto al importar)');
   }
 
