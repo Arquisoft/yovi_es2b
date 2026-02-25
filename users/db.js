@@ -10,6 +10,9 @@ let client;
  * Conectarse a la base de datos
  */
 async function connectDB() {
+  console.log('MONGO_URI:', process.env.MONGO_URI);
+  console.log('All env vars:', Object.keys(process.env).filter(k => k.includes('MONGO')));
+
   console.log("intento conectar");
   console.log(uri);
   if (uri == null) {
