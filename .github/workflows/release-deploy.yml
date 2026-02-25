@@ -10,7 +10,6 @@ permissions:
 
 env:
   IMAGE_TAG: ${{ github.event.release.tag_name }}
-  MONGO_URI: ${{ secrets.MONGO_URI }}
 
 jobs:
   test-node:
@@ -37,6 +36,8 @@ jobs:
         run: |
           cd ${{ matrix.service }}
           npm test
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
 
   test-rust:
     name: Run rust (gamey) tests
@@ -155,6 +156,6 @@ jobs:
           key: ${{ secrets.DEPLOY_KEY }}
           command: |
             wget https://raw.githubusercontent.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/master/docker-compose.yml -O docker-compose.yml
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" > .env
             docker compose down
             docker compose up -d --pull always
+            docker compose up -d --build -e MONGO_URI=${{ secrets.MONGO_URI }}
