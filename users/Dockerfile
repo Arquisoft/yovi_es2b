@@ -1,4 +1,6 @@
 FROM node:22-alpine
+ARG MONGO_URI
+ENV MONGO_URI=${MONGO_URI}
 WORKDIR /app
 
 COPY package.json package-lock.json ./
