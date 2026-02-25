@@ -12,11 +12,16 @@ let client;
 async function connectDB() {
   console.log("intento conectar");
   if (!uri) {
-    console.log("URI error");
     throw new Error("MONGO_URI mal definida -> Habla con Jimena");
   }
 
+  console.log("URI bien");
   client = new MongoClient(uri);
+
+  if(client==null) {
+    console.log("cliente null");
+  }
+  
 
   try {
     await client.connect();
