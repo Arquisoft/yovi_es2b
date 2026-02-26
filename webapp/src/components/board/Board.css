@@ -1,0 +1,107 @@
+.board-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important; /* IMPORTANTE: Transparente para unificarse */
+  box-shadow: none !important;        /* Sin sombra propia */
+  padding: 20px;
+  width: fit-content;
+  margin: auto;
+}
+
+.board {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.row-container {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Casilla con estilo de ficha */
+.cell {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #d1d5db;
+  background-color: #ffffff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s ease;
+  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.05);
+}
+/* Efecto al pasar el ratón */
+.cell:hover {
+  transform: translateY(-3px) scale(1.1);
+  border-color: #9ca3af;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), inset 0 -3px 0 rgba(0, 0, 0, 0.05);
+  z-index: 10;
+}
+
+/* Label interno (el index) - Estilo sutil para debug */
+.cell-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: #9ca3af;
+  pointer-events: none; /* Evita que interfiera con el click */
+  user-select: none;
+}
+
+/* --- Estados de Jugador (Dinámicos) --- */
+
+/* Jugador 1 - Humano (Azul) */
+.player-1 {
+  background-color: #3b82f6;
+  border-color: #2563eb;
+  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.15);
+}
+.player-1 .cell-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Jugador 2 - Máquina (Rojo) */
+.player-2 {
+  background-color: #ef4444;
+  border-color: #dc2626;
+  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.15);
+}
+.player-2 .cell-label {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.controls {
+  display: flex;
+  flex-direction: column; /* Botones uno sobre otro */
+  gap: 12px;
+}
+
+.controls button {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.controls button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+#restart-button {
+  background-color: #6f42c1; 
+  color: white;
+}
+
+#exit-button {
+  background-color: #ffc107; 
+  color: white;
+}
+
