@@ -21,7 +21,10 @@ jobs:
         node-version: 22
     - run: npm --prefix users ci
     - run: npm --prefix webapp ci
-    - run: npm --prefix users run test:coverage
+    - name: Run users tests
+      run: npm --prefix users run test:coverage
+      env:
+        MONGO_URI: ${{ secrets.MONGO_URI }}
     - run: npm --prefix webapp run test:coverage
     - name: Install cargo-llvm-cov
       run: cargo install cargo-llvm-cov --locked

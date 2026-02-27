@@ -1,3 +1,5 @@
+// para la creación de cliente mongo
+// asi nos conectamos a la base de datos mediante un cliente para cada peticion de juego
 const { MongoClient } = require("mongodb");
 
 const uri = process.env.MONGO_URI;
@@ -11,7 +13,6 @@ let client;
  */
 async function connectDB() {
   console.log('MONGO_URI:', process.env.MONGO_URI);
-  console.log('All env vars:', Object.keys(process.env).filter(k => k.includes('MONGO')));
 
   console.log("intento conectar");
   console.log(uri);

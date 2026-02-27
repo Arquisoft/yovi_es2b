@@ -64,7 +64,7 @@ app.post('/createuser', async (req, res) => {
 
 if (require.main === module) {
   connectDB().then(() => {
-      app.listen(port, "0.0.0.0", () => {
+      app.listen(port, () => {
     console.log(`User Service listening at http://localhost:${port}`)
     })
   });
