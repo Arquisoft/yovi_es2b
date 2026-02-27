@@ -5,10 +5,12 @@ services:
     image: ghcr.io/arquisoft/yovi_es2b-users:latest
     ports:
       - "3000:3000"
-    environment:
-      MONGO_URI=${MONGO_URI}
     networks:
       - monitor-net
+  mongo:
+    image: mongo:7
+    ports:
+      - 27017:27017
 
   webapp:
     build:
