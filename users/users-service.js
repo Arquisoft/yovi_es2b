@@ -35,17 +35,13 @@ app.post('/createuser', async (req, res) => {
   // si no se ha conectado la bd, lo hace
   if(!global.__bdConectada) {
     await connectDB();
-    console.log('DB conectada');
   }
 
   const username = req.body && req.body.username;
-  console.log('Recibido username:', username); // log de debug
   try {
     // primero, traemos la base de datos
     const db = getDB();
-    console.log('DB obtenida');
     const users = db.collection("users");
-    console.log('Colección users obtenida');
 
     // creamos y añadimo el usuario a la base de datos
     // mirar /users/db.js

@@ -12,27 +12,22 @@ let client;
  * Conectarse a la base de datos
  */
 async function connectDB() {
-  console.log('MONGO_URI:', process.env.MONGO_URI);
-
-  console.log("intento conectar");
-  console.log(uri);
+  // error con la URI
   if (uri == null) {
-    console.log("URI error");
     throw new Error("MONGO_URI mal definida -> Habla con Jimena");
   }
 
-  console.log("URI bien");
-  client = new MongoClient(uri);
-
-  if(client==null) {
-    console.log("cliente null");
-  }
-  
+  // crea un cliente nuevo para cada conexión
+  client = new MongoClient(uri);  
 
   try {
+
+    // se conecta a la base
+    // se usa await porque devuelve un Promise, básicamente espera a que se conecte
     await client.connect();
     db = client.db("yovi_es2bJ");
-    console.log("MongoDB conectado");
+
+    // ya se conectó
     global.__dbConnected = true;
   } catch (err) {
     console.error(err);
@@ -44,7 +39,9 @@ async function connectDB() {
  * Retorna la base de datos
  */
 function getDB() {
-  if (!db) throw new Error("Base de datos inexistente -> Habla con Jimena");
+  if (!db) {
+    throw new Error("Base de datos inexistente -> Habla con Jimena");
+  }
 
   return db;
 }
