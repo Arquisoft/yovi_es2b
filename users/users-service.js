@@ -5,6 +5,11 @@ const swaggerUi = require('swagger-ui-express');
 const fs = require('node:fs');
 const YAML = require('js-yaml');
 const promBundle = require('express-prom-bundle');
+//Axios permite simplificar las peticios HTTP
+const axios = require('axios');
+//URL del gamey
+const GAMEY_URL = process.env.GAMEY_URL || "http://gamey:4000";
+
 
 const metricsMiddleware = promBundle({includeMethod: true});
 app.use(metricsMiddleware);
@@ -39,6 +44,35 @@ app.post('/createuser', async (req, res) => {
   }
 });
 
+/*
+  Método que inicia el juego
+    Recibe los parametros del juego Dificultad, Estrategia...
+*/
+app.post('/game/start', async (req, res) => { 
+
+});
+
+/*
+  Métedo que reincia el juego
+*/
+app.post('/game/restart', async (req, res) => { 
+
+});
+
+/*
+  Devuelve el estado del juego
+*/
+app.get('/game/state', async (req, res) => {
+
+});
+
+/*
+  Realiza un movimiento en el juego
+*/
+app.post('/game/move', async (req, res) => { 
+
+});
+
 
 if (require.main === module) {
   app.listen(port, () => {
@@ -47,3 +81,4 @@ if (require.main === module) {
 }
 
 module.exports = app
+

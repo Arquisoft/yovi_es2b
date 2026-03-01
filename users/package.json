@@ -14,7 +14,8 @@
     "express": "^5.2.1",
     "express-prom-bundle": "^8.0.0",
     "js-yaml": "^4.1.0",
-    "swagger-ui-express": "^5.0.1"
+    "swagger-ui-express": "^5.0.1",
+    "axios": "^1.7.2"
   },
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.15",

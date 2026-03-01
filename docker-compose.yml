@@ -5,6 +5,8 @@ services:
     image: ghcr.io/arquisoft/yovi_es2b-users:latest
     ports:
       - "3000:3000"
+    environment: 
+      - GAMEY_URL=http://gamey:4000
     networks:
       - monitor-net
 
