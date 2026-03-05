@@ -1,0 +1,152 @@
+.home-container {
+  width: 600px;
+  height: 800px;
+  margin: 24px auto 0;
+  padding: 40px 36px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d9d9d9;
+  border-radius: 14px;
+  background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.home-container h1 {
+  margin: 0;
+  font-size: 2rem;
+  letter-spacing: 1px;
+}
+
+.home-container h2 {
+  margin: 8px 0 24px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #4a4a4a;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.config-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 320px;
+  margin: 0 auto;
+  padding: 18px;
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.config-box label {
+  text-align: center;
+  font-weight: 600;
+  color: #2f2f2f;
+  width: 100%;
+}
+
+/* El simbolo > indica que se modifican los apartados div que sean hijos de congif-box*/
+.config-box > div {
+  display: grid;
+  grid-template-columns: repeat(3, 90px);
+  justify-content: center;
+  gap: 8px;
+}
+
+select {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #bfc5d2;
+  border-radius: 8px;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+select:hover {
+  border-color: #7f93c8;
+}
+
+select:focus {
+  border-color: #3f63c7;
+  box-shadow: 0 0 0 3px rgba(63, 99, 199, 0.2);
+}
+
+button {
+  margin-top: 8px;
+  padding: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  border: 1px solid #bcc3d1;
+  border-radius: 8px;
+  background: #ffffff;
+  transition: transform 0.12s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#easy-difficulty {
+  background: #2f8a3d;
+  color: #fff;
+  border-color: #2f8a3d;
+}
+
+#hard-difficulty {
+  background: #c62828;
+  color: #fff;
+  border-color: #c62828;
+}
+
+#medium-difficulty {
+  background: #f9a825;
+  color: #fff;
+  border-color: #f9a825;
+}
+
+
+.menu-buttons button,
+.config-box > button {
+  width: 260px;
+}
+
+.config-box > div button {
+  width: 90px;
+}
+
+.menu-buttons button:hover {
+  background: #f2f6ff;
+  border-color: #6f86bf;
+}
+
+/* El simbolo > indica que se modifican los botones que sean hijos de congif-box*/
+#start-game {
+  background: #2f318a;
+  color: #fff;
+  border-color: #2f318a;
+}
+
+#start-game:hover {
+  border-color: #025bff;
+  box-shadow: 0 4px 12px rgba(47, 138, 61, 0.3);
+}
+
+button:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(63, 99, 199, 0.25);
+}
+
+button:active {
+  transform: translateY(1px);
+}
+
