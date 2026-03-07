@@ -1,11 +1,11 @@
 import { useState } from "react";
-import type { GameSettings } from "../gameOptions/GameSettings";
-import { Strategy } from "../gameOptions/Strategy";
-import type { StrategyType } from "../gameOptions/Strategy";
-import { Difficulty } from "../gameOptions/Difficulty";
+import type { GameSettings } from "../../gameOptions/GameSettings";
+import { Strategy } from "../../gameOptions/Strategy";
+import type { StrategyType } from "../../gameOptions/Strategy";
+import { Difficulty } from "../../gameOptions/Difficulty";
 import "./Home.css";
 
-export default function HomePage() {
+export default function HomePage( {username} : { username: string }) {
     const [settings, setSettings] = useState<GameSettings>({
         strategy: Strategy.RANDOM,
         difficulty: Difficulty.EASY
@@ -18,9 +18,10 @@ export default function HomePage() {
     }
 
     return (
-        <div className="home-container">
+        <div className="home-container">    
             <h1>YOVI</h1>
-            <h2>La mejor versión del juego Y</h2>
+            <p>La mejor versión del juego Y</p>
+            <h2>Bienvenido a tu menú principal, {username}</h2>
 
             <div className="menu-buttons">
                 <button onClick={() => setMenuSelected("Nueva partida")}>

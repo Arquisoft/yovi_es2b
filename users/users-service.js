@@ -11,7 +11,7 @@ app.use(metricsMiddleware);
 
 // necesidades para tener la base de datos
 const { connectDB, getDB } = require('./db');
-const { createUser } = require('./dbFunctions');
+const { loginuser } = require('./dbFunctions');
 
 try {
   const swaggerDocument = YAML.load(fs.readFileSync('./openapi.yaml', 'utf8'));
@@ -30,7 +30,7 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.post('/createuser', async (req, res) => {
+app.post('/loginuser', async (req, res) => {
 
   // si no se ha conectado la bd, lo hace
   if(!global.__bdConectada) {
@@ -38,6 +38,7 @@ app.post('/createuser', async (req, res) => {
   }
 
   const username = req.body && req.body.username;
+  const password = req.body && req.body.password;
   try {
     // primero, traemos la base de datos
     const db = getDB();
@@ -45,7 +46,7 @@ app.post('/createuser', async (req, res) => {
 
     // creamos y añadimo el usuario a la base de datos
     // mirar /users/db.js
-    await createUser(users, username);
+    await loginuser(users, username, password);
     
     // Simulate a 1 second delay to mimic processing/network latency
     await new Promise((resolve) => setTimeout(resolve, 1000));

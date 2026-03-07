@@ -1,5 +1,5 @@
 import './App.css'
-import RegisterForm from './components/RegisterForm';
+import RegisterForm from './screens/init/InitialScreen';
 import reactLogo from './assets/react.svg'
 
 function App() {
