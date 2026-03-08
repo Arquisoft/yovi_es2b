@@ -23,6 +23,7 @@ impl GameServiceError {
     }
 }
 
+//Transforma GameYError en GameServiceError
 impl From<GameYError> for GameServiceError {
     fn from(e: GameYError) -> Self {
         GameServiceError::GameError(e.to_string())
@@ -35,6 +36,7 @@ struct ServiceErrorBody {
     error: String,
 }
 
+// Mediante axum convierte un error HTTP
 impl IntoResponse for GameServiceError {
     fn into_response(self) -> axum::response::Response {
         let status = match &self {
@@ -74,6 +76,7 @@ pub enum GameStatusDto {
     },
 }
 
+// Transforma GameStatus en GameStatusDto
 impl From<&GameStatus> for GameStatusDto {
     fn from(s: &GameStatus) -> Self {
         match s {
@@ -106,7 +109,7 @@ pub struct ActionRequest {
 // ─── METODOS DE SERVICIO ─────────────────────────────────────────────────────────────────
 
 pub struct GameService {
-    games: Mutex<HashMap<GameId, GameY>>,
+    games: Mutex<HashMap<GameId, GameY>>,  //Partidas almacenadas en un map
     next_id: Mutex<u64>,
 }
 
@@ -124,7 +127,7 @@ impl GameService {
     pub fn create_game(&self, board_size: u32) -> GameId {
         let mut counter = self.next_id.lock().unwrap();
         let id = format!("game-{}", *counter);
-        *counter += 1;
+        *counter += 1; // Incrementa el contador de la coleccion mediante puntero
 
         let game = GameY::new(board_size);
         self.games.lock().unwrap().insert(id.clone(), game);
@@ -134,6 +137,7 @@ impl GameService {
     // Devuelve state del juego para un id proporcionado
     pub fn get_game_state(&self, game_id: &str) -> Option<GameStateResponse> {
         let games = self.games.lock().unwrap();
+        //Mapea el resultado para devolverlo
         games.get(game_id).map(|game| GameStateResponse {
             game_id: game_id.to_string(),
             state: game.into(),
@@ -142,8 +146,7 @@ impl GameService {
     }
 
     // Ejecuta movimiento
-    // Returns the updated game state on success, or a `GameServiceError` if
-    // the game is not found or the move is invalid.
+    // Devuelve el estado del juego o GameServiceError
     pub fn place_move(&self, game_id: &str, movement: Movement,) -> Result<GameStateResponse, GameServiceError> {
         let mut games = self.games.lock().unwrap();
         let game = games
@@ -169,6 +172,11 @@ impl GameService {
 
     // Devuelve todos los id de partidas activas
     pub fn list_games(&self) -> Vec<GameId> {
+        // Con lock se bloquea el mutex para acceder al map.
+        // unwarp - Saca el valor despues de bloquearlo
+        // keys - Claves del map
+        // cloned - Hace una copia
+        // collect - Convierte a Vec<>
         self.games.lock().unwrap().keys().cloned().collect()
     }
 
