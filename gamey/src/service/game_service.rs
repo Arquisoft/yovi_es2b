@@ -6,7 +6,7 @@ use std::collections::HashMap;
 use std::sync::Mutex;
 
 pub type GameId = String; // Session id
-
+ 
 // Errores
 #[derive(Debug, Serialize)]
 pub enum GameServiceError {
