@@ -157,7 +157,7 @@ impl GameService {
 
         Ok(GameStateResponse {
             game_id: game_id.to_string(),
-            state: game.into(),
+            state: (&*game).into(),
             status: GameStatusDto::from(game.status()),
         })
     }
