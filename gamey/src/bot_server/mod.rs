@@ -32,15 +32,17 @@ pub use version::*;
 use crate::{GameYError, RandomBot, YBotRegistry, state::AppState};
 
 /// Creates the Axum router with the given state.
-///
 /// This is useful for testing the API without binding to a network port.
 pub fn create_router(state: AppState) -> axum::Router {
+    let game_routes = crate::service::game_router();  //Obtiene el router de service/mod.rs
+
     axum::Router::new()
         .route("/status", axum::routing::get(status))
         .route(
             "/{api_version}/ybot/choose/{bot_id}",
             axum::routing::post(choose::choose),
         )
+        .merge(game_routes)  // Junta a los end points de los 2 routers
         .with_state(state)
 }
 
