@@ -7,10 +7,11 @@ describe('POST /createuser', () => {
         vi.restoreAllMocks()
     })
 
-    it('returns a greeting message for the provided username', async () => {
+    it('returns a greeting message for the provided username and password', async () => {
         const res = await request(app)
             .post('/createuser')
             .send({ username: 'Pablo' })
+            .send({ password: 'Pablo1' })
             .set('Accept', 'application/json')
 
         expect(res.status).toBe(200)
