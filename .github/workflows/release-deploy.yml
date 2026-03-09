@@ -1,9 +1,6 @@
 name: Release — Test, Build, Publish, Deploy
 
 on:
-  push:
-    branches:
-      - ArreglosMinimos
   release:
     types: [published]
 
