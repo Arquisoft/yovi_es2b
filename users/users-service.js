@@ -33,7 +33,7 @@ app.use(express.json());
 app.post('/loginuser', async (req, res) => {
 
   // si no se ha conectado la bd, lo hace
-  if(!global.__bdConectada) {
+  if(!global.__dbConnected) {
     await connectDB();
     global.__bdConectada = true;
   }
