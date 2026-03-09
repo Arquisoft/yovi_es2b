@@ -83,6 +83,7 @@ jobs:
           npm run test:e2e
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
+          VITE_API_URL: http://localhost:3000
 
   docker-push-users:
     name: Publish users image
