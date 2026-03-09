@@ -436,11 +436,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article toc2 toc-left">
 <div id="header">
-<h1><span class="image"><img src="./images/arc42-logo.png" alt="arc42"></span> yovi_es2b</h1>
+<h1><span class="image"><img src="./images/yovi_logo.png" alt="yovi_logo"></span> yovi_es2b</h1>
 <div class="details">
-<span id="revnumber">version 8.2 EN,</span>
-<span id="revdate">January 2023</span>
-<br><span id="revremark">(based upon AsciiDoc version)</span>
+<span id="revdate">March 2026</span>
+<br><span id="revremark">(Arquitectura de Software - Universidad de Oviedo)</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -503,19 +502,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	.arc42help {display:none;}
 }
 </style>
-<div class="paragraph">
-<p><strong>About arc42</strong></p>
-</div>
-<div class="paragraph lead">
-<p>arc42, the template for documentation of software and system architecture.</p>
-</div>
-<div class="paragraph">
-<p>Template Version 8.2 EN. (based upon AsciiDoc version), January 2023</p>
-</div>
-<div class="paragraph">
-<p>Created, maintained and &#169; by Dr. Peter Hruschka, Dr. Gernot Starke and contributors.
-See <a href="https://arc42.org" class="bare">https://arc42.org</a>.</p>
-</div>
 <hr>
 <div class="sidebarblock arc42help">
 <div class="content">
@@ -544,7 +530,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <h2 id="section-introduction-and-goals">1. Introducción y Objetivos</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>La empresa de desarrollo de juegos <strong>Micrati</strong> ha decidido apostar por el desarrollo de juegos basados en el "Juego Y", los cuales tendrán el nombre de <strong>YOVI</strong>.</p>
+<p>La empresa de desarrollo de juegos <strong>Micrati</strong> ha decidido apostar por el  desarrollar un juego en formato webapp basado en el "Juego Y", que tendrá el nombre <strong>YOVI</strong>. Estamos ante un juego de mesa de estrategia de dos jugadores que transformaremos y modificaremos para que se pueda jugar con el ordenador.</p>
 </div>
 <div class="sect2">
 <h3 id="_resumen_de_requisitos">1.1. Resumen de Requisitos</h3>
@@ -680,6 +666,10 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Entorno tecnológico</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Usaremos <strong>VisualCode</strong> ya que ofrece sencillez en cuanto al manejo de GitHub (uso reflejado más adelante), además, este entorno ya nos era conocido gracias al uso en otras asignaturas.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Front-end</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Para la programación front-end se usará <strong>React</strong>. Esta biblioteca favorece la construcción de interfaces mediante el lenguaje JavaScript.</p></td>
 </tr>
@@ -722,7 +712,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Revisión de trabajo</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">También usando GitHub nos revisaremos unos a otros nuestro trabajo mediante pull requests. Además, para esta revisión, usamos un algoritmo circular: Sara revisa a Jimena &#8594; Jimena revisa a Iyán &#8594; Iyán revisa a Carolina &#8594; Carolina revisa a Sara.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">También usando GitHub nos revisaremos unos a otros nuestro trabajo mediante pull requests. Además, para esta revisión, usamos un algoritmo circular: &#8594; Sara revisa a Jimena &#8594; Jimena revisa a Iyán &#8594; Iyán revisa a Carolina &#8594; Carolina revisa a Sara</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Reuniones</strong></p></td>
@@ -908,6 +898,10 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <div class="paragraph">
 <p>En este apartado veremos una versión estática del proyecto. Se tienen que ver una visión principal del proyecto de forma que se puedan simplificar mediante un diagrama donde se puedan ver los componentes principales (clases, módulos, paquetes, …) y las dependencias entre ellos (relaciones, asociaciones, interacciones, …).</p>
 </div>
+<div class="paragraph">
+<p>Vemos en la siguiente imagen el diagrama de clases de este proyecto.
+= <span class="image"><img src="./images/gamey_uml.png" alt="gamey_uml"></span></p>
+</div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
@@ -916,6 +910,14 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <div class="sectionbody">
 <div class="paragraph">
 <p>Ahora podremos ver diferentes diagramas, que representarán el juego a lo largo de su tiempo de vida para casos concretos en tiempo de ejecución. Más específicamente, se verá la interacción entre usuario y el resto del sistema (interfaces, servicio, base de datos, etc.), y cómo afectará al juego en cada caso.</p>
+</div>
+<div class="paragraph">
+<p>En un primer punto vemos el flujo de ejecución de una petición. Es decir, una sola interacción entre el usuario y el juego.
+= <span class="image"><img src="./images/gamey_peticion.png" alt="gamey_peticion"></span></p>
+</div>
+<div class="paragraph">
+<p>Mediante este otro diagrama veremos los flujos de la petición, pero según su tipo. Aquí se especificarán de manera más clara los endpoint.
+= <span class="image"><img src="./images/gamey_endpoint.png" alt="gamey_endpoint"></span></p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1044,13 +1046,44 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <div class="paragraph">
 <p>Se explicarán varios conceptos necesarios para comprender la documentación y el producto final de forma completa.</p>
 </div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 25%;">
+<col style="width: 75%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Concepto</th>
+<th class="tableblock halign-left valign-top">Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>WebApp</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Aplicación ejecutada desde algún navegador.</p></td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<div class="paragraph">
+<p><strong>About arc42</strong></p>
+</div>
+<div class="paragraph lead">
+<p>arc42, the template for documentation of software and system architecture.</p>
+</div>
+<div class="paragraph">
+<p>Template Version {revnumber}. (Arquitectura de Software - Universidad de Oviedo), March 2026</p>
+</div>
+<div class="paragraph">
+<p>Created, maintained and &#169; by Dr. Peter Hruschka, Dr. Gernot Starke and contributors.
+See <a href="https://arc42.org" class="bare">https://arc42.org</a>.</p>
+</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Version 8.2 EN<br>
-Last updated 2026-02-22 20:34:36 +0100
+Last updated 2026-03-08 22:45:33 +0100
 </div>
 </div>
 </body>
