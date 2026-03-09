@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Home from "../game/Home.tsx";
 import SignUp from "../init/SignUp.tsx";
+import "./InitialScreen.css";
+import yoviLogo from "../../../public/yovi_logo.png";
 
 const InitialScreen: React.FC = () => {
   const [username, setUsername] = useState('');
@@ -60,10 +62,10 @@ const InitialScreen: React.FC = () => {
 
   return (
     <div className="initial-screen">
-      <h1>YOVI</h1>
+      <img src={yoviLogo} alt="YOVI Logo" className="initial-screen__logo" />
 
       <form onSubmit={handleSubmit} className="register-form">
-        <h2>Escriba su usuario y contraseña para iniciar sesión.</h2>
+        <h1>Escriba su usuario y contraseña para iniciar sesión.</h1>
         <div className="form-group">
           <label htmlFor="username">Usuario</label>
           <input
@@ -90,8 +92,8 @@ const InitialScreen: React.FC = () => {
         )}
       </form>
 
-      <div>
-        <p>¿No tienes usuario? Crea aquí para crear uno.</p>
+      <div className="signup">
+        <h2>¿No tienes usuario? Haz click aquí para crear uno.</h2>
         <button onClick={() => setToSigned(true)}>
           Regístrate
         </button>
