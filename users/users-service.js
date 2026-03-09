@@ -52,7 +52,6 @@ app.post('/loginuser', async (req, res) => {
     // Simulate a 1 second delay to mimic processing/network latency
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    res.status(200);
     const message = `Hello ${username}! welcome to the course!`;
     res.json({ message });
   } catch (err) {
@@ -82,7 +81,6 @@ app.post('/createuser', async (req, res) => {
     // Simulate a 1 second delay to mimic processing/network latency
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    res.status(200);
     const message = `Hello ${username}! welcome to the course!`;
     res.json({ message });
   } catch (err) {

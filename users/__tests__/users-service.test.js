@@ -3,11 +3,12 @@ import request from 'supertest'
 import app from '../users-service.js'
 
 describe('POST /createuser', () => {
+
+    /*
     afterEach(() => {
         vi.restoreAllMocks()
     })
 
-    /*
     it('returns a greeting message for the provided username', async () => {
         const res = await request(app)
             .post('/createuser')
