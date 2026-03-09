@@ -63,6 +63,7 @@ const InitialScreen: React.FC = () => {
   return (
     <div className="initial-screen">
       <img src={yoviLogo} alt="YOVI Logo" className="initial-screen__logo" />
+      <h1>Bienvenido de nuevo, inicia sesión aquí</h1>
 
       <form onSubmit={handleSubmit} className="register-form">
         <h1>Escriba su usuario y contraseña para iniciar sesión.</h1>
