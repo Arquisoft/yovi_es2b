@@ -23,6 +23,8 @@ jobs:
         node-version: 22
     - run: npm --prefix users ci
     - run: npm --prefix webapp ci
+    - run: npm --prefix users run test:coverage
+    - run: npm --prefix webapp run test:coverage
     - name: Install cargo-llvm-cov
       run: cargo install cargo-llvm-cov --locked
     - name: Generate gamey code coverage
