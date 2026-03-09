@@ -1,4 +1,5 @@
 use crate::YBotRegistry;
+use crate::service::game_service::GameService;
 use std::sync::Arc;
 
 /// Shared application state for the bot server.
@@ -10,6 +11,8 @@ use std::sync::Arc;
 pub struct AppState {
     /// The registry of available bots, wrapped in Arc for thread-safe sharing.
     bots: Arc<YBotRegistry>,
+    /// Servicio que gestiona las partidas activas.
+    game_service: Arc<GameService>,
 }
 
 impl AppState {
@@ -17,12 +20,18 @@ impl AppState {
     pub fn new(bots: YBotRegistry) -> Self {
         Self {
             bots: Arc::new(bots),
+            game_service: Arc::new(GameService::new()),
         }
     }
 
     /// Returns a clone of the Arc-wrapped bot registry.
     pub fn bots(&self) -> Arc<YBotRegistry> {
         Arc::clone(&self.bots)
+    }
+
+    /// Devuelve una copia del Arc del servicio de partidas.
+    pub fn game_service(&self) -> Arc<GameService> {
+        Arc::clone(&self.game_service)
     }
 }
 
