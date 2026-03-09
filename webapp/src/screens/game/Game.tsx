@@ -1,10 +1,10 @@
-import { Board } from "../components/board/Board";
-import GameInfo from "../components/board/GameInfo";
-import ControlPanel from "../components/board/ControlPanel";
+import { Board } from "../../components/board/Board";
+import GameInfo from "../../components/board/GameInfo";
+import ControlPanel from "../../components/board/ControlPanel";
 import "../components/board/Board.css";
 import "./Game.css";
-import { Difficulty } from "../gameOptions/Difficulty";
-import { Strategy } from "../gameOptions/Strategy";
+import { Difficulty } from "../../gameOptions/Difficulty";
+import { Strategy } from "../../gameOptions/Strategy";
 
 export function Game() {
   const settings = {

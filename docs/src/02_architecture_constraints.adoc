@@ -10,6 +10,7 @@ Entendemos por restricciones los elementos que influyen sobre un proyecto y que 
 [options="header",cols="1,3"]
 |===
 |Restricción|Descripción
+|**Entorno tecnológico**|Usaremos **VisualCode** ya que ofrece sencillez en cuanto al manejo de GitHub (uso reflejado más adelante), además, este entorno ya nos era conocido gracias al uso en otras asignaturas.
 |**Front-end**|Para la programación front-end se usará **React**. Esta biblioteca favorece la construcción de interfaces mediante el lenguaje JavaScript.
 |**Back-end**|En cuanto a programar el back-end usaremos el lenguaje **Rust**. Lenguaje compilado de alto rendimiento desarrollado por ingenieros de Mozilla.
 |**Despliegue**|Usamos la plataforma de **Docker**, que nos permitirá ejecutar y gestionar la aplicación de forma sencilla. Para contener las aplicaciones que se usarán en las diversas partes del proyecto, usaremos **Amazon Web Services (AWS)** para tener este contenedor en la nube.
@@ -23,7 +24,7 @@ Entendemos por restricciones los elementos que influyen sobre un proyecto y que 
 |===
 |Restricción|Descripción
 |**Reparto de trabajo**|Mediante la sección de Issues de GitHub, nos dividiremos las tareas, historias de usuario, etc.
-|**Revisión de trabajo**|También usando GitHub nos revisaremos unos a otros nuestro trabajo mediante pull requests. Además, para esta revisión, usamos un algoritmo circular: Sara revisa a Jimena -> Jimena revisa a Iyán -> Iyán revisa a Carolina -> Carolina revisa a Sara.
+|**Revisión de trabajo**|También usando GitHub nos revisaremos unos a otros nuestro trabajo mediante pull requests. Además, para esta revisión, usamos un algoritmo circular: -> Sara revisa a Jimena -> Jimena revisa a Iyán -> Iyán revisa a Carolina -> Carolina revisa a Sara
 |**Reuniones**|Se realizarán reuniones, al menos una vez a la semana en la duración del proyecto, para la decisión y organización de ciertos puntos. De estas quedará constancia en actas recogiendo lo sucedido, hablado y decidido en ellas en la sección Wiki de GitHub.
 |===
 
