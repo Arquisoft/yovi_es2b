@@ -1,6 +1,9 @@
 name: Release — Test, Build, Publish, Deploy
 
 on:
+  push:
+    branches:
+      - ArreglosMinimos
   release:
     types: [published]
 
@@ -83,7 +86,7 @@ jobs:
           npm run test:e2e
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-          VITE_API_URL=http://localhost:3000
+          VITE_API_URL: http://localhost:3000
 
   docker-push-users:
     name: Publish users image
