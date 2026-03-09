@@ -6,10 +6,9 @@
 // configure EN settings for asciidoc
 include::src/config.adoc[]
 
-= image:arc42-logo.png[arc42] yovi_es2b
-:revnumber: 8.2 EN
-:revdate: January 2023
-:revremark: (based upon AsciiDoc version)
+= image:yovi_logo.png[yovi_logo] yovi_es2b
+:revdate: March 2026
+:revremark: (Arquitectura de Software - Universidad de Oviedo)
 :toc: left
 // toc-title definition MUST follow document title without blank line!
 :toc-title: Table of Contents
@@ -28,9 +27,6 @@ ifdef::backend-html5[]
 </style>
 ++++
 endif::backend-html5[]
-
-
-include::src/about-arc42.adoc[]
 
 // horizontal line
 ***
@@ -102,4 +98,6 @@ include::src/12_testing.adoc[]
 // 13. Glosario
 include::src/13_glossary.adoc[]
 
-
+<<<<
+// about arc42
+include::src/about-arc42.adoc[]

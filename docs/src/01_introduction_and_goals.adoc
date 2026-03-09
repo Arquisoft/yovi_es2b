@@ -3,7 +3,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 [[section-introduction-and-goals]]
 == Introducción y Objetivos
 
-La empresa de desarrollo de juegos **Micrati** ha decidido apostar por el desarrollo de juegos basados en el "Juego Y", los cuales tendrán el nombre de **YOVI**.
+La empresa de desarrollo de juegos **Micrati** ha decidido apostar por el  desarrollar un juego en formato webapp basado en el "Juego Y", que tendrá el nombre **YOVI**. Estamos ante un juego de mesa de estrategia de dos jugadores que transformaremos y modificaremos para que se pueda jugar con el ordenador.
 
 === Resumen de Requisitos
 
