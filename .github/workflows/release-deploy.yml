@@ -81,6 +81,8 @@ jobs:
         run: |
           cd webapp
           npm run test:e2e
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
 
   docker-push-users:
     name: Publish users image
