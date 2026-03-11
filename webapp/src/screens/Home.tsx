@@ -3,6 +3,7 @@ import type { GameSettings } from "../gameOptions/GameSettings";
 import { Strategy } from "../gameOptions/Strategy";
 import type { StrategyType } from "../gameOptions/Strategy";
 import { Difficulty } from "../gameOptions/Difficulty";
+import { Game } from "./Game"; 
 import "./Home.css";
 
 export default function HomePage() {
@@ -11,10 +12,16 @@ export default function HomePage() {
         difficulty: Difficulty.EASY
     });
 
+    const [gameStarted, setGameStarted] = useState(false);
     const [menuSelected, setMenuSelected] = useState<string>("");
 
     function startGame() {
-        setMenuSelected("Empezar partida");
+        setGameStarted(true); // Cambiamos el estado para "navegar"    
+    }
+
+    // Si el juego ha empezado, renderizamos Game y le pasamos las settings
+    if (gameStarted) {
+        return <Game settings={settings} onBack={() => setGameStarted(false)} />;
     }
 
     return (
@@ -73,9 +80,9 @@ export default function HomePage() {
                     </button>
                 </div>
 
-                <button id="start-game" onClick={startGame}>
-                    Empezar partida
-                </button>
+               <button id="start-game" onClick={startGame}>
+                Empezar partida
+            </button>
             </div>
         </div>
     );
