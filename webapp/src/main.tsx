@@ -1,11 +1,11 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import Home from "./screens/Home.tsx";
 
+import InitialScreen from "./screens/init/InitialScreen.tsx";
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Home />
+    <InitialScreen />
   </StrictMode>,
 )

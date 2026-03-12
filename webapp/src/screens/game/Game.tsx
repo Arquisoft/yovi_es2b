@@ -1,8 +1,7 @@
-import { Board } from "../components/board/Board";
-import GameInfo from "../components/board/GameInfo";
-import ControlPanel from "../components/board/ControlPanel";
-import type { GameSettings } from "../gameOptions/GameSettings";
-import "../components/board/Board.css";
+import { Board } from "../../components/board/Board";
+import GameInfo from "../../components/board/GameInfo";
+import ControlPanel from "../../components/board/ControlPanel";
+import type { GameSettings } from "../../gameOptions/GameSettings";
 import "./Game.css";
 
 // Definimos la interfaz de las props

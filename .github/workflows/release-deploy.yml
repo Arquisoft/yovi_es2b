@@ -36,6 +36,8 @@ jobs:
         run: |
           cd ${{ matrix.service }}
           npm test
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
 
   test-rust:
     name: Run rust (gamey) tests
@@ -79,6 +81,9 @@ jobs:
         run: |
           cd webapp
           npm run test:e2e
+        env:
+          MONGO_URI: ${{ secrets.MONGO_URI }}
+          VITE_API_URL: http://localhost:3000
 
   docker-push-users:
     name: Publish users image
@@ -153,6 +158,7 @@ jobs:
           user: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_KEY }}
           command: |
+            export MONGO_URI=${{ secrets.MONGO_URI }}
             wget https://raw.githubusercontent.com/${{ github.repository_owner }}/${{ github.event.repository.name }}/master/docker-compose.yml -O docker-compose.yml
             docker compose down
             docker compose up -d --pull always

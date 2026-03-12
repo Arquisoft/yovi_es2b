@@ -4,3 +4,6 @@ ifndef::imagesdir[:imagesdir: ../images]
 == Vista de bloques
 
 En este apartado veremos una versión estática del proyecto. Se tienen que ver una visión principal del proyecto de forma que se puedan simplificar mediante un diagrama donde se puedan ver los componentes principales (clases, módulos, paquetes, …) y las dependencias entre ellos (relaciones, asociaciones, interacciones, …).
+
+Vemos en la siguiente imagen el diagrama de clases de este proyecto.
+= image:gamey_uml.png[gamey_uml]

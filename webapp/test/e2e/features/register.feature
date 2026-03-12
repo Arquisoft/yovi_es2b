@@ -3,5 +3,5 @@ Feature: Register
 
   Scenario: Successful registration
     Given the register page is open
-    When I enter "Alice" as the username and submit
-    Then I should see a welcome message containing "Hello Alice"
+    When I navigate to signup and register with valid credentials
+    Then I should see the home screen

@@ -1,5 +1,4 @@
 import { Given, When, Then } from '@cucumber/cucumber'
-import assert from 'assert'
 
 Given('the register page is open', async function () {
   const page = this.page
@@ -7,17 +6,17 @@ Given('the register page is open', async function () {
   await page.goto('http://localhost:5173')
 })
 
-When('I enter {string} as the username and submit', async function (username) {
+When('I navigate to signup and register with valid credentials', async function () {
   const page = this.page
   if (!page) throw new Error('Page not initialized')
-  await page.fill('#username', username)
+  await page.click('button:has-text("Regístrate")')
+  await page.fill('#username', `TestUser_${Date.now()}`)
+  await page.fill('#password', 'Test1234')
   await page.click('.submit-button')
 })
 
-Then('I should see a welcome message containing {string}', async function (expected) {
+Then('I should see the home screen', async function () {
   const page = this.page
   if (!page) throw new Error('Page not initialized')
-  await page.waitForSelector('.success-message', { timeout: 5000 })
-  const text = await page.textContent('.success-message')
-  assert.ok(text && text.includes(expected), `Expected success message to include "${expected}", got: "${text}"`)
+  await page.waitForSelector('.home-container', { timeout: 15000 })
 })
