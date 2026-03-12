@@ -1,152 +1,167 @@
-.home-container {
-  width: 600px;
-  height: 800px;
-  margin: 24px auto 0;
-  padding: 40px 36px;
-  text-align: center;
+/* ── Layout principal ─────────────────────────────────────────────────────── */
+.home-screen {
+  position: fixed;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  border: 1px solid #d9d9d9;
-  border-radius: 14px;
-  background: linear-gradient(180deg, #ffffff 0%, #f8faff 100%);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  background: #ffffff;
+  padding: 2rem;
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
-.home-container h1 {
-  margin: 0;
-  font-size: 2rem;
-  letter-spacing: 1px;
+/* ── Logo ─────────────────────────────────────────────────────────────────── */
+.home-screen__logo {
+  width: 280px;
+  height: auto;
+  margin-bottom: 1.5rem;
 }
 
-.home-container h2 {
-  margin: 8px 0 24px;
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #4a4a4a;
+/* ── Título bienvenida ────────────────────────────────────────────────────── */
+.home-screen__title {
+  margin: 0 0 1.5rem;
+  font-size: 1.75rem;
+  font-weight: 750;
+  color: #191a1c;
+  text-align: center;
 }
 
-.menu-buttons {
+/* ── Botones del menú principal ───────────────────────────────────────────── */
+.home-menu {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 8px;
+  gap: 0.75rem;
   width: 100%;
+  max-width: 320px;
+  margin-bottom: 1.5rem;
 }
 
-.config-box {
+.home-menu__btn {
+  width: 100%;
+  padding: 0.7rem 1.2rem;
+  background: transparent;
+  color: #646cff;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid #646cff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 0;
+}
+
+.home-menu__btn:hover {
+  background: rgba(100, 108, 255, 0.08);
+}
+
+.home-menu__btn:active {
+  transform: scale(0.98);
+}
+
+/* ── Caja de configuración ────────────────────────────────────────────────── */
+.home-config {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  width: 320px;
-  margin: 0 auto;
-  padding: 18px;
-  border: 1px solid #d0d0d0;
-  border-radius: 10px;
+  gap: 1rem;
+  width: 100%;
+  max-width: 360px;
+  padding: 2rem 2.5rem;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Labels dentro de config ──────────────────────────────────────────────── */
+.home-config__label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #24292f;
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Select estrategia ────────────────────────────────────────────────────── */
+.home-config__select {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  background: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  color: #24292f;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.home-config__select:focus {
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.18);
   background: #ffffff;
 }
 
-.config-box label {
-  text-align: center;
-  font-weight: 600;
-  color: #2f2f2f;
-  width: 100%;
-}
-
-/* El simbolo > indica que se modifican los apartados div que sean hijos de congif-box*/
-.config-box > div {
+/* ── Botones de dificultad ────────────────────────────────────────────────── */
+.home-difficulty {
   display: grid;
-  grid-template-columns: repeat(3, 90px);
-  justify-content: center;
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
-select {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #bfc5d2;
-  border-radius: 8px;
-  background: #fff;
-  outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-select:hover {
-  border-color: #7f93c8;
-}
-
-select:focus {
-  border-color: #3f63c7;
-  box-shadow: 0 0 0 3px rgba(63, 99, 199, 0.2);
-}
-
-button {
-  margin-top: 8px;
-  padding: 10px;
-  font-size: 15px;
+.home-difficulty__btn {
+  padding: 0.6rem 0;
+  font-size: 0.9rem;
   font-weight: 600;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
-  border: 1px solid #bcc3d1;
-  border-radius: 8px;
-  background: #ffffff;
-  transition: transform 0.12s ease, border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  transition: opacity 0.2s, transform 0.1s;
+  margin: 0;
 }
 
-#easy-difficulty {
+.home-difficulty__btn:active {
+  transform: scale(0.97);
+}
+
+.home-difficulty__btn--easy {
   background: #2f8a3d;
   color: #fff;
-  border-color: #2f8a3d;
 }
 
-#hard-difficulty {
-  background: #c62828;
-  color: #fff;
-  border-color: #c62828;
-}
-
-#medium-difficulty {
+.home-difficulty__btn--medium {
   background: #f9a825;
   color: #fff;
-  border-color: #f9a825;
 }
 
-
-.menu-buttons button,
-.config-box > button {
-  width: 260px;
-}
-
-.config-box > div button {
-  width: 90px;
-}
-
-.menu-buttons button:hover {
-  background: #f2f6ff;
-  border-color: #6f86bf;
-}
-
-/* El simbolo > indica que se modifican los botones que sean hijos de congif-box*/
-#start-game {
-  background: #2f318a;
+.home-difficulty__btn--hard {
+  background: #c62828;
   color: #fff;
-  border-color: #2f318a;
 }
 
-#start-game:hover {
-  border-color: #025bff;
-  box-shadow: 0 4px 12px rgba(47, 138, 61, 0.3);
+.home-difficulty__btn--active {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
 }
 
-button:focus-visible {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(63, 99, 199, 0.25);
+/* ── Botón empezar partida ────────────────────────────────────────────────── */
+.home-config__start {
+  width: 100%;
+  padding: 0.7rem 1.2rem;
+  background: #646cff;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin: 0;
 }
 
-button:active {
-  transform: translateY(1px);
+.home-config__start:hover {
+  background: #535bf2;
 }
 
+.home-config__start:active {
+  transform: scale(0.98);
+}
