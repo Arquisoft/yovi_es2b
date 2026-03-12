@@ -1,23 +1,24 @@
 import { Board } from "../../components/board/Board";
 import GameInfo from "../../components/board/GameInfo";
 import ControlPanel from "../../components/board/ControlPanel";
-import "../components/board/Board.css";
+import type { GameSettings } from "../../gameOptions/GameSettings";
 import "./Game.css";
-import { Difficulty } from "../../gameOptions/Difficulty";
-import { Strategy } from "../../gameOptions/Strategy";
 
-export function Game() {
-  const settings = {
-    strategy: Strategy.RANDOM,
-    difficulty: Difficulty.EASY
-  };
+// Definimos la interfaz de las props
+interface GameProps {
+  settings: GameSettings;
+  onBack: () => void; // Opcional: para volver al menú
+}
 
+export function Game({ settings, onBack }: GameProps) {
   const currentPlayer = "X";
   const gameStatus = "Playing";
 
   return (
     <div className="game-screen">
       <div className="game-panel">
+
+      <button onClick={onBack} className="back-button">Volver</button>
 
 
         <div className="game-info">
