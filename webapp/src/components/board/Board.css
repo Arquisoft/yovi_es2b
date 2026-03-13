@@ -72,7 +72,7 @@
   color: #9ca3af;
   pointer-events: none;
   user-select: none;
-}
+}*/
 
 /* --- Estados de Jugador (Dinámicos) --- */
 
@@ -120,13 +120,9 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-#restart-button {
-  background-color: #6f42c1; 
-  color: white;
-}
-
 #exit-button {
-  background-color: #ffc107; 
-  color: white;
+  background: transparent;
+  color: #ff5a5a;
+  border: 1px solid #ff5a5a;
 }
 

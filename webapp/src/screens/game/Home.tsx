@@ -26,7 +26,7 @@ export default function HomePage( {username} : { username: string }) {
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings
     if (gameStarted) {
-        return <Game settings={settings} onBack={() => setGameStarted(false)} />;
+        return <Game settings={settings} username={username} />;
     }
 
     if (logOut) {
