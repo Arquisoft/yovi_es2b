@@ -4,7 +4,7 @@
 async function loginuser(users, username, password) {
 
     // que no sea vacío o ERROR
-    if (!username || typeof username !== 'string') {
+    if (!username || typeof username !== 'string' || username.trim().length === 0) {
         throw new Error('Ususario inválido');
     }
     if (!password || typeof password !== 'string') {
@@ -56,6 +56,23 @@ async function createuser(users, username, password) {
 }
 
 /**
+ * Busca un usuario por su nombre de usuario
+ * @throws {UserError} Si el usuario no existe, se lanza un error con un mensaje descriptivo.
+ */
+async function findUser(users, username) {
+  if (!username || typeof username !== 'string' || username.trim().length === 0) {
+    throw new Error('Usuario inválido');
+  }
+  const existingUser = await users.findOne({ "username": username });
+  
+  if (existingUser==null) {
+      throw new UserError(`Usuario '${username}' no encontrado`, 404);
+     //404 Not Found es un código de estado HTTP que indica que el recurso solicitado no se ha encontrado en el servidor.
+    }
+    return existingUser; //no lanza error si no encuentra el usuario, simplemente devuelve null
+}
+
+/**
  * Comprueba que una contraseña sea correcta
  * en la creación del usuario
  */
@@ -82,4 +99,6 @@ function checkPassword(password) {
 }
 
 
-module.exports = { loginuser, createuser };
+
+
+module.exports = { loginuser, createuser, findUser };

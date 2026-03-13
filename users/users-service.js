@@ -8,7 +8,7 @@ const promBundle = require('express-prom-bundle');
 // Importamos las funciones necesarias para interactuar con la base de datos y manejar la lógica de usuarios.
 // necesidades para tener la base de datos
 const { connectDB, getDB } = require('./src/database/db');
-const User = require('./src/users'); // La clase con la lógica
+const UserService = require('./src/user-service'); // La clase con la lógica
 const UserController = require('./user-controller');   // El controlador de rutas
 
 const app = express(); //creamos instancia de express para el manejo de las peticiones
