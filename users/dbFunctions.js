@@ -84,7 +84,7 @@ function checkPassword(password) {
 /**
  * Función de creación de usuario
  */
-async function initmatch(users, username) {
+async function initmatch(users, username, strategy, difficulty) {
     // espera a encontrar el usuario en la base -> Jimena maneja la base
     const existingUser = await users.findOne({ "username": username });
     // si el usuario no existe
@@ -92,9 +92,15 @@ async function initmatch(users, username) {
         throw new Error('Usuario incorrecto. Habla con Jimena');
     }
 
+    var estrategiaJuego = "estrategia" + strategy;
+    var dificultadJuego = "dificultad" + difficulty;
+
     await users.updateOne(
         { _id: existingUser._id },
-        { $inc: { partidasJugadas: 1 } }
+        { $inc: { partidasTotales: 1 ,
+          [estrategiaJuego]: 1,
+          [dificultadJuego]: 1 }
+        }
     )
 
 

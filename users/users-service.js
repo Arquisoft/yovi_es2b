@@ -84,16 +84,16 @@ app.post('/createuser', async (req, res) => {
 
 app.post('/initmatch', async (req, res) => {
 
-  console.log("INITMATCH llamado", req.body);
-
   const username = req.body && req.body.username;
+  const strategy = req.body && req.body.strategy;
+  const difficulty = req.body && req.body.difficulty;
 
   try {
     // primero, traemos la base de datos
     const db = getDB();
     const users = db.collection("users");
 
-    await initmatch(users, username);
+    await initmatch(users, username, strategy, difficulty);
 
     const message = `Partida creada para ${username}!`;
     res.json({ message });

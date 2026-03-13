@@ -13,14 +13,14 @@ const yoviLogo = "/yovi_logo.png";
 /**
  * Declaración primera de esto, para que funcione el guardar datos de la partida
  */
-async function iniciarPartida(username: string) {
+async function iniciarPartida(username: string, strategy: string, difficulty: string) {
     try {
         const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
         const res = await fetch(`${API_URL}/initmatch`, {
             method: 'POST', headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username })
+            body: JSON.stringify({ username, strategy, difficulty })
         });
 
         const data = await res.json();
@@ -45,7 +45,7 @@ export default function HomePage( {username} : { username: string }) {
     // como es función async, llamamos useEffect
     useEffect(() => {
         if (gameStarted) {
-            iniciarPartida(username);
+            iniciarPartida(username, settings.strategy, settings.difficulty);
         }
     }, [gameStarted]);
 
