@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Game } from "./Game";
 import type { GameSettings } from "../../gameOptions/GameSettings";
@@ -10,6 +10,28 @@ import InitialScreen from "../init/InitialScreen";
 
 const yoviLogo = "/yovi_logo.png";
 
+/**
+ * Declaración primera de esto, para que funcione el guardar datos de la partida
+ */
+async function iniciarPartida(username: string) {
+    try {
+        const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
+        const res = await fetch(`${API_URL}/initmatch`, {
+            method: 'POST', headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.error || 'Server error');
+        }
+    } catch (err: any) {
+        throw new Error(err.message || 'Network error');
+    }
+}
+
 export default function HomePage( {username} : { username: string }) {
     const [settings, setSettings] = useState<GameSettings>({
         strategy: Strategy.RANDOM,
@@ -20,11 +42,14 @@ export default function HomePage( {username} : { username: string }) {
     const [menuSelected, setMenuSelected] = useState<string>("");
     const [logOut, setLogOut] = useState(false);
 
-    function startGame() {
-        setGameStarted(true);
-    }
+    // como es función async, llamamos useEffect
+    useEffect(() => {
+        if (gameStarted) {
+            iniciarPartida(username);
+        }
+    }, [gameStarted]);
 
-    // Si el juego ha empezado, renderizamos Game y le pasamos las settings
+    // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (gameStarted) {
         return <Game settings={settings} username={username} />;
     }
@@ -49,7 +74,7 @@ export default function HomePage( {username} : { username: string }) {
             {menuSelected && <p className="home-menu__selected">Seleccionado: {menuSelected}</p>}
 
             <div className="home-config">
-                <button className="home-config__start" onClick={startGame}>
+                <button className="home-config__start" onClick={() => setGameStarted(true)}>
                     Empezar partida
                 </button>
 

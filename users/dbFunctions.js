@@ -65,14 +65,14 @@ function checkPassword(password) {
         throw new Error('La contraseña debe tener 6 o más caracteres.');
     }
 
-    // contraseña tiene una mayúscula
-    if (!password.match(/[A-Z]/)) {
-        throw new Error('La contraseña debe contener al menos una mayúscula');
-    }
-
     // contraseña tiene una minúscula
     if (!password.match(/[a-z]/)) {
         throw new Error('La contraseña debe contener al menos una minúscula');
+    }
+
+    // contraseña tiene una mayúscula
+    if (!password.match(/[A-Z]/)) {
+        throw new Error('La contraseña debe contener al menos una mayúscula');
     }
 
     // contraseña tiene un número
@@ -81,5 +81,26 @@ function checkPassword(password) {
     }
 }
 
+/**
+ * Función de creación de usuario
+ */
+async function initmatch(users, username) {
+    // espera a encontrar el usuario en la base -> Jimena maneja la base
+    const existingUser = await users.findOne({ "username": username });
+    // si el usuario no existe
+    if (!existingUser) {
+        throw new Error('Usuario incorrecto. Habla con Jimena');
+    }
 
-module.exports = { loginuser, createuser };
+    await users.updateOne(
+        { _id: existingUser._id },
+        { $inc: { partidasJugadas: 1 } }
+    )
+
+
+    // todo bien
+    return { message: 'Partida creada correctamente' };
+}
+
+
+module.exports = { loginuser, createuser, initmatch };

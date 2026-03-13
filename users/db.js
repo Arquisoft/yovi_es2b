@@ -28,7 +28,7 @@ async function connectDB() {
     db = client.db("yovi_es2bJ");
 
     // ya se conectó
-    global.__dbConnected = true;
+    global.__bdConectada = true;
   } catch (err) {
     console.error(err);
     process.exit(1);
