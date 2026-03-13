@@ -6,6 +6,7 @@ import { Strategy } from "../../gameOptions/Strategy";
 import type { StrategyType } from "../../gameOptions/Strategy";
 import { Difficulty } from "../../gameOptions/Difficulty";
 import "./Home.css";
+import InitialScreen from "../init/InitialScreen";
 
 const yoviLogo = "/yovi_logo.png";
 
@@ -17,6 +18,7 @@ export default function HomePage( {username} : { username: string }) {
 
     const [gameStarted, setGameStarted] = useState(false);
     const [menuSelected, setMenuSelected] = useState<string>("");
+    const [logOut, setLogOut] = useState(false);
 
     function startGame() {
         setGameStarted(true);
@@ -25,6 +27,10 @@ export default function HomePage( {username} : { username: string }) {
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings
     if (gameStarted) {
         return <Game settings={settings} onBack={() => setGameStarted(false)} />;
+    }
+
+    if (logOut) {
+        return <InitialScreen />;
     }
 
     /*
@@ -89,12 +95,14 @@ export default function HomePage( {username} : { username: string }) {
             <br></br>
             
             <div className="home-menu">
-                
+                <button className="home-menu__btn" onClick={() => setMenuSelected("Mis estadísticas")}>
+                    Mis estadísticas
+                </button>
                 <button className="home-menu__btn" onClick={() => setMenuSelected("Ranking")}>
                     Ranking
                 </button>
-                <button className="home-menu__btn" onClick={() => setMenuSelected("Mis estadísticas")}>
-                    Mis estadísticas
+                <button className="home-menu-out__btn" onClick={() => setLogOut(true)}>
+                    Cerrar sesión
                 </button>
             </div>
         </div>

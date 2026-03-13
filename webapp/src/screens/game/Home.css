@@ -60,6 +60,20 @@
   transform: scale(0.98);
 }
 
+.home-menu-out__btn {
+  width: 100%;
+  padding: 0.7rem 1.2rem;
+  background: transparent;
+  color: #ff5858;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid #ff5858;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 0;
+}
+
 /* ── Caja de configuración ────────────────────────────────────────────────── */
 .home-config {
   display: flex;
