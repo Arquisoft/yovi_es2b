@@ -11,10 +11,10 @@
  * Requiere es una función de Node.js que se utiliza para importar módulos o archivos en el código. 
  * En este caso, estamos importando las funciones loginuser y createuser desde el archivo dbFunctions.js, necesarias para el inicio de sesión
  */
-const { loginuser, createuser } = require('./dbFunctions');
+const { loginuser, createuser } = require('./database/dbFunctions');
 //Busca las funciones loginuser y createuser en el archivo dbFunctions.js y las importa para que puedan ser utilizadas en esta clase UserService.
 
-class UserService {
+class User {
     // El constructor es donde se define el "atributo"
     constructor(db) {
         this.db = db; 
@@ -51,4 +51,4 @@ class UserService {
 }
 
 //Module exports es una forma de exportar un módulo en Node.js, lo que permite que otras partes de la aplicación puedan importar y utilizar la clase UserService definida en este archivo.
-module.exports = UserService;
+module.exports = User;
