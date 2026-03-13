@@ -1,54 +1,77 @@
+/* ── Screen: full viewport, white background (igual que Home) ─────────────── */
 .game-screen {
-  min-height: 100vh;
+  position: fixed;
+  inset: 0;
   display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 24px;
+  flex-direction: column;
+  background: #ffffff;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
+/* ── Panel principal: ocupa todo el espacio disponible ────────────────────── */
 .game-panel {
-  display: flex;
-  flex-direction: row; /* Alineación horizontal: Info | (Tablero + Botones) */
-  align-items: flex-start;
-  gap: 40px;
-  padding: 40px;
-  border-radius: 20px;
-  background-color: #e7f1ff; /* MISMO COLOR PARA TODO EL PANEL INTERIOR */
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  display: grid;
+  grid-template-columns: 260px 1fr 160px;
+  grid-template-rows: auto 1fr;
+  grid-template-areas:
+    "back  back  back"
+    "info  board controls";
+  flex: 1;
+  height: 100%;
+  color: #24292f;
 }
 
-/* Contenedor para el Tablero y los Botones a la derecha */
-.board-main {
+/* ── Barra superior con el botón Volver ───────────────────────────────────── */
+.back-button {
+  grid-area: back;
+  justify-self: start;
+  margin: 1.25rem 1.5rem;
+  padding: 0.55rem 1.2rem;
+  background: transparent;
+  color: #646cff;
+  border: 1px solid #646cff;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.back-button:hover {
+  background: rgba(100, 108, 255, 0.08);
+}
+
+.back-button:active {
+  transform: scale(0.97);
+}
+
+/* ── Info section (columna izquierda) ─────────────────────────────────────── */
+.game-info {
+  grid-area: info;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-right: 1px solid #d0d7de;
 }
 
-.game-info,
-.board-main,
-.controls-bottom {
-  width: 100%;
+/* ── Tablero (centro) ─────────────────────────────────────────────────────── */
+.board-main {
+  grid-area: board;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.game-info {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  text-align: left;
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-
+/* ── Controles (columna derecha) ──────────────────────────────────────────── */
 .controls-bottom {
-  flex: 1;
+  grid-area: controls;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centra los botones verticalmente */
-  align-items: flex-end;   /* Los alinea a la derecha del panel */
+  justify-content: flex-start;
+  align-items: stretch;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem 1.5rem 1rem;
+  border-left: 1px solid #d0d7de;
 }
-

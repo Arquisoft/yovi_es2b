@@ -19,47 +19,69 @@
 .row-container {
   display: flex;
   justify-content: center;
-  gap: 8px;
+  gap: 2px;
+  margin-top: -18px;
 }
 
-/* Casilla con estilo de ficha */
+.row-container:first-child {
+  margin-top: 0;
+}
+
+/* Casilla con forma de hexágono */
 .cell {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid #d1d5db;
-  background-color: #ffffff;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background-color: #b8c0cc; /* color del borde gris */
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.25s ease;
-  box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.05);
+  transition: background-color 0.2s ease, transform 0.15s ease;
+  border: none;
 }
-/* Efecto al pasar el ratón */
+
+/* Relleno interior del hexágono (crea el efecto de borde) */
+.cell::after {
+  content: '';
+  position: absolute;
+  inset: 3px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  background-color: #e8edf2;
+  z-index: 0;
+  transition: background-color 0.2s ease;
+}
+
 .cell:hover {
-  transform: translateY(-3px) scale(1.1);
-  border-color: #9ca3af;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1), inset 0 -3px 0 rgba(0, 0, 0, 0.05);
+  background-color: #8e98a8;
+  transform: scale(1.08);
   z-index: 10;
+}
+
+.cell:hover::after {
+  background-color: #d0d8e4;
 }
 
 /* Label interno (el index) - Estilo sutil para debug */
 .cell-label {
+  position: relative;
+  z-index: 1;
   font-size: 10px;
   font-weight: 600;
   color: #9ca3af;
-  pointer-events: none; /* Evita que interfiera con el click */
+  pointer-events: none;
   user-select: none;
-}
+}*/
 
 /* --- Estados de Jugador (Dinámicos) --- */
 
 /* Jugador 1 - Humano (Azul) */
 .player-1 {
+  background-color: #1d6fd4;
+}
+.player-1::after {
   background-color: #3b82f6;
-  border-color: #2563eb;
-  box-shadow: 0 4px 14px rgba(59, 130, 246, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.15);
 }
 .player-1 .cell-label {
   color: rgba(255, 255, 255, 0.8);
@@ -67,9 +89,10 @@
 
 /* Jugador 2 - Máquina (Rojo) */
 .player-2 {
+  background-color: #b91c1c;
+}
+.player-2::after {
   background-color: #ef4444;
-  border-color: #dc2626;
-  box-shadow: 0 4px 14px rgba(239, 68, 68, 0.4), inset 0 -3px 0 rgba(0, 0, 0, 0.15);
 }
 .player-2 .cell-label {
   color: rgba(255, 255, 255, 0.8);
@@ -82,12 +105,14 @@
 }
 
 .controls button {
-  padding: 12px 20px;
+  padding: 0.65rem 1rem;
   border: none;
-  border-radius: 12px;
-  font-weight: bold;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.95rem;
   cursor: pointer;
-  transition: transform 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s;
+  width: 100%;
 }
 
 .controls button:hover {
@@ -95,13 +120,9 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-#restart-button {
-  background-color: #6f42c1; 
-  color: white;
-}
-
 #exit-button {
-  background-color: #ffc107; 
-  color: white;
+  background: transparent;
+  color: #ff5a5a;
+  border: 1px solid #ff5a5a;
 }
 

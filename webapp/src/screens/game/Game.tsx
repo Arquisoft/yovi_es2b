@@ -7,19 +7,16 @@ import "./Game.css";
 // Definimos la interfaz de las props
 interface GameProps {
   settings: GameSettings;
-  onBack: () => void; // Opcional: para volver al menú
+  username: string;
 }
 
-export function Game({ settings, onBack }: GameProps) {
-  const currentPlayer = "X";
+export function Game({ settings, username }: GameProps) {
+  const currentPlayer = username;
   const gameStatus = "Playing";
 
   return (
     <div className="game-screen">
       <div className="game-panel">
-
-      <button onClick={onBack} className="back-button">Volver</button>
-
 
         <div className="game-info">
           <GameInfo
@@ -34,7 +31,7 @@ export function Game({ settings, onBack }: GameProps) {
         </div>
 
         <div className="controls-bottom">
-          <ControlPanel />
+          <ControlPanel username={username} />
         </div>
       </div>
     </div>
