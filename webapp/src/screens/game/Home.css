@@ -143,9 +143,21 @@
   color: #fff;
 }
 
+.home-difficulty__btn--easy--active {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
+  background-color: #4ee464;
+  color: #181818;
+}
+
 .home-difficulty__btn--medium {
   background: #f9a825;
   color: #fff;
+}
+
+.home-difficulty__btn--medium--active {
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
+  background-color: #ffe32b;
+  color: #181818;
 }
 
 .home-difficulty__btn--hard {
@@ -153,9 +165,12 @@
   color: #fff;
 }
 
-.home-difficulty__btn--active {
+.home-difficulty__btn--hard--active {
   box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
+  background-color: #ff5c5c;
+  color: #181818;
 }
+
 
 /* ── Botón empezar partida ────────────────────────────────────────────────── */
 .home-config__start {

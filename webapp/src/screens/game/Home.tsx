@@ -99,17 +99,17 @@ export default function HomePage( {username} : { username: string }) {
                 <label className="home-config__label">Dificultad</label>
                 <div className="home-difficulty">
                     <button
-                        className={`home-difficulty__btn home-difficulty__btn--easy${settings.difficulty === Difficulty.EASY ? " home-difficulty__btn--active" : ""}`}
+                        className={`home-difficulty__btn home-difficulty__btn--easy${settings.difficulty === Difficulty.EASY ? " home-difficulty__btn--easy--active" : ""}`}
                         onClick={() => setSettings({ ...settings, difficulty: Difficulty.EASY })}>
                         Fácil
                     </button>
                     <button
-                        className={`home-difficulty__btn home-difficulty__btn--medium${settings.difficulty === Difficulty.MEDIUM ? " home-difficulty__btn--active" : ""}`}
+                        className={`home-difficulty__btn home-difficulty__btn--medium${settings.difficulty === Difficulty.MEDIUM ? " home-difficulty__btn--medium--active" : ""}`}
                         onClick={() => setSettings({ ...settings, difficulty: Difficulty.MEDIUM })}>
                         Media
                     </button>
                     <button
-                        className={`home-difficulty__btn home-difficulty__btn--hard${settings.difficulty === Difficulty.HARD ? " home-difficulty__btn--active" : ""}`}
+                        className={`home-difficulty__btn home-difficulty__btn--hard${settings.difficulty === Difficulty.HARD ? " home-difficulty__btn--hard--active" : ""}`}
                         onClick={() => setSettings({ ...settings, difficulty: Difficulty.HARD })}>
                         Difícil
                     </button>
