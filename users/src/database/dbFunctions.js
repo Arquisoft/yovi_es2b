@@ -1,3 +1,5 @@
+const UserError = require('../errors/UserError');
+
 /*
  * Función de registro de un usuario existente
  */
