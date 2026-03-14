@@ -10,8 +10,11 @@ RUN npm ci --silent
 COPY . .
 
 # Accept build-time API url (defaults to localhost:3000)
-ARG VITE_API_URL="http://localhost:3000"
-RUN export VITE_API_URL=${VITE_API_URL} && npm run build
+ARG VITE_API_URL_WA="http://localhost:3000"
+RUN export VITE_API_URL_WA=${VITE_API_URL_WA} && npm run build
+# Lo mismo para gamey
+ARG VITE_API_URL_GY="http://localhost:4000"
+RUN export VITE_API_URL_GY=${VITE_API_URL_GY} && npm run build
 
 # Production image
 FROM nginx:stable-alpine

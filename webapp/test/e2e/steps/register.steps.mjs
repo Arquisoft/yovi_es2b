@@ -18,5 +18,5 @@ When('I navigate to signup and register with valid credentials', async function 
 Then('I should see the home screen', async function () {
   const page = this.page
   if (!page) throw new Error('Page not initialized')
-  await page.waitForSelector('.home-container', { timeout: 15000 })
+  await page.waitForSelector('.initial-screen', { timeout: 15000 })
 })

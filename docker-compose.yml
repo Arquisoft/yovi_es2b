@@ -14,7 +14,7 @@ services:
     build:
       context: ./webapp
       args:
-        - VITE_API_URL=http://localhost:3000
+        - VITE_API_URL_WA=http://localhost:3000
     container_name: webapp
     image: ghcr.io/arquisoft/yovi_es2b-webapp:latest
     ports:
@@ -25,7 +25,10 @@ services:
       - monitor-net
 
   gamey:
-    build: ./gamey
+    build: 
+      context: ./gamey
+      args:
+        - VITE_API_URL_GY=http://localhost:4000
     container_name: gamey
     image: ghcr.io/arquisoft/yovi_es2b-gamey:latest
     ports:
