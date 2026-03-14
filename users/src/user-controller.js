@@ -21,7 +21,7 @@ class UserController {
         this.loginUser = this.loginUser.bind(this);
         this.createUser = this.createUser.bind(this);
         this.getUser = this.getUser.bind(this);
-        this.initMatch = this.initMatch.bind(this);
+        this.initmatch = this.initmatch.bind(this);
     }
 
     /**
@@ -124,12 +124,12 @@ class UserController {
      * Req y res son los objetos de solicitud (request) y respuesta de Express, que permiten manejar la comunicación HTTP.
      * Express esta definido en users-service.js,  pero se usa aqui para manejar las solicitudes HTTP que llegan a los endpoints definidos en users.js.
      */
-     async initMatch(req, res) {    
+     async initmatch(req, res) {    
         try {
             const username = req.body && req.body.username;
             const strategy = req.body && req.body.strategy;
             const difficulty = req.body && req.body.difficulty;
-            const message = await this.userService.initMatch(username, strategy, difficulty);
+            const message = await this.userService.initmatch(username, strategy, difficulty);
             //Error 200 OK se devuelve cuando la solicitud se ha procesado correctamente y se ha generado una respuesta exitosa. En este caso, se devuelve un mensaje indicando que la partida ha comenzado para el usuario especificado.
             return res.status(200).json({ message });
         } catch (error) {

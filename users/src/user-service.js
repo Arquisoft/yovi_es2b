@@ -11,7 +11,7 @@
  * Requiere es una función de Node.js que se utiliza para importar módulos o archivos en el código. 
  * En este caso, estamos importando las funciones loginuser y createuser desde el archivo dbFunctions.js, necesarias para el inicio de sesión
  */
-const { loginuser, createuser, findUser, initMatch } = require('./database/dbFunctions');
+const { loginuser, createuser, findUser, initmatch } = require('./database/dbFunctions');
 //Busca las funciones loginuser y createuser en el archivo dbFunctions.js y las importa para que puedan ser utilizadas en esta clase UserService.
 
 class UserService {
@@ -86,7 +86,7 @@ class UserService {
    * @param {*} difficulty 
    * @returns 
    */
-  async initMatch(username, strategy, difficulty) {
+  async initmatch(username, strategy, difficulty) {
     await initmatch(this.usersCollection, username, strategy, difficulty);
     return `Match started for ${username}!`;
 }
