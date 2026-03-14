@@ -20,7 +20,6 @@ const port = 3000; //definimos el puerto en el que se ejecutará el servicio de 
 const metricsMiddleware = promBundle({includeMethod: true});
 app.use(metricsMiddleware);
 
-//
 try {
   //Lee el archivo openapi.yaml, que contiene la definición de la API en formato OpenAPI, y lo carga en una variable llamada swaggerDocument.
   //YAML.load convierte ese texto (que está en formato YAML) en un objeto de JavaScript que el programa pueda entender
@@ -47,7 +46,7 @@ app.use((req, res, next) =>
 
 app.use(express.json());
 
-/** 5. Arranco el servidor y conecto a la base de datos. Como tengo modelo, servicio y controlador, sustituyo el código
+/**Arranco el servidor y conecto a la base de datos. Como tengo modelo, servicio y controlador, sustituyo el código
 *  de arranque inicial por las instancias de cada uno y defino los endpoints que llaman a los  métodos del controlador,
 *  que a su vez llaman a los métodos del servicio, que a su vez llaman a las funciones de la base de datos.
 */
@@ -61,6 +60,7 @@ async function startServer() {
   app.post('/loginuser',  userController.login);
   app.post('/createuser', userController.createUser);
   app.get('/users/:id',   userController.getUser);
+  app.post('/initmatch',  userController.initMatch);
 
 }
 
