@@ -7,7 +7,7 @@
 const UserError = require('../errors/UserError');
 
 class UserController {
-
+ 
     /**
      * @param {UserService} userService - Servicio inyectado desde el entry point
      * Necesario para que el controlador pueda delegar en los métodos definidos en service, que a su vez llaman a las funciones de la base de datos.
@@ -21,6 +21,7 @@ class UserController {
         this.loginUser = this.loginUser.bind(this);
         this.createUser = this.createUser.bind(this);
         this.getUser = this.getUser.bind(this);
+        this.initMatch = this.initMatch.bind(this);
     }
 
     /**
@@ -112,6 +113,35 @@ class UserController {
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
     }
+
+    /**
+     * POST /initmatch
+     * Body esperado: { username: string, strategy: string, difficulty: string }
+     * 
+     * Metodo para manejar la lógica de inicio de una nueva partida.
+     * Recibe el nombre de usuario, la estrategia y la dificultad como parámetros en el cuerpo de la solicitud, y devuelve un mensaje indicando que la partida ha comenzado si los parámetros son válidos.
+     * Si el usuario no existe o si los parámetros no son válidos, se lanzan errores que son manejados por el controlador para devolver respuestas adecuadas al cliente.
+     * Req y res son los objetos de solicitud (request) y respuesta de Express, que permiten manejar la comunicación HTTP.
+     * Express esta definido en users-service.js,  pero se usa aqui para manejar las solicitudes HTTP que llegan a los endpoints definidos en users.js.
+     */
+     async initMatch(req, res) {    
+        try {
+            const username = req.body && req.body.username;
+            const strategy = req.body && req.body.strategy;
+            const difficulty = req.body && req.body.difficulty;
+            const message = await this.userService.initMatch(username, strategy, difficulty);
+            //Error 200 OK se devuelve cuando la solicitud se ha procesado correctamente y se ha generado una respuesta exitosa. En este caso, se devuelve un mensaje indicando que la partida ha comenzado para el usuario especificado.
+            return res.status(200).json({ message });
+        } catch (error) {
+            if (error instanceof UserError) {
+                return res.status(error.statusCode).json({ error: error.message });
+            }
+            if (!username || !strategy || !difficulty) {
+                return res.status(400).json({ error: 'username, strategy y difficulty son obligatorios' });
+            }   
+            return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+     }
 }
 
 module.exports = UserController;

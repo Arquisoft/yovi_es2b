@@ -11,7 +11,7 @@
  * Requiere es una función de Node.js que se utiliza para importar módulos o archivos en el código. 
  * En este caso, estamos importando las funciones loginuser y createuser desde el archivo dbFunctions.js, necesarias para el inicio de sesión
  */
-const { loginuser, createuser, findUser } = require('./database/dbFunctions');
+const { loginuser, createuser, findUser, initMatch } = require('./database/dbFunctions');
 //Busca las funciones loginuser y createuser en el archivo dbFunctions.js y las importa para que puedan ser utilizadas en esta clase UserService.
 
 class UserService {
@@ -75,6 +75,21 @@ class UserService {
     const { password, ...userWithoutPassword } = user;
     return userWithoutPassword;
     }
+
+  /**
+   * Para la creación de una partida, se necesita verificar que el usuario existe y luego iniciar la partida con los parámetros dados.
+   * Llama a la función initmatch para iniciar una nueva partida en la base de datos.
+   * Si la partida se inicia correctamente, devuelve un mensaje indicando que la partida ha comenzado.
+   * 
+   * @param {*} username 
+   * @param {*} strategy 
+   * @param {*} difficulty 
+   * @returns 
+   */
+  async initMatch(username, strategy, difficulty) {
+    await initmatch(this.usersCollection, username, strategy, difficulty);
+    return `Match started for ${username}!`;
+}
 }
 
 //Module exports es una forma de exportar un módulo en Node.js, lo que permite que otras partes de la aplicación puedan importar y utilizar la clase UserService definida en este archivo.

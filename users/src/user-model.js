@@ -11,14 +11,11 @@ class User {
    * @param {string} username - Nombre de usuario único
    * @param {string} password - Contraseña (idealmente ya hasheada antes de llegar aquí)
    * @param {Date}   createdAt - Fecha de creación (por defecto, ahora)
-   * @param {Object} stats     - Estadísticas de partidas del usuario
    */
-  constructor(username, password, createdAt = new Date(), stats = { gamesPlayed: 0, wins: 0, losses: 0 }) {
+  constructor(username, password, createdAt = new Date()) {
     this.username  = username;
     this.password  = password;
-    this.createdAt = createdAt;
-    this.stats     = stats;
-  }
+    this.createdAt = createdAt;  }
 }
 
 //Module exports es una forma de exportar un módulo en Node.js, lo que permite que otras partes de la aplicación puedan importar y utilizar la clase UserService definida en este archivo.

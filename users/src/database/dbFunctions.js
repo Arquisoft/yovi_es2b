@@ -102,7 +102,7 @@ function checkPassword(password) {
     /**
  * Función de creación de usuario
  */
-    async function initmatch(users, username, strategy, difficulty) {
+    async function initMatch(users, username, strategy, difficulty) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
         const existingUser = await users.findOne({ "username": username });
         // si el usuario no existe
