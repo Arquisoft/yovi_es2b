@@ -70,21 +70,27 @@ export function Board(props: BoardProps) {
     setValores(layoutToValores(layout));
   };
 
+/*
 
+########################################################################
+
+          Jimena  -- Metodos a completar
+
+########################################################################
+
+*/
 
    // Llama al servidor enviandole el movimiento
    //
    //   Promise<any> -> Devuelve un valor cualquiera de forma async
   async function peticionMovimiento(x: number, y: number, z: number, player: number): Promise<any> {
-    
+
     // POST /v1/games/gameId/move
     // return json
-
   }
 
   // Obtiene el estado actual de la partida desde el servidor
   async function peticionEstadoPartida(): Promise<any> {
-
     // /v1/games/gameId
     // return json
 
@@ -94,10 +100,13 @@ export function Board(props: BoardProps) {
   // Pasarle estado
   async function peticionMovimientoBot(state: unknown): Promise<any> {
 
-    // POST /v1/ybot/choose/0
+    // POST /v1/ybot/choose/random_bot
     // return json
 
   }
+
+  /*
+
 
    /**
    * METODO RECEPTOR QUE GESTIONA TODA LA LOGICA DEL TABLERO

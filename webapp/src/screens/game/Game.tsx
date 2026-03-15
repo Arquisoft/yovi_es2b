@@ -24,9 +24,6 @@ async function crearPartida(boardSize: number): Promise<string> {
      * // Entrada: { "board_size": 5 }
       // Respuesta: { "game_id": "game-1", "board_size": 5 }
      */
-
-      //Return gameID
-      return "";
 }
 
 /*async function getEstadoPartida() {
@@ -45,7 +42,6 @@ async function getTurnoPartida(gameId: string): Promise<number> {
     // Respuesta ongoing:  { "kind": "Ongoing",  "next_player": 0 }
     // Respuesta finished: { "kind": "Finished", "winner": 1 }
     */
-    return 0;
 }
 
 export function Game({ settings, username, stateStart }: GameProps) {
