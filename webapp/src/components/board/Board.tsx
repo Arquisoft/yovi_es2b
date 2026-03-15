@@ -58,7 +58,7 @@ export function Board(props: BoardProps) {
 		  //llama a servicio para obtener movimiento bot
 		  // manejarClick(movimiento bot)
       //Si jugador 1 o jugador 2
-      props.turno=username;
+      props.turno=props.username;
       return;
     }
 
