@@ -471,22 +471,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </li>
 <li><a href="#section-building-block-view">5. Vista de bloques</a></li>
-<li><a href="#section-runtime-view">6. Vista en tiempo de ejecución</a></li>
-<li><a href="#section-deployment-view">7. Vista de despliegue</a></li>
-<li><a href="#section-concepts">8. Conceptos transversales</a></li>
-<li><a href="#section-design-decisions">9. Decisiones arquitectónicas</a>
+<li><a href="#_vista_de_bloques_building_block_view">6. Vista de Bloques (Building Block View)</a>
 <ul class="sectlevel2">
-<li><a href="#_tabla_de_decisiones">9.1. Tabla de decisiones</a></li>
+<li><a href="#_nivel_1_visión_general_del_sistema">6.1. Nivel 1 – Visión general del sistema</a></li>
+<li><a href="#_nivel_2_descomposición_interna_de_los_bloques">6.2. Nivel 2 – Descomposición interna de los bloques</a></li>
+<li><a href="#_nivel_3_interfaces_entre_componentes">6.3. Nivel 3: Interfaces entre componentes</a></li>
 </ul>
 </li>
-<li><a href="#section-quality-scenarios">10. Requisitos de calidad</a></li>
-<li><a href="#section-technical-risks">11. Riesgos y deuda técnica</a>
+<li><a href="#section-runtime-view">7. Vista en tiempo de ejecución</a></li>
+<li><a href="#section-deployment-view">8. Vista de despliegue</a></li>
+<li><a href="#section-concepts">9. Conceptos transversales</a></li>
+<li><a href="#section-design-decisions">10. Decisiones arquitectónicas</a>
 <ul class="sectlevel2">
-<li><a href="#_tabla_de_riesgos">11.1. Tabla de riesgos</a></li>
+<li><a href="#_tabla_de_decisiones">10.1. Tabla de decisiones</a></li>
 </ul>
 </li>
-<li><a href="#section-glossary">12. Tests</a></li>
-<li><a href="#section-glossary">13. Glosario</a></li>
+<li><a href="#section-quality-scenarios">11. Requisitos de calidad</a></li>
+<li><a href="#section-technical-risks">12. Riesgos y deuda técnica</a>
+<ul class="sectlevel2">
+<li><a href="#_tabla_de_riesgos">12.1. Tabla de riesgos</a></li>
+</ul>
+</li>
+<li><a href="#section-glossary">13. Tests</a></li>
+<li><a href="#section-glossary">14. Glosario</a></li>
 </ul>
 </div>
 </div>
@@ -798,10 +805,10 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <p><strong>El frontend web:</strong> desarrollado en React, se ejecuta en el navegador del usuario y se encarga de la presentación visual del tablero, la gestión de interacciones de los jugadores y la comunicación con el backend.</p>
 </li>
 <li>
-<p><strong>El backend:</strong> implementado en Rust, centraliza toda la lógica de juego. Su responsabilidad incluye validar movimientos, controlar los turnos, calcular capturas y determinar el resultado final de la partida. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.</p>
+<p><strong>El backend:</strong> se divide en dos microservicios independientes que gestionan distintas responsabilidades del sistema, el microservicio de GameY, en Rust, y el de los usuarios, en NOde.js</p>
 </li>
 <li>
-<p><strong>La persistencia de datos:</strong> se realiza mediante MongoDB, que almacena información estructurada de usuarios, partidas y resultados. Elegimos el modelo racional por la facilidad de despliegue y la capacidad de ver los datos en tiempo real.</p>
+<p><strong>La persistencia de datos:</strong> se realiza mediante MongoDB, que almacena información estructurada de usuarios, partidas y resultados. Elegimos el modelo noSQL por la facilidad de despliegue y la capacidad de ver los datos en tiempo real.</p>
 </li>
 <li>
 <p><strong>La comunicación entre frontend y backend:</strong> se realiza mediante mensajes JSON siguiendo la notación YEN. Esta notación permite representar de manera precisa la situación de cada partida en un instante dado, facilitando tanto la interacción con la interfaz web como la integración con bots a través del API.</p>
@@ -812,7 +819,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </ul>
 </div>
 <div class="paragraph">
-<p>Esta arquitectura modular y distribuida permite que el sistema sea escalable y extensible para futuras versiones que incluyan variantes adicionales del juego, soporte para varios jugadores o funcionalidades opcionales avanzadas.</p>
+<p>La comunicación se realiza mediante una API REST que intercambia mensajes JSON.. Esta arquitectura modular y distribuida permite que el sistema sea escalable y extensible para futuras versiones que incluyan variantes adicionales del juego, soporte para varios jugadores o funcionalidades opcionales avanzadas.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -898,15 +905,298 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <div class="paragraph">
 <p>En este apartado veremos una versión estática del proyecto. Se tienen que ver una visión principal del proyecto de forma que se puedan simplificar mediante un diagrama donde se puedan ver los componentes principales (clases, módulos, paquetes, …) y las dependencias entre ellos (relaciones, asociaciones, interacciones, …).</p>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_vista_de_bloques_building_block_view">6. Vista de Bloques (Building Block View)</h2>
+<div class="sectionbody">
 <div class="paragraph">
-<p>Vemos en la siguiente imagen el diagrama de clases de este proyecto.
-= <span class="image"><img src="./images/gamey_uml.png" alt="gamey_uml"></span></p>
+<p>La arquitectura de YOVI se organiza siguiendo un modelo modular basado en microservicios. Cada componente del sistema tiene responsabilidades claramente definidas, permitiendo separar la lógica de presentación, la lógica de negocio y la persistencia de datos. Esta separación facilita la mantenibilidad del sistema, y facilita el trabajo en caso de que sea necesario evolucionar cada componente de forma independiente.</p>
+</div>
+<div class="sect2">
+<h3 id="_nivel_1_visión_general_del_sistema">6.1. Nivel 1 – Visión general del sistema</h3>
+<div class="paragraph">
+<p>A alto nivel, el sistema está compuesto por cuatro bloques principales, uno de frontend, dos de backend y uno de persistencia:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Frontend web</p>
+</li>
+<li>
+<p>Microservicio User</p>
+</li>
+<li>
+<p>Microservicio GameY</p>
+</li>
+<li>
+<p>Base de datos</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Estos componentes interactúan entre sí mediante API REST (modelo, servicio y controlers) y mensajes en formato JSON.</p>
+</div>
+<div class="sect3">
+<h4 id="_frontend_web_webapp">6.1.1. Frontend Web: WEBAPP</h4>
+<div class="paragraph">
+<p>El frontend es una aplicación web desarrollada en React y que es ejecutada en el navegador del usuario. Divide el códgio en screens y componentes, que interactúan directamente con los controllers del juego</p>
+</div>
+<div class="paragraph">
+<p>Sus responsabilidades principales son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Mostrar la interfaz del juego.</p>
+</li>
+<li>
+<p>Representar el tablero y las fichas.</p>
+</li>
+<li>
+<p>Gestionar las acciones del usuario (movimientos, selección de estrategias, inicio de partidas).</p>
+</li>
+<li>
+<p>Enviar solicitudes al controller por los endpoints del backend.</p>
+</li>
+<li>
+<p>Mostrar los resultados y el estado actualizado de la partida.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>El frontend no contiene lógica del juego. Toda la validación de movimientos y cálculo del estado del tablero se delega al backend para garantizar la integridad de las partidas.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_microservicio_user">6.1.2. Microservicio User</h4>
+<div class="paragraph">
+<p>El microservicio User está implementado en Node.js y se encarga de gestionar toda la información relacionada con los usuarios del sistema. Este servicio se base en una API REST que permite al frontend consultar o modificar información relacionada con los jugadores.</p>
+</div>
+<div class="paragraph">
+<p>Entre sus responsabilidades se incluyen:
+* Registro y gestión de usuarios.
+* Consulta y gestión de estadísticas de juego.
+* Almacenamiento del ranking de partidas.
+* Gestión de la información de perfil del jugador.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_microservicio_gamey">6.1.3. Microservicio GameY</h4>
+<div class="paragraph">
+<p>El microservicio GameY está desarrollado en Rust y contiene toda la lógica principal del juego.
+De nuevo gracias a la API REST usada el frontend envia el estado actual de una partida y recibe como respuesta el nuevo estado del tablero o el siguiente movimiento calculado. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.</p>
+</div>
+<div class="paragraph">
+<p>Sus responsabilidades son:
+* Validar los movimientos realizados por los jugadores.
+* Gestionar el turno de juego.
+* Determinar si una partida ha finalizado.
+* Calcular el siguiente movimiento cuando se juega contra la máquina.
+* Implementar diferentes estrategias y niveles de dificultad para la inteligencia artificial.</p>
+</div>
+<div class="paragraph">
+<p>Para representar el estado del juego se utiliza la notación YEN, que permite describir de forma compacta la situación del tablero.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_base_de_datos">6.1.4. Base de Datos</h4>
+<div class="paragraph">
+<p>El sistema utiliza MongoDB como sistema de persistencia.
+Se trata de una base de datos NoSQL orientada a documentos, adecuada para almacenar estructuras de datos flexibles como partidas de juego y estadísticas.</p>
+</div>
+<div class="paragraph">
+<p>La base de datos almacena principalmente:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Información de usuarios.</p>
+</li>
+<li>
+<p>Partidas jugadas.</p>
+</li>
+<li>
+<p>Estadísticas de juego.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Los microservicios acceden a la base de datos para almacenar y recuperar la información necesaria para su funcionamiento.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_este_es_el_esquema_del_juego_completo">6.1.5. Este es el esquema del juego completo:</h4>
+<div class="imageblock">
+<div class="content">
+<img src="./images/yovi-estructura.png" alt="componentes-yovi">
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_nivel_2_descomposición_interna_de_los_bloques">6.2. Nivel 2 – Descomposición interna de los bloques</h3>
+<div class="paragraph">
+<p>Este apartado se centra en detallar la estructura interna de los principales componentes del sistema.
+El objetivo de este nivel es mostrar cómo se separan las distintas capas de la aplicación, distinguiendo claramente entre los componentes responsables de la interfaz de usuario, los responsables de implementar la lógica de negocio y los encargados de gestionar los datos del juego.</p>
+</div>
+<div class="sect3">
+<h4 id="_frontend">6.2.1. Frontend</h4>
+<div class="paragraph">
+<p>El frontend actúa principalmente como una capa de presentación, delegando la lógica de negocio y la validación de las reglas del juego en los servicios backend.
+Así, lograr una arquitectura clara y evitar que el cliente deba controlar los aspectos críticos es posible.</p>
+</div>
+<div class="paragraph">
+<p>El frontend puede dividirse internamente en varios módulos:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Interfaz de usuario:</strong> encargados de representar el tablero, el menú y los elementos visuales de la aplicación.</p>
+</li>
+<li>
+<p><strong>Gestión de estado:</strong> control del estado actual de la partida y de la sesión del usuario.</p>
+</li>
+<li>
+<p><strong>Peticiones del cliente:</strong> módulo encargado de realizar las peticiones HTTP a los microservicios backend, comunicandose con los controllers.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_microservicio_user_2">6.2.2. Microservicio User</h4>
+<div class="paragraph">
+<p>Este microservicio se compone de los siguientes módulos internos:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Controladores API:</strong> reciben las peticiones REST y gestionan las respuestas.</p>
+</li>
+<li>
+<p><strong>Lógica de negocio de usuarios:</strong> implementa las operaciones relacionadas la gestión de usuarios y estadísticas.</p>
+</li>
+<li>
+<p><strong>Acceso a datos:</strong> es el encargado de interactuar con la base de datos MongoDB: crear usuarios, iniciar sesión, &#8230;&#8203;</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_microservicio_gamey_2">6.2.3. Microservicio GameY</h4>
+<div class="paragraph">
+<p>Está organizado en las siguientes partes internas:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Motor de juego:</strong> implementa las reglas de gameY.</p>
+</li>
+<li>
+<p><strong>Validador de movimientos:</strong> verifica que los movimientos realizados sean válidos.</p>
+</li>
+<li>
+<p><strong>Gestor de partidas:</strong> mantiene el estado actual de cada partida.</p>
+</li>
+<li>
+<p><strong>Módulo de estrategias:</strong> calcula el siguiente movimiento del bot según el nivel de dificultad y la estrategia elegidas.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Esta organización permite modificar o añadir nuevas estrategias de juego sin afectar al resto del sistema.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_beneficios_de_la_arquitectura">6.2.4. Beneficios de la arquitectura</h4>
+<div class="paragraph">
+<p>Las principales ventajas que proporciona la estructura elegida son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Separación clara de responsabilidades</strong> - como cada componente tiene una responsabilidad bien definida, se facilita el mantenimiento del sistema y reduce el acoplamiento entre componentes..</p>
+</li>
+<li>
+<p><strong>Escalabilidad</strong>, permitiendo desplegar y escalar cada microservicio de manera independiente, lo que permitira por ejemplo crear varias instancias del juego</p>
+</li>
+<li>
+<p><strong>Flexibilidad tecnológica</strong>, ya que cada servicio puede desarrollarse con el lenguaje más adecuado según sus necesidades.</p>
+</li>
+<li>
+<p><strong>Extensibilidad</strong>, permitiendo añadir nuevas funcionalidades o variantes del juego sin rediseñar el sistema completo.</p>
+</li>
+<li>
+<p><strong>Despliegue reproducible</strong> , ya que el uso de contenedores Docker permite ejecutar el sistema en diferentes entornos de forma consistente.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_nivel_3_interfaces_entre_componentes">6.3. Nivel 3: Interfaces entre componentes</h3>
+<div class="paragraph">
+<p>Los  componentes del sistema se comunican entre sí mediante las interfaces basadas en servicios web y mensajes, que también contribuyen al desacoplamiento y la separación de responabilidades.</p>
+</div>
+<div class="paragraph">
+<p>Las principales interfaces del sistema son las siguientes.</p>
+</div>
+<div class="sect3">
+<h4 id="_interfaz_frontend_microservicio_user">6.3.1. Interfaz Frontend – Microservicio User</h4>
+<div class="paragraph">
+<p>Esta interfaz permite realizar operaciones de registro de usuarios, información del perfil, consulta de estrategias del juego:</p>
+</div>
+<div class="paragraph">
+<p>Las peticiones se realizan mediante HTTP y utilizan mensajes en formato JSON para el intercambio de datos. Algunas de las operaciones disponibles son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>POST /loginuser – iniciar sesión con un usuario existente</p>
+</li>
+<li>
+<p>GET /users/{id} – obtener información de un usuario.</p>
+</li>
+<li>
+<p>POST /createuser – crea un nuevo usuario, validando que no exista</p>
+<div class="literalblock">
+<div class="content">
+<pre>image::yovi-interfazusers.png[interfaz-users-yovi]</pre>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_interfaz_frontend_microservicio_gamey">6.3.2. Interfaz Frontend – Microservicio GameY</h4>
+<div class="paragraph">
+<p>El frontend interactúa con el microservicio GameY para gestionar el desarrollo de las partidas gracias a la API REST . La información de la partida se representa mediante la notación YEN, que describe el tamaño del tablero, el turno actual y la disposición de las piezas.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_interfaz_de_acceso_a_datos">6.3.3. Interfaz de acceso a datos</h4>
+<div class="paragraph">
+<p>Los microservicios del sistema acceden a la base de datos de MongoDB para almacenar y recuperar la información persistente. Entre las principales operaciones destacan el almacenamiento de usuarios ya registrados, el registro de las partidas jugadas, la consulta de estadísticas del juego o del ranking, &#8230;&#8203;</p>
+</div>
+<div class="paragraph">
+<p>El acceso a la base de datos se realiza a través de los métodos de acceso a datos definidos dentro de cada microservicio, evitando que otros componentes interactúen directamente con la base de datos.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_vemos_en_la_siguiente_imagen_el_diagrama_de_clases_de_este_proyecto">6.3.4. Vemos en la siguiente imagen el diagrama de clases de este proyecto.</h4>
+<div class="imageblock">
+<div class="content">
+<img src="./images/gamey_uml.png" alt="gamey_uml">
+</div>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
 </div>
+</div>
+</div>
 <div class="sect1">
-<h2 id="section-runtime-view">6. Vista en tiempo de ejecución</h2>
+<h2 id="section-runtime-view">7. Vista en tiempo de ejecución</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Ahora podremos ver diferentes diagramas, que representarán el juego a lo largo de su tiempo de vida para casos concretos en tiempo de ejecución. Más específicamente, se verá la interacción entre usuario y el resto del sistema (interfaces, servicio, base de datos, etc.), y cómo afectará al juego en cada caso.</p>
@@ -923,7 +1213,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-deployment-view">7. Vista de despliegue</h2>
+<h2 id="section-deployment-view">8. Vista de despliegue</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>En este caso, habrá un diagrama que represente las relaciones entre elementos que participarán en las acciones de despliegue y cómo se hará para distribuir el proyecto sobre un producto final y la infraestructura para soportarlo.</p>
@@ -935,7 +1225,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-concepts">8. Conceptos transversales</h2>
+<h2 id="section-concepts">9. Conceptos transversales</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>En este apartado se explicarán distintos aspectos de la gestión del proyecto, centrándose en los niveles de prioridad para abordar las tareas, los patrones de diseño seguidos, la testeabilidad y seguridad del proyecto y las librerías usadas. Además, mencionaremos algunos aspectos extras del desarrollo si se acaban implementando.</p>
@@ -944,13 +1234,13 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-design-decisions">9. Decisiones arquitectónicas</h2>
+<h2 id="section-design-decisions">10. Decisiones arquitectónicas</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Son criterios importantes respecto al proyecto que nos puedan costar recursos, no tanto monetarios en este caso, pero más de tiempo y esfuerzo humano. Se explayarán por duplas de términos “Decisión-Consecuencia”.</p>
 </div>
 <div class="sect2">
-<h3 id="_tabla_de_decisiones">9.1. Tabla de decisiones</h3>
+<h3 id="_tabla_de_decisiones">10.1. Tabla de decisiones</h3>
 <div class="paragraph">
 <p>Este apartado trata de explicar que las decisiones tomadas se llevaron a cabo tras una reflexión grupal, conociendo inconvenientes de cada una.</p>
 </div>
@@ -989,7 +1279,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-quality-scenarios">10. Requisitos de calidad</h2>
+<h2 id="section-quality-scenarios">11. Requisitos de calidad</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Se definirán los requisitos de calidad necesarios para que el proyecto esté realmente correcto y finalizado.</p>
@@ -998,13 +1288,13 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-technical-risks">11. Riesgos y deuda técnica</h2>
+<h2 id="section-technical-risks">12. Riesgos y deuda técnica</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Aquí definiremos también mediante duplas de “Título-Descripción” de algunos riesgos que surgidos a lo largo del tiempo de vida del proyecto. Esta tabla estará ordenada en orden de prioridad para tener en cuenta.</p>
 </div>
 <div class="sect2">
-<h3 id="_tabla_de_riesgos">11.1. Tabla de riesgos</h3>
+<h3 id="_tabla_de_riesgos">12.1. Tabla de riesgos</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1032,7 +1322,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-glossary">12. Tests</h2>
+<h2 id="section-glossary">13. Tests</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Se explicarán los tests hechos para comprobar el funcionamiento del juego.</p>
@@ -1041,7 +1331,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-glossary">13. Glosario</h2>
+<h2 id="section-glossary">14. Glosario</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Se explicarán varios conceptos necesarios para comprender la documentación y el producto final de forma completa.</p>
@@ -1083,7 +1373,7 @@ See <a href="https://arc42.org" class="bare">https://arc42.org</a>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-08 22:45:33 +0100
+Last updated 2026-03-14 14:07:11 +0100
 </div>
 </div>
 </body>
