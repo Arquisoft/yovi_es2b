@@ -9,7 +9,7 @@ const promBundle = require('express-prom-bundle');
 // necesidades para tener la base de datos
 const { connectDB, getDB } = require('./src/database/db');
 const UserService = require('./src/user-service'); // La clase con la lógica
-const UserController = require('./user-controller');   // El controlador de rutas
+const UserController = require('./src/user-controller');   // El controlador de rutas
 
 const app = express(); //creamos instancia de express para el manejo de las peticiones
 const port = 3000; //definimos el puerto en el que se ejecutará el servicio de usuarios (3000)
@@ -57,7 +57,7 @@ async function startServer() {
   const userService = new UserService(db);
   const userController = new UserController(userService);
 
-  app.post('/loginuser',  userController.login);
+  app.post('/loginuser',  userController.loginUser);
   app.post('/createuser', userController.createUser);
   app.get('/users/:id',   userController.getUser);
   app.post('/initmatch',  userController.initmatch);

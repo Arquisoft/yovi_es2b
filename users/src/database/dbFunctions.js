@@ -98,6 +98,8 @@ function checkPassword(password) {
     if (!password.match(/[0-9]/)) {
         throw new Error('La contraseña debe contener al menos un número');
     }
+}
+
 
     /**
  * Función de creación de usuario
@@ -127,7 +129,7 @@ function checkPassword(password) {
         return { message: 'Partida creada correctamente' };
     }
 
-}
+
 
 
 module.exports = { loginuser, createuser, findUser, initmatch };

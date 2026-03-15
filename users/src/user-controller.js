@@ -4,7 +4,7 @@
  * El controlador recibe una instancia de UserService a través de su constructor, lo que le permite delegar la lógica de negocio a ese servicio.
  */
 
-const UserError = require('../errors/UserError');
+const UserError = require('./errors/UserError');
 
 class UserController {
  
