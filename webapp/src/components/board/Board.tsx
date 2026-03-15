@@ -1,3 +1,5 @@
+import { useState, useEffect } from "react";
+
 import { Casilla } from "./Casilla";
 import { getBoardSize } from "../../gameOptions/Difficulty";
 import type { DifficultyType } from "../../gameOptions/Difficulty";
@@ -5,9 +7,28 @@ import "./Board.css";
 
 type BoardProps = {
   difficulty: DifficultyType;
+  turno: string;
+  gameState: string;
+  username:string;
 };
 
+/**
+ * Declaración primera de esto, para que funcione el guardar datos de la partida
+ */ // inicio del primer turno en caso de ser bot
+async function primerTurno() {
+    // if(bot)
+	  // llama a servicio para obtener movimiento bot
+	  // llama a metodoGrande(movimiento bot)
+    // else nada
+}
+
 export function Board(props: BoardProps) {
+
+  const [bloq, setBloq] = useState(false);
+
+  const bloquearTablero = () => {setBloq(true);}
+  const desbloquearTablero = () => {setBloq(false);}
+
   let selectedDifficulty: DifficultyType = props.difficulty;
   // let es para variables que pueden cambiar su valor
   // selectedDifficulty puede cambiar su valor dependiendo de lo que el usuario elija
@@ -21,8 +42,29 @@ export function Board(props: BoardProps) {
   // Función simple para manejar el click (por ahora solo un log)
   // manejarClick recibe un id de casilla y lo muestra en consola
   const manejarClick = (id: string) => {
+    bloquearTablero()
+    /* Posiblemente se necesiten métodos a parte, depende de como se plantee, lo siento iyan
+    estado = ejecutaMovimiento -> Señal a game y
+    actualizarTablero -> En función del estado nuevo (Pintar casillas)
+    comprobación si el juego esta finalizado -> Lo tiene el estado nuevo
+    */
+    proximojugador();
     console.log("Click en: " + id);
   };
+
+  const proximojugador = () => {
+    if(props.turno === "BOT") {
+      //Si bot
+		  //llama a servicio para obtener movimiento bot
+		  // manejarClick(movimiento bot)
+      //Si jugador 1 o jugador 2
+      props.turno=username;
+      return;
+    }
+
+    props.turno = "BOT";
+    //Establecer nombre del próximo jugador
+}
 
   /**
    * Metodo para crear el tablero de juego. 
@@ -47,6 +89,7 @@ export function Board(props: BoardProps) {
             key={key}
             index={key} 
             valor={0} //para empezar, todas las casillas están vacías (valor 0)
+            bloq={bloq}
             alHacerClick={() => manejarClick(key)} //pasamos la función de click con el ID de la casilla
           />
         );
@@ -62,6 +105,15 @@ export function Board(props: BoardProps) {
 
     return TABLERO;
   };
+
+  // antes de empezar, comprobar si el primer turno es del bot
+  useEffect(() => {
+    if (props.turno === "BOT") {
+      bloquearTablero();
+      primerTurno();
+      desbloquearTablero();
+    }
+  }, [props.turno]);
 
   return (
     <div className="board-wrapper">
