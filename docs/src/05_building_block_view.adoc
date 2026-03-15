@@ -74,8 +74,8 @@ La base de datos almacena principalmente:
 Los microservicios acceden a la base de datos para almacenar y recuperar la información necesaria para su funcionamiento.
 
 
-====Este es el esquema del juego completo:
-= image:yovi-estructura.png[componentes-yovi]
+==== Este es el esquema del juego completo:
+image::yovi-estructura.png[componentes-yovi]
 
 === Nivel 2 – Descomposición interna de los bloques
 
@@ -138,7 +138,7 @@ Las peticiones se realizan mediante HTTP y utilizan mensajes en formato JSON par
 * GET /users/{id} – obtener información de un usuario.
 * POST /createuser – crea un nuevo usuario, validando que no exista
 
-= image:yovi-interfazusers.png[interfaz-users-yovi]
+ image::yovi-interfazusers.png[interfaz-users-yovi]
 
 
 ==== Interfaz Frontend – Microservicio GameY
@@ -153,4 +153,4 @@ El acceso a la base de datos se realiza a través de los métodos de acceso a da
 
 
 ==== Vemos en la siguiente imagen el diagrama de clases de este proyecto.
-= image:gamey_uml.png[gamey_uml]
+image::gamey_uml.png[gamey_uml]
