@@ -5,9 +5,6 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 En este apartado veremos una versión estática del proyecto. Se tienen que ver una visión principal del proyecto de forma que se puedan simplificar mediante un diagrama donde se puedan ver los componentes principales (clases, módulos, paquetes, …) y las dependencias entre ellos (relaciones, asociaciones, interacciones, …).
 
-Vemos en la siguiente imagen el diagrama de clases de este proyecto.
-= image:gamey_uml.png[gamey_uml]
-
 == Vista de Bloques (Building Block View)
 
 La arquitectura de YOVI se organiza siguiendo un modelo modular basado en microservicios. Cada componente del sistema tiene responsabilidades claramente definidas, permitiendo separar la lógica de presentación, la lógica de negocio y la persistencia de datos. Esta separación facilita la mantenibilidad del sistema, y facilita el trabajo en caso de que sea necesario evolucionar cada componente de forma independiente.
@@ -39,82 +36,121 @@ El frontend no contiene lógica del juego. Toda la validación de movimientos y 
 
 ==== Microservicio User
 
-El microservicio User está implementado en Node.js y se encarga de gestionar toda la información relacionada con los usuarios del sistema.
+El microservicio User está implementado en Node.js y se encarga de gestionar toda la información relacionada con los usuarios del sistema. Este servicio se base en una API REST que permite al frontend consultar o modificar información relacionada con los jugadores.
 
 Entre sus responsabilidades se incluyen:
-
 * Registro y gestión de usuarios.
-* Consulta de estadísticas de juego.
-* Almacenamiento del historial de partidas.
+* Consulta y gestión de estadísticas de juego.
+* Almacenamiento del ranking de partidas.
 * Gestión de la información de perfil del jugador.
 
-Este servicio expone una **API REST** que permite al frontend consultar o modificar información relacionada con los usuarios.
 
 ==== Microservicio GameY
 
-El microservicio GameY está desarrollado en **Rust** y contiene la lógica principal del juego.
+El microservicio GameY está desarrollado en Rust y contiene toda la lógica principal del juego.
+De nuevo gracias a la API REST usada el frontend envia el estado actual de una partida y recibe como respuesta el nuevo estado del tablero o el siguiente movimiento calculado. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.
+
 
 Sus responsabilidades son:
-
 * Validar los movimientos realizados por los jugadores.
 * Gestionar el turno de juego.
 * Determinar si una partida ha finalizado.
 * Calcular el siguiente movimiento cuando se juega contra la máquina.
 * Implementar diferentes estrategias y niveles de dificultad para la inteligencia artificial.
 
-Este servicio expone una **API REST** que permite al frontend enviar el estado actual de una partida y recibir como respuesta el nuevo estado del tablero o el siguiente movimiento calculado.
-
-Para representar el estado del juego se utiliza la **notación YEN**, que permite describir de forma compacta la situación del tablero.
+Para representar el estado del juego se utiliza la notación YEN, que permite describir de forma compacta la situación del tablero.
 
 ==== Base de Datos
 
-El sistema utiliza **MongoDB** como sistema de persistencia.
-
-MongoDB es una base de datos NoSQL orientada a documentos, adecuada para almacenar estructuras de datos flexibles como partidas de juego y estadísticas.
+El sistema utiliza MongoDB como sistema de persistencia.
+Se trata de una base de datos NoSQL orientada a documentos, adecuada para almacenar estructuras de datos flexibles como partidas de juego y estadísticas.
 
 La base de datos almacena principalmente:
 
 * Información de usuarios.
 * Partidas jugadas.
 * Estadísticas de juego.
-* Historial de movimientos.
 
 Los microservicios acceden a la base de datos para almacenar y recuperar la información necesaria para su funcionamiento.
 
+
+====Este es el esquema del juego completo:
+= image:yovi-estructura.png[componentes-yovi]
+
 === Nivel 2 – Descomposición interna de los bloques
+
+Este apartado se centra en detallar la estructura interna de los principales componentes del sistema.
+El objetivo de este nivel es mostrar cómo se separan las distintas capas de la aplicación, distinguiendo claramente entre los componentes responsables de la interfaz de usuario, los responsables de implementar la lógica de negocio y los encargados de gestionar los datos del juego.
 
 ==== Frontend
 
+El frontend actúa principalmente como una capa de presentación, delegando la lógica de negocio y la validación de las reglas del juego en los servicios backend. 
+Así, lograr una arquitectura clara y evitar que el cliente deba controlar los aspectos críticos es posible.
+
 El frontend puede dividirse internamente en varios módulos:
 
-* **Interfaz de usuario:** componentes visuales que representan el tablero, fichas, menús y estadísticas.
+* **Interfaz de usuario:** encargados de representar el tablero, el menú y los elementos visuales de la aplicación.
 * **Gestión de estado:** control del estado actual de la partida y de la sesión del usuario.
-* **Cliente de API:** módulo encargado de realizar las peticiones HTTP a los microservicios backend.
+* **Peticiones del cliente:** módulo encargado de realizar las peticiones HTTP a los microservicios backend, comunicandose con los controllers.
 
 ==== Microservicio User
 
 Este microservicio se compone de los siguientes módulos internos:
 
 * **Controladores API:** reciben las peticiones REST y gestionan las respuestas.
-* **Lógica de negocio de usuarios:** implementa las operaciones relacionadas con cuentas y estadísticas.
-* **Acceso a datos:** módulo encargado de interactuar con la base de datos MongoDB.
+* **Lógica de negocio de usuarios:** implementa las operaciones relacionadas la gestión de usuarios y estadísticas.
+* **Acceso a datos:** es el encargado de interactuar con la base de datos MongoDB: crear usuarios, iniciar sesión, ...
 
 ==== Microservicio GameY
 
-La lógica del juego se organiza en varios módulos internos:
+Está organizado en las siguientes partes internas:
 
-* **Motor de juego:** implementa las reglas del juego Y.
+* **Motor de juego:** implementa las reglas de gameY.
 * **Validador de movimientos:** verifica que los movimientos realizados sean válidos.
 * **Gestor de partidas:** mantiene el estado actual de cada partida.
-* **Módulo de estrategias:** calcula el siguiente movimiento de la inteligencia artificial según el nivel de dificultad.
+* **Módulo de estrategias:** calcula el siguiente movimiento del bot según el nivel de dificultad y la estrategia elegidas.
 
 Esta organización permite modificar o añadir nuevas estrategias de juego sin afectar al resto del sistema.
 
-=== Beneficios de la arquitectura
+==== Beneficios de la arquitectura
 
-La arquitectura basada en microservicios proporciona varias ventajas:
+Las principales ventajas que proporciona la estructura elegida son:
 
-* **Separación clara de responsabilidades**, lo que facilita el mantenimiento del sistema.
-* **Escalabilidad**, permitiendo desplegar y escalar cada microservicio de manera independiente.
-* **Flexibilidad tecnológica**, ya que cada servicio puede desarrollarse con el lenguaje más adecuado para su función.
+* **Separación clara de responsabilidades** - como cada componente tiene una responsabilidad bien definida, se facilita el mantenimiento del sistema y reduce el acoplamiento entre componentes..
+* **Escalabilidad**, permitiendo desplegar y escalar cada microservicio de manera independiente, lo que permitira por ejemplo crear varias instancias del juego
+* **Flexibilidad tecnológica**, ya que cada servicio puede desarrollarse con el lenguaje más adecuado según sus necesidades.
 * **Extensibilidad**, permitiendo añadir nuevas funcionalidades o variantes del juego sin rediseñar el sistema completo.
+* **Despliegue reproducible** , ya que el uso de contenedores Docker permite ejecutar el sistema en diferentes entornos de forma consistente.
+
+
+=== Nivel 3: Interfaces entre componentes
+Los  componentes del sistema se comunican entre sí mediante las interfaces basadas en servicios web y mensajes, que también contribuyen al desacoplamiento y la separación de responabilidades.
+
+Las principales interfaces del sistema son las siguientes.
+
+==== Interfaz Frontend – Microservicio User
+
+Esta interfaz permite realizar operaciones de registro de usuarios, información del perfil, consulta de estrategias del juego:
+
+Las peticiones se realizan mediante HTTP y utilizan mensajes en formato JSON para el intercambio de datos. Algunas de las operaciones disponibles son:
+
+* POST /loginuser – iniciar sesión con un usuario existente
+* GET /users/{id} – obtener información de un usuario.
+* POST /createuser – crea un nuevo usuario, validando que no exista
+
+= image:yovi-interfazusers.png[interfaz-users-yovi]
+
+
+==== Interfaz Frontend – Microservicio GameY
+
+El frontend interactúa con el microservicio GameY para gestionar el desarrollo de las partidas gracias a la API REST . La información de la partida se representa mediante la notación YEN, que describe el tamaño del tablero, el turno actual y la disposición de las piezas.
+
+==== Interfaz de acceso a datos
+
+Los microservicios del sistema acceden a la base de datos de MongoDB para almacenar y recuperar la información persistente. Entre las principales operaciones destacan el almacenamiento de usuarios ya registrados, el registro de las partidas jugadas, la consulta de estadísticas del juego o del ranking, ...
+
+El acceso a la base de datos se realiza a través de los métodos de acceso a datos definidos dentro de cada microservicio, evitando que otros componentes interactúen directamente con la base de datos.
+
+
+==== Vemos en la siguiente imagen el diagrama de clases de este proyecto.
+= image:gamey_uml.png[gamey_uml]

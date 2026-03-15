@@ -24,13 +24,10 @@ YOVI se desarrolla como una aplicación web compuesta por distintos módulos y m
 Los componentes principales de la aplicación son:
 
 * **El frontend web:** desarrollado en React, se ejecuta en el navegador del usuario y se encarga de la presentación visual del tablero, la gestión de interacciones de los jugadores y la comunicación con el backend.
-* **El backend:** se divide en dos microservicios independientes que gestionan distintas responsabilidades del sistema.
-**El microservicio GameY**, implementado en Rust, centraliza toda la lógica de juego. Su responsabilidad incluye validar movimientos, controlar los turnos, calcular capturas y determinar el resultado final de la partida. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.
-**El microservicio Users**, en Node.js, gestiona toda la información relacionada con los usuarios del sistema. Sus responsabilidades incluyen el registro de usuarios, la consulta del historial de partidas y la gestión de estadísticas.
+* **El backend:** se divide en dos microservicios independientes que gestionan distintas responsabilidades del sistema, el microservicio de GameY, en Rust, y el de los usuarios, en NOde.js
 * **La persistencia de datos:** se realiza mediante MongoDB, que almacena información estructurada de usuarios, partidas y resultados. Elegimos el modelo noSQL por la facilidad de despliegue y la capacidad de ver los datos en tiempo real.
 * **La comunicación entre frontend y backend:** se realiza mediante mensajes JSON siguiendo la notación YEN. Esta notación permite representar de manera precisa la situación de cada partida en un instante dado, facilitando tanto la interacción con la interfaz web como la integración con bots a través del API.
 * **El sistema se despliega en un entorno contenerizado:** mediante Docker, lo que asegura reproducibilidad y consistencia en el entorno de ejecución. La aplicación se ejecuta en una máquina virtual en la nube, proporcionando disponibilidad remota y facilitando el acceso para usuarios y pruebas. 
 
 La comunicación se realiza mediante una API REST que intercambia mensajes JSON.. Esta arquitectura modular y distribuida permite que el sistema sea escalable y extensible para futuras versiones que incluyan variantes adicionales del juego, soporte para varios jugadores o funcionalidades opcionales avanzadas.
 
-= image:yovi-estructura.png[componentes-yovi]
