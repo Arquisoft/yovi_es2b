@@ -4,6 +4,7 @@ import { Board } from "../../components/board/Board";
 import GameInfo from "../../components/board/GameInfo";
 import ControlPanel from "../../components/board/ControlPanel";
 import type { GameSettings } from "../../gameOptions/GameSettings";
+import { getBoardSize } from "../../gameOptions/Difficulty";
 import "./Game.css";
 
 // Definimos la interfaz de las props
@@ -15,36 +16,56 @@ interface GameProps {
 
 /**
  * Declaración primera de esto, para que funcione el guardar datos de la partida
+ * Recibe el tamaño del tablero para crear el juego y retorna el id que tendra.
  */
-async function crearPartida() {
-    // completar con el post de crearJuego
+async function crearPartida(boardSize: number): Promise<string> {
+    // TODO completar con el post de crearJuego
+    /**
+     * // Entrada: { "board_size": 5 }
+      // Respuesta: { "game_id": "game-1", "board_size": 5 }
+     */
+
+      //Return gameID
+      return "";
 }
 
-async function getTurnoPartida() {
-    // completar con el post de preguntamosEstado -> TURNO
-    return "Turno";
-}
-
-async function getEstadoPartida() {
+/*async function getEstadoPartida() {
     // completar con el post de preguntamosEstado -> PROCESO DE JUGAR
+  
+    // Entrada: (sin body) GET /v1/games/game-1
+    // Respuesta: { "game_id": "game-1", "state": { "size": 5, "turn": 0, "players": ["B","R"], "layout": "....." }, "status": { "kind": "Ongoing", "next_player": 0 } } 
+    
     return "Jugando";
+}*/
+
+async function getTurnoPartida(gameId: string): Promise<number> {
+    // completar con el post de preguntamosEstado -> 0 o 1
+    /*
+    // Entrada: (sin body) GET /v1/games/game-1/status
+    // Respuesta ongoing:  { "kind": "Ongoing",  "next_player": 0 }
+    // Respuesta finished: { "kind": "Finished", "winner": 1 }
+    */
+    return 0;
 }
 
 export function Game({ settings, username, stateStart }: GameProps) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
+  const [gameId, setGameId] = useState("");
 
   // como es función async, llamamos useEffect
   useEffect(() => {
     async function nuevaPartida() {
       if (stateStart) {
-        await crearPartida();
+        const boardSize = getBoardSize(settings.difficulty); //Consigue el tamaño del tablero
+        const idG = await crearPartida(boardSize);           //Crea la partida y asigna el idGame
+        setGameId(idG);
 
         // para cada atributo
-        setTurno(await getTurnoPartida());
-        setGameState(await getEstadoPartida());
-
+        const nextPlayer = await getTurnoPartida(idG);
+        setTurno(nextPlayer === 0 ? username : "BOT"); //Si es 0 es el anfitrion
+        setGameState("Iniciada");
       }
     }
     nuevaPartida();
@@ -63,7 +84,15 @@ export function Game({ settings, username, stateStart }: GameProps) {
         </div>
 
         <div className="board-main">
-          <Board difficulty={settings.difficulty} turno={turno} gameState={gameState} username={username}/>
+          <Board 
+            difficulty={settings.difficulty}
+            gameId={gameId} 
+            turno={turno} 
+            gameState={gameState} 
+            username={username}
+            changeTurno={setTurno}
+            changeGameState={setGameState}
+          />
         </div>
 
         <div className="controls-bottom">

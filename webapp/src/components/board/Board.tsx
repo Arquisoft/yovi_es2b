@@ -7,9 +7,12 @@ import "./Board.css";
 
 type BoardProps = {
   difficulty: DifficultyType;
+  gameId: string;
   turno: string;
   gameState: string;
   username:string;
+  changeTurno: (turno: string) => void;
+  changeGameState: (winner: string) => void;
 };
 
 /**
