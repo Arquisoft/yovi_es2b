@@ -5,8 +5,6 @@ ifndef::imagesdir[:imagesdir: ../images]
 
 En este apartado veremos una versión estática del proyecto. Se tienen que ver una visión principal del proyecto de forma que se puedan simplificar mediante un diagrama donde se puedan ver los componentes principales (clases, módulos, paquetes, …) y las dependencias entre ellos (relaciones, asociaciones, interacciones, …).
 
-== Vista de Bloques (Building Block View)
-
 La arquitectura de YOVI se organiza siguiendo un modelo modular basado en microservicios. Cada componente del sistema tiene responsabilidades claramente definidas, permitiendo separar la lógica de presentación, la lógica de negocio y la persistencia de datos. Esta separación facilita la mantenibilidad del sistema, y facilita el trabajo en caso de que sea necesario evolucionar cada componente de forma independiente.
 
 === Nivel 1 – Visión general del sistema
@@ -36,9 +34,10 @@ El frontend no contiene lógica del juego. Toda la validación de movimientos y 
 
 ==== Microservicio User
 
-El microservicio User está implementado en Node.js y se encarga de gestionar toda la información relacionada con los usuarios del sistema. Este servicio se base en una API REST que permite al frontend consultar o modificar información relacionada con los jugadores.
+El microservicio User está implementado en Node.js y se encarga de gestionar toda la información relacionada con los usuarios del sistema. Este servicio se basa en una API REST que permite al frontend consultar o modificar información relacionada con los jugadores.
 
 Entre sus responsabilidades se incluyen:
+
 * Registro y gestión de usuarios.
 * Consulta y gestión de estadísticas de juego.
 * Almacenamiento del ranking de partidas.
@@ -52,6 +51,7 @@ De nuevo gracias a la API REST usada el frontend envia el estado actual de una p
 
 
 Sus responsabilidades son:
+
 * Validar los movimientos realizados por los jugadores.
 * Gestionar el turno de juego.
 * Determinar si una partida ha finalizado.
@@ -73,8 +73,8 @@ La base de datos almacena principalmente:
 
 Los microservicios acceden a la base de datos para almacenar y recuperar la información necesaria para su funcionamiento.
 
-
-==== Este es el esquema del juego completo:
+==== Esquema del sistema
+Este es el esquema del juego completo:
 image::yovi-estructura.png[componentes-yovi]
 
 === Nivel 2 – Descomposición interna de los bloques
@@ -152,5 +152,6 @@ Los microservicios del sistema acceden a la base de datos de MongoDB para almace
 El acceso a la base de datos se realiza a través de los métodos de acceso a datos definidos dentro de cada microservicio, evitando que otros componentes interactúen directamente con la base de datos.
 
 
-==== Vemos en la siguiente imagen el diagrama de clases de este proyecto.
+=== Diagrama de clases
+ Vemos en la siguiente imagen el diagrama de clases de este proyecto.
 image::gamey_uml.png[gamey_uml]
