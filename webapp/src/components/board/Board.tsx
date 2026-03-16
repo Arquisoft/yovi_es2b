@@ -95,7 +95,7 @@ export function Board(props: BoardProps) {
   // Llama al servidor enviandole el movimiento (Solo Bot)
    // Promise<any> -> Devuelve un valor cualquiera de forma async -> json con el estado de tablero actualizado
   async function peticionMovimientoBot(state: unknown): Promise<any> {
-    const res = await fetch(`${GAMEY_URL}/v1/ybot/choose/0`, {
+    const res = await fetch(`${GAMEY_URL}/v1/ybot/choose/random_bot`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(state),
@@ -105,7 +105,6 @@ export function Board(props: BoardProps) {
     if (!res.ok) throw new Error("Error al obtener movimiento del bot");
     return res.json();
   }
-
 
    /**
    * METODO RECEPTOR QUE GESTIONA TODA LA LOGICA DEL TABLERO

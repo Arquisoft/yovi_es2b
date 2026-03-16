@@ -32,12 +32,6 @@ async function crearPartida(boardSize: number): Promise<string> {
 }
 
 async function getTurnoPartida(gameId: string): Promise<number> {
-    // completar con el post de preguntamosEstado -> 0 o 1
-    /*
-    // Entrada: (sin body) GET /v1/games/game-1/status
-    // Respuesta ongoing:  { "kind": "Ongoing",  "next_player": 0 }
-    // Respuesta finished: { "kind": "Finished", "winner": 1 }
-    */
    const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     const res = await fetch(`${GAMEY_URL}/v1/games/${gameId}/status`);
     if (!res.ok) {
@@ -63,7 +57,7 @@ export function Game({ settings, username, stateStart }: GameProps) {
 
         // para cada atributo
         const nextPlayer = await getTurnoPartida(idG);
-        setTurno(nextPlayer === 0 ? username : "BOT"); //Si es 0 es el anfitrion
+        setTurno(nextPlayer === 0 ? username : "BOT"); // Si es 0 es el anfitrion
         setGameState("Iniciada");
       }
     }
