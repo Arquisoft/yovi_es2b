@@ -19,21 +19,17 @@ interface GameProps {
  * Recibe el tamaño del tablero para crear el juego y retorna el id que tendra.
  */
 async function crearPartida(boardSize: number): Promise<string> {
-    // TODO completar con el post de crearJuego
-    /**
-     * // Entrada: { "board_size": 5 }
-      // Respuesta: { "game_id": "game-1", "board_size": 5 }
-     */
+    const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
+    const res = await fetch(`${GAMEY_URL}/v1/games`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ board_size: boardSize }),
+    });
+    if (!res.ok) throw new Error("Error al crear la partida");
+    const data = await res.json();
+      //Return gameID
+      return data.game_id;
 }
-
-/*async function getEstadoPartida() {
-    // completar con el post de preguntamosEstado -> PROCESO DE JUGAR
-  
-    // Entrada: (sin body) GET /v1/games/game-1
-    // Respuesta: { "game_id": "game-1", "state": { "size": 5, "turn": 0, "players": ["B","R"], "layout": "....." }, "status": { "kind": "Ongoing", "next_player": 0 } } 
-    
-    return "Jugando";
-}*/
 
 async function getTurnoPartida(gameId: string): Promise<number> {
     // completar con el post de preguntamosEstado -> 0 o 1
@@ -42,6 +38,13 @@ async function getTurnoPartida(gameId: string): Promise<number> {
     // Respuesta ongoing:  { "kind": "Ongoing",  "next_player": 0 }
     // Respuesta finished: { "kind": "Finished", "winner": 1 }
     */
+   const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
+    const res = await fetch(`${GAMEY_URL}/v1/games/${gameId}/status`);
+    if (!res.ok) {
+      throw new Error("Error al obtener el turno");
+    } 
+    const data = await res.json();
+    return data.kind === 'Ongoing' ? data.next_player : 0;
 }
 
 export function Game({ settings, username, stateStart }: GameProps) {
@@ -54,8 +57,8 @@ export function Game({ settings, username, stateStart }: GameProps) {
   useEffect(() => {
     async function nuevaPartida() {
       if (stateStart) {
-        const boardSize = getBoardSize(settings.difficulty); //Consigue el tamaño del tablero
-        const idG = await crearPartida(boardSize);           //Crea la partida y asigna el idGame
+        const boardSize = getBoardSize(settings.difficulty); // Consigue el tamaño del tablero
+        const idG = await crearPartida(boardSize);           // Crea la partida y asigna el idGame
         setGameId(idG);
 
         // para cada atributo

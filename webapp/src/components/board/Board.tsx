@@ -70,42 +70,41 @@ export function Board(props: BoardProps) {
     setValores(layoutToValores(layout));
   };
 
-/*
-
-########################################################################
-
-          Jimena  -- Metodos a completar
-
-########################################################################
-
-*/
-
-   // Llama al servidor enviandole el movimiento
-   //
-   //   Promise<any> -> Devuelve un valor cualquiera de forma async
+   // Llama al servidor enviandole el movimiento (Solo Jugador)
+   // Promise<any> -> Devuelve un valor cualquiera de forma async -> json con el estado de tablero actualizado
   async function peticionMovimiento(x: number, y: number, z: number, player: number): Promise<any> {
+    const res = await fetch(`${GAMEY_URL}/v1/games/${props.gameId}/move`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ player, x, y, z }),
+    });
 
-    // POST /v1/games/gameId/move
-    // return json
+    if (!res.ok) throw new Error("Movimiento rechazado por el servidor");
+    return res.json();
   }
 
-  // Obtiene el estado actual de la partida desde el servidor
+  // Llama al servidor para obtener el estado actual de la partida -> json
   async function peticionEstadoPartida(): Promise<any> {
-    // /v1/games/gameId
-    // return json
-
+    const res = await fetch(`${GAMEY_URL}/v1/games/${props.gameId}`);
+    if (!res.ok) {
+      throw new Error("Error al obtener el estado de la partida");
+    } 
+    return res.json();
   }
 
-  // Solicita al bot un movimiento
-  // Pasarle estado
+  // Llama al servidor enviandole el movimiento (Solo Bot)
+   // Promise<any> -> Devuelve un valor cualquiera de forma async -> json con el estado de tablero actualizado
   async function peticionMovimientoBot(state: unknown): Promise<any> {
-
-    // POST /v1/ybot/choose/random_bot
+    const res = await fetch(`${GAMEY_URL}/v1/ybot/choose/0`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(state),
+    });
+    // POST /v1/ybot/choose/0
     // return json
-
+    if (!res.ok) throw new Error("Error al obtener movimiento del bot");
+    return res.json();
   }
-
-  /*
 
 
    /**
@@ -148,8 +147,6 @@ export function Board(props: BoardProps) {
     }
   };
 
-
-
   // Flujo de ejecucion -> Si le toca el bot, lo hace directamente
   useEffect(() => {
     if (!props.gameId) return; //Si no hay gameID
@@ -172,16 +169,8 @@ export function Board(props: BoardProps) {
   const manejarClick = async (id: string) => {
     if (bloq || gameOver) return;
     const { x, y, z } = keyToCoords(id, BOARDHIGHT);
-    /* Posiblemente se necesiten métodos a parte, depende de como se plantee, lo siento iyan
-    estado = ejecutaMovimiento -> Señal a game y
-    actualizarTablero -> En función del estado nuevo (Pintar casillas)
-    comprobación si el juego esta finalizado -> Lo tiene el estado nuevo
-    */
-
     await realizarMovimiento(x, y, z, 0);
   };
-
-
 
   /**
    * Metodo para crear el tablero de juego. 
@@ -231,40 +220,3 @@ export function Board(props: BoardProps) {
     </div>
   );
 }
-
-/**
- * EN PRINCIPIO YA VIENE CALCULADO DEL METODO QUE CREA EL JUEGO EN GAME.TSX
- * 
- *  Declaración primera de esto, para que funcione el guardar datos de la partida
-  // inicio del primer turno en caso de ser bot
-async function primerTurno() {
-    // if(bot)
-	  // llama a servicio para obtener movimiento bot
-	  // llama a metodoGrande(movimiento bot)
-    // else nada
-}*/
-
-  /* Se comprueba al crear el juego
-
-  // antes de empezar, comprobar si el primer turno es del bot
-  useEffect(() => {
-    if (props.turno === "BOT") {
-      bloquearTablero();
-      primerTurno();
-      desbloquearTablero();
-    }
-  }, [props.turno]);*/
-
-  /*const proximojugador = () => {
-    if(props.turno === "BOT") {
-      //Si bot
-		  //llama a servicio para obtener movimiento bot
-		  // manejarClick(movimiento bot)
-      //Si jugador 1 o jugador 2
-      props.turno=props.username;
-      return;
-    }
-
-    props.turno = "BOT";
-    //Establecer nombre del próximo jugador
-}*/
