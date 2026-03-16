@@ -102,8 +102,8 @@ function checkPassword(password) {
 
 
     /**
- * Función de creación de usuario
- */
+     * Función de creación de partida
+     */
     async function initmatch(users, username, strategy, difficulty) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
         const existingUser = await users.findOne({ "username": username });
@@ -125,11 +125,39 @@ function checkPassword(password) {
                 }
             }
         )
-        // todo bien
+        // es correcto
         return { message: 'Partida creada correctamente' };
+    }
+
+    /**
+     * Función de terminación de partida ganada
+     */
+    async function endmatch(users, username, strategy, difficulty) {
+        // espera a encontrar el usuario en la base -> Jimena maneja la base
+        const existingUser = await users.findOne({ "username": username });
+        // si el usuario no existe
+        if (!existingUser) {
+            throw new Error('Usuario incorrecto. Habla con Jimena');
+        }
+
+        var estrategiaJuego = "estrategia" + strategy + "Wins";
+        var dificultadJuego = "dificultad" + difficulty + "Wins";
+
+        await users.updateOne(
+            { _id: existingUser._id },
+            {
+                $inc: {
+                    partidasTotalesWins: 1,
+                    [estrategiaJuego]: 1,
+                    [dificultadJuego]: 1
+                }
+            }
+        )
+        // es correcto
+        return { message: 'Partida terminada y ganada correctamente' };
     }
 
 
 
 
-module.exports = { loginuser, createuser, findUser, initmatch };
+module.exports = { loginuser, createuser, findUser, initmatch, endmatch };

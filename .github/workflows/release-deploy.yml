@@ -83,7 +83,7 @@ jobs:
           npm run test:e2e
         env:
           MONGO_URI: ${{ secrets.MONGO_URI }}
-          VITE_API_URL: http://localhost:3000
+          VITE_API_URL_WA: http://localhost:3000
 
   docker-push-users:
     name: Publish users image
@@ -124,7 +124,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           workdir: webapp
-          buildargs: VITE_API_URL=http://${{ secrets.DEPLOY_HOST }}:3000
+          buildargs: VITE_API_URL_WA=http://${{ secrets.DEPLOY_HOST }}:3000
 
   docker-push-gamey:
     name: Publish gamey image
@@ -145,6 +145,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: ghcr.io
           workdir: gamey
+          buildargs: VITE_API_URL_GY=http://${{ secrets.DEPLOY_HOST }}:4000
 
   deploy:
     name: Deploy over SSH

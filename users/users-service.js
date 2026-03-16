@@ -61,6 +61,7 @@ async function startServer() {
   app.post('/createuser', userController.createUser);
   app.get('/users/:id',   userController.getUser);
   app.post('/initmatch',  userController.initmatch);
+  app.post('/endmatch',   userController.endmatch);
 
 }
 

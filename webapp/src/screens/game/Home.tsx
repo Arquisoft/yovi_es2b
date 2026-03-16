@@ -15,7 +15,7 @@ const yoviLogo = "/yovi_logo.png";
  */
 async function iniciarPartida(username: string, strategy: string, difficulty: string) {
     try {
-        const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
+        const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
         const res = await fetch(`${API_URL}/initmatch`, {
             method: 'POST', headers: {
                 'Content-Type': 'application/json'
@@ -51,7 +51,7 @@ export default function HomePage( {username} : { username: string }) {
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (gameStarted) {
-        return <Game settings={settings} username={username} />;
+        return <Game settings={settings} username={username} stateStart={true}/>;
     }
 
     if (logOut) {
