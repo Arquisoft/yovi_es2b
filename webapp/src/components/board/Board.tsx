@@ -4,10 +4,12 @@ import { Casilla } from "./Casilla";
 import { getBoardSize } from "../../gameOptions/Difficulty";
 import type { DifficultyType } from "../../gameOptions/Difficulty";
 import "./Board.css";
+import type { StrategyType } from "../../gameOptions/Strategy";
 
 const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
 
 type BoardProps = {
+  strategy: StrategyType;
   difficulty: DifficultyType;
   gameId: string;
   turno: string;
@@ -43,6 +45,26 @@ function layoutToValores(layout: string): Record<string, number> {
     });
   });
   return valores;
+}
+
+// método que conecta con la base de datos SI Y SOLO SI SE GANA LA PARTIDA
+async function partidaGanada(username: string, strategy: string, difficulty: string) {
+  try {
+    const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
+    const res = await fetch(`${API_URL}/endmatch`, {
+      method: 'POST', headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, strategy, difficulty })
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      throw new Error(data.error || 'Server error');
+    }
+  } catch (err: any) {
+    throw new Error(err.message || 'Network error');
+  }
 }
 
 
@@ -124,6 +146,11 @@ export function Board(props: BoardProps) {
         props.changeTurno(winnerName);
         props.changeGameState(`Ganó: ${winnerName}`);
         desbloquearTablero();
+
+        if(data.status.winner === 0) {
+          partidaGanada(props.username, props.strategy, props.difficulty);
+        }
+
         return;
       }
 

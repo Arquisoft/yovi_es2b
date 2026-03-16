@@ -78,6 +78,7 @@ export function Game({ settings, username, stateStart }: GameProps) {
 
         <div className="board-main">
           <Board 
+            strategy={settings.strategy}
             difficulty={settings.difficulty}
             gameId={gameId} 
             turno={turno} 
