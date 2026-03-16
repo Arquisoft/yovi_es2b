@@ -29,7 +29,7 @@ const InitialScreen: React.FC = () => {
 
     setLoading(true);
     try {
-      const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3000'
+      const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
       const res = await fetch(`${API_URL}/loginuser`, {
         method: 'POST',
         headers: {

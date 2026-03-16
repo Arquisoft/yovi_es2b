@@ -1,11 +1,36 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Game } from "./Game"; 
+import { Game } from "./Game";
 import type { GameSettings } from "../../gameOptions/GameSettings";
 import { Strategy } from "../../gameOptions/Strategy";
 import type { StrategyType } from "../../gameOptions/Strategy";
 import { Difficulty } from "../../gameOptions/Difficulty";
 import "./Home.css";
+import InitialScreen from "../init/InitialScreen";
+
+const yoviLogo = "/yovi_logo.png";
+
+/**
+ * Declaración primera de esto, para que funcione el guardar datos de la partida
+ */
+async function iniciarPartida(username: string, strategy: string, difficulty: string) {
+    try {
+        const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
+        const res = await fetch(`${API_URL}/initmatch`, {
+            method: 'POST', headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, strategy, difficulty })
+        });
+
+        const data = await res.json();
+        if (!res.ok) {
+            throw new Error(data.error || 'Server error');
+        }
+    } catch (err: any) {
+        throw new Error(err.message || 'Network error');
+    }
+}
 
 export default function HomePage( {username} : { username: string }) {
     const [settings, setSettings] = useState<GameSettings>({
@@ -15,41 +40,47 @@ export default function HomePage( {username} : { username: string }) {
 
     const [gameStarted, setGameStarted] = useState(false);
     const [menuSelected, setMenuSelected] = useState<string>("");
+    const [logOut, setLogOut] = useState(false);
 
-    function startGame() {
-        setGameStarted(true); // Cambiamos el estado para "navegar"    
-    }
+    // como es función async, llamamos useEffect
+    useEffect(() => {
+        if (gameStarted) {
+            iniciarPartida(username, settings.strategy, settings.difficulty);
+        }
+    }, [gameStarted]);
 
-    // Si el juego ha empezado, renderizamos Game y le pasamos las settings
+    // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (gameStarted) {
-        return <Game settings={settings} onBack={() => setGameStarted(false)} />;
+        return <Game settings={settings} username={username} stateStart={true}/>;
     }
 
-    return (
-        <div className="home-container">    
-            <h1>YOVI</h1>
-            <p>La mejor versión del juego Y</p>
-            <h2>Bienvenido a tu menú principal, {username}</h2>
+    if (logOut) {
+        return <InitialScreen />;
+    }
 
-            <div className="menu-buttons">
-                <button onClick={() => setMenuSelected("Nueva partida")}>
+    /*
+    <button className="home-menu__btn" onClick={() => setMenuSelected("Nueva partida")}>
                     Nueva partida
                 </button>
+    */
 
-                <button onClick={() => setMenuSelected("Ranking")}>
-                    Ranking
+    return (
+        <div className="home-screen">
+            <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
+            <h2 className="home-screen__title">Bienvenido a tu menú principal, {username}</h2>
+
+            
+
+            {menuSelected && <p className="home-menu__selected">Seleccionado: {menuSelected}</p>}
+
+            <div className="home-config">
+                <button className="home-config__start" onClick={() => setGameStarted(true)}>
+                    Empezar partida
                 </button>
 
-                <button onClick={() => setMenuSelected("Mis estadísticas")}>
-                    Mis estadísticas
-                </button>
-            </div>
-
-            {menuSelected && <p>Seleccionado: {menuSelected}</p>}
-
-            <div className="config-box">
-                <label>Estrategia</label>
+                <label className="home-config__label">Estrategia</label>
                 <select
+                    className="home-config__select"
                     value={settings.strategy}
                     onChange={(e) =>
                         setSettings({
@@ -65,26 +96,39 @@ export default function HomePage( {username} : { username: string }) {
                     <option value={Strategy.EDGE_FIRST}>Borde Primero</option>
                 </select>
 
-                <label>Dificultad</label>
-                <div>
-                    {/* setSettings es la función de useState envargada de de cambiar el estado al hacer click en el boton.
-             Se crea un nuevo objeto con los mismos valores que settings pero con difficulty cambiado a EASY. 
-             Esto es necesario porque el estado es inmutable, no se puede modificar directamente, sino que se debe crear una nueva copia con los cambios.
-            */  }
-                    <button id="easy-difficulty" onClick={() => setSettings({ ...settings, difficulty: Difficulty.EASY })}>
+                <label className="home-config__label">Dificultad</label>
+                <div className="home-difficulty">
+                    <button
+                        className={`home-difficulty__btn home-difficulty__btn--easy${settings.difficulty === Difficulty.EASY ? " home-difficulty__btn--easy--active" : ""}`}
+                        onClick={() => setSettings({ ...settings, difficulty: Difficulty.EASY })}>
                         Fácil
                     </button>
-                    <button id="medium-difficulty" onClick={() => setSettings({ ...settings, difficulty: Difficulty.MEDIUM })}>
+                    <button
+                        className={`home-difficulty__btn home-difficulty__btn--medium${settings.difficulty === Difficulty.MEDIUM ? " home-difficulty__btn--medium--active" : ""}`}
+                        onClick={() => setSettings({ ...settings, difficulty: Difficulty.MEDIUM })}>
                         Media
                     </button>
-                    <button id="hard-difficulty" onClick={() => setSettings({ ...settings, difficulty: Difficulty.HARD })}>
+                    <button
+                        className={`home-difficulty__btn home-difficulty__btn--hard${settings.difficulty === Difficulty.HARD ? " home-difficulty__btn--hard--active" : ""}`}
+                        onClick={() => setSettings({ ...settings, difficulty: Difficulty.HARD })}>
                         Difícil
                     </button>
                 </div>
+                
+            </div>
 
-               <button id="start-game" onClick={startGame}>
-                Empezar partida
-            </button>
+            <br></br>
+            
+            <div className="home-menu">
+                <button className="home-menu__btn" onClick={() => setMenuSelected("Mis estadísticas")}>
+                    Mis estadísticas
+                </button>
+                <button className="home-menu__btn" onClick={() => setMenuSelected("Ranking")}>
+                    Ranking
+                </button>
+                <button className="home-menu-out__btn" onClick={() => setLogOut(true)}>
+                    Cerrar sesión
+                </button>
             </div>
         </div>
     );

@@ -11,6 +11,7 @@
 interface CasillaProps {
     index: string;          
     valor: number;           
+    bloq: boolean;
     alHacerClick: () => void; 
 }
 
@@ -18,13 +19,14 @@ interface CasillaProps {
 * se le pasara un index para mostrarlo en la casilla y asi poder identificarla. 
 * Se exporta para que pueda ser utilizada en otros archivos, como Board.tsx 
 **/
-export function Casilla({ index, valor, alHacerClick }: CasillaProps) {
+export function Casilla({ index, valor, bloq, alHacerClick }: CasillaProps) {
 
     return (
         <button 
             className={`cell player-${valor}`}
             onClick={alHacerClick}
             title={`Casilla ${index}`}
+            disabled={bloq}
         >
             {/* Ocultamos el index en el juego final, o lo dejamos pequeño para debug */}
             <span className="cell-label">{index}</span>
