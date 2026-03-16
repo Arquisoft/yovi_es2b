@@ -53,14 +53,28 @@
   transition: background-color 0.2s ease;
 }
 
-.cell:hover {
-  background-color: #8e98a8;
-  transform: scale(1.08);
-  z-index: 10;
+.cell.player-0:hover {
+  background-color: gray;
+}
+
+.cell.player-1:hover {
+  background-color: #1d6fd4;
+}
+
+.cell.player-2 {
+  background-color: #b91c1c;
 }
 
 .cell:hover::after {
   background-color: #d0d8e4;
+}
+
+.cell.player-1::after {
+  background-color: #3b82f6;
+}
+
+.cell.player-2::after {
+  background-color: #ef4444;
 }
 
 /* Label interno (el index) - Estilo sutil para debug */

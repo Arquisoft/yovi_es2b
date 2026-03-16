@@ -100,8 +100,6 @@ export function Board(props: BoardProps) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(state),
     });
-    // POST /v1/ybot/choose/0
-    // return json
     if (!res.ok) throw new Error("Error al obtener movimiento del bot");
     return res.json();
   }
