@@ -69,11 +69,11 @@ class UserController {
      * Express esta definido en users-service.js,  pero se usa aqui para manejar las solicitudes HTTP que llegan a los endpoints definidos en users.js.
      */
     async createUser(req, res) {
+        let username, password;
         try {
-
             // Si username o password no están definidos (undifined) da error
-            const username = req.body && req.body.username;
-            const password = req.body && req.body.password;
+            username = req.body && req.body.username;
+            password = req.body && req.body.password;
 
             const message = await this.userService.createUser(username, password);
             //Error 201 Created se devuelve cuando la solicitud ha sido procesada exitosamente y se ha creado un nuevo recurso (en este caso, un nuevo usuario). El mensaje de bienvenida personalizado se incluye en la respuesta para indicar que la creación del usuario fue exitosa.

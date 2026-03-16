@@ -7,25 +7,25 @@ async function loginuser(users, username, password) {
 
     // que no sea vacío o ERROR
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
-        throw new Error('Ususario inválido');
+        throw new UserError('Ususario inválido', 404);
     }
     if (!password || typeof password !== 'string') {
-        throw new Error('Contraseña inválida');
+        throw new UserError('Contraseña inválida', 404);
     }
 
     // espera a encontrar el usuario en la base -> Jimena maneja la base
     const existingUser = await users.findOne({ "username": username });
     // si el usuario no existe
     if (!existingUser) {
-        throw new Error('Usuario incorrecto. Prueba con otro o regístrate.');
+        throw new UserError('Usuario incorrecto. Prueba con otro o regístrate.', 404);
     }
     // si la contraseña es incorrecta
     if (existingUser.password !== password) {
-        throw new Error('Contraseña incorrecta. Inténtalo de nuevo.');
+        throw new UserError('Contraseña incorrecta. Inténtalo de nuevo.', 404);
     }
 
     // todo bien
-    return { message: 'Usuario encontrado exitosamente. Iniciando sesión...' };
+    return 'Usuario encontrado exitosamente. Iniciando sesión...' ;
 }
 
 /**
@@ -34,17 +34,17 @@ async function loginuser(users, username, password) {
 async function createuser(users, username, password) {
     // que no sea usuario vacío 
     if (!username || typeof username !== 'string') {
-        throw new Error('Ususario inválido');
+        throw new UserError('Ususario inválido', 404);
     }
     // que no sea contraseña vacía
     if (!password || typeof password !== 'string') {
-        throw new Error('Contraseña inválida');
+        throw new UserError('Contraseña inválida', 404);
     }
 
     // busca si existe usuario con ese nombre
     const existingUser = await users.findOne({ "username": username });
     if (existingUser) {
-        throw new Error('Ese usuario ya existe. Prueba con otro o inicie sesión.');
+        throw new UserError('Ese usuario ya existe. Prueba con otro o inicie sesión.', 404);
     }
 
     // comprueba una contraseña correcta
@@ -54,7 +54,7 @@ async function createuser(users, username, password) {
     await users.insertOne({ username, password, createdAt: new Date() });
 
     // todo bien
-    return { message: 'Usuario creado exitosamente. Iniciando sesión...' };
+    return 'Usuario creado exitosamente. Iniciando sesión...' ;
 }
 
 /**
@@ -63,7 +63,7 @@ async function createuser(users, username, password) {
  */
 async function findUser(users, username) {
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
-        throw new Error('Usuario inválido');
+        throw new UserError('Usuario inválido', 404);
     }
     const existingUser = await users.findOne({ "username": username });
 
@@ -109,7 +109,7 @@ function checkPassword(password) {
         const existingUser = await users.findOne({ "username": username });
         // si el usuario no existe
         if (!existingUser) {
-            throw new Error('Usuario incorrecto. Habla con Jimena');
+            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
         }
 
         var estrategiaJuego = "estrategia" + strategy;
@@ -126,7 +126,7 @@ function checkPassword(password) {
             }
         )
         // es correcto
-        return { message: 'Partida creada correctamente' };
+        return 'Partida creada correctamente' ;
     }
 
     /**
@@ -137,7 +137,7 @@ function checkPassword(password) {
         const existingUser = await users.findOne({ "username": username });
         // si el usuario no existe
         if (!existingUser) {
-            throw new Error('Usuario incorrecto. Habla con Jimena');
+            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
         }
 
         var estrategiaJuego = "estrategia" + strategy + "Wins";
@@ -154,7 +154,7 @@ function checkPassword(password) {
             }
         )
         // es correcto
-        return { message: 'Partida terminada y ganada correctamente' };
+        return 'Partida terminada y ganada correctamente' ;
     }
 
 
