@@ -1,9 +1,6 @@
 name: Release — Test, Build, Publish, Deploy
 
 on:
-  push:
-    branches:
-      - JimenaIssue27
   release:
     types: [published]
 
