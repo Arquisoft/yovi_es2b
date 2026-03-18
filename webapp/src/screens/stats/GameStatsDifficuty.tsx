@@ -3,16 +3,8 @@ import Home from "../game/Home.tsx";
 import GameStats from "./GameStats.tsx";
 import "./GameStats.css";
 
-// TIPO ESTADISTICA
-/*type Stat = {
-    dificultad: string;
-    estrategia: string;
-    ganadas: number;
-    jugadas: number;
-};*/
-
-// TIPO ESTADISTICA PARA USO EN LA TABLA
-type StatAdaptedD = {
+// TIPO ESTADISTICA DIFICULTAD
+type StatDif = {
     dificultad: string;
     ganadas: number;
     perdidas: number;
@@ -20,8 +12,28 @@ type StatAdaptedD = {
     porcentaje: string;
 };
 
-async function obtenerDatos() {
-//async function obtenerDatos(username: string) {
+
+async function obtenerDatos(username: string) {
+    try {
+        const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
+        const res = await fetch(`${API_URL}/diffstats`, {
+            method: 'POST', headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username })
+        });
+
+        const stats = await res.json();
+
+        if(res.ok) {
+            // return stats
+        } else {
+            throw new Error(stats.error || 'Server error');
+        }
+    } catch (err: any) {
+        throw new Error(err.message || 'Network error');
+    }    
+
     return [
         { dificultad: "Fácil", ganadas: 8, jugadas: 10, perdidas: 2, porcentaje: "80.00 %" },
         { dificultad: "Media", ganadas: 5, jugadas: 12, perdidas: 7, porcentaje: "41.67 %" },
@@ -34,11 +46,11 @@ export default function GameStatsTotal( {username} : { username: string }) {
     const [goBack, setGoBack] = useState(false);
     const [goHome, setGoHome] = useState(false);
 
-    const [data, setData] = useState<StatAdaptedD[]>([]);
+    const [data, setData] = useState<StatDif[]>([]);
 
     useEffect(() => {
         const cargarDatos = async () => {
-            const resultado = await obtenerDatos();
+            const resultado = await obtenerDatos(username);
             setData(resultado);
         };
         cargarDatos();

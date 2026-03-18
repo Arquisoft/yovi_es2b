@@ -105,6 +105,11 @@ class UserService {
     await endmatch(this.usersCollection, username, strategy, difficulty);
     return `Match ended for ${username}! You won!`;
   }
+
+  async diffstats(username) {
+    const stats = await diffstats(this.usersCollection, username);
+    return stats;
+  }
 }
 
 //Module exports es una forma de exportar un módulo en Node.js, lo que permite que otras partes de la aplicación puedan importar y utilizar la clase UserService definida en este archivo.

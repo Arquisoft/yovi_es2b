@@ -157,7 +157,45 @@ function checkPassword(password) {
         return 'Partida terminada y ganada correctamente' ;
     }
 
+    /**
+     * Función de calculo de estadisticas segun la dificultad
+     */
+    async function diffstats(users, username) {
+        // espera a encontrar el usuario en la base -> Jimena maneja la base
+        const existingUser = await users.findOne({ "username": username });
+        // si el usuario no existe
+        if (!existingUser) {
+            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+        }
+        
+        const stats = [
+        {
+            dificultad: "FÁCIL",
+            jugadas: existingUser.dificultadEASY || 0,
+            perdidas: existingUser.dificultadEASY - (existingUser.dificultadEASYWins || 0) || 0,
+            ganadas: existingUser.dificultadEASYWins || 0,
+            porcentaje: existingUser.dificultadEASY ? ((existingUser.dificultadEASYWins || 0) / existingUser.dificultadEASY * 100).toFixed(2) : '0.00 %'
+        },
+        {
+            dificultad: "MEDIA",
+            jugadas: existingUser.dificultadMEDIUM || 0,
+            perdidas: existingUser.dificultadMEDIUM - (existingUser.dificultadMEDIUMWins || 0) || 0,
+            ganadas: existingUser.dificultadMEDIUMWins || 0,
+            porcentaje: existingUser.dificultadMEDIUM ? ((existingUser.dificultadMEDIUMWins || 0) / existingUser.dificultadMEDIUM * 100).toFixed(2) : '0.00 %'
+        },
+        {
+            dificultad: "DIFÍCIL",
+            jugadas: existingUser.dificultadHARD || 0,
+            perdidas: existingUser.dificultadHARD - (existingUser.dificultadHARDWins || 0) || 0,
+            ganadas: existingUser.dificultadHARDWins || 0,
+            porcentaje: existingUser.dificultadHARD ? ((existingUser.dificultadHARDWins || 0) / existingUser.dificultadHARD * 100).toFixed(2) : '0.00 %'
+        }
+        ];
+
+        return stats;
+    }
 
 
 
-module.exports = { loginuser, createuser, findUser, initmatch, endmatch };
+
+module.exports = { loginuser, createuser, findUser, initmatch, endmatch, diffstats };

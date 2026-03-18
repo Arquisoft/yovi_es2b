@@ -23,6 +23,7 @@ class UserController {
         this.getUser = this.getUser.bind(this);
         this.initmatch = this.initmatch.bind(this);
         this.endmatch = this.endmatch.bind(this);
+        this.diffstats = this.diffstats.bind(this);
     }
 
     /**
@@ -168,6 +169,22 @@ class UserController {
             }
             if (!username || !strategy || !difficulty) {
                 return res.status(400).json({ error: 'username, strategy y difficulty son obligatorios' });
+            }   
+            return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+    }
+
+    async diffstats(req, res) {
+        try {
+            const username = req.body && req.query.username;
+            const stats = await this.userService.diffstats(username);
+            return res.status(200).json(stats);
+        } catch (error) {
+            if (error instanceof UserError) {
+                return res.status(error.statusCode).json({ error: error.message });
+            }
+            if (!username) {
+                return res.status(400).json({ error: 'username es obligatorio' });
             }   
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
