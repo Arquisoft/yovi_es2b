@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Home from "../game/Home.tsx";
 import GameStatsTotal from "./GameStatsTotal.tsx";
+import GameStatsDifficulty from "./GameStatsDifficuty.tsx";
+import GameStatsStrategy from "./GameStatsStrategy.tsx";
 import "./GameStats.css";
 
 export default function GameStats( {username} : { username: string }) {
@@ -17,10 +19,10 @@ export default function GameStats( {username} : { username: string }) {
         return <GameStatsTotal username={username}/>;
     }
     if (goDifficulty) {
-        return <Home username={username}/>;
+        return <GameStatsDifficulty username={username}/>;
     }
     if (goStrategy) {
-        return <Home username={username}/>;
+        return <GameStatsStrategy username={username}/>;
     }
 
 

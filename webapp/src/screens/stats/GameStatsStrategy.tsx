@@ -13,7 +13,6 @@ import "./GameStats.css";
 
 // TIPO ESTADISTICA PARA USO EN LA TABLA
 type StatAdaptedT = {
-    dificultad: string;
     estrategia: string;
     ganadas: number;
     perdidas: number;
@@ -24,9 +23,9 @@ type StatAdaptedT = {
 async function obtenerDatos() {
 //async function obtenerDatos(username: string) {
     return [
-        { dificultad: "Fácil", estrategia: "Agresiva", ganadas: 8, jugadas: 10, perdidas: 2, porcentaje: "80.00 %" },
-        { dificultad: "Media", estrategia: "Defensiva", ganadas: 5, jugadas: 12, perdidas: 7, porcentaje: "41.67 %" },
-        { dificultad: "Difícil", estrategia: "Mixta", ganadas: 2, jugadas: 8, perdidas: 6, porcentaje: "25.00 %" },
+        { estrategia: "Agresiva", ganadas: 8, jugadas: 10, perdidas: 2, porcentaje: "80.00 %" },
+        { estrategia: "Defensiva", ganadas: 5, jugadas: 12, perdidas: 7, porcentaje: "41.67 %" },
+        { estrategia: "Mixta", ganadas: 2, jugadas: 8, perdidas: 6, porcentaje: "25.00 %" },
     ];
 }
 
@@ -63,7 +62,6 @@ export default function GameStatsTotal( {username} : { username: string }) {
                 <table className="stats-total-table">
                     <thead>
                         <tr>
-                            <td>Dificultad</td>
                             <td>Estrategia</td>
                             <td>Victorias</td>
                             <td>Derrotas</td>
@@ -74,7 +72,6 @@ export default function GameStatsTotal( {username} : { username: string }) {
                     <tbody>
                         {data.map((stat, index) => (
                             <tr key={index}>
-                                <td>{stat.dificultad}</td>
                                 <td>{stat.estrategia}</td>
                                 <td>{stat.ganadas}</td>
                                 <td>{stat.perdidas}</td>
