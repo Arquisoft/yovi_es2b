@@ -8,7 +8,7 @@ async function loginuser(users, username, password) {
 
     // que no sea vacío o ERROR
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
-        throw new UserError('Ususario inválido', 404);
+        throw new UserError('Usuario inválido', 404);
     }
     if (!password || typeof password !== 'string') {
         throw new UserError('Contraseña inválida', 404);
@@ -210,7 +210,74 @@ function checkPassword(password) {
         return stats;
     }
 
+    /**
+     * Función de calculo de estadisticas segun la estrategia
+     */
+    async function stratstats(users, username) {
+        // espera a encontrar el usuario en la base -> Jimena maneja la base
+        const existingUser = await users.findOne({ "username": username });
+        // si el usuario no existe
+        if (!existingUser) {
+            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+        }
+        
+        const er=existingUser.estrategiaRANDOM;
+        const erw=existingUser.estrategiaRANDOMWins;
+        const ed=existingUser.estrategiaDEFENSIVE;
+        const edw=existingUser.estrategiaDEFENSIVEWins;
+        const eo=existingUser.estrategiaOFFENSIVE;
+        const eow=existingUser.estrategiaOFFENSIVEWins;
+        const ecf=existingUser.estrategiaCENTER_FIRST;
+        const ecfw=existingUser.estrategiaCENTER_FIRSTWins;
+        const eef=existingUser.estrategiaEDGE_FIRST;
+        const eefw=existingUser.estrategiaEDGE_FIRSTWins;
 
+        const stats = [
+        {
+            estrategia: "RANDOM",
+            jugadas: er || 0,
+            perdidas: er - (erw || 0) || 0,
+            ganadas: erw || 0,
+            porcentaje: er ? ((erw || 0) / er * 100).toFixed(2) : '0.00 %'
+        },
+        {
+            estrategia: "DEFENSIVE",
+            jugadas: ed || 0,
+            perdidas: ed - (edw || 0) || 0,
+            ganadas: edw || 0,
+            porcentaje: ed ? ((edw || 0) / ed * 100).toFixed(2) : '0.00 %'
+        },
+        {
+            estrategia: "OFFENSIVE",
+            jugadas: eo || 0,
+            perdidas: eo - (eow || 0) || 0,
+            ganadas: eow || 0,
+            porcentaje: eo ? ((eow || 0) / eo * 100).toFixed(2) : '0.00 %'
+        },
+        {
+            estrategia: "CENTER_FIRST",
+            jugadas: ecf || 0,
+            perdidas: ecf - (ecfw || 0) || 0,
+            ganadas: ecfw || 0,
+            porcentaje: ecf ? ((ecfw || 0) / ecf * 100).toFixed(2) : '0.00 %'
+        },
+        {
+            estrategia: "EDGE_FIRST",
+            jugadas: eef || 0,
+            perdidas: eef - (eefw || 0) || 0,
+            ganadas: eefw || 0,
+            porcentaje: eef ? ((eefw || 0) / eef * 100).toFixed(2) : '0.00 %'
+        },
+        {
+            estrategia: "TOTALES",
+            jugadas: er+ed+eo+ecf+eef || 0,
+            perdidas: (er+ed+eo+ecf+eef) - (erw+edw+eow+ecfw+eefw || 0) || 0,
+            ganadas: erw+edw+eow+ecfw+eefw || 0,
+            porcentaje: (er+ed+eo+ecf+eef) ? (((erw+edw+eow+ecfw+eefw || 0)) / (er+ed+eo+ecf+eef) * 100).toFixed(2) : '0.00 %'
+        }
+        ];
 
+        return stats;
+    }
 
-module.exports = { loginuser, createuser, findUser, initmatch, endmatch, diffstats };
+module.exports = { loginuser, createuser, findUser, initmatch, endmatch, diffstats, stratstats };

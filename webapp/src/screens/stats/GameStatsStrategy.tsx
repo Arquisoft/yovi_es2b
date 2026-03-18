@@ -3,16 +3,8 @@ import Home from "../game/Home.tsx";
 import GameStats from "./GameStats.tsx";
 import "./GameStats.css";
 
-// TIPO ESTADISTICA
-/*type Stat = {
-    dificultad: string;
-    estrategia: string;
-    ganadas: number;
-    jugadas: number;
-};*/
-
-// TIPO ESTADISTICA PARA USO EN LA TABLA
-type StatAdaptedT = {
+// TIPO ESTADISTICA ESTRATEGIA
+type StatStr = {
     estrategia: string;
     ganadas: number;
     perdidas: number;
@@ -20,29 +12,42 @@ type StatAdaptedT = {
     porcentaje: string;
 };
 
-async function obtenerDatos() {
-//async function obtenerDatos(username: string) {
-    return [
-        { estrategia: "Agresiva", ganadas: 8, jugadas: 10, perdidas: 2, porcentaje: "80.00 %" },
-        { estrategia: "Defensiva", ganadas: 5, jugadas: 12, perdidas: 7, porcentaje: "41.67 %" },
-        { estrategia: "Mixta", ganadas: 2, jugadas: 8, perdidas: 6, porcentaje: "25.00 %" },
-    ];
+async function obtenerDatos(username: string) {
+    try {
+        const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
+        const res = await fetch(`${API_URL}/stratstats`, {
+            method: 'POST', headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username : username })
+        });
+
+        const stats = await res.json();
+
+        if(res.ok) {
+            return stats.stats;
+        } else {
+            throw new Error(stats.error || 'Server error');
+        }
+    } catch (err: any) {
+        throw new Error(err.message || 'Network error');
+    }    
 }
 
-export default function GameStatsTotal( {username} : { username: string }) {
+export default function GameStatsStra( {username} : { username: string }) {
 
     const [goBack, setGoBack] = useState(false);
     const [goHome, setGoHome] = useState(false);
 
-    const [data, setData] = useState<StatAdaptedT[]>([]);
+    const [data, setData] = useState<StatStr[]>([]);
 
     useEffect(() => {
-        const cargarDatos = async () => {
-            const resultado = await obtenerDatos();
-            setData(resultado);
-        };
-        cargarDatos();
-    }, [username]);
+            const cargarDatos = async () => {
+                const resultado = await obtenerDatos(username);
+                setData(resultado);
+            };
+            cargarDatos();
+        }, [username]);
 
     if (goBack) {
         return <GameStats username={username}/>;

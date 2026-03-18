@@ -24,6 +24,7 @@ class UserController {
         this.initmatch = this.initmatch.bind(this);
         this.endmatch = this.endmatch.bind(this);
         this.diffstats = this.diffstats.bind(this);
+        this.stratstats = this.stratstats.bind(this);
     }
 
     /**
@@ -175,24 +176,11 @@ class UserController {
     }
 
     async diffstats(req, res) {
-         if (!req.body) {
-        return res.status(400).json({ error: 'Falta body en la petición' });
-    }
         let username;
         try {
             username = req.body && req.body.username;
             const stats = await this.userService.diffstats(username);
-
-            // Asegurarse de que stats sea siempre un array de objetos válidos
-            const safeStats = stats.map(s => ({
-                dificultad: s.dificultad || '',
-                jugadas: s.jugadas ?? 0,
-                perdidas: s.perdidas ?? 0,
-                ganadas: s.ganadas ?? 0,
-                porcentaje: s.porcentaje || '0.00 %'
-            }))
-
-            return res.status(200).json({stats : safeStats});
+            return res.status(200).json({stats : stats});
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });
@@ -204,6 +192,25 @@ class UserController {
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
     }
+
+    async stratstats(req, res) {
+        let username;
+        try {
+            username = req.body && req.body.username;
+            const stats = await this.userService.stratstats(username);
+            return res.status(200).json({stats : stats});
+        } catch (error) {
+            if (error instanceof UserError) {
+                return res.status(error.statusCode).json({ error: error.message });
+            }
+            if (!username) {
+                return res.status(400).json({ error: 'username es obligatorio' });
+            }
+            console.error(error); // Para ver qué está fallando
+            return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+    }
+ 
 }
 
 module.exports = UserController;

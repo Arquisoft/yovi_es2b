@@ -68,6 +68,7 @@ async function startServer() {
 
   // estadisticas
   app.post('/diffstats', userController.diffstats);
+  app.post('/stratstats', userController.stratstats);
 
 }
 

@@ -33,15 +33,9 @@ async function obtenerDatos(username: string) {
     } catch (err: any) {
         throw new Error(err.message || 'Network error');
     }    
-
-    return [
-        { dificultad: "Fácil", ganadas: 8, jugadas: 10, perdidas: 2, porcentaje: "80.00 %" },
-        { dificultad: "Media", ganadas: 5, jugadas: 12, perdidas: 7, porcentaje: "41.67 %" },
-        { dificultad: "Difícil", ganadas: 2, jugadas: 8, perdidas: 6, porcentaje: "25.00 %" },
-    ];
 }
 
-export default function GameStatsTotal( {username} : { username: string }) {
+export default function GameStatsDiff( {username} : { username: string }) {
 
     const [goBack, setGoBack] = useState(false);
     const [goHome, setGoHome] = useState(false);
