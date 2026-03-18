@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Home from "../game/Home.tsx";
-// import "./GameStats.css";
+import "./GameStats.css";
 
 export default function GameStats( {username} : { username: string }) {
 
@@ -33,14 +33,19 @@ export default function GameStats( {username} : { username: string }) {
                     Ver todas las estadísticas
                 </button>
 
+                <br></br>
+
                 <button className="stats-btn-diff" onClick={() => setGoDifficulty(true)}>
                     Por dificultad
                 </button>
+
+                <br></br>
 
                 <button className="stats-btn-strategy" onClick={() => setGoStrategy(true)}>
                     Por estrategia
                 </button>
 
+                <br></br>
                 <br></br>    
                 
                 <button className="stats-btn-back" onClick={() => setGoBack(true)}>
