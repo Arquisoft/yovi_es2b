@@ -67,7 +67,7 @@ async function startServer() {
   app.post('/endmatch',   userController.endmatch);
 
   // estadisticas
-  app.get('/diffstats', userController.diffstats);
+  app.post('/diffstats', userController.diffstats);
 
 }
 

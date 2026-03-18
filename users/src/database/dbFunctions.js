@@ -1,3 +1,4 @@
+const e = require('express');
 const UserError = require('../errors/UserError');
 
 /*
@@ -168,27 +169,41 @@ function checkPassword(password) {
             throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
         }
         
+        const de=existingUser.dificultadEASY;
+        const dew=existingUser.dificultadEASYWins;
+        const dm=existingUser.dificultadMEDIUM;
+        const dmw=existingUser.dificultadMEDIUMWins;
+        const dh=existingUser.dificultadHARD;
+        const dhw=existingUser.dificultadHARDWins;
+
         const stats = [
         {
             dificultad: "FÁCIL",
-            jugadas: existingUser.dificultadEASY || 0,
-            perdidas: existingUser.dificultadEASY - (existingUser.dificultadEASYWins || 0) || 0,
-            ganadas: existingUser.dificultadEASYWins || 0,
-            porcentaje: existingUser.dificultadEASY ? ((existingUser.dificultadEASYWins || 0) / existingUser.dificultadEASY * 100).toFixed(2) : '0.00 %'
+            jugadas: de || 0,
+            perdidas: de - (dew || 0) || 0,
+            ganadas: dew || 0,
+            porcentaje: de ? ((dew || 0) / de * 100).toFixed(2) : '0.00 %'
         },
         {
             dificultad: "MEDIA",
-            jugadas: existingUser.dificultadMEDIUM || 0,
-            perdidas: existingUser.dificultadMEDIUM - (existingUser.dificultadMEDIUMWins || 0) || 0,
-            ganadas: existingUser.dificultadMEDIUMWins || 0,
-            porcentaje: existingUser.dificultadMEDIUM ? ((existingUser.dificultadMEDIUMWins || 0) / existingUser.dificultadMEDIUM * 100).toFixed(2) : '0.00 %'
+            jugadas: dm || 0,
+            perdidas: dm - (dmw || 0) || 0,
+            ganadas: dmw || 0,
+            porcentaje: dm ? ((dmw || 0) / dm * 100).toFixed(2) : '0.00 %'
         },
         {
             dificultad: "DIFÍCIL",
-            jugadas: existingUser.dificultadHARD || 0,
-            perdidas: existingUser.dificultadHARD - (existingUser.dificultadHARDWins || 0) || 0,
-            ganadas: existingUser.dificultadHARDWins || 0,
-            porcentaje: existingUser.dificultadHARD ? ((existingUser.dificultadHARDWins || 0) / existingUser.dificultadHARD * 100).toFixed(2) : '0.00 %'
+            jugadas: dh || 0,
+            perdidas: dh - (dhw || 0) || 0,
+            ganadas: dhw || 0,
+            porcentaje: dh ? ((dhw || 0) / dh * 100).toFixed(2) : '0.00 %'
+        },
+        {
+            dificultad: "TOTALES",
+            jugadas: de+dm+dh || 0,
+            perdidas: (de+dm+dh) - (dew+dmw+dhw || 0) || 0,
+            ganadas: dew+dmw+dhw || 0,
+            porcentaje: (de+dm+dh) ? (((dew+dmw+dhw || 0)) / (de+dm+dh) * 100).toFixed(2) : '0.00 %'
         }
         ];
 

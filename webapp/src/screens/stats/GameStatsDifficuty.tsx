@@ -20,13 +20,13 @@ async function obtenerDatos(username: string) {
             method: 'POST', headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ username })
+            body: JSON.stringify({ username : username })
         });
 
         const stats = await res.json();
 
         if(res.ok) {
-            // return stats
+            return stats.stats;
         } else {
             throw new Error(stats.error || 'Server error');
         }
