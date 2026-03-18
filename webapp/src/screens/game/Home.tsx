@@ -7,6 +7,7 @@ import type { StrategyType } from "../../gameOptions/Strategy";
 import { Difficulty } from "../../gameOptions/Difficulty";
 import "./Home.css";
 import InitialScreen from "../init/InitialScreen";
+import GameStats from "../stats/GameStats";
 
 const yoviLogo = "/yovi_logo.png";
 
@@ -40,6 +41,7 @@ export default function HomePage( {username} : { username: string }) {
 
     const [gameStarted, setGameStarted] = useState(false);
     const [menuSelected, setMenuSelected] = useState<string>("");
+    const [goStats, setGoStats] = useState(false);
     const [logOut, setLogOut] = useState(false);
 
     // como es función async, llamamos useEffect
@@ -58,11 +60,10 @@ export default function HomePage( {username} : { username: string }) {
         return <InitialScreen />;
     }
 
-    /*
-    <button className="home-menu__btn" onClick={() => setMenuSelected("Nueva partida")}>
-                    Nueva partida
-                </button>
-    */
+    if (goStats) {
+        return <GameStats username={username}/>;
+    }
+
 
     return (
         <div className="home-screen">
@@ -120,7 +121,7 @@ export default function HomePage( {username} : { username: string }) {
             <br></br>
             
             <div className="home-menu">
-                <button className="home-menu__btn" onClick={() => setMenuSelected("Mis estadísticas")}>
+                <button className="home-menu__btn" onClick={() => setGoStats(true)}>
                     Mis estadísticas
                 </button>
                 <button className="home-menu__btn" onClick={() => setMenuSelected("Ranking")}>
