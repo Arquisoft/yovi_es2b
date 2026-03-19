@@ -79,6 +79,7 @@ export function Board(props: BoardProps) {
 
   // let -> variables que pueden cambiar su valor
   let selectedDifficulty: DifficultyType = props.difficulty; // selectedDifficulty -> dificultad seleccionada por el usuario
+  let selectedStrategy: StrategyType = props.strategy; // selectedStrategy -> estrategia seleccionada por el usuario del bot
   
   // const -> variables no cambia su valor
   const BOARDHIGHT = getBoardSize(selectedDifficulty);

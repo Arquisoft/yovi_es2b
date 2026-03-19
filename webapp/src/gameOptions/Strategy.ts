@@ -3,10 +3,11 @@
 // Estrategias
 export const Strategy = {
   RANDOM: "RANDOM",
-  DEFENSIVE: "DEFENSIVE",
-  OFFENSIVE: "OFFENSIVE",
-  CENTER_FIRST: "CENTER_FIRST",
-  EDGE_FIRST: "EDGE_FIRST"
+  DEFENSIVO: "DEFENSIVO",
+  OFENSIVO: "OFENSIVO",
+  MONTE_CARLO: "MONTE CARLO",
+  MONTE_CARLO_MEJORADO: "MONTE_CARLO_MEJORADO",
+  MONTE_CARLO_ENDURECIDO: "MONTE_CARLO_ENDURECIDO"
 } as const;
 
 // Tipo para Strategy. Esto asegura que solo se puedan usar los valores definidos en Strategy.
