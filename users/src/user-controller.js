@@ -23,6 +23,7 @@ class UserController {
         this.getUser = this.getUser.bind(this);
         this.initmatch = this.initmatch.bind(this);
         this.endmatch = this.endmatch.bind(this);
+        this.allstats = this.allstats.bind(this);
         this.diffstats = this.diffstats.bind(this);
         this.stratstats = this.stratstats.bind(this);
     }
@@ -175,6 +176,26 @@ class UserController {
         }
     }
 
+    async allstats(req, res) {
+        let username;
+        try {
+            username = req.body && req.body.username;
+            const stats = await this.userService.allstats(username);
+            return res.status(200).json({stats : stats});
+        } catch (error) {
+            if (error instanceof UserError) {
+                return res.status(error.statusCode).json({ error: error.message });
+            }
+            if (!username) {
+                return res.status(400).json({ error: 'username es obligatorio' });
+            }
+            return res.status(500).json({ 
+                error: error.message,
+                stack: error.stack
+            });
+        }
+    }
+
     async diffstats(req, res) {
         let username;
         try {
@@ -188,8 +209,10 @@ class UserController {
             if (!username) {
                 return res.status(400).json({ error: 'username es obligatorio' });
             }
-            console.error(error); // Para ver qué está fallando
-            return res.status(500).json({ error: 'Error interno del servidor' });
+            return res.status(500).json({ 
+                error: error.message,
+                stack: error.stack
+            });
         }
     }
 
@@ -206,8 +229,10 @@ class UserController {
             if (!username) {
                 return res.status(400).json({ error: 'username es obligatorio' });
             }
-            console.error(error); // Para ver qué está fallando
-            return res.status(500).json({ error: 'Error interno del servidor' });
+            return res.status(500).json({ 
+                error: error.message,
+                stack: error.stack
+            });
         }
     }
  

@@ -1,0 +1,11 @@
+.stats-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: transparent !important; /* IMPORTANTE: Transparente para unificarse */
+  box-shadow: none !important;        /* Sin sombra propia */
+  padding: 20px;
+  width: fit-content;
+  margin: auto;
+}

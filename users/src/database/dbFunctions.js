@@ -115,6 +115,7 @@ function checkPassword(password) {
 
         var estrategiaJuego = "estrategia" + strategy;
         var dificultadJuego = "dificultad" + difficulty;
+        var partidasGeneral = "partida" + difficulty + strategy;
 
         await users.updateOne(
             { _id: existingUser._id },
@@ -122,7 +123,8 @@ function checkPassword(password) {
                 $inc: {
                     partidasTotales: 1,
                     [estrategiaJuego]: 1,
-                    [dificultadJuego]: 1
+                    [dificultadJuego]: 1,
+                    [partidasGeneral]: 1
                 }
             }
         )
@@ -143,6 +145,7 @@ function checkPassword(password) {
 
         var estrategiaJuego = "estrategia" + strategy + "Wins";
         var dificultadJuego = "dificultad" + difficulty + "Wins";
+        var partidasGeneral = "partida" + difficulty + strategy + "Wins";
 
         await users.updateOne(
             { _id: existingUser._id },
@@ -150,7 +153,8 @@ function checkPassword(password) {
                 $inc: {
                     partidasTotalesWins: 1,
                     [estrategiaJuego]: 1,
-                    [dificultadJuego]: 1
+                    [dificultadJuego]: 1,
+                    [partidasGeneral]: 1
                 }
             }
         )
@@ -280,4 +284,40 @@ function checkPassword(password) {
         return stats;
     }
 
-module.exports = { loginuser, createuser, findUser, initmatch, endmatch, diffstats, stratstats };
+    /**
+     * Función de calculo de estadisticas segun la dificultad
+     */
+    async function allstats(users, username) {
+        // espera a encontrar el usuario en la base -> Jimena maneja la base
+        const existingUser = await users.findOne({ "username": username });
+        // si el usuario no existe
+        if (!existingUser) {
+            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+        }
+        
+        const difs = ["EASY", "MEDIUM", "HARD"];
+        const stras = ["RANDOM", "OFFENSIVE"];
+
+        const stats = [];
+
+        for (const diff of difs) {
+            for (const strat of stras) {
+
+                const partidas = existingUser[`partida${diff}${strat}`] || 0;
+                const wins = existingUser[`partida${diff}${strat}Wins`] || 0;
+
+                stats.push({
+                    dificultad: diff,
+                    estrategia: strat,
+                    jugadas: partidas,
+                    perdidas: partidas - wins,
+                    ganadas: wins,
+                    porcentaje: partidas ? ((wins / partidas) * 100).toFixed(2) +' %' : '0.00 %'
+                });
+            }
+        }
+
+        return stats;
+    }
+
+module.exports = { loginuser, createuser, findUser, initmatch, endmatch, diffstats, stratstats, allstats };

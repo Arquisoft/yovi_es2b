@@ -1,16 +1,8 @@
-import { useState } from "react";
-import Home from "../../screens/game/Home";
-
-export default function ControlPanel({username} : { username: string }) {
-  const [end, setEnd] = useState(false);
-
-  if(end) {
-    return (<Home username={username}/>);
-  };
+export default function ControlPanel({onExit} : { onExit: () => void }) {
 
   return (
     <div className="controls">
-      <button id="exit-button" onClick={() => setEnd(true)}>Terminar partida</button>
+      <button id="exit-button" onClick={onExit}>Terminar partida</button>
     </div>
   );
 }

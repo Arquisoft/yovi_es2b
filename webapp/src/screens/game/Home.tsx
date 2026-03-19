@@ -39,29 +39,27 @@ export default function HomePage( {username} : { username: string }) {
         difficulty: Difficulty.EASY
     });
 
-    const [gameStarted, setGameStarted] = useState(false);
     const [menuSelected, setMenuSelected] = useState<string>("");
-    const [goStats, setGoStats] = useState(false);
-    const [logOut, setLogOut] = useState(false);
+    const [screen, setScreen] = useState("home");
 
     // como es función async, llamamos useEffect
     useEffect(() => {
-        if (gameStarted) {
+        if (screen==="game") {
             iniciarPartida(username, settings.strategy, settings.difficulty);
         }
-    }, [gameStarted]);
+    }, [screen]);
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
-    if (gameStarted) {
+    if (screen==="game") {
         return <Game settings={settings} username={username} stateStart={true}/>;
     }
 
-    if (logOut) {
-        return <InitialScreen />;
+    if (screen==="login") {
+        return (<InitialScreen />);
     }
 
-    if (goStats) {
-        return <GameStats username={username}/>;
+    if (screen==="stats") {
+        return (<GameStats username={username}/>);
     }
 
 
@@ -75,7 +73,7 @@ export default function HomePage( {username} : { username: string }) {
             {menuSelected && <p className="home-menu__selected">Seleccionado: {menuSelected}</p>}
 
             <div className="home-config">
-                <button className="home-config__start" onClick={() => setGameStarted(true)}>
+                <button className="home-config__start" onClick={() => setScreen("game")}>
                     Empezar partida
                 </button>
 
@@ -121,13 +119,13 @@ export default function HomePage( {username} : { username: string }) {
             <br></br>
             
             <div className="home-menu">
-                <button className="home-menu__btn" onClick={() => setGoStats(true)}>
+                <button className="home-menu__btn" onClick={() => setScreen("stats")}>
                     Mis estadísticas
                 </button>
                 <button className="home-menu__btn" onClick={() => setMenuSelected("Ranking")}>
                     Ranking
                 </button>
-                <button className="home-menu-out__btn" onClick={() => setLogOut(true)}>
+                <button className="home-menu-out__btn" onClick={() => setScreen("login")}>
                     Cerrar sesión
                 </button>
             </div>
