@@ -228,9 +228,9 @@ function checkPassword(password) {
 
             stats.push({
                 estrategia: strat,
-                jugadas: totalPartidas,
-                perdidas: totalPartidas - totalWins,
-                ganadas: totalWins,
+                jugadas: totalPartidas || 0,
+                perdidas: totalPartidas - totalWins || 0,
+                ganadas: totalWins || 0,
                 porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
             });
         }
