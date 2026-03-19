@@ -29,7 +29,7 @@ pub use choose::MoveResponse;
 pub use error::ErrorResponse;
 pub use version::*;
 
-use crate::{GameYError, RandomBot, YBotRegistry, state::AppState};
+use crate::{DefensiveBot, GameYError, MonteCarloBot, MonteCarloEndurecidoBot, MonteCarloMejoradoBot, OffensiveBot, RandomBot, YBotRegistry, state::AppState};
 use tower_http::cors::{Any, CorsLayer};
 
 /// Creates the Axum router with the given state.
@@ -57,7 +57,13 @@ pub fn create_router(state: AppState) -> axum::Router {
 ///
 /// The default state includes the `RandomBot` which selects moves randomly.
 pub fn create_default_state() -> AppState {
-    let bots = YBotRegistry::new().with_bot(Arc::new(RandomBot));
+    let bots = YBotRegistry::new()
+        .with_bot(Arc::new(RandomBot))
+        .with_bot(Arc::new(DefensiveBot))
+        .with_bot(Arc::new(OffensiveBot))
+        .with_bot(Arc::new(MonteCarloBot))
+        .with_bot(Arc::new(MonteCarloMejoradoBot))
+        .with_bot(Arc::new(MonteCarloEndurecidoBot));
     AppState::new(bots)
 }
 
