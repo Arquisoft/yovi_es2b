@@ -172,44 +172,30 @@ function checkPassword(password) {
         if (!existingUser) {
             throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
         }
-        
-        const de=existingUser.dificultadEASY;
-        const dew=existingUser.dificultadEASYWins;
-        const dm=existingUser.dificultadMEDIUM;
-        const dmw=existingUser.dificultadMEDIUMWins;
-        const dh=existingUser.dificultadHARD;
-        const dhw=existingUser.dificultadHARDWins;
 
-        const stats = [
-        {
-            dificultad: "FÁCIL",
-            jugadas: de || 0,
-            perdidas: de - (dew || 0) || 0,
-            ganadas: dew || 0,
-            porcentaje: de ? ((dew || 0) / de * 100).toFixed(2) : '0.00 %'
-        },
-        {
-            dificultad: "MEDIA",
-            jugadas: dm || 0,
-            perdidas: dm - (dmw || 0) || 0,
-            ganadas: dmw || 0,
-            porcentaje: dm ? ((dmw || 0) / dm * 100).toFixed(2) : '0.00 %'
-        },
-        {
-            dificultad: "DIFÍCIL",
-            jugadas: dh || 0,
-            perdidas: dh - (dhw || 0) || 0,
-            ganadas: dhw || 0,
-            porcentaje: dh ? ((dhw || 0) / dh * 100).toFixed(2) : '0.00 %'
-        },
-        {
-            dificultad: "TOTALES",
-            jugadas: de+dm+dh || 0,
-            perdidas: (de+dm+dh) - (dew+dmw+dhw || 0) || 0,
-            ganadas: dew+dmw+dhw || 0,
-            porcentaje: (de+dm+dh) ? (((dew+dmw+dhw || 0)) / (de+dm+dh) * 100).toFixed(2) : '0.00 %'
+        const difs = ["EASY", "MEDIUM", "HARD"];
+        const strats = ["RANDOM", "DEFENSIVE", "OFFENSIVE", "CENTER_FIRST", "EDGE_FIRST"];
+
+        const stats = [];
+        
+        for (const diff of difs) {
+
+            let totalPartidas = 0;
+            let totalWins = 0;
+
+            for (const strat of strats) {
+                totalPartidas += existingUser[`partida${diff}${strat}`] || 0;
+                totalWins += existingUser[`partida${diff}${strat}Wins`] || 0;
+            }
+
+            stats.push({
+                dificultad: diff,
+                jugadas: totalPartidas,
+                perdidas: totalPartidas - totalWins,
+                ganadas: totalWins,
+                porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
+            });
         }
-        ];
 
         return stats;
     }
@@ -224,62 +210,30 @@ function checkPassword(password) {
         if (!existingUser) {
             throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
         }
-        
-        const er=existingUser.estrategiaRANDOM;
-        const erw=existingUser.estrategiaRANDOMWins;
-        const ed=existingUser.estrategiaDEFENSIVE;
-        const edw=existingUser.estrategiaDEFENSIVEWins;
-        const eo=existingUser.estrategiaOFFENSIVE;
-        const eow=existingUser.estrategiaOFFENSIVEWins;
-        const ecf=existingUser.estrategiaCENTER_FIRST;
-        const ecfw=existingUser.estrategiaCENTER_FIRSTWins;
-        const eef=existingUser.estrategiaEDGE_FIRST;
-        const eefw=existingUser.estrategiaEDGE_FIRSTWins;
 
-        const stats = [
-        {
-            estrategia: "RANDOM",
-            jugadas: er || 0,
-            perdidas: er - (erw || 0) || 0,
-            ganadas: erw || 0,
-            porcentaje: er ? ((erw || 0) / er * 100).toFixed(2) : '0.00 %'
-        },
-        {
-            estrategia: "DEFENSIVE",
-            jugadas: ed || 0,
-            perdidas: ed - (edw || 0) || 0,
-            ganadas: edw || 0,
-            porcentaje: ed ? ((edw || 0) / ed * 100).toFixed(2) : '0.00 %'
-        },
-        {
-            estrategia: "OFFENSIVE",
-            jugadas: eo || 0,
-            perdidas: eo - (eow || 0) || 0,
-            ganadas: eow || 0,
-            porcentaje: eo ? ((eow || 0) / eo * 100).toFixed(2) : '0.00 %'
-        },
-        {
-            estrategia: "CENTER_FIRST",
-            jugadas: ecf || 0,
-            perdidas: ecf - (ecfw || 0) || 0,
-            ganadas: ecfw || 0,
-            porcentaje: ecf ? ((ecfw || 0) / ecf * 100).toFixed(2) : '0.00 %'
-        },
-        {
-            estrategia: "EDGE_FIRST",
-            jugadas: eef || 0,
-            perdidas: eef - (eefw || 0) || 0,
-            ganadas: eefw || 0,
-            porcentaje: eef ? ((eefw || 0) / eef * 100).toFixed(2) : '0.00 %'
-        },
-        {
-            estrategia: "TOTALES",
-            jugadas: er+ed+eo+ecf+eef || 0,
-            perdidas: (er+ed+eo+ecf+eef) - (erw+edw+eow+ecfw+eefw || 0) || 0,
-            ganadas: erw+edw+eow+ecfw+eefw || 0,
-            porcentaje: (er+ed+eo+ecf+eef) ? (((erw+edw+eow+ecfw+eefw || 0)) / (er+ed+eo+ecf+eef) * 100).toFixed(2) : '0.00 %'
+        const difs = ["EASY", "MEDIUM", "HARD"];
+        const strats = ["RANDOM", "DEFENSIVE", "OFFENSIVE", "CENTER_FIRST", "EDGE_FIRST"];
+
+        const stats = [];
+        
+        for (const strat of strats) {
+
+            let totalPartidas = 0;
+            let totalWins = 0;
+
+            for (const diff of difs) {
+                totalPartidas += existingUser[`partida${diff}${strat}`] || 0;
+                totalWins += existingUser[`partida${diff}${strat}Wins`] || 0;
+            }
+
+            stats.push({
+                estrategia: strat,
+                jugadas: totalPartidas,
+                perdidas: totalPartidas - totalWins,
+                ganadas: totalWins,
+                porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
+            });
         }
-        ];
 
         return stats;
     }
@@ -296,12 +250,12 @@ function checkPassword(password) {
         }
         
         const difs = ["EASY", "MEDIUM", "HARD"];
-        const stras = ["RANDOM", "OFFENSIVE"];
+        const strats = ["RANDOM", "DEFENSIVE", "OFFENSIVE", "CENTER_FIRST", "EDGE_FIRST"];
 
         const stats = [];
 
         for (const diff of difs) {
-            for (const strat of stras) {
+            for (const strat of strats) {
 
                 const partidas = existingUser[`partida${diff}${strat}`] || 0;
                 const wins = existingUser[`partida${diff}${strat}Wins`] || 0;
@@ -312,10 +266,22 @@ function checkPassword(password) {
                     jugadas: partidas,
                     perdidas: partidas - wins,
                     ganadas: wins,
-                    porcentaje: partidas ? ((wins / partidas) * 100).toFixed(2) +' %' : '0.00 %'
+                    porcentaje: partidas ? ((wins / partidas) * 100).toFixed(2) + ' %' : '0.00 %'
                 });
             }
         }
+
+        const pt = existingUser.partidasTotales;
+        const ptw = existingUser.partidasTotalesWins;
+
+        stats.push({
+            dificultad: "",
+            estrategia: "TOTALES",
+            jugadas: pt,
+            perdidas: pt - ptw,
+            ganadas: ptw,
+            porcentaje: pt ? ((ptw / pt) * 100).toFixed(2) + ' %' : '0.00 %'
+        });
 
         return stats;
     }

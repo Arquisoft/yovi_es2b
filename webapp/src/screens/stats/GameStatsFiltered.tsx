@@ -24,12 +24,14 @@ export default function GameStatsFiltered( {username} : { username: string }) {
 
             <div className="stats-menu-filter">
 
-                <div className="stats-menu-filter-strategy">
-                    <GameStatsStrategy username={username}/>
-                </div>
-
                 <div className="stats-menu-filter-difficulty">
                     <GameStatsDifficulty username={username}/>
+                </div>
+
+                <br></br>
+
+                <div className="stats-menu-filter-strategy">
+                    <GameStatsStrategy username={username}/>
                 </div>
 
                 <br></br>
