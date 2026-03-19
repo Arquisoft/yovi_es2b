@@ -1,16 +1,14 @@
 import { useState } from "react";
 import Home from "../game/Home.tsx";
 import GameStatsTotal from "./GameStatsTotal.tsx";
-import GameStatsDifficulty from "./GameStatsDifficuty.tsx";
-import GameStatsStrategy from "./GameStatsStrategy.tsx";
+import GameStatsFiltered from "./GameStatsFiltered.tsx";
 import "./GameStats.css";
 
 export default function GameStats( {username} : { username: string }) {
 
     const [goBack, setGoBack] = useState(false);
-    const [goDifficulty, setGoDifficulty] = useState(false);
-    const [goStrategy, setGoStrategy] = useState(false);
     const [goTotal, setGoTotal] = useState(false);
+    const [goFiltered, setGoFiltered] = useState(false);
 
     if (goBack) {
         return <Home username={username}/>;
@@ -18,13 +16,9 @@ export default function GameStats( {username} : { username: string }) {
     if (goTotal) {
         return <GameStatsTotal username={username}/>;
     }
-    if (goDifficulty) {
-        return <GameStatsDifficulty username={username}/>;
+    if (goFiltered) {
+        return <GameStatsFiltered username={username}/>;
     }
-    if (goStrategy) {
-        return <GameStatsStrategy username={username}/>;
-    }
-
 
     return (
         <div className="stats-screen">
@@ -38,15 +32,11 @@ export default function GameStats( {username} : { username: string }) {
 
                 <br></br>
 
-                <button className="stats-btn-diff" onClick={() => setGoDifficulty(true)}>
-                    Por dificultad
+                <button className="stats-btn-diff" onClick={() => setGoFiltered(true)}>
+                    Ver estadísticas filtradas
                 </button>
 
                 <br></br>
-
-                <button className="stats-btn-strategy" onClick={() => setGoStrategy(true)}>
-                    Por estrategia
-                </button>
 
                 <br></br>
                 <br></br>    

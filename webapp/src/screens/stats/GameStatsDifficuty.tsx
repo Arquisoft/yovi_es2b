@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import Home from "../game/Home.tsx";
-import GameStats from "./GameStats.tsx";
 import "./GameStats.css";
 
 // TIPO ESTADISTICA DIFICULTAD
@@ -37,9 +35,6 @@ async function obtenerDatos(username: string) {
 
 export default function GameStatsDiff( {username} : { username: string }) {
 
-    const [goBack, setGoBack] = useState(false);
-    const [goHome, setGoHome] = useState(false);
-
     const [data, setData] = useState<StatDif[]>([]);
 
     useEffect(() => {
@@ -50,60 +45,33 @@ export default function GameStatsDiff( {username} : { username: string }) {
         cargarDatos();
     }, [username]);
 
-    if (goBack) {
-        return <GameStats username={username}/>;
-    }
-    if (goHome) {
-        return <Home username={username}/>;
-    }
-
-
     return (
-        <div className="stats-total-screen">
-            <h2 className="stats-total-screen-title">Estadísticas según dificultad de:</h2>
-            <h1 className="stats-total-screen-username">{username}</h1>
+        <div className="stats-diff-screen">
 
-            <div className="stats-total-menu">
-
-                <table className="stats-total-table">
-                    <thead>
-                        <tr>
-                            <td>Dificultad</td>
-                            <td>Victorias</td>
-                            <td>Derrotas</td>
-                            <td>Partidas jugadas</td>
-                            <td>Porcentaje de victorias</td>
+            <table className="stats-diff-table">
+                <thead>
+                    <tr>
+                        <td>Dificultad</td>
+                        <td>Victorias</td>
+                        <td>Derrotas</td>
+                        <td>Partidas jugadas</td>
+                        <td>Porcentaje de victorias</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {data.map((stat, index) => (
+                        <tr key={index}>
+                            <td>{stat.dificultad}</td>
+                            <td>{stat.ganadas}</td>
+                            <td>{stat.perdidas}</td>
+                            <td>{stat.jugadas}</td>
+                            <td>{stat.porcentaje}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {data.map((stat, index) => (
-                            <tr key={index}>
-                                <td>{stat.dificultad}</td>
-                                <td>{stat.ganadas}</td>
-                                <td>{stat.perdidas}</td>
-                                <td>{stat.jugadas}</td>
-                                <td>{stat.porcentaje}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                
-
-                <br></br>
-                <br></br>    
-                
-                <button className="stats-total-btn-back" onClick={() => setGoBack(true)}>
-                    Volver al menú de estadísticas
-                </button>
-
-                <br></br> 
-
-                <button className="stats-total-btn-home" onClick={() => setGoHome(true)}>
-                    Volver al menú principal
-                </button>
-                
-            </div>
+                    ))}
+                </tbody>
+            </table>
             
         </div>
+        
     );
 }
