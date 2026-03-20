@@ -4,7 +4,8 @@ use crate::{Coordinates, GameStatus, GameY, Movement, PlayerId, YBot};
 use rand::prelude::IndexedRandom;
 
 // Numero de simulaciones por casilla candidata
-const SIMULATIONS_PER_MOVE: u32 = 50;
+const SIMULATIONS_PER_MOVE: u32 = 100;
+
 
 pub struct MonteCarloEndurecidoBot;
 
@@ -22,6 +23,15 @@ impl YBot for MonteCarloEndurecidoBot {
             return None;
         }
 
+        // 1. Comprueba si hay un movimiento ganador inmediato y lo juega
+        for &cell in &available {
+            let coords = Coordinates::from_index(cell, board.board_size());
+            let mut sim = board.clone();
+            if sim.add_move(Movement::Placement { player, coords }).is_ok() && sim.check_game_over() {
+                return Some(coords);
+            }
+        }
+
         // Objeto para numeros aleatorios
         let mut rng = rand::rng();
 
@@ -31,8 +41,7 @@ impl YBot for MonteCarloEndurecidoBot {
         // Calcula las estadisticas de cada casilla
         for i in 0..available.len() {
             let coords = Coordinates::from_index(available[i], board.board_size());
-            
-            //Hace simulaciones de las partidas para ver el ratio de victorias
+
             for _simulacion in 0..SIMULATIONS_PER_MOVE {
                 let mut sim_board = board.clone();
 
@@ -72,7 +81,6 @@ fn simulaPartida(mut board: GameY, rng: &mut impl rand::Rng) -> Option<PlayerId>
         }
 
         let player = board.next_player()?;
-        // Mirar casilla con mejor puntuacion
         let cell = calculaHeuristico(available, &board, rng);
         let coords = Coordinates::from_index(cell, board.board_size());
 
@@ -86,40 +94,44 @@ fn simulaPartida(mut board: GameY, rng: &mut impl rand::Rng) -> Option<PlayerId>
 }
 
 // Elige una casilla usando heuristica con algo de aleatoriedad.
-// 30% del tiempo elige al azar, el resto puntua y elige entre las 3 mejores.
-// Puntuacion = (lados_tocados * 4) - distancia_al_centro
+// 20% del tiempo elige al azar, el resto puntua y elige entre las 3 mejores.
+// Puntuacion = (proximidad_al_centro * 2) + lados_tocados
+//
+// En el juego Y el centro es estrategicamente clave porque desde ahi
+// se puede conectar con los 3 lados. Las casillas de borde solo conectan
+// con 1 lado, por lo que la proximidad al centro tiene mas peso.
 fn calculaHeuristico(available: Vec<u32>, board: &GameY, rng: &mut impl rand::Rng) -> u32 {
     // Aleatoriedad pura para diversificar los rollouts
-    if rng.random::<f64>() < 0.3 {
+    if rng.random::<f64>() < 0.2 {
         return *available.choose(rng).unwrap();
     }
 
     let size = board.board_size();
     let center = size / 2;
 
-    // Calculamos la puntuacion heuristica de cada casilla
-    // Puntuacion = (lados_tocados * 4) - distancia_al_centro
     let mut scored: Vec<(u32, i32)> = Vec::new();
     for i in 0..available.len() {
         let c = Coordinates::from_index(available[i], size);
 
-        // Puntuacion de lados tocados
-        let sides = c.touches_side_a() as i32
-            + c.touches_side_b() as i32
-            + c.touches_side_c() as i32;
-
-        // Puntuacion de distacia al centro
+        // Distancia Manhattan al centro (menor = mejor)
         let ci = center as i32;
         let dist = (c.x() as i32 - ci).abs()
             + (c.y() as i32 - ci).abs()
             + (c.z() as i32 - ci).abs();
 
-        scored.push((available[i], sides * 4 - dist));
+        // Bonus por tocar lados (ayuda a cerrar la conexion de los 3 lados)
+        let sides = c.touches_side_a() as i32
+            + c.touches_side_b() as i32
+            + c.touches_side_c() as i32;
+
+        // Proximidad al centro pesa el doble que el bonus de lados
+        let score = (size as i32 - dist) * 2 + sides;
+        scored.push((available[i], score));
     }
 
     // Ordenamos de mayor a menor puntuacion
     for i in 0..scored.len() {
-        for j in i+1..scored.len() {
+        for j in i + 1..scored.len() {
             if scored[j].1 > scored[i].1 {
                 scored.swap(i, j);
             }
@@ -129,6 +141,5 @@ fn calculaHeuristico(available: Vec<u32>, board: &GameY, rng: &mut impl rand::Rn
     // Elegimos al azar entre los 3 mejores para mantener variabilidad
     let top_n = scored.len().min(3).max(1);
     let pick = rng.random_range(0..top_n);
-    //Devuelve una de las casillas con mejor heuristico
     return scored[pick].0;
 }
