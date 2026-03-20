@@ -74,6 +74,12 @@
   margin: 0;
 }
 
+.home-menu-out__btn:hover {
+  background: rgba(255, 100, 100, 0.08);
+  border: 1px solid #ff5858;
+  border-radius: 6px;
+}
+
 /* ── Caja de configuración ────────────────────────────────────────────────── */
 .home-config {
   display: flex;

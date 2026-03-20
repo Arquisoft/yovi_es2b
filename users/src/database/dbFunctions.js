@@ -277,9 +277,9 @@ function checkPassword(password) {
         stats.push({
             dificultad: "",
             estrategia: "TOTALES",
-            jugadas: pt,
-            perdidas: pt - ptw,
-            ganadas: ptw,
+            jugadas: pt || 0,
+            perdidas: pt - ptw || 0,
+            ganadas: ptw || 0,
             porcentaje: pt ? ((ptw / pt) * 100).toFixed(2) + ' %' : '0.00 %'
         });
 

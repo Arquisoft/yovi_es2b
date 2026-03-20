@@ -30,16 +30,11 @@ export default function GameStats( {username} : { username: string }) {
                     Ver todas las estadísticas
                 </button>
 
-                <br></br>
-
-                <button className="stats-btn-diff" onClick={() => setGoFiltered(true)}>
+                <button className="stats-btn-filt" onClick={() => setGoFiltered(true)}>
                     Ver estadísticas filtradas
                 </button>
 
-                <br></br>
-
-                <br></br>
-                <br></br>    
+                <br></br> 
                 
                 <button className="stats-btn-back" onClick={() => setGoBack(true)}>
                     Volver al menú principal
