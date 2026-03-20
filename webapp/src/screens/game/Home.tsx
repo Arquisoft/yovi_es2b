@@ -67,7 +67,6 @@ export default function HomePage( {username} : { username: string }) {
         <div className="home-screen">
             <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
             <h2 className="home-screen__title">Bienvenido a tu menú principal, {username}</h2>
-
             
 
             {menuSelected && <p className="home-menu__selected">Seleccionado: {menuSelected}</p>}
