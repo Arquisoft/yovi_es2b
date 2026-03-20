@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Home from "../game/Home.tsx";
 import GameStats from "./GameStats.tsx";
 import "./GameStats.css";
+import "./GameStatsTable.css"
 
 // TIPO ESTADISTICA PARA USO EN LA TABLA
 type AllStat = {
@@ -60,8 +61,10 @@ export default function GameStatsTotal( {username} : { username: string }) {
 
     return (
         <div className="stats-total-screen">
-            <h2 className="stats-total-screen-title">Todas las estadísticas de:</h2>
-            <h1 className="stats-total-screen-username">{username}</h1>
+            <div className="header">
+                <h1 className="stats-total-screen-title">Todas las estadísticas de:</h1>
+                <h2 className="stats-total-screen-username">{username}</h2>
+            </div>
 
             <div className="stats-total-menu">
 
@@ -94,15 +97,15 @@ export default function GameStatsTotal( {username} : { username: string }) {
                 <br></br>
                 <br></br>    
                 
-                <button className="stats-total-btn-back" onClick={() => setGoBack(true)}>
-                    Volver al menú de estadísticas
-                </button>
+                <div className="btn-menu">
+                    <button className="stats-total-btn-back" onClick={() => setGoBack(true)}>
+                        Volver al menú de estadísticas
+                    </button>
 
-                <br></br> 
-
-                <button className="stats-total-btn-home" onClick={() => setGoHome(true)}>
-                    Volver al menú principal
-                </button>
+                    <button className="stats-total-btn-home" onClick={() => setGoHome(true)}>
+                        Volver al menú principal
+                    </button>
+                </div>
                 
             </div>
             

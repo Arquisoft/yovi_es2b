@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import "./GameStats.css";
+import "./GameStatsTable.css"
 
 // TIPO ESTADISTICA ESTRATEGIA
 type StatStr = {

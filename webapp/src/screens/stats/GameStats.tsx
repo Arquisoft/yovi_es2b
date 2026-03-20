@@ -22,7 +22,7 @@ export default function GameStats( {username} : { username: string }) {
 
     return (
         <div className="stats-screen">
-            <h2 className="stats-screen-title">Eliga que estadísticas desea ver</h2>
+            <h1 className="stats-screen-title">Eliga que estadísticas desea ver</h1>
 
             <div className="stats-menu">
 

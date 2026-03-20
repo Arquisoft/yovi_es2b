@@ -1,6 +1,6 @@
 /* ── Screen: full viewport, white background (igual que Home) ─────────────── */
 .game-screen {
-  position: fixed;
+  min-height: 100vh;
   inset: 0;
   display: flex;
   flex-direction: column;

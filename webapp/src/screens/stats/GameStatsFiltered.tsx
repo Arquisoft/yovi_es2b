@@ -19,8 +19,10 @@ export default function GameStatsFiltered( {username} : { username: string }) {
 
     return (
         <div className="stats-screen-filter">
-            <h2 className="stats-screen-filter-title">Estadísticas filtradas de:</h2>
-            <h1 className="stats-total-screen-username">{username}</h1>
+            <div className="header">
+                <h1 className="stats-screen-filter-title">Estadísticas filtradas de:</h1>
+                <h2 className="stats-filter-screen-username">{username}</h2>
+            </div>
 
             <div className="stats-menu-filter">
 
@@ -37,15 +39,15 @@ export default function GameStatsFiltered( {username} : { username: string }) {
                 <br></br>
                 <br></br>    
                 
-                <button className="stats-total-btn-back" onClick={() => setGoBack(true)}>
-                    Volver al menú de estadísticas
-                </button>
+                <div className="btn-menu">
+                    <button className="stats-total-btn-back" onClick={() => setGoBack(true)}>
+                        Volver al menú de estadísticas
+                    </button>
 
-                <br></br> 
-
-                <button className="stats-total-btn-home" onClick={() => setGoHome(true)}>
-                    Volver al menú principal
-                </button>
+                    <button className="stats-total-btn-home" onClick={() => setGoHome(true)}>
+                        Volver al menú principal
+                    </button>
+                </div>
                 
             </div>
             
