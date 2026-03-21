@@ -1,0 +1,81 @@
+/* ── Tabla general ────────────────────────────────────────────── */
+.stats-total-table, .stats-strat-table, .stats-diff-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* ── Cabecera ─────────────────────────────────────────────────── */
+.stats-total-table thead, .stats-strat-table thead, .stats-diff-table thead {
+  background: #023eb6;
+}
+
+.stats-total-table thead td, .stats-strat-table thead td, .stats-diff-table thead td {
+  padding: 0.75rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-align: center;
+  font-size: 1rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stats-total-table thead td:last-child, .stats-strat-table thead td:last-child, .stats-diff-table thead td:last-child {
+  border-right: none;
+}
+
+/* ── Celdas ───────────────────────────────────────────────────── */
+.stats-total-table td, .stats-strat-table td, .stats-diff-table td {
+  padding: 0.65rem 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid #e6edf3;
+}
+
+/* ── Filas ────────────────────────────────────────────────────── */
+/* FACIL */
+.stats-total-table tbody tr:nth-child(1),  .stats-total-table tbody tr:nth-child(2),  .stats-total-table tbody tr:nth-child(3),
+.stats-total-table tbody tr:nth-child(4),  .stats-total-table tbody tr:nth-child(5),  .stats-total-table tbody tr:nth-child(6),
+.stats-diff-table tbody tr:nth-child(1) {
+  background: #f6f8fa;
+}
+/* MEDIO */
+.stats-total-table tbody tr:nth-child(7),  .stats-total-table tbody tr:nth-child(8),  .stats-total-table tbody tr:nth-child(9),
+.stats-total-table tbody tr:nth-child(10), .stats-total-table tbody tr:nth-child(11), .stats-total-table tbody tr:nth-child(12),
+.stats-diff-table tbody tr:nth-child(2) {
+  background: #dbe8f5;
+}
+/* DIFICIL */
+.stats-total-table tbody tr:nth-child(13),  .stats-total-table tbody tr:nth-child(14),  .stats-total-table tbody tr:nth-child(15),
+.stats-total-table tbody tr:nth-child(16),  .stats-total-table tbody tr:nth-child(17),  .stats-total-table tbody tr:nth-child(18),
+.stats-diff-table tbody tr:nth-child(3) {
+  background: #a2cbf4;
+}
+/* RANDOM, OFENSIVA, DEFENSIVA */
+.stats-strat-table tbody tr:nth-child(1),  .stats-strat-table tbody tr:nth-child(2),  .stats-strat-table tbody tr:nth-child(3) {
+  background: #dcf7d6;
+}
+/* MONTECARLO, MONTECARLO_V2 */
+.stats-strat-table tbody tr:nth-child(4),  .stats-strat-table tbody tr:nth-child(5) {
+  background: #fdf5d0;
+}
+/* MONTECARLO_PRO */
+.stats-strat-table tbody tr:nth-child(6) {
+  background: #fdd0d0;
+}
+
+/* ── Última fila sin borde ───────────────────────────────────── */
+.stats-total-table tbody tr:last-child td, .stats-strat-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ── Primeras y segundas columnas ────────────────────────────── */
+.stats-total-table tbody td:first-child, .stats-total-table tbody td:nth-child(2),
+.stats-strat-table tbody td:first-child, .stats-diff-table tbody td:first-child{
+  font-weight: 600;
+  color: #023eb6;
+}
+

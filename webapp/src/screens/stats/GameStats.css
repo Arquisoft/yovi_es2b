@@ -1,0 +1,235 @@
+/* ── Layout principal inicio ────────────────────────────────────── */
+.stats-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 2rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* ── Layout principal subpantallas ──────────────────────────────── */
+.stats-total-screen {
+  min-height: 100vh;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+.stats-screen-filter {
+  min-height: 100vh;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 1rem;
+  box-sizing: border-box;
+  overflow-y: auto;
+}
+
+/* ── Títulos y subtítulos ───────────────────────────────────────── */
+.stats-screen-title {
+  margin-bottom: 2rem;
+  font-size: 1.75rem;
+  font-weight: 750;
+  color: #191a1c;
+  text-align: center;
+}
+
+.stats-total-screen-title {
+  font-size: 1.75rem;
+  font-weight: 750;
+  color: #191a1c;
+  text-align: center;
+}
+
+.stats-total-screen-username {
+  font-size: 2rem;
+  font-weight: 750;
+  color: #023eb6;
+  text-align: center;
+}
+
+.stats-screen-filter-title {
+  font-size: 1.75rem;
+  font-weight: 750;
+  color: #191a1c;
+  text-align: center;
+}
+
+.stats-filter-screen-username {
+  font-size: 2rem;
+  font-weight: 750;
+  color: #023eb6;
+  text-align: center;
+}
+
+/* ── Contenedores ───────────────────────────────────────────────── */
+.stats-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  width: 100%;
+  max-width: 380px;
+
+  padding: 2rem;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.stats-total-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 2rem;
+}
+
+.stats-menu-filter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 100%;
+
+  padding: 2rem;
+}
+
+.btn-menu {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+
+  width: 100%;
+  max-width: 380px;
+
+  padding: 2rem;
+}
+
+/* ── Botones base ──────────────────────────────────────────────── */
+.stats-menu button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.stats-btn-total {
+  width: 100%;
+  padding: 0.7rem 1.2rem;
+  background: transparent;
+  color: #646cff;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid #646cff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 0;
+}
+
+.stats-btn-total:hover {
+  background: rgba(100, 108, 255, 0.08);
+}
+
+.stats-btn-filt {
+  width: 100%;
+  padding: 0.7rem 1.2rem;
+  background: transparent;
+  color: #646cff;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid #646cff;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 0;
+}
+
+.stats-btn-filt:hover {
+  background: rgba(100, 108, 255, 0.08);
+}
+
+/* ── Volver ───────────────────────────────────────────────────── */
+.stats-btn-back {
+  width: 100%;
+  padding: 0.7rem 1.2rem;
+  background: transparent;
+  color: #ff5858;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid #ff5858;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 0;
+}
+
+.stats-btn-back:hover {
+  background: rgba(255, 100, 100, 0.08);
+  border: 1px solid #ff5858;
+  border-radius: 6px;
+}
+
+/* ── Botones de salida de subpantallas ────────────────────────── */
+.stats-total-btn-back {
+  width: 100%;
+  padding: 0.7rem 1.2rem;
+  background: transparent;
+  color: #ff5858;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid #ff5858;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 0;
+}
+
+.stats-total-btn-back:hover {
+  background: rgba(255, 100, 100, 0.08);
+  border: 1px solid #ff5858;
+  border-radius: 6px;
+}
+
+.stats-total-btn-home {
+  width: 100%;
+  padding: 0.7rem 1.2rem;
+  background: transparent;
+  color: #ff5858;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid #ff5858;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin: 0;
+}
+
+.stats-total-btn-home:hover {
+  background: rgba(255, 100, 100, 0.08);
+  border: 1px solid #ff5858;
+  border-radius: 6px;
+}

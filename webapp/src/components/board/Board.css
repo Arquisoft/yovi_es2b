@@ -57,8 +57,8 @@
   background-color: gray;
 }
 
-.cell.player-1:hover {
-  background-color: #1d6fd4;
+.cell.player-1 {
+  background-color: #0c55c0;
 }
 
 .cell.player-2 {
@@ -92,7 +92,7 @@
 
 /* Jugador 1 - Humano (Azul) */
 .player-1 {
-  background-color: #1d6fd4;
+  background-color: #0c55c0;
 }
 .player-1::after {
   background-color: #3b82f6;

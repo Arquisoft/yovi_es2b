@@ -57,11 +57,19 @@ async function startServer() {
   const userService = new UserService(db);
   const userController = new UserController(userService);
 
+  // usuario
   app.post('/loginuser',  userController.loginUser);
   app.post('/createuser', userController.createUser);
   app.get('/users/:id',   userController.getUser);
+
+  // partida
   app.post('/initmatch',  userController.initmatch);
   app.post('/endmatch',   userController.endmatch);
+
+  // estadisticas
+  app.post('/allstats', userController.allstats);
+  app.post('/diffstats', userController.diffstats);
+  app.post('/stratstats', userController.stratstats);
 
 }
 

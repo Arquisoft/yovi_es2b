@@ -1,3 +1,4 @@
+const e = require('express');
 const UserError = require('../errors/UserError');
 
 /*
@@ -7,7 +8,7 @@ async function loginuser(users, username, password) {
 
     // que no sea vacío o ERROR
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
-        throw new UserError('Ususario inválido', 404);
+        throw new UserError('Usuario inválido', 404);
     }
     if (!password || typeof password !== 'string') {
         throw new UserError('Contraseña inválida', 404);
@@ -81,22 +82,22 @@ async function findUser(users, username) {
 function checkPassword(password) {
     // contraseña de más de 5 caracteres
     if (password.length < 5) {
-        throw new Error('La contraseña debe tener 6 o más caracteres.');
+        throw new UserError('La contraseña debe tener 6 o más caracteres.', 404);
     }
 
     // contraseña tiene una minúscula
     if (!password.match(/[a-z]/)) {
-        throw new Error('La contraseña debe contener al menos una minúscula');
+        throw new UserError('La contraseña debe contener al menos una minúscula', 404);
     }
 
     // contraseña tiene una mayúscula
     if (!password.match(/[A-Z]/)) {
-        throw new Error('La contraseña debe contener al menos una mayúscula');
+        throw new UserError('La contraseña debe contener al menos una mayúscula', 404);
     }
 
     // contraseña tiene un número
     if (!password.match(/[0-9]/)) {
-        throw new Error('La contraseña debe contener al menos un número');
+        throw new UserError('La contraseña debe contener al menos un número', 404);
     }
 }
 
@@ -112,16 +113,14 @@ function checkPassword(password) {
             throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
         }
 
-        var estrategiaJuego = "estrategia" + strategy;
-        var dificultadJuego = "dificultad" + difficulty;
+        var partidasGeneral = difficulty + strategy;
 
         await users.updateOne(
             { _id: existingUser._id },
             {
                 $inc: {
-                    partidasTotales: 1,
-                    [estrategiaJuego]: 1,
-                    [dificultadJuego]: 1
+                    totales: 1,
+                    [partidasGeneral]: 1
                 }
             }
         )
@@ -140,16 +139,14 @@ function checkPassword(password) {
             throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
         }
 
-        var estrategiaJuego = "estrategia" + strategy + "Wins";
-        var dificultadJuego = "dificultad" + difficulty + "Wins";
+        var partidasGeneral = difficulty + strategy + "Wins";
 
         await users.updateOne(
             { _id: existingUser._id },
             {
                 $inc: {
-                    partidasTotalesWins: 1,
-                    [estrategiaJuego]: 1,
-                    [dificultadJuego]: 1
+                    totalesWins: 1,
+                    [partidasGeneral]: 1
                 }
             }
         )
@@ -157,7 +154,128 @@ function checkPassword(password) {
         return 'Partida terminada y ganada correctamente' ;
     }
 
+    /**
+     * Función de calculo de estadisticas segun la dificultad
+     */
+    async function diffstats(users, username) {
+        // espera a encontrar el usuario en la base -> Jimena maneja la base
+        const existingUser = await users.findOne({ "username": username });
+        // si el usuario no existe
+        if (!existingUser) {
+            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+        }
 
+        const difs = ["EASY", "MEDIUM", "HARD"];
+        const strats = ["RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO", "MONTE_CARLO_ENDURECIDO"];
 
+        const stats = [];
+        
+        for (const diff of difs) {
 
-module.exports = { loginuser, createuser, findUser, initmatch, endmatch };
+            let totalPartidas = 0;
+            let totalWins = 0;
+
+            for (const strat of strats) {
+                totalPartidas += existingUser[`${diff}${strat}`] || 0;
+                totalWins += existingUser[`${diff}${strat}Wins`] || 0;
+            }
+
+            stats.push({
+                dificultad: diff,
+                jugadas: totalPartidas,
+                perdidas: totalPartidas - totalWins,
+                ganadas: totalWins,
+                porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
+            });
+        }
+
+        return stats;
+    }
+
+    /**
+     * Función de calculo de estadisticas segun la estrategia
+     */
+    async function stratstats(users, username) {
+        // espera a encontrar el usuario en la base -> Jimena maneja la base
+        const existingUser = await users.findOne({ "username": username });
+        // si el usuario no existe
+        if (!existingUser) {
+            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+        }
+
+        const difs = ["EASY", "MEDIUM", "HARD"];
+        const strats = ["RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO", "MONTE_CARLO_ENDURECIDO"];
+
+        const stats = [];
+        
+        for (const strat of strats) {
+
+            let totalPartidas = 0;
+            let totalWins = 0;
+
+            for (const diff of difs) {
+                totalPartidas += existingUser[`${diff}${strat}`] || 0;
+                totalWins += existingUser[`${diff}${strat}Wins`] || 0;
+            }
+
+            stats.push({
+                estrategia: strat,
+                jugadas: totalPartidas || 0,
+                perdidas: totalPartidas - totalWins || 0,
+                ganadas: totalWins || 0,
+                porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
+            });
+        }
+
+        return stats;
+    }
+
+    /**
+     * Función de calculo de estadisticas segun la dificultad
+     */
+    async function allstats(users, username) {
+        // espera a encontrar el usuario en la base -> Jimena maneja la base
+        const existingUser = await users.findOne({ "username": username });
+        // si el usuario no existe
+        if (!existingUser) {
+            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+        }
+        
+        const difs = ["EASY", "MEDIUM", "HARD"];
+        const strats = ["RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO", "MONTE_CARLO_ENDURECIDO"];
+
+        const stats = [];
+
+        for (const diff of difs) {
+            for (const strat of strats) {
+
+                const partidas = existingUser[`${diff}${strat}`] || 0;
+                const wins = existingUser[`${diff}${strat}Wins`] || 0;
+
+                stats.push({
+                    dificultad: diff,
+                    estrategia: strat,
+                    jugadas: partidas,
+                    perdidas: partidas - wins,
+                    ganadas: wins,
+                    porcentaje: partidas ? ((wins / partidas) * 100).toFixed(2) + ' %' : '0.00 %'
+                });
+            }
+        }
+
+        const pt = existingUser.totales;
+        const ptw = existingUser.totalesWins;
+
+        stats.push({
+            dificultad: "",
+            estrategia: "TOTALES",
+            jugadas: pt || 0,
+            perdidas: pt - ptw || 0,
+            ganadas: ptw || 0,
+            porcentaje: pt ? ((ptw / pt) * 100).toFixed(2) + ' %' : '0.00 %'
+        });
+
+        return stats;
+    }
+
+module.exports = { loginuser, createuser, findUser, initmatch, endmatch, diffstats, stratstats, allstats };
