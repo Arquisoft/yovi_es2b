@@ -8,7 +8,7 @@
 use crate::{Coordinates, GameY, Movement, PlayerId, YBot};
 use super::monteCarloUtil::{busca_ganador, mejor_casilla, simula_partida};
 
-const TOTAL_SIMULACIONES: u32 = 500;
+const TOTAL_SIMULACIONES: u32 = 200;
 const UCB_C: f64 = 1.4;
 
 pub struct MonteCarloMejoradoBot;
