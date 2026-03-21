@@ -40,21 +40,7 @@ impl YBot for MonteCarloBot {
         // Calcula las estadisticas de cada casilla
         for i in 0..available.len() {
             let coords = Coordinates::from_index(available[i], board.board_size());
-
-            for _simulacion in 0..SIMULATIONS_PER_MOVE {
-                let mut sim_board = board.clone();
-
-                if sim_board
-                    .add_move(Movement::Placement { player, coords })
-                    .is_err()
-                {
-                    break;
-                }
-
-                if simulaPartida(sim_board, &mut rng) == Some(player) {
-                    wins[i] += 1;
-                }
-            }
+            wins[i] = simulasCasilla(board, player, coords, &mut rng);
         }
 
         // Elegimos la casilla con mas victorias
@@ -67,6 +53,21 @@ impl YBot for MonteCarloBot {
 
         return Some(Coordinates::from_index(available[best_idx], board.board_size()));
     }
+}
+
+// Ejecuta SIMULATIONS_PER_MOVE simulaciones para una casilla y devuelve el numero de victorias.
+fn simulasCasilla(board: &GameY, player: PlayerId, coords: Coordinates, rng: &mut impl rand::Rng) -> u32 {
+    let mut wins = 0u32;
+    for _ in 0..SIMULATIONS_PER_MOVE {
+        let mut sim_board = board.clone();
+        if sim_board.add_move(Movement::Placement { player, coords }).is_err() {
+            break;
+        }
+        if simulaPartida(sim_board, rng) == Some(player) {
+            wins += 1;
+        }
+    }
+    wins
 }
 
 // Simula una partida completa desde el estado actual hasta el final con movimientos aleatorios.

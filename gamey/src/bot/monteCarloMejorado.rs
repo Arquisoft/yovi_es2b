@@ -62,38 +62,24 @@ impl YBot for MonteCarloMejoradoBot {
         // Inicializamos con una simulacion por casilla para evitar divisiones por cero
         for i in 0..n {
             let coords = Coordinates::from_index(available[i], board.board_size());
-            let mut sim_board = board.clone();
-            if sim_board.add_move(Movement::Placement { player, coords }).is_err() {
-                continue;
+            if let Some((gano, jugados)) = ejecutaUnaSim(board, player, coords, &mut rng) {
+                visitas[i] += 1;
+                total_sims += 1;
+                victorias[i] += gano as u32;
+                actualizaRave(&available, &jugados, gano, &mut rave_visitas, &mut rave_victorias);
             }
-            let (ganador, jugados) = simulaPartida(sim_board, &mut rng);
-            visitas[i] += 1;
-            total_sims += 1;
-            if ganador == Some(player) {
-                victorias[i] += 1;
-            }
-            // Actualiza RAVE con todos los movimientos del rollout
-            actualizaRave(&available, &jugados, ganador, player, &mut rave_visitas, &mut rave_victorias);
         }
 
         // Simulaciones restantes guiadas por UCB-RAVE
         for _ in n as u32..TOTAL_SIMULACIONES {
-            // Seleccionamos la casilla con mayor puntuacion UCB-RAVE
             let idx = seleccionaUCBRAVE(&visitas, &victorias, &rave_visitas, &rave_victorias, total_sims);
-
             let coords = Coordinates::from_index(available[idx], board.board_size());
-            let mut sim_board = board.clone();
-            if sim_board.add_move(Movement::Placement { player, coords }).is_err() {
-                continue;
+            if let Some((gano, jugados)) = ejecutaUnaSim(board, player, coords, &mut rng) {
+                visitas[idx] += 1;
+                total_sims += 1;
+                victorias[idx] += gano as u32;
+                actualizaRave(&available, &jugados, gano, &mut rave_visitas, &mut rave_victorias);
             }
-
-            let (ganador, jugados) = simulaPartida(sim_board, &mut rng);
-            visitas[idx] += 1;
-            total_sims += 1;
-            if ganador == Some(player) {
-                victorias[idx] += 1;
-            }
-            actualizaRave(&available, &jugados, ganador, player, &mut rave_visitas, &mut rave_victorias);
         }
 
         // Elegimos la casilla con mas visitas (politica robusta de MCTS, mas estable que max win rate)
@@ -108,22 +94,27 @@ impl YBot for MonteCarloMejoradoBot {
     }
 }
 
+// Ejecuta una simulacion para una casilla dada.
+// Devuelve None si el movimiento falla, o Some((gano, jugados)) si la simulacion se completo.
+// Calcula internamente si el jugador gano para evitar pasar referencias extra al llamador.
+fn ejecutaUnaSim( board: &GameY, player: PlayerId, coords: Coordinates, rng: &mut impl rand::Rng,
+) -> Option<(bool, Vec<u32>)> {
+
+    let mut sim_board = board.clone();
+    sim_board.add_move(Movement::Placement { player, coords }).ok()?;
+    let (ganador, jugados) = simulaPartida(sim_board, rng);
+    Some((ganador == Some(player), jugados))
+}
+
 // Actualiza las estadisticas RAVE con los movimientos jugados en un rollout.
-// Si una celda del rollout coincide con una candidata, cuenta como observacion RAVE.
-fn actualizaRave(
-    available: &[u32],
-    jugados: &[u32],
-    ganador: Option<PlayerId>,
-    player: PlayerId,
-    rave_visitas: &mut Vec<u32>,
-    rave_victorias: &mut Vec<u32>,
+// Recibe directamente si el jugador gano (bool) en lugar de Option<PlayerId>
+// para evitar recalcular la comparacion en cada llamada.
+fn actualizaRave( available: &[u32], jugados: &[u32], gano: bool, rave_visitas: &mut Vec<u32>, rave_victorias: &mut Vec<u32>,
 ) {
     for &cell_jugado in jugados {
         if let Some(j) = available.iter().position(|&c| c == cell_jugado) {
             rave_visitas[j] += 1;
-            if ganador == Some(player) {
-                rave_victorias[j] += 1;
-            }
+            rave_victorias[j] += gano as u32;
         }
     }
 }
@@ -137,13 +128,9 @@ fn actualizaRave(
 //   rave_valor     = rave_victorias / rave_visitas  (explotacion RAVE)
 //   ucb_exploracion = C * sqrt(ln(total) / visitas) (incentivo a explorar poco visitadas)
 //   beta           = sqrt(K / (3*visitas + K))     (peso de RAVE, decrece con visitas)
-fn seleccionaUCBRAVE(
-    visitas: &[u32],
-    victorias: &[u32],
-    rave_visitas: &[u32],
-    rave_victorias: &[u32],
-    total_sims: u32,
-) -> usize {
+fn seleccionaUCBRAVE( visitas: &[u32], victorias: &[u32], rave_visitas: &[u32], rave_victorias: &[u32],
+    total_sims: u32,) -> usize {
+        
     let mut best_idx = 0;
     let mut best_score = f64::NEG_INFINITY;
 
