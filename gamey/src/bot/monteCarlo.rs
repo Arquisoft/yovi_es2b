@@ -100,14 +100,14 @@ mod tests {
     use crate::{Movement, PlayerId};
 
     #[test]
-    fn test_random_bot_name() {
-        let bot = RandomBot;
-        assert_eq!(bot.name(), "random_bot");
+    fn test_montecarlo_bot_name() {
+        let bot = MonteCarloBot;
+        assert_eq!(bot.name(), "montecarlo_bot");
     }
 
     #[test]
-    fn test_random_bot_returns_move_on_empty_board() {
-        let bot = RandomBot;
+    fn test_montecarlo_bot_returns_move_on_empty_board() {
+        let bot = MonteCarloBot;
         let game = GameY::new(5);
 
         let chosen_move = bot.choose_move(&game);
@@ -115,21 +115,20 @@ mod tests {
     }
 
     #[test]
-    fn test_random_bot_returns_valid_coordinates() {
-        let bot = RandomBot;
+    fn test_montecarlo_bot_returns_valid_coordinates() {
+        let bot = MonteCarloBot;
         let game = GameY::new(5);
 
         let coords = bot.choose_move(&game).unwrap();
         let index = coords.to_index(game.board_size());
 
-        // Index should be within the valid range for a size-5 board
         // Total cells = (5 * 6) / 2 = 15
         assert!(index < 15);
     }
 
     #[test]
-    fn test_random_bot_returns_none_on_full_board() {
-        let bot = RandomBot;
+    fn test_montecarlo_bot_returns_none_on_full_board() {
+        let bot = MonteCarloBot;
         let mut game = GameY::new(2);
 
         // Fill the board (size 2 has 3 cells)
@@ -152,18 +151,16 @@ mod tests {
             game.add_move(mv).unwrap();
         }
 
-        // Board is now full
         assert!(game.available_cells().is_empty());
         let chosen_move = bot.choose_move(&game);
         assert!(chosen_move.is_none());
     }
 
     #[test]
-    fn test_random_bot_chooses_from_available_cells() {
-        let bot = RandomBot;
+    fn test_montecarlo_bot_chooses_from_available_cells() {
+        let bot = MonteCarloBot;
         let mut game = GameY::new(3);
 
-        // Make some moves to reduce available cells
         game.add_move(Movement::Placement {
             player: PlayerId::new(0),
             coords: Coordinates::new(2, 0, 0),
@@ -173,16 +170,14 @@ mod tests {
         let coords = bot.choose_move(&game).unwrap();
         let index = coords.to_index(game.board_size());
 
-        // The chosen index should be in the available cells
         assert!(game.available_cells().contains(&index));
     }
 
     #[test]
-    fn test_random_bot_multiple_calls_return_valid_moves() {
-        let bot = RandomBot;
+    fn test_montecarlo_bot_multiple_calls_return_valid_moves() {
+        let bot = MonteCarloBot;
         let game = GameY::new(7);
 
-        // Call choose_move multiple times to exercise the randomness
         for _ in 0..10 {
             let coords = bot.choose_move(&game).unwrap();
             let index = coords.to_index(game.board_size());
