@@ -5,13 +5,10 @@
 //   - monteCarlo: reparte las simulaciones IGUALMENTE entre todas las casillas (100 cada una)
 //   - monteCarloMejorado: reparte las simulaciones ADAPTATIVAMENTE con UCB,
 //     dando mas simulaciones a las casillas prometedoras y menos a las malas
-use crate::{Coordinates, GameStatus, GameY, Movement, PlayerId, YBot};
-use rand::prelude::IndexedRandom;
+use crate::{Coordinates, GameY, Movement, PlayerId, YBot};
+use super::monteCarloUtil::{busca_ganador, mejor_casilla, simula_partida};
 
-// Total de simulaciones a repartir entre todas las casillas
 const TOTAL_SIMULACIONES: u32 = 500;
-
-// Constante de exploracion UCB (mayor = explora mas, menor = explota mas)
 const UCB_C: f64 = 1.4;
 
 pub struct MonteCarloMejoradoBot;
@@ -25,17 +22,14 @@ impl YBot for MonteCarloMejoradoBot {
         let player = board.next_player()?;
         let available = board.available_cells().clone();
 
+        //Sin casillas libres   
         if available.is_empty() {
             return None;
         }
 
-        // Comprueba si hay un movimiento ganador inmediato y lo juega
-        for &cell in &available {
-            let coords = Coordinates::from_index(cell, board.board_size());
-            let mut sim = board.clone();
-            if sim.add_move(Movement::Placement { player, coords }).is_ok() && sim.check_game_over() {
-                return Some(coords);
-            }
+        //Moviemiento ganador inmediato
+        if let Some(coords) = busca_ganador(board, player, &available) {
+            return Some(coords);
         }
 
         let n = available.len();
@@ -47,7 +41,7 @@ impl YBot for MonteCarloMejoradoBot {
         // Inicializamos con una simulacion por casilla para evitar divisiones por cero
         for i in 0..n {
             let coords = Coordinates::from_index(available[i], board.board_size());
-            if let Some(gano) = ejecutaUnaSim(board, player, coords, &mut rng) {
+            if let Some(gano) = ejecuta_una_sim(board, player, coords, &mut rng) {
                 visitas[i] += 1;
                 total_sims += 1;
                 victorias[i] += gano as u32;
@@ -56,39 +50,30 @@ impl YBot for MonteCarloMejoradoBot {
 
         // Simulaciones restantes guiadas por UCB
         for _ in n as u32..TOTAL_SIMULACIONES {
-            let idx = seleccionaUCB(&visitas, &victorias, total_sims);
+            let idx = selecciona_ucb(&visitas, &victorias, total_sims);
             let coords = Coordinates::from_index(available[idx], board.board_size());
-            if let Some(gano) = ejecutaUnaSim(board, player, coords, &mut rng) {
+            if let Some(gano) = ejecuta_una_sim(board, player, coords, &mut rng) {
                 visitas[idx] += 1;
                 total_sims += 1;
                 victorias[idx] += gano as u32;
             }
         }
 
-        // Elegimos la casilla con mas visitas (politica robusta de MCTS)
-        let mut best_idx = 0;
-        for i in 0..n {
-            if visitas[i] > visitas[best_idx] {
-                best_idx = i;
-            }
-        }
-
-        Some(Coordinates::from_index(available[best_idx], board.board_size()))
+        return Some(Coordinates::from_index(available[mejor_casilla(&visitas)], board.board_size()));
     }
 }
 
 // Ejecuta una simulacion para una casilla dada y devuelve si el jugador gano.
-fn ejecutaUnaSim(board: &GameY, player: PlayerId, coords: Coordinates, rng: &mut impl rand::Rng) -> Option<bool> {
+fn ejecuta_una_sim(board: &GameY, player: PlayerId, coords: Coordinates, rng: &mut impl rand::Rng) -> Option<bool> {
     let mut sim_board = board.clone();
     sim_board.add_move(Movement::Placement { player, coords }).ok()?;
-    let ganador = simulaPartida(sim_board, rng);
-    Some(ganador == Some(player))
+    return Some(simula_partida(sim_board, rng) == Some(player));
 }
 
 // Calcula la puntuacion UCB de cada casilla y devuelve el indice de la mejor.
 //
 // Formula: victorias/visitas + C * sqrt(ln(total) / visitas)
-fn seleccionaUCB(visitas: &[u32], victorias: &[u32], total_sims: u32) -> usize {
+fn selecciona_ucb(visitas: &[u32], victorias: &[u32], total_sims: u32) -> usize {
     let mut best_idx = 0;
     let mut best_score = f64::NEG_INFINITY;
 
@@ -105,24 +90,5 @@ fn seleccionaUCB(visitas: &[u32], victorias: &[u32], total_sims: u32) -> usize {
         }
     }
 
-    best_idx
-}
-
-// Simula una partida completa con movimientos aleatorios y devuelve el jugador ganador.
-fn simulaPartida(mut board: GameY, rng: &mut impl rand::Rng) -> Option<PlayerId> {
-    while !board.check_game_over() {
-        let available = board.available_cells().clone();
-        if available.is_empty() {
-            break;
-        }
-        let player = board.next_player()?;
-        let cell = available.choose(rng)?;
-        let coords = Coordinates::from_index(*cell, board.board_size());
-        let _resultado = board.add_move(Movement::Placement { player, coords });
-    }
-
-    match board.status() {
-        GameStatus::Finished { winner } => Some(*winner),
-        _ => None,
-    }
+    return best_idx;
 }

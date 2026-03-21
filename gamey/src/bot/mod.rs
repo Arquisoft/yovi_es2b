@@ -9,6 +9,7 @@
 
 pub mod defensive;
 pub mod monteCarlo;
+pub mod monteCarloUtil;
 pub mod monteCarloEndurecido;
 pub mod monteCarloMejorado;
 pub mod offensive;
