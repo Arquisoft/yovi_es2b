@@ -56,10 +56,16 @@
 }
 /* RANDOM, OFENSIVA, DEFENSIVA */
 .stats-strat-table tbody tr:nth-child(1),  .stats-strat-table tbody tr:nth-child(2),  .stats-strat-table tbody tr:nth-child(3) {
-  background: #d8fdd0;
+  background: #dcf7d6;
 }
 /* MONTECARLO, MONTECARLO_V2 */
+.stats-strat-table tbody tr:nth-child(4),  .stats-strat-table tbody tr:nth-child(5) {
+  background: #fdf5d0;
+}
 /* MONTECARLO_PRO */
+.stats-strat-table tbody tr:nth-child(6) {
+  background: #fdd0d0;
+}
 
 /* ── Última fila sin borde ───────────────────────────────────── */
 .stats-total-table tbody tr:last-child td, .stats-strat-table tbody tr:last-child td {

@@ -113,17 +113,13 @@ function checkPassword(password) {
             throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
         }
 
-        var estrategiaJuego = "estrategia" + strategy;
-        var dificultadJuego = "dificultad" + difficulty;
-        var partidasGeneral = "partida" + difficulty + strategy;
+        var partidasGeneral = difficulty + strategy;
 
         await users.updateOne(
             { _id: existingUser._id },
             {
                 $inc: {
-                    partidasTotales: 1,
-                    [estrategiaJuego]: 1,
-                    [dificultadJuego]: 1,
+                    totales: 1,
                     [partidasGeneral]: 1
                 }
             }
@@ -143,17 +139,13 @@ function checkPassword(password) {
             throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
         }
 
-        var estrategiaJuego = "estrategia" + strategy + "Wins";
-        var dificultadJuego = "dificultad" + difficulty + "Wins";
-        var partidasGeneral = "partida" + difficulty + strategy + "Wins";
+        var partidasGeneral = difficulty + strategy + "Wins";
 
         await users.updateOne(
             { _id: existingUser._id },
             {
                 $inc: {
-                    partidasTotalesWins: 1,
-                    [estrategiaJuego]: 1,
-                    [dificultadJuego]: 1,
+                    totalesWins: 1,
                     [partidasGeneral]: 1
                 }
             }
@@ -174,7 +166,7 @@ function checkPassword(password) {
         }
 
         const difs = ["EASY", "MEDIUM", "HARD"];
-        const strats = ["RANDOM", "DEFENSIVE", "OFFENSIVE", "CENTER_FIRST", "EDGE_FIRST"];
+        const strats = ["RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO", "MONTE_CARLO_ENDURECIDO"];
 
         const stats = [];
         
@@ -184,8 +176,8 @@ function checkPassword(password) {
             let totalWins = 0;
 
             for (const strat of strats) {
-                totalPartidas += existingUser[`partida${diff}${strat}`] || 0;
-                totalWins += existingUser[`partida${diff}${strat}Wins`] || 0;
+                totalPartidas += existingUser[`${diff}${strat}`] || 0;
+                totalWins += existingUser[`${diff}${strat}Wins`] || 0;
             }
 
             stats.push({
@@ -212,7 +204,7 @@ function checkPassword(password) {
         }
 
         const difs = ["EASY", "MEDIUM", "HARD"];
-        const strats = ["RANDOM", "DEFENSIVE", "OFFENSIVE", "CENTER_FIRST", "EDGE_FIRST"];
+        const strats = ["RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO", "MONTE_CARLO_ENDURECIDO"];
 
         const stats = [];
         
@@ -222,8 +214,8 @@ function checkPassword(password) {
             let totalWins = 0;
 
             for (const diff of difs) {
-                totalPartidas += existingUser[`partida${diff}${strat}`] || 0;
-                totalWins += existingUser[`partida${diff}${strat}Wins`] || 0;
+                totalPartidas += existingUser[`${diff}${strat}`] || 0;
+                totalWins += existingUser[`${diff}${strat}Wins`] || 0;
             }
 
             stats.push({
@@ -250,15 +242,15 @@ function checkPassword(password) {
         }
         
         const difs = ["EASY", "MEDIUM", "HARD"];
-        const strats = ["RANDOM", "DEFENSIVE", "OFFENSIVE", "CENTER_FIRST", "EDGE_FIRST"];
+        const strats = ["RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO", "MONTE_CARLO_ENDURECIDO"];
 
         const stats = [];
 
         for (const diff of difs) {
             for (const strat of strats) {
 
-                const partidas = existingUser[`partida${diff}${strat}`] || 0;
-                const wins = existingUser[`partida${diff}${strat}Wins`] || 0;
+                const partidas = existingUser[`${diff}${strat}`] || 0;
+                const wins = existingUser[`${diff}${strat}Wins`] || 0;
 
                 stats.push({
                     dificultad: diff,
@@ -271,8 +263,8 @@ function checkPassword(password) {
             }
         }
 
-        const pt = existingUser.partidasTotales;
-        const ptw = existingUser.partidasTotalesWins;
+        const pt = existingUser.totales;
+        const ptw = existingUser.totalesWins;
 
         stats.push({
             dificultad: "",
