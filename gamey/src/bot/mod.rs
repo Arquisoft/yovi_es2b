@@ -7,9 +7,20 @@
 //! - [`YBotRegistry`] - A registry for managing multiple bot implementations
 //! - [`RandomBot`] - A simple bot that makes random valid moves
 
+pub mod defensive;
+pub mod monteCarlo;
+pub mod monteCarloUtil;
+pub mod monteCarloEndurecido;
+pub mod monteCarloMejorado;
+pub mod offensive;
 pub mod random;
 pub mod ybot;
 pub mod ybot_registry;
+pub use defensive::*;
+pub use monteCarlo::*;
+pub use monteCarloEndurecido::*;
+pub use monteCarloMejorado::*;
+pub use offensive::*;
 pub use random::*;
 pub use ybot::*;
 pub use ybot_registry::*;

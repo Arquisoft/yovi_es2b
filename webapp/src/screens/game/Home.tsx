@@ -90,10 +90,11 @@ export default function HomePage( {username} : { username: string }) {
                     }
                 >
                     <option value={Strategy.RANDOM}>Random</option>
-                    <option value={Strategy.DEFENSIVE}>Defensiva</option>
-                    <option value={Strategy.OFFENSIVE}>Ofensiva</option>
-                    <option value={Strategy.CENTER_FIRST}>Centro Primero</option>
-                    <option value={Strategy.EDGE_FIRST}>Borde Primero</option>
+                    <option value={Strategy.DEFENSIVO}>Defensiva</option>
+                    <option value={Strategy.OFENSIVO}>Ofensiva</option>
+                    <option value={Strategy.MONTE_CARLO}>Monte Carlo</option>
+                    <option value={Strategy.MONTE_CARLO_MEJORADO}>Monte Carlo Mejorado</option>
+                    <option value={Strategy.MONTE_CARLO_ENDURECIDO}>Monte Carlo Endurecido</option>
                 </select>
 
                 <label className="home-config__label">Dificultad</label>
