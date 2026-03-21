@@ -4,6 +4,8 @@ import GameStatsTotal from "./GameStatsTotal.tsx";
 import GameStatsFiltered from "./GameStatsFiltered.tsx";
 import "./GameStats.css";
 
+const yoviLogo = "/yovi_logo.png";
+
 export default function GameStats( {username} : { username: string }) {
 
     const [goBack, setGoBack] = useState(false);
@@ -22,6 +24,7 @@ export default function GameStats( {username} : { username: string }) {
 
     return (
         <div className="stats-screen">
+            <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
             <h1 className="stats-screen-title">Eliga que estadísticas desea ver</h1>
 
             <div className="stats-menu">
