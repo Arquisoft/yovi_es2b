@@ -1,6 +1,6 @@
 /* ── Layout principal ─────────────────────────────────────────────────────── */
 .home-screen {
-  position: fixed;
+  min-height: 100vh;
   inset: 0;
   display: flex;
   flex-direction: column;
@@ -72,6 +72,12 @@
   cursor: pointer;
   transition: background 0.2s;
   margin: 0;
+}
+
+.home-menu-out__btn:hover {
+  background: rgba(255, 100, 100, 0.08);
+  border: 1px solid #ff5858;
+  border-radius: 6px;
 }
 
 /* ── Caja de configuración ────────────────────────────────────────────────── */

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import Home from "./Home.tsx";
 import { Board } from "../../components/board/Board";
 import GameInfo from "../../components/board/GameInfo";
 import ControlPanel from "../../components/board/ControlPanel";
@@ -103,6 +103,10 @@ export function Game({ settings, username, stateStart, onGoMenu, onGameEnd  }: G
     );
   }
 
+  if(gameState==="fin") {
+    return <Home username={username}/>;
+  }
+
   return (
     <div className="game-screen">
       <div className="game-panel">
@@ -130,7 +134,7 @@ export function Game({ settings, username, stateStart, onGoMenu, onGameEnd  }: G
         </div>
 
         <div className="controls-bottom">
-          <ControlPanel username={username} />
+          <ControlPanel onExit={() => setGameState("fin")} />
         </div>
       </div>
     </div>

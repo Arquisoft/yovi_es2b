@@ -79,6 +79,7 @@ export function Board(props: BoardProps) {
 
   // let -> variables que pueden cambiar su valor
   let selectedDifficulty: DifficultyType = props.difficulty; // selectedDifficulty -> dificultad seleccionada por el usuario
+  let selectedStrategy: StrategyType = props.strategy; // selectedStrategy -> estrategia seleccionada por el usuario del bot
   
   // const -> variables no cambia su valor
   const BOARDHIGHT = getBoardSize(selectedDifficulty);
@@ -114,10 +115,24 @@ export function Board(props: BoardProps) {
     return res.json();
   }
 
+  // Si se añade un nuevo bot o se cambia el nombre, hay que cambiarla aqui
+  function strategyToBotId(strategy: StrategyType): string {
+    const map: Record<StrategyType, string> = {
+      RANDOM: "random_bot",
+      DEFENSIVO: "defensive_bot",
+      OFENSIVO: "offensive_bot",
+      MONTE_CARLO: "montecarlo_bot",
+      MONTE_CARLO_MEJORADO: "montecarlo_mejorado_bot",
+      MONTE_CARLO_ENDURECIDO: "montecarlo_endurecido_bot",
+    };
+    return map[strategy];
+  }
+
   // Llama al servidor enviandole el movimiento (Solo Bot)
    // Promise<any> -> Devuelve un valor cualquiera de forma async -> json con el estado de tablero actualizado
   async function peticionMovimientoBot(state: unknown): Promise<any> {
-    const res = await fetch(`${GAMEY_URL}/v1/ybot/choose/random_bot`, {
+    const botId = strategyToBotId(selectedStrategy);
+    const res = await fetch(`${GAMEY_URL}/v1/ybot/choose/${botId}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(state),

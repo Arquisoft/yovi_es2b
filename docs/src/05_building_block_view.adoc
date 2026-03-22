@@ -89,26 +89,26 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 
 El frontend puede dividirse internamente en varios módulos:
 
-* **Interfaz de usuario:** encargados de representar el tablero, el menú y los elementos visuales de la aplicación.
-* **Gestión de estado:** control del estado actual de la partida y de la sesión del usuario.
-* **Peticiones del cliente:** módulo encargado de realizar las peticiones HTTP a los microservicios backend, comunicandose con los controllers.
+* *Interfaz de usuario:* encargados de representar el tablero, el menú y los elementos visuales de la aplicación.
+* *Gestión de estado:* control del estado actual de la partida y de la sesión del usuario.
+* *Peticiones del cliente:* módulo encargado de realizar las peticiones HTTP a los microservicios backend, comunicandose con los controllers.
 
 ==== Microservicio User
 
 Este microservicio se compone de los siguientes módulos internos:
 
-* **Controladores API:** reciben las peticiones REST y gestionan las respuestas.
-* **Lógica de negocio de usuarios:** implementa las operaciones relacionadas la gestión de usuarios y estadísticas.
-* **Acceso a datos:** es el encargado de interactuar con la base de datos MongoDB: crear usuarios, iniciar sesión, ...
+* *Controladores API:* reciben las peticiones REST y gestionan las respuestas.
+* *Lógica de negocio de usuarios:* implementa las operaciones relacionadas la gestión de usuarios y estadísticas.
+* *Acceso a datos:* es el encargado de interactuar con la base de datos MongoDB: crear usuarios, iniciar sesión, ...
 
 ==== Microservicio GameY
 
 Está organizado en las siguientes partes internas:
 
-* **Motor de juego:** implementa las reglas de gameY.
-* **Validador de movimientos:** verifica que los movimientos realizados sean válidos.
-* **Gestor de partidas:** mantiene el estado actual de cada partida.
-* **Módulo de estrategias:** calcula el siguiente movimiento del bot según el nivel de dificultad y la estrategia elegidas.
+* *Motor de juego:* implementa las reglas de gameY.
+* *Validador de movimientos:* verifica que los movimientos realizados sean válidos.
+* *Gestor de partidas:* mantiene el estado actual de cada partida.
+* *Módulo de estrategias:* calcula el siguiente movimiento del bot según el nivel de dificultad y la estrategia elegidas.
 
 Esta organización permite modificar o añadir nuevas estrategias de juego sin afectar al resto del sistema.
 
@@ -116,11 +116,11 @@ Esta organización permite modificar o añadir nuevas estrategias de juego sin a
 
 Las principales ventajas que proporciona la estructura elegida son:
 
-* **Separación clara de responsabilidades** - como cada componente tiene una responsabilidad bien definida, se facilita el mantenimiento del sistema y reduce el acoplamiento entre componentes..
-* **Escalabilidad**, permitiendo desplegar y escalar cada microservicio de manera independiente, lo que permitira por ejemplo crear varias instancias del juego
-* **Flexibilidad tecnológica**, ya que cada servicio puede desarrollarse con el lenguaje más adecuado según sus necesidades.
-* **Extensibilidad**, permitiendo añadir nuevas funcionalidades o variantes del juego sin rediseñar el sistema completo.
-* **Despliegue reproducible** , ya que el uso de contenedores Docker permite ejecutar el sistema en diferentes entornos de forma consistente.
+* *Separación clara de responsabilidades* - como cada componente tiene una responsabilidad bien definida, se facilita el mantenimiento del sistema y reduce el acoplamiento entre componentes..
+* *Escalabilidad*, permitiendo desplegar y escalar cada microservicio de manera independiente, lo que permitira por ejemplo crear varias instancias del juego
+* *Flexibilidad tecnológica*, ya que cada servicio puede desarrollarse con el lenguaje más adecuado según sus necesidades.
+* *Extensibilidad*, permitiendo añadir nuevas funcionalidades o variantes del juego sin rediseñar el sistema completo.
+* *Despliegue reproducible* , ya que el uso de contenedores Docker permite ejecutar el sistema en diferentes entornos de forma consistente.
 
 
 === Nivel 3: Interfaces entre componentes
