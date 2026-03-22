@@ -1,5 +1,18 @@
 const e = require('express');
 const UserError = require('../errors/UserError');
+const {
+    InvalidCredentialsError,
+    MissingFieldsError,
+    UserNotFoundError,
+    UserAlreadyExistsError,
+    WeakPasswordError,
+    InvalidStrategyError,
+    InvalidDifficultyError,
+} = require('../errors/UserErrorsTypes');
+
+    const difs = ["EASY", "MEDIUM", "HARD"];
+    const strats = ["RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO", "MONTE_CARLO_ENDURECIDO"];
+
 
 /*
  * Función de registro de un usuario existente
@@ -8,21 +21,21 @@ async function loginuser(users, username, password) {
 
     // que no sea vacío o ERROR
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
-        throw new UserError('Usuario inválido', 404);
+        throw new MissingFieldsError(['username']);
     }
     if (!password || typeof password !== 'string') {
-        throw new UserError('Contraseña inválida', 404);
+        throw new MissingFieldsError(['password']);
     }
 
     // espera a encontrar el usuario en la base -> Jimena maneja la base
     const existingUser = await users.findOne({ "username": username });
     // si el usuario no existe
     if (!existingUser) {
-        throw new UserError('Usuario incorrecto. Prueba con otro o regístrate.', 404);
+        throw new UserNotFoundError(username);
     }
     // si la contraseña es incorrecta
     if (existingUser.password !== password) {
-        throw new UserError('Contraseña incorrecta. Inténtalo de nuevo.', 404);
+        throw new InvalidCredentialsError();
     }
 
     // todo bien
@@ -35,17 +48,17 @@ async function loginuser(users, username, password) {
 async function createuser(users, username, password) {
     // que no sea usuario vacío 
     if (!username || typeof username !== 'string') {
-        throw new UserError('Ususario inválido', 404);
+        throw new MissingFieldsError(['username']);
     }
     // que no sea contraseña vacía
     if (!password || typeof password !== 'string') {
-        throw new UserError('Contraseña inválida', 404);
+        throw new MissingFieldsError(['password']);
     }
 
     // busca si existe usuario con ese nombre
     const existingUser = await users.findOne({ "username": username });
     if (existingUser) {
-        throw new UserError('Ese usuario ya existe. Prueba con otro o inicie sesión.', 404);
+        throw new UserAlreadyExistsError(username);
     }
 
     // comprueba una contraseña correcta
@@ -64,12 +77,12 @@ async function createuser(users, username, password) {
  */
 async function findUser(users, username) {
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
-        throw new UserError('Usuario inválido', 404);
+        throw new MissingFieldsError(['username']);
     }
     const existingUser = await users.findOne({ "username": username });
 
     if (existingUser == null) {
-        throw new UserError(`Usuario '${username}' no encontrado`, 404);
+        throw new UserNotFoundError(username);
         //404 Not Found es un código de estado HTTP que indica que el recurso solicitado no se ha encontrado en el servidor.
     }
     return existingUser; //no lanza error si no encuentra el usuario, simplemente devuelve null
@@ -82,35 +95,42 @@ async function findUser(users, username) {
 function checkPassword(password) {
     // contraseña de más de 5 caracteres
     if (password.length < 5) {
-        throw new UserError('La contraseña debe tener 6 o más caracteres.', 404);
+        throw new WeakPasswordError('La contraseña debe tener 6 o más caracteres.');
     }
 
     // contraseña tiene una minúscula
     if (!password.match(/[a-z]/)) {
-        throw new UserError('La contraseña debe contener al menos una minúscula', 404);
+        throw new WeakPasswordError('La contraseña debe contener al menos una minúscula');
     }
 
     // contraseña tiene una mayúscula
     if (!password.match(/[A-Z]/)) {
-        throw new UserError('La contraseña debe contener al menos una mayúscula', 404);
+        throw new WeakPasswordError('La contraseña debe contener al menos una mayúscula');
     }
 
     // contraseña tiene un número
     if (!password.match(/[0-9]/)) {
-        throw new UserError('La contraseña debe contener al menos un número', 404);
+        throw new WeakPasswordError('La contraseña debe contener al menos un número');
     }
 }
-
 
     /**
      * Función de creación de partida
      */
     async function initmatch(users, username, strategy, difficulty) {
+
         // espera a encontrar el usuario en la base -> Jimena maneja la base
         const existingUser = await users.findOne({ "username": username });
         // si el usuario no existe
         if (!existingUser) {
-            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+            throw new UserNotFoundError(username);
+        }
+
+        if (!strats.includes(strategy)) {
+            throw new InvalidStrategyError(strategy);
+        }
+        if (!difs.includes(difficulty)) {
+            throw new InvalidDifficultyError(difficulty);
         }
 
         var partidasGeneral = difficulty + strategy;
@@ -134,9 +154,16 @@ function checkPassword(password) {
     async function endmatch(users, username, strategy, difficulty) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
         const existingUser = await users.findOne({ "username": username });
-        // si el usuario no existe
+        // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
-            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+            throw new UserNotFoundError(username);
+        }
+
+        if (!strats.includes(strategy)) {
+            throw new InvalidStrategyError(strategy);
+        }
+        if (!difs.includes(difficulty)) {
+            throw new InvalidDifficultyError(difficulty);
         }
 
         var partidasGeneral = difficulty + strategy + "Wins";
@@ -160,13 +187,10 @@ function checkPassword(password) {
     async function diffstats(users, username) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
         const existingUser = await users.findOne({ "username": username });
-        // si el usuario no existe
+        // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
-            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+            throw new UserNotFoundError(username);
         }
-
-        const difs = ["EASY", "MEDIUM", "HARD"];
-        const strats = ["RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO", "MONTE_CARLO_ENDURECIDO"];
 
         const stats = [];
         
@@ -198,13 +222,10 @@ function checkPassword(password) {
     async function stratstats(users, username) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
         const existingUser = await users.findOne({ "username": username });
-        // si el usuario no existe
+        // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
-            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+            throw new UserNotFoundError(username);
         }
-
-        const difs = ["EASY", "MEDIUM", "HARD"];
-        const strats = ["RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO", "MONTE_CARLO_ENDURECIDO"];
 
         const stats = [];
         
@@ -236,14 +257,11 @@ function checkPassword(password) {
     async function allstats(users, username) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
         const existingUser = await users.findOne({ "username": username });
-        // si el usuario no existe
+        // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
-            throw new UserError('Usuario incorrecto. Habla con Jimena', 404);
+            throw new UserNotFoundError(username);
         }
         
-        const difs = ["EASY", "MEDIUM", "HARD"];
-        const strats = ["RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO", "MONTE_CARLO_ENDURECIDO"];
-
         const stats = [];
 
         for (const diff of difs) {
