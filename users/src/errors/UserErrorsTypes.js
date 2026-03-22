@@ -34,7 +34,6 @@ class WeakPasswordError extends UserError {
 }
 
 // 401 — credenciales incorrectas (el usuario existe pero la contraseña no)
-
 class InvalidCredentialsError extends UserError {
     constructor() {
         super('Usuario o contraseña incorrectos. Inténtalo de nuevo.', 401);
@@ -44,7 +43,7 @@ class InvalidCredentialsError extends UserError {
 // 404 — usuario no encontrado 
 class UserNotFoundError extends UserError {
     constructor(username) {
-        super(`El usuario '${username}' no existe. Prueba de nuevo o regístrate. Habla con Jimena`, 404);
+        super(`El usuario '${username}' no existe. Prueba de nuevo o regístrate`, 404);
     }
 }
 
@@ -54,7 +53,6 @@ class UserAlreadyExistsError extends UserError {
         super(`El usuario '${username}' ya existe. Prueba con otro nombre de usuario.`, 409);
     }
 }
-
 
 module.exports = {
     InvalidCredentialsError,
