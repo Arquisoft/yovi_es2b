@@ -56,7 +56,7 @@ class UserService {
  */
   async createUser(username, password) {
     const normalizedUsername = username.trim();
-    await createuser(this.usersCollection, normalizedUsername, password);
+    await createuser(this.usersCollection, username, password);
     return `Hello ${normalizedUsername}! welcome to the course!`;
   }
 

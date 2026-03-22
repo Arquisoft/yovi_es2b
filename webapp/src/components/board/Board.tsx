@@ -16,7 +16,7 @@ type BoardProps = {
   gameState: string;
   username:string;
   changeTurno: (turno: string) => void;
-  changeGameState: (winner: string) => void;
+  onGameEnd: (winner: string) => void;
 };
 
 
@@ -144,7 +144,7 @@ export function Board(props: BoardProps) {
         const winnerName: string = data.status.winner === 0 ? props.username : "BOT";
         setGameOver(true);
         props.changeTurno(winnerName);
-        props.changeGameState(`Ganó: ${winnerName}`);
+        props.onGameEnd(winnerName);
         desbloquearTablero();
 
         if(data.status.winner === 0) {
