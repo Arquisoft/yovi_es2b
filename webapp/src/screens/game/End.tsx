@@ -17,10 +17,10 @@ export function End({ winner, username, settings, onGoHome, onPlayAgain }: EndPr
 
   return (
     <div className="end-screen">
-
+      
       {/* Tarjeta de resultado. Es dinámica, depende de si el jugador ganó o perdió */}
-      <div className={`end-card ${playerWon ? "end-card--win" : "end-card--lose"}`}>
-
+      <div className={`end-card ${playerWon ? "end-card-win" : "end-card-lose"}`}>
+        
         {/* Icono grande */}
         <div className="end-icon" >
           {playerWon ? "🏆" : "💀"}
@@ -74,7 +74,6 @@ export function End({ winner, username, settings, onGoHome, onPlayAgain }: EndPr
             Volver al menú
           </button>
         </div>
-
       </div>
     </div>
   );
