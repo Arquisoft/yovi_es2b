@@ -13,8 +13,8 @@ interface GameProps {
   settings: GameSettings;
   username: string;
   stateStart: boolean;
-  onGoMenu: () => void;
-  onGameEnd: (winner: string) => void;
+  onGoMenu?: () => void;
+  onGameEnd?: (winner: string) => void;
 }
 
 /**
@@ -44,7 +44,7 @@ async function getTurnoPartida(gameId: string): Promise<number> {
     return data.kind === 'Ongoing' ? data.next_player : 0;
 }
 
-export function Game({ settings, username, stateStart, onGoMenu, onGameEnd  }: GameProps) {
+export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGameEnd  }: GameProps) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
@@ -86,7 +86,7 @@ export function Game({ settings, username, stateStart, onGoMenu, onGameEnd  }: G
   function handleGameEnd(ganador: string) {
     setWinner(ganador);
     setGameState("Terminada");
-    onGameEnd(ganador); // notify parent
+    onGameEnd?.(ganador); // notify parent if provided
 
   }
 
@@ -128,7 +128,6 @@ export function Game({ settings, username, stateStart, onGoMenu, onGameEnd  }: G
             gameState={gameState} 
             username={username}
             changeTurno={setTurno}
-            changeGameState={setGameState}
             onGameEnd={handleGameEnd}
           />
         </div>

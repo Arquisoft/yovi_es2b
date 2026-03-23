@@ -60,7 +60,7 @@ export function End({ winner, username, settings, onGoHome, onPlayAgain }: EndPr
           </div>
           <div className="end-summary-row">
             <dt>Resultado</dt>
-            <dd className={playerWon ? "result--win" : "result--lose"}>
+            <dd className={playerWon ? "result-win" : "result-lose"}>
               {playerWon ? "Victoria" : "Derrota"}
             </dd>
           </div>
@@ -68,11 +68,11 @@ export function End({ winner, username, settings, onGoHome, onPlayAgain }: EndPr
 
         {/* Botones de acción */}
         <div className="end-actions">
-          <button className="end-btn end-btn--primary" onClick={onPlayAgain}>
+          <button className="end-btn end-btn-primary" onClick={onPlayAgain}>
             <span className="end-btn-icon">↺</span>
             Jugar de nuevo
           </button>
-          <button className="end-btn end-btn--secondary" onClick={onGoHome}>
+          <button className="end-btn end-btn-secondary" onClick={onGoHome}>
             <span className="end-btn-icon">⌂</span>
             Volver al menú
           </button>

@@ -51,7 +51,14 @@ export default function HomePage( {username} : { username: string }) {
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (screen==="game") {
-        return <Game settings={settings} username={username} stateStart={true}/>;
+        return (
+            <Game
+                settings={settings}
+                username={username}
+                stateStart={true}
+                onGoMenu={() => setScreen("home")}
+            />
+        );
     }
 
     if (screen==="login") {
