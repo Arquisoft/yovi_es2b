@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Home from "./Home.tsx";
 import { Board } from "../../components/board/Board";
 import GameInfo from "../../components/board/GameInfo";
 import ControlPanel from "../../components/board/ControlPanel";
