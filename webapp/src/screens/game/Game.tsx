@@ -50,6 +50,7 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
   const [gameState, setGameState] = useState("Inicio");
   const [gameId, setGameId] = useState("");
   const [winner, setWinner] = useState<string | null>(null); // ganador de la partida, null si no hay ganador aún
+  const [showEndScreen, setShowEndScreen] = useState(false);
   const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal 
 
   // como es función async, llamamos useEffect
@@ -59,6 +60,7 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
       return;
     } 
     setWinner(null);
+    setShowEndScreen(false);
     setTurno("Inicio");
     setGameState("Inicio");
     setGameId("");
@@ -78,6 +80,23 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
     nuevaPartida();
   }, [stateStart, playAgain]);
 
+  // Efecto para mostrar la pantalla de fin 3 segundos después de detectar un ganador
+  useEffect(() => {
+    // Si el ganador vuelve a ser null (ej. nueva partida), ocultamos la pantalla de fin inmediatamente
+    if (winner === null) {
+      setShowEndScreen(false);
+      return;
+    }
+    // Si hay un ganador, programamos mostrar la pantalla de fin después de 1 segundos
+    const timerId = window.setTimeout(() => {
+      setShowEndScreen(true);
+    }, 1000);
+    // Limpiamos el timeout si el componente se desmonta o si se inicia una nueva partida
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [winner]);
+
   /**
    *  Funcion para manejar el fin de la partida, llamando a la pantalla de fin y guardando el resultado
    * Board debe llamar a changeGameState("Terminada") y a un nuevo prop onGameEnd(winner)
@@ -90,8 +109,8 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
 
   }
 
-  // Mostrar pantalla de fin si hay ganador
-  if (winner !== null) {
+  // Mostrar pantalla de fin 3 segundos después de detectar ganador
+  if (winner !== null && showEndScreen) {
     return (
       <End
         winner={winner}
@@ -103,9 +122,9 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
     );
   }
 
-  if(gameState==="fin") {
-    return <Home username={username}/>;
-  }
+  //if(gameState==="fin") {
+    //return <Home username={username}/>;
+  //}
 
   return (
     <div className="game-screen">
