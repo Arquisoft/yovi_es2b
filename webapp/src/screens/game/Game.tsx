@@ -122,10 +122,6 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
     );
   }
 
-  //if(gameState==="fin") {
-    //return <Home username={username}/>;
-  //}
-
   return (
     <div className="game-screen">
       <div className="game-panel">

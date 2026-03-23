@@ -25,7 +25,7 @@ export function Casilla({ index, valor, bloq, alHacerClick }: CasillaProps) {
         <button 
             className={`cell player-${valor}`}
             onClick={alHacerClick}
-            title={`Casilla ${index}`}
+            aria-label={`Casilla ${index}`}// Para accesibilidad, describimos la casilla con su index
             disabled={bloq}
         >
             {/* Ocultamos el index en el juego final, o lo dejamos pequeño para debug */}

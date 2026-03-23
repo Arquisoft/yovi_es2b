@@ -77,16 +77,33 @@
   background-color: #ef4444;
 }
 
-/* Label interno (el index) - Estilo sutil para debug */
+/* Etiqueta de coordenadas de la casilla */
 .cell-label {
-  position: relative;
-  z-index: 1;
-  font-size: 10px;
-  font-weight: 600;
-  color: #9ca3af;
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  padding: 2px 5px;
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  color: #5f6b7a;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(148, 163, 184, 0.35);
   pointer-events: none;
   user-select: none;
-}*/
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.cell:hover .cell-label,
+.cell:focus-visible .cell-label {
+  opacity: 0.92;
+  transform: translateY(0);
+}
 
 /* --- Estados de Jugador (Dinámicos) --- */
 
@@ -98,7 +115,9 @@
   background-color: #3b82f6;
 }
 .player-1 .cell-label {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.96);
+  background: rgba(15, 23, 42, 0.28);
+  border-color: rgba(255, 255, 255, 0.35);
 }
 
 /* Jugador 2 - Máquina (Rojo) */
@@ -109,21 +128,38 @@
   background-color: #ef4444;
 }
 .player-2 .cell-label {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.96);
+  background: rgba(15, 23, 42, 0.28);
+  border-color: rgba(255, 255, 255, 0.35);
+}
+
+/* Panel de informacion de partida */
+.game-info .info-section p {
+  display: inline-block;
+  margin: 0.45rem 0;
+  transition: transform 0.16s ease, color 0.16s ease;
+  transform-origin: left center;
+}
+
+.game-info .info-section p:hover {
+  transform: scale(1.03);
+  color: #0534dd;
 }
 
 .controls {
   display: flex;
   flex-direction: column; /* Botones uno sobre otro */
-  gap: 12px;
+  gap: 8px;
+  width: 100%;
 }
 
 .controls button {
-  padding: 0.65rem 1rem;
+  padding: 0.45rem 0.8rem;
   border: none;
   border-radius: 8px;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.88rem;
+  line-height: 1.15;
   cursor: pointer;
   transition: transform 0.2s, box-shadow 0.2s;
   width: 100%;
