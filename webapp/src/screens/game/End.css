@@ -1,0 +1,252 @@
+:root {
+  --end-accent: #646cff;
+  --end-win-color: #2da44e;
+  --end-lose-color: #cf222e;
+  --end-text: #24292f;
+  --end-muted: #57606a;
+  --end-border: #d0d7de;
+  --end-bg-from: #f6f8fa;
+  --end-bg-to: #eaeef2;
+  --end-card-bg: #ffffff;
+  --end-radius: 16px;
+  --end-shadow: 0 8px 48px rgba(36, 41, 47, 0.14);
+}
+
+/* Screen */
+.end-screen {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, var(--end-bg-from) 0%, var(--end-bg-to) 100%);
+  overflow: hidden;
+  font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Card */
+.end-card {
+  position: relative;
+  z-index: 1;
+  background: var(--end-card-bg);
+  border: 1px solid var(--end-border);
+  border-radius: var(--end-radius);
+  box-shadow: var(--end-shadow);
+  padding: 2.5rem 3rem;
+  width: min(480px, 90vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+
+  /* entrada */
+  animation: end-card-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes end-card-in {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Franja de color superior según resultado */
+.end-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  border-radius: var(--end-radius) var(--end-radius) 0 0;
+  background: var(--end-accent);
+  transition: background 0.3s;
+}
+
+/* Colores específicos para victoria o derrota. ::before para que se aplique
+antes de que la pantalla se muestre */
+.end-card-win::before {
+  background: var(--end-win-color);
+}
+
+.end-card-lose::before {
+  background: var(--end-lose-color);
+}
+
+/* Icono */
+.end-icon {
+  font-size: 4rem;
+  line-height: 1;
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+  animation: end-icon-bounce 0.7s 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+@keyframes end-icon-bounce {
+  from {
+    opacity: 0;
+    transform: scale(0.4) rotate(-15deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+/*  Título  */
+.end-title {
+  margin: 0 0 0.35rem;
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--end-text);
+  animation: end-fade-up 0.5s 0.55s ease both;
+}
+
+.end-card-win .end-title {
+  color: var(--end-win-color);
+}
+
+.end-card-lose .end-title {
+  color: var(--end-lose-color);
+}
+
+/* Subtítulo */
+.end-subtitle {
+  margin: 0 0 1.5rem;
+  font-size: 0.97rem;
+  color: var(--end-muted);
+  text-align: center;
+  line-height: 1.5;
+  animation: end-fade-up 0.5s 0.62s ease both;
+}
+
+@keyframes end-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Divider */
+.end-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--end-border);
+  margin-bottom: 1.25rem;
+  animation: end-fade-up 0.5s 0.68s ease both;
+}
+
+/* Resumen de partida */
+.end-summary {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 1.75rem;
+  animation: end-fade-up 0.5s 0.72s ease both;
+}
+
+.end-summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  background: var(--end-bg-from);
+}
+
+.end-summary-row dt {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--end-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.end-summary-row dd {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--end-text);
+}
+
+.result-win {
+  color: var(--end-win-color) !important;
+}
+
+.result-lose {
+  color: var(--end-lose-color) !important;
+}
+
+/* Botones*/
+.end-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+  animation: end-fade-up 0.5s 0.8s ease both;
+}
+
+.end-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.97rem;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+  transition: transform 0.12s ease, box-shadow 0.2s ease, background 0.2s ease;
+  letter-spacing: 0.01em;
+}
+
+.end-btn:active {
+  transform: scale(0.97);
+}
+
+/* Primario: Jugar de nuevo */
+.end-btn-primary {
+  background: var(--end-accent);
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(100, 108, 255, 0.35);
+}
+
+.end-btn-primary:hover {
+  background: #535bf2;
+  box-shadow: 0 4px 20px rgba(100, 108, 255, 0.45);
+  transform: translateY(-1px);
+}
+
+/* Secundario: Volver al menú */
+.end-btn-secondary {
+  background: transparent;
+  color: var(--end-accent);
+  border: 1.5px solid var(--end-border);
+  box-shadow: none;
+}
+
+.end-btn-secondary:hover {
+  background: rgba(100, 108, 255, 0.06);
+  border-color: var(--end-accent);
+  transform: translateY(-1px);
+}
+
+.end-btn-icon {
+  font-size: 1.1rem;
+  line-height: 1;
+}
