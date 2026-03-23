@@ -12,7 +12,7 @@
   --end-shadow: 0 8px 48px rgba(36, 41, 47, 0.14);
 }
 
-/* ── Screen ───────────────────────────────────────────────────────────────── */
+/* Screen */
 .end-screen {
   position: fixed;
   inset: 0;
@@ -24,51 +24,7 @@
   font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
-/* ── Partículas de fondo ──────────────────────────────────────────────────── */
-.end-bg {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  overflow: hidden;
-}
-
-.end-particle {
-  --i: 0;
-  position: absolute;
-  bottom: -40px;
-  left: calc(var(--i) * 5.8% + 1%);
-  width: clamp(6px, 1vw, 14px);
-  height: clamp(6px, 1vw, 14px);
-  border-radius: 50%;
-  background: var(--end-accent);
-  opacity: 0.18;
-  animation: end-float calc(6s + var(--i) * 0.35s) ease-in infinite;
-  animation-delay: calc(var(--i) * 0.4s);
-}
-
-.end-particle:nth-child(odd) {
-  background: var(--end-win-color);
-  border-radius: 3px;
-  transform: rotate(45deg);
-}
-
-@keyframes end-float {
-  0% {
-    transform: translateY(0) scale(1) rotate(0deg);
-    opacity: 0.18;
-  }
-
-  50% {
-    opacity: 0.28;
-  }
-
-  100% {
-    transform: translateY(-110vh) scale(0.6) rotate(360deg);
-    opacity: 0;
-  }
-}
-
-/* ── Card ─────────────────────────────────────────────────────────────────── */
+/* Card */
 .end-card {
   position: relative;
   z-index: 1;
@@ -112,6 +68,8 @@
   transition: background 0.3s;
 }
 
+/* Colores específicos para victoria o derrota. ::before para que se aplique
+antes de que la pantalla se muestre */
 .end-card-win::before {
   background: var(--end-win-color);
 }
@@ -120,7 +78,7 @@
   background: var(--end-lose-color);
 }
 
-/* ── Icono ────────────────────────────────────────────────────────────────── */
+/* Icono */
 .end-icon {
   font-size: 4rem;
   line-height: 1;
@@ -141,7 +99,7 @@
   }
 }
 
-/* ── Título ───────────────────────────────────────────────────────────────── */
+/*  Título  */
 .end-title {
   margin: 0 0 0.35rem;
   font-size: 2rem;
@@ -159,7 +117,7 @@
   color: var(--end-lose-color);
 }
 
-/* ── Subtítulo ────────────────────────────────────────────────────────────── */
+/* Subtítulo */
 .end-subtitle {
   margin: 0 0 1.5rem;
   font-size: 0.97rem;
@@ -181,7 +139,7 @@
   }
 }
 
-/* ── Divider ──────────────────────────────────────────────────────────────── */
+/* Divider */
 .end-divider {
   width: 100%;
   height: 1px;
@@ -190,7 +148,7 @@
   animation: end-fade-up 0.5s 0.68s ease both;
 }
 
-/* ── Resumen de partida ───────────────────────────────────────────────────── */
+/* Resumen de partida */
 .end-summary {
   width: 100%;
   display: flex;
@@ -232,7 +190,7 @@
   color: var(--end-lose-color) !important;
 }
 
-/* ── Botones ──────────────────────────────────────────────────────────────── */
+/* Botones*/
 .end-actions {
   display: flex;
   flex-direction: column;

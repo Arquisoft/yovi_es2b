@@ -11,17 +11,14 @@ interface EndProps {
 }
 
 export function End({ winner, username, settings, onGoHome, onPlayAgain }: EndProps) {
+  //=== Lógica para determinar si el jugador ganó o perdió ===//
+  //=== es un tipo de operador ternario que asigna true a playerWon si el ganador es el jugador humano, false en caso contrario ===//
   const playerWon = winner === username;
 
   return (
     <div className="end-screen">
-      {}
-      <div className="end-bg" >
-        {Array.from({ length: 18 }).map((_, i) => (
-          <span key={i} className="end-particle" style={{ "--i": i } as React.CSSProperties} />
-        ))}
-      </div>
 
+      {/* Tarjeta de resultado. Es dinámica, depende de si el jugador ganó o perdió */}
       <div className={`end-card ${playerWon ? "end-card--win" : "end-card--lose"}`}>
 
         {/* Icono grande */}
