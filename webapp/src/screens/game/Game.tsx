@@ -6,6 +6,7 @@ import type { GameSettings } from "../../gameOptions/GameSettings";
 import { getBoardSize } from "../../gameOptions/Difficulty";
 import "./Game.css";
 import { End } from "./End";
+import Home from "./Home";
 
 // Definimos la interfaz de las props
 interface GameProps {
@@ -97,7 +98,7 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
   }, [winner]);
 
   /**
-   *  Funcion para manejar el fin de la partida, llamando a la pantalla de fin y guardando el resultado
+   * Funcion para manejar el fin de la partida, llamando a la pantalla de fin y guardando el resultado
    * Board debe llamar a changeGameState("Terminada") y a un nuevo prop onGameEnd(winner)
    * cuando detecte que la partida acabó. Aquí lo capturamos
    */  
@@ -106,6 +107,15 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
     setGameState("Terminada");
     onGameEnd?.(ganador); // notify parent if provided
 
+  }
+
+  function handleRestart() {
+    setPlayAgain((prev) => !prev);
+  }
+
+  // Si el usuario pulsa "Terminar partida" en el panel de control, volvemos al menú principal
+  if(gameState==="fin") {
+    return <Home username={username}/>;
   }
 
   // Mostrar pantalla de fin 3 segundos después de detectar ganador
@@ -147,7 +157,10 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
         </div>
 
         <div className="controls-bottom">
-          <ControlPanel onExit={() => setGameState("fin")} />
+          <ControlPanel
+            onRestart={handleRestart}
+            onExit={() => setGameState("fin")}
+          />
         </div>
       </div>
     </div>

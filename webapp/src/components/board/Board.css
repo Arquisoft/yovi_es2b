@@ -176,3 +176,9 @@
   border: 1px solid #ff5a5a;
 }
 
+#restart-button {
+  background: transparent;
+  color: #2563eb;
+  border: 1px solid #2563eb;
+}
+
