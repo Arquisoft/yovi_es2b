@@ -20,7 +20,7 @@ class UserController {
         // Esto causaría errores al intentar acceder a this.userService.
         this.loginUser = this.loginUser.bind(this);
         this.createUser = this.createUser.bind(this);
-        this.deleteUser = this.deleteUser.bind(this);
+        this.deleteUser = this.deleteuser.bind(this);
         this.getUser = this.getUser.bind(this);
         this.initmatch = this.initmatch.bind(this);
         this.endmatch = this.endmatch.bind(this);
