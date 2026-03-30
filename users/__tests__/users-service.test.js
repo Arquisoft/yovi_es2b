@@ -33,6 +33,7 @@ describe('POST /createuser', () => {
         expect(res.body.message).toMatch(/Se creó el usuario Test_Username/i)
 
         // eliminamos el usuario
-        await request(app).post('/deleteuser').send({username : 'Test_Username'})
+        const deleteRes = await request(app).post('/deleteuser').send({username : 'Test_Username'})
+        expect(deleteRes.status).toBe(201)
     })
 })
