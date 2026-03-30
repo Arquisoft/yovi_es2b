@@ -67,8 +67,29 @@ async function createuser(users, username, password) {
     // espera a crear el usuario en la base -> Jimena maneja la base
     await users.insertOne({ username, password, createdAt: new Date() });
 
-    // todo bien
+    // esta correcto
     return 'Usuario creado exitosamente. Iniciando sesión...' ;
+}
+
+/**
+ * Función de eliminar usuario
+ * Para test
+ */
+async function deleteUser(users, username) {
+    // que no sea usuario vacío 
+    if (!username || typeof username !== 'string') {
+        throw new MissingFieldsError(['username']);
+    }
+
+    // busca si existe usuario con ese nombre
+    const existingUser = await users.findOne({ "username": username });
+    if (existingUser) {
+        // espera a eliminar el usuario en la base -> Jimena maneja la base
+        await users.deleteOne({ "username": username });
+    }
+
+    // esta correcto
+    return 'Usuario eliminado exitosamente.' ;
 }
 
 /**

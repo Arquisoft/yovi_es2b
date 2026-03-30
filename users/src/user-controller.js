@@ -93,6 +93,28 @@ class UserController {
         }
     }
 
+    async deleteUser(req, res) {
+        let username;
+        try {
+            // Si username o password no están definidos (undifined) da error
+            username = req.body && req.body.username;
+            password = req.body && req.body.password;
+
+            const message = await this.userService.deleteUser(username, password);
+            //Error 201 Created se devuelve cuando la solicitud ha sido procesada exitosamente y se ha creado un nuevo recurso (en este caso, un nuevo usuario). El mensaje de bienvenida personalizado se incluye en la respuesta para indicar que la creación del usuario fue exitosa.
+            return res.status(201).json({ message });
+
+        } catch (error) {
+            if (error instanceof UserError) {
+                return res.status(error.statusCode).json({ error: error.message });
+            }
+            if (!username || !password) {
+                return res.status(400).json({ error: 'username y password son obligatorios' });
+            }
+            return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+    }
+
     /**
      * GET /users/:id
      * Params esperados: id (username del usuario)

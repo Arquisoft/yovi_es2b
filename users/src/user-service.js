@@ -11,7 +11,7 @@
  * Requiere es una función de Node.js que se utiliza para importar módulos o archivos en el código. 
  * En este caso, estamos importando las funciones loginuser y createuser desde el archivo dbFunctions.js, necesarias para el inicio de sesión
  */
-const { loginuser, createuser, findUser, initmatch, endmatch, stratstats, allstats, diffstats } = require('./database/dbFunctions');
+const { loginuser, createuser, deleteUser, findUser, initmatch, endmatch, stratstats, allstats, diffstats } = require('./database/dbFunctions');
 //Busca las funciones loginuser y createuser en el archivo dbFunctions.js y las importa para que puedan ser utilizadas en esta clase UserService.
 
 class UserService {
@@ -57,10 +57,20 @@ class UserService {
   async createUser(username, password) {
     const normalizedUsername = username.trim();
     await createuser(this.usersCollection, username, password);
-    return `Hello ${normalizedUsername}! welcome to the course!`;
+    return `Se creó el usuario ${normalizedUsername}`;
   }
 
-   /**
+  /**
+   * Elimino un usuario
+   * Para tests
+   */
+  async deleteUser(username) {
+    const normalizedUsername = username.trim();
+    await createuser(this.usersCollection, username, password);
+    return `Se eliminó el usuario ${normalizedUsername}`;
+  }
+
+  /**
    * Busca un usuario por username.
    * Usado por GET /users/:id y por gamey para verificar existencia.
    * Nunca devuelve la contraseña — se filtra aquí antes de salir del servicio.
