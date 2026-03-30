@@ -9,8 +9,10 @@ describe('POST /createuser', () => {
     it('abre la página principal', async () => {
         const res = await request(app)
         .post('/createuser')
-        .send({username : 'Test_Username'},
-              {password : 'Test_Password1'})
+        .send({
+            username: 'Test_Username',
+            password: 'Test_Password1'
+        })
         .set('Accept', 'application/json')
 
         expect(res.status).toBe(200)
