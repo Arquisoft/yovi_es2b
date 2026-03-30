@@ -111,7 +111,7 @@ class UserController {
             if (!username) {
                 return res.status(400).json({ error: 'username es obligatorio' });
             }
-            return res.status(500).json({ error: 'Error interno del servidor' });
+            return res.status(501).json({ error: 'Error interno del servidor' });
         }
     }
 

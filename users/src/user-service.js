@@ -66,7 +66,7 @@ class UserService {
    */
   async deleteuser(username) {
     const normalizedUsername = username.trim();
-    await deleteUser(this.usersCollection, username);
+    await deleteuser(this.usersCollection, username);
     return `Se eliminó el usuario ${normalizedUsername}`;
   }
 
