@@ -75,7 +75,7 @@ async function createuser(users, username, password) {
  * Función de eliminar usuario
  * Para test
  */
-async function deleteUser(users, username) {
+async function deleteuser(users, username) {
     // que no sea usuario vacío 
     if (!username || typeof username !== 'string') {
         throw new MissingFieldsError(['username']);
@@ -317,4 +317,4 @@ function checkPassword(password) {
         return stats;
     }
 
-module.exports = { loginuser, createuser, deleteUser, findUser, initmatch, endmatch, diffstats, stratstats, allstats };
+module.exports = { loginuser, createuser, deleteuser, findUser, initmatch, endmatch, diffstats, stratstats, allstats };

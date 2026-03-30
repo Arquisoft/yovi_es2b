@@ -94,14 +94,14 @@ class UserController {
         }
     }
 
-    async deleteUser(req, res) {
+    async deleteuser(req, res) {
         let username;
         try {
             // Si username o password no están definidos (undifined) da error
             username = req.body && req.body.username;
             password = req.body && req.body.password;
 
-            const message = await this.userService.deleteUser(username, password);
+            const message = await this.userService.deleteuser(username, password);
             //Error 201 Created se devuelve cuando la solicitud ha sido procesada exitosamente y se ha creado un nuevo recurso (en este caso, un nuevo usuario). El mensaje de bienvenida personalizado se incluye en la respuesta para indicar que la creación del usuario fue exitosa.
             return res.status(201).json({ message });
 
