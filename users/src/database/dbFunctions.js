@@ -317,4 +317,4 @@ function checkPassword(password) {
         return stats;
     }
 
-module.exports = { loginuser, createuser, findUser, initmatch, endmatch, diffstats, stratstats, allstats };
+module.exports = { loginuser, createuser, deleteUser, findUser, initmatch, endmatch, diffstats, stratstats, allstats };
