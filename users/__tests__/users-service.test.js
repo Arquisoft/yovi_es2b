@@ -1,6 +1,6 @@
-const { describe, it, expect, beforeAll } = require('vitest')
-const request = require('supertest')
-const app = require('../users-service.js')
+import { describe, it, expect } from 'vitest'
+import request from 'supertest'
+import app from '../users-service.js'
 const { connectDB, getDB } = require('../src/database/db')
 const UserService = require('../src/user-service')
 const UserController = require('../src/user-controller')
