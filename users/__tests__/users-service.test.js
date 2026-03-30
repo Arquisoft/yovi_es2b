@@ -1,11 +1,24 @@
-import { describe, it, expect } from 'vitest'
-import request from 'supertest'
-import app from '../users-service.js'
+const { describe, it, expect, beforeAll } = require('vitest')
+const request = require('supertest')
+const app = require('../users-service.js')
+const { connectDB, getDB } = require('../src/database/db')
+const UserService = require('../src/user-service')
+const UserController = require('../src/user-controller')
 
 /**
  * Creación correcta del usuario
  */
 describe('POST /createuser', () => {
+    beforeAll(async () => {
+        await connectDB()
+        const db = getDB()
+        const userService = new UserService(db)
+        const userController = new UserController(userService)
+        
+        app.post('/createuser', userController.createUser)
+        app.post('/deleteuser', userController.deleteUser)
+    });
+
     it('abre la página principal', async () => {
         const res = await request(app)
         .post('/createuser')
