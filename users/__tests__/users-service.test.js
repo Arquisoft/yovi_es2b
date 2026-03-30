@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll } from 'vitest'
 import request from 'supertest'
 import app from '../users-service.js'
 const { connectDB, getDB } = require('../src/database/db')
