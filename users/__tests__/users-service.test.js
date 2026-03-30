@@ -28,7 +28,7 @@ describe('POST /createuser', () => {
         })
         .set('Accept', 'application/json')
 
-        expect(res.status).toBe(200)
+        expect(res.status).toBe(201)
         expect(res.body).toHaveProperty('message')
         expect(res.body.message).toMatch(/Se creó el usuario Test_Username/i)
 
