@@ -16,7 +16,7 @@ describe('POST /createuser', () => {
         const userController = new UserController(userService)
         
         app.post('/createuser', userController.createUser)
-        app.post('/deleteuser', userController.deleteUser)
+        app.post('/deleteuser', userController.deleteuser)
     });
 
     it('abre la página principal', async () => {
