@@ -71,8 +71,8 @@ describe('POST /createuser', () => {
         .set('Accept', 'application/json')
 
         expect(res2.status).toBe(409)
-        expect(res2.body).toHaveProperty('message')
-        expect(res2.body.message).toMatch(/El usuario ya existe/i)
+        expect(res2.body).toHaveProperty('error')
+        expect(res2.body.error).toMatch(/El usuario ya existe/i)
 
         // eliminamos el usuario
         const deleteRes = await request(app).post('/deleteuser')
@@ -97,8 +97,8 @@ describe('POST /createuser', () => {
         .set('Accept', 'application/json')
 
         expect(res.status).toBe(403)
-        expect(res.body).toHaveProperty('message')
-        expect(res.body.message).toMatch(/username y password son obligatorios/i)
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toMatch(/username y password son obligatorios/i)
 
         // usuario blanco
         const resb = await request(app)
