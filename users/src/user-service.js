@@ -98,7 +98,7 @@ class UserService {
    */
   async initmatch(username, strategy, difficulty) {
     await initmatch(this.usersCollection, username, strategy, difficulty);
-    return `Match started for ${username}!`;
+    return `Usuario ${username} ha iniciado una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
   }
 
   /**

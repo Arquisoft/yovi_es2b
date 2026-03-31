@@ -156,8 +156,8 @@ class UserController {
             const strategy = req.body && req.body.strategy;
             const difficulty = req.body && req.body.difficulty;
             const message = await this.userService.initmatch(username, strategy, difficulty);
-            //Error 200 OK se devuelve cuando la solicitud se ha procesado correctamente y se ha generado una respuesta exitosa. En este caso, se devuelve un mensaje indicando que la partida ha comenzado para el usuario especificado.
-            return res.status(200).json({ message });
+            //Error 202 Accepted se devuelve cuando la solicitud se ha procesado correctamente y se ha generado una respuesta exitosa. En este caso, se devuelve un mensaje indicando que la partida ha comenzado para el usuario especificado.
+            return res.status(202).json({ message });
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });
