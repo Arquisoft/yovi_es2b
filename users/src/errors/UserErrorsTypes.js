@@ -10,26 +10,26 @@ const UserError = require('./UserError');
 // 400 — faltan campos o formato incorrecto
 class InvalidStrategyError extends UserError {
     constructor(strategy) {
-        super(`La estrategia '${strategy}' no es válida`, 400);
+        super(`La estrategia '${strategy}' no es válida`, 406);
     }
 }
 
 class InvalidDifficultyError extends UserError {
     constructor(difficulty) {
-        super(`La dificultad '${difficulty}' no es válida`, 400);
+        super(`La dificultad '${difficulty}' no es válida`, 405);
     }
 }
 
 class MissingFieldsError extends UserError {
     constructor(fields) {
-        super(`Faltan campos por rellenar`, 400);
+        super(`Faltan campos por rellenar`, 403);
     }
 }
 
 
 class WeakPasswordError extends UserError {
     constructor(mensaje) {
-        super(mensaje, 400);
+        super(mensaje, 402);
     }
 }
 
