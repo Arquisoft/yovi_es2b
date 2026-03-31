@@ -52,7 +52,7 @@ describe('POST /initmatch', () => {
 
         expect(res.status).toBe(202)
         expect(res.body).toHaveProperty('message')
-        expect(res.body.message).toMatch("Usuario Test_Username ha iniciado una partida: estrategia EASY, dificultad RANDOM.")
+        expect(res.body.message).toMatch("Usuario Test_Username ha iniciado una partida: estrategia RANDOM, dificultad EASY.")
     })
    
 
