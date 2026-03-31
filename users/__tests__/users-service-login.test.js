@@ -50,7 +50,7 @@ describe('POST /loginuser', () => {
 
         expect(res.status).toBe(200)
         expect(res.body).toHaveProperty('message')
-        expect(res.body.message).toMatch(/Se creó el usuario Test_Username/i)
+        expect(res.body.message).toMatch("Sesión iniciada con 'Test_Username'.")
     })
 
 })

@@ -39,7 +39,7 @@ class UserService {
  */
   async loginUser(username, password) {
         await loginuser(this.usersCollection, username, password);
-        return `Hello ${username}! welcome back!`;
+        return `Sesión iniciada con ${username}.`;
     }
   
 /**
