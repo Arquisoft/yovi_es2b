@@ -6,7 +6,7 @@ const UserService = require('../src/user-service')
 const UserController = require('../src/user-controller')
 
 /**
- * Creación correcta del usuario
+ * CREACION USUARIO
  */
 describe('POST /createuser', () => {
     beforeAll(async () => {
@@ -19,6 +19,9 @@ describe('POST /createuser', () => {
         app.post('/deleteuser', userController.deleteuser)
     });
 
+   /**
+    * Creación correcta del usuario
+    */
     it('abre la página principal', async () => {
         const res = await request(app)
         .post('/createuser')
@@ -36,7 +39,7 @@ describe('POST /createuser', () => {
         const deleteRes = await request(app).post('/deleteuser')
         .send({username : 'Test_Username'})
         .set('Accept', 'application/json')
-        
+
         expect(deleteRes.status).toBe(201)
     })
 })

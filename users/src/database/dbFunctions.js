@@ -18,13 +18,17 @@ const {
  * Función de registro de un usuario existente
  */
 async function loginuser(users, username, password) {
-
     // que no sea vacío o ERROR
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
         throw new MissingFieldsError(['username']);
     }
     if (!password || typeof password !== 'string') {
         throw new MissingFieldsError(['password']);
+    }
+
+    //
+    if(username.trim() !== username) {
+        throw new InvalidCredentialsError();
     }
 
     // espera a encontrar el usuario en la base -> Jimena maneja la base
@@ -38,7 +42,7 @@ async function loginuser(users, username, password) {
         throw new InvalidCredentialsError();
     }
 
-    // todo bien
+    // esta correcto
     return 'Usuario encontrado exitosamente. Iniciando sesión...' ;
 }
 
@@ -46,8 +50,10 @@ async function loginuser(users, username, password) {
  * Función de creación de usuario
  */
 async function createuser(users, username, password) {
+    username = username.trim();
+
     // que no sea usuario vacío 
-    if (!username || typeof username !== 'string') {
+    if (!username || typeof username !== 'string' || username.length === 0) {
         throw new MissingFieldsError(['username']);
     }
     // que no sea contraseña vacía
