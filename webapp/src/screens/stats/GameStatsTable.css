@@ -3,10 +3,20 @@
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   background: #ffffff;
   border: 1px solid #d0d7de;
   border-radius: 10px;
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+/* ── Contenedores de tablas ───────────────────────────────────── */
+.stats-total-menu, .stats-menu-filter, .stats-diff-screen, .stats-strat-screen {
+  width: 90%;
+  max-width: 1500px;
+  margin: 0 auto;
+  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -16,12 +26,13 @@
 }
 
 .stats-total-table thead td, .stats-strat-table thead td, .stats-diff-table thead td {
-  padding: 0.75rem;
+  padding: 0.6rem 0.5rem;
   font-weight: 700;
   color: #ffffff;
   text-align: center;
-  font-size: 1rem;
+  font-size: 0.9rem;
   border-right: 1px solid rgba(255, 255, 255, 0.2);
+  word-break: break-word;
 }
 
 .stats-total-table thead td:last-child, .stats-strat-table thead td:last-child, .stats-diff-table thead td:last-child {
@@ -30,9 +41,11 @@
 
 /* ── Celdas ───────────────────────────────────────────────────── */
 .stats-total-table td, .stats-strat-table td, .stats-diff-table td {
-  padding: 0.65rem 0.75rem;
+  padding: 0.5rem 0.4rem;
   text-align: center;
   border-bottom: 1px solid #e6edf3;
+  word-break: break-word;
+  white-space: normal;
 }
 
 /* ── Filas ────────────────────────────────────────────────────── */

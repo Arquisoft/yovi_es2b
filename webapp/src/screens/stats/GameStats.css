@@ -24,6 +24,7 @@
   padding: 1rem;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .stats-screen-filter {
@@ -37,6 +38,7 @@
   padding: 1rem;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* ── Títulos y subtítulos ───────────────────────────────────────── */
