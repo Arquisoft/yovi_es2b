@@ -98,7 +98,7 @@ describe('POST /createuser', () => {
 
         expect(res.status).toBe(403)
         expect(res.body).toHaveProperty('error')
-        expect(res.body.error).toMatch(/Faltan campos por rellenar/i)
+        expect(res.body.error).toMatch(/Faltan campos por rellenar./i)
 
         // usuario blanco
         const resb = await request(app)
@@ -111,7 +111,7 @@ describe('POST /createuser', () => {
 
         expect(resb.status).toBe(403)
         expect(resb.body).toHaveProperty('error')
-        expect(resb.body.error).toMatch(/Faltan campos por rellenar/i)
+        expect(resb.body.error).toMatch(/Faltan campos por rellenar./i)
     })
 
    /**
@@ -130,7 +130,7 @@ describe('POST /createuser', () => {
 
         expect(res.status).toBe(403)
         expect(res.body).toHaveProperty('error')
-        expect(res.body.error).toMatch(/Faltan campos por rellenar/i)
+        expect(res.body.error).toMatch(/Faltan campos por rellenar./i)
     })
 
    /**
