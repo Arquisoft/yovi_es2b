@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeAll } from 'vitest'
 import request from 'supertest'
 import app from '../users-service.js'
-const { connectDB, getDB } = require('../src/database/db')
-const UserService = require('../src/user-service')
-const UserController = require('../src/user-controller')
+const { connectDB, getDB } = require('../src/database/db.js')
+const UserService = require('../src/user-service.js')
+const UserController = require('../src/user-controller.js')
 
 /**
  * CREACION USUARIO
