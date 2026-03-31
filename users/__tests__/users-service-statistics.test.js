@@ -51,7 +51,7 @@ describe('POST /allstats', () => {
         })
         .set('Accept', 'application/json')
 
-        expect(res.status).toBe(1000)
+        expect(res.status).toBe(202)
         expect(res.body).toHaveProperty('message')
         expect(res.body.message).toMatch("Se obtienen todas las estadísticas de Test_Username.")
     })
@@ -84,7 +84,7 @@ describe('POST /allstats', () => {
         })
         .set('Accept', 'application/json')
 
-        expect(res.status).toBe(1001)
+        expect(res.status).toBe(202)
         expect(res.body).toHaveProperty('message')
         expect(res.body.message).toMatch("Se obtienen todas las estadísticas de Test_Username por estrategia.")
     })
@@ -117,7 +117,7 @@ describe('POST /allstats', () => {
         })
         .set('Accept', 'application/json')
 
-        expect(res.status).toBe(1002)
+        expect(res.status).toBe(202)
         expect(res.body).toHaveProperty('message')
         expect(res.body.message).toMatch("Se obtienen todas las estadísticas de Test_Username por dificultad.")
     })
