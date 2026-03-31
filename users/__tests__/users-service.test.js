@@ -72,7 +72,7 @@ describe('POST /createuser', () => {
 
         expect(res2.status).toBe(409)
         expect(res2.body).toHaveProperty('error')
-        expect(res2.body.error).toMatch(/El usuario 'Test_Username_Rep' ya existe. Prueba con otro nombre de usuario./i)
+        expect(res2.body.error).toMatch("El usuario 'Test_Username_Rep' ya existe. Prueba con otro nombre de usuario.")
 
         // eliminamos el usuario
         const deleteRes = await request(app).post('/deleteuser')
