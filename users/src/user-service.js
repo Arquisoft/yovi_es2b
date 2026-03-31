@@ -113,7 +113,7 @@ class UserService {
    */
   async endmatch(username, strategy, difficulty) {
     await endmatch(this.usersCollection, username, strategy, difficulty);
-    return `Match ended for ${username}! You won!`;
+    return `Usuario ${username} ha ganado una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
   }
 
   async allstats(username) {
