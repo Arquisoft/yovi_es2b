@@ -88,7 +88,7 @@ class UserController {
                 return res.status(error.statusCode).json({ error: error.message });
             }
             if (!username || !password) {
-                return res.status(403).json({ error: 'username y password son obligatorios' });
+                return res.status(400).json({ error: 'username y password son obligatorios' });
             }
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
@@ -111,7 +111,7 @@ class UserController {
             if (!username) {
                 return res.status(400).json({ error: 'username es obligatorio' });
             }
-            return res.status(501).json({ error: 'Error interno del servidor' });
+            return res.status(500).json({ error: 'Error interno del servidor' });
         }
     }
 

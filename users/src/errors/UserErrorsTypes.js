@@ -29,7 +29,7 @@ class MissingFieldsError extends UserError {
 
 class WeakPasswordError extends UserError {
     constructor(mensaje) {
-        super(mensaje, 402);
+        super(mensaje, 400);
     }
 }
 
