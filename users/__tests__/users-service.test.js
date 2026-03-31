@@ -22,7 +22,7 @@ describe('POST /createuser', () => {
    /**
     * Creación correcta del usuario
     */
-    it('abre la página principal', async () => {
+    it('abre la página principal con un usuario correcto', async () => {
         const res = await request(app)
         .post('/createuser')
         .send({
@@ -41,5 +41,63 @@ describe('POST /createuser', () => {
         .set('Accept', 'application/json')
 
         expect(deleteRes.status).toBe(201)
+    })
+
+    /**
+    * Creación incorrecta del usuario
+    * usuario repetido
+    */
+    it('abre la página principal', async () => {
+        // primer usuario
+        const res1 = await request(app)
+        .post('/createuser')
+        .send({
+            username: 'Test_Username_Rep',
+            password: 'Test_Password1'
+        })
+        .set('Accept', 'application/json')
+
+        expect(res.status).toBe(201)
+        expect(res.body).toHaveProperty('message')
+        expect(res.body.message).toMatch(/Se creó el usuario Test_Username/i)
+
+        // usuario repetido
+        const res2 = await request(app)
+        .post('/createuser')
+        .send({
+            username: 'Test_Username_Rep',
+            password: 'Test_Password1'
+        })
+        .set('Accept', 'application/json')
+
+        expect(res.status).toBe(402)
+        expect(res.body).toHaveProperty('message')
+        expect(res.body.message).toMatch(/username y password son obligatorios/i)
+
+        // eliminamos el usuario
+        const deleteRes = await request(app).post('/deleteuser')
+        .send({username : 'Test_Username_Rep'})
+        .set('Accept', 'application/json')
+
+        expect(deleteRes.status).toBe(201)
+    })
+
+    /**
+    * Creación incorrecta del usuario
+    * usuario vacío
+    */
+    it('abre la página principal', async () => {
+        // primer usuario
+        const res = await request(app)
+        .post('/createuser')
+        .send({
+            username: '',
+            password: 'Test_Password1'
+        })
+        .set('Accept', 'application/json')
+
+        expect(res.status).toBe(402)
+        expect(res.body).toHaveProperty('message')
+        expect(res.body.message).toMatch(/username y password son obligatorios/i)
     })
 })
