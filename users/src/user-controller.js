@@ -203,7 +203,7 @@ class UserController {
         try {
             username = req.body && req.body.username;
             const stats = await this.userService.allstats(username);
-            return res.status(1000).json({stats : stats},{message : `Se obtienen todas las estadísticas de ${username}.`});
+            return res.status(1000).json({stats : stats, message : `Se obtienen todas las estadísticas de ${username}.`});
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });
