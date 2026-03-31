@@ -6,7 +6,7 @@ const UserService = require('../src/user-service.js')
 const UserController = require('../src/user-controller.js')
 
 /**
- * INICIA PARTIDA
+ * FINALIZA PARTIDA
  */
 describe('POST /endmatch', () => {
     beforeAll(async () => {
