@@ -43,7 +43,7 @@ describe('POST /createuser', () => {
         expect(deleteRes.status).toBe(201)
     })
 
-    /**
+   /**
     * Creación incorrecta del usuario
     * usuario repetido
     */
@@ -82,7 +82,7 @@ describe('POST /createuser', () => {
         expect(deleteRes.status).toBe(201)
     })
 
-    /**
+   /**
     * Creación incorrecta del usuario
     * usuario vacío o en blanco
     */
@@ -112,5 +112,100 @@ describe('POST /createuser', () => {
         expect(resb.status).toBe(403)
         expect(resb.body).toHaveProperty('error')
         expect(resb.body.error).toMatch(/Faltan campos por rellenar/i)
+    })
+
+   /**
+    * Creación incorrecta del usuario
+    * contraseña vacía
+    */
+    it('salta error con contraseña vacía', async () => {
+        // contraseña vacía
+        const res = await request(app)
+        .post('/createuser')
+        .send({
+            username: 'Test_Username',
+            password: ''
+        })
+        .set('Accept', 'application/json')
+
+        expect(res.status).toBe(403)
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toMatch(/Faltan campos por rellenar/i)
+    })
+
+   /**
+    * Creación incorrecta del usuario
+    * contraseña num caracteres < 5
+    */
+    it('salta error con contraseña corta', async () => {
+        // contraseña corta
+        const res = await request(app)
+        .post('/createuser')
+        .send({
+            username: 'Test_Username',
+            password: '1234'
+        })
+        .set('Accept', 'application/json')
+
+        expect(res.status).toBe(402)
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toMatch(/La contraseña debe tener 5 o más caracteres./i)
+    })
+
+    /**
+    * Creación incorrecta del usuario
+    * contraseña sin minusculas
+    */
+    it('salta error con contraseña sin minusculas', async () => {
+        // contraseña sin minusculas
+        const res = await request(app)
+        .post('/createuser')
+        .send({
+            username: 'Test_Username',
+            password: 'SIN_MINUSCULAS'
+        })
+        .set('Accept', 'application/json')
+
+        expect(res.status).toBe(402)
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toMatch(/La contraseña debe contener al menos una minúscula./i)
+    })
+
+    /**
+    * Creación incorrecta del usuario
+    * contraseña sin mayusculas
+    */
+    it('salta error con contraseña sin mayusculas', async () => {
+        // contraseña sin mayusculas
+        const res = await request(app)
+        .post('/createuser')
+        .send({
+            username: 'Test_Username',
+            password: 'sin_mayusculas'
+        })
+        .set('Accept', 'application/json')
+
+        expect(res.status).toBe(402)
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toMatch(/La contraseña debe contener al menos una mayúscula./i)
+    })
+
+   /**
+    * Creación incorrecta del usuario
+    * contraseña sin numeros
+    */
+    it('salta error con contraseña sin numeros', async () => {
+        // contraseña sin numeros
+        const res = await request(app)
+        .post('/createuser')
+        .send({
+            username: 'Test_Username',
+            password: 'Sin_Numeros'
+        })
+        .set('Accept', 'application/json')
+
+        expect(res.status).toBe(402)
+        expect(res.body).toHaveProperty('error')
+        expect(res.body.error).toMatch(/La contraseña debe contener al menos un número./i)
     })
 })

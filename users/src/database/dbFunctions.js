@@ -122,22 +122,22 @@ async function findUser(users, username) {
 function checkPassword(password) {
     // contraseña de más de 5 caracteres
     if (password.length < 5) {
-        throw new WeakPasswordError('La contraseña debe tener 6 o más caracteres.');
+        throw new WeakPasswordError('La contraseña debe tener 5 o más caracteres.');
     }
 
     // contraseña tiene una minúscula
     if (!password.match(/[a-z]/)) {
-        throw new WeakPasswordError('La contraseña debe contener al menos una minúscula');
+        throw new WeakPasswordError('La contraseña debe contener al menos una minúscula.');
     }
 
     // contraseña tiene una mayúscula
     if (!password.match(/[A-Z]/)) {
-        throw new WeakPasswordError('La contraseña debe contener al menos una mayúscula');
+        throw new WeakPasswordError('La contraseña debe contener al menos una mayúscula.');
     }
 
     // contraseña tiene un número
     if (!password.match(/[0-9]/)) {
-        throw new WeakPasswordError('La contraseña debe contener al menos un número');
+        throw new WeakPasswordError('La contraseña debe contener al menos un número.');
     }
 }
 
