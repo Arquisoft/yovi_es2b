@@ -98,7 +98,7 @@ describe('POST /createuser', () => {
 
         expect(res.status).toBe(403)
         expect(res.body).toHaveProperty('error')
-        expect(res.body.error).toMatch(/username y password son obligatorios/i)
+        expect(res.body.error).toMatch(/Faltan campos por rellenar/i)
 
         // usuario blanco
         const resb = await request(app)
@@ -110,7 +110,7 @@ describe('POST /createuser', () => {
         .set('Accept', 'application/json')
 
         expect(resb.status).toBe(403)
-        expect(resb.body).toHaveProperty('message')
-        expect(resb.body.message).toMatch(/username y password son obligatorios/i)
+        expect(resb.body).toHaveProperty('error')
+        expect(resb.body.error).toMatch(/Faltan campos por rellenar/i)
     })
 })
