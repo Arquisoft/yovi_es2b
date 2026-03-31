@@ -45,8 +45,8 @@ describe('POST /initmatch', () => {
         .post('/initmatch')
         .send({
             username: 'Test_Username',
-            strategy: 'EASY',
-            difficulty: 'RANDOM'
+            strategy: 'RANDOM',
+            difficulty: 'EASY'
         })
         .set('Accept', 'application/json')
 
