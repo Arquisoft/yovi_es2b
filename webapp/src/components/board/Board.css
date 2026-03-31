@@ -166,8 +166,7 @@
 }
 
 .controls button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(100, 108, 255, 0.08);
 }
 
 #exit-button {
@@ -178,7 +177,10 @@
 
 #restart-button {
   background: transparent;
-  color: #2563eb;
-  border: 1px solid #2563eb;
+  color: #ff5a5a;
+  border: 1px solid #ff5a5a;
 }
 
+#exit-button:hover, #restart-button:hover {
+  background: rgba(255, 100, 100, 0.08);
+}
