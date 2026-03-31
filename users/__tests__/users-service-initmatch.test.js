@@ -102,7 +102,7 @@ describe('POST /initmatch', () => {
         .post('/initmatch')
         .send({
             username: 'Test_Username',
-            strategy: 'Random',
+            strategy: 'RANDOM',
             difficulty: 'Dificultad_Inexistente'
         })
         .set('Accept', 'application/json')
