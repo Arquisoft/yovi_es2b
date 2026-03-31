@@ -47,7 +47,7 @@ describe('POST /createuser', () => {
     * Creación incorrecta del usuario
     * usuario repetido
     */
-    it('abre la página principal', async () => {
+    it('salta error con usuario repetido', async () => {
         // primer usuario
         const res1 = await request(app)
         .post('/createuser')
@@ -57,9 +57,9 @@ describe('POST /createuser', () => {
         })
         .set('Accept', 'application/json')
 
-        expect(res.status).toBe(201)
-        expect(res.body).toHaveProperty('message')
-        expect(res.body.message).toMatch(/Se creó el usuario Test_Username/i)
+        expect(res1.status).toBe(201)
+        expect(res1.body).toHaveProperty('message')
+        expect(res1.body.message).toMatch(/Se creó el usuario Test_Username/i)
 
         // usuario repetido
         const res2 = await request(app)
@@ -70,9 +70,9 @@ describe('POST /createuser', () => {
         })
         .set('Accept', 'application/json')
 
-        expect(res.status).toBe(402)
-        expect(res.body).toHaveProperty('message')
-        expect(res.body.message).toMatch(/username y password son obligatorios/i)
+        expect(res2.status).toBe(402)
+        expect(res2.body).toHaveProperty('message')
+        expect(res2.body.message).toMatch(/username y password son obligatorios/i)
 
         // eliminamos el usuario
         const deleteRes = await request(app).post('/deleteuser')
@@ -84,10 +84,10 @@ describe('POST /createuser', () => {
 
     /**
     * Creación incorrecta del usuario
-    * usuario vacío
+    * usuario vacío o en blanco
     */
-    it('abre la página principal', async () => {
-        // primer usuario
+    it('salta error con usuario vacío y en blanco', async () => {
+        // usuario vacio
         const res = await request(app)
         .post('/createuser')
         .send({
@@ -99,5 +99,18 @@ describe('POST /createuser', () => {
         expect(res.status).toBe(402)
         expect(res.body).toHaveProperty('message')
         expect(res.body.message).toMatch(/username y password son obligatorios/i)
+
+        // usuario blanco
+        const resb = await request(app)
+        .post('/createuser')
+        .send({
+            username: '   ',
+            password: 'Test_Password1'
+        })
+        .set('Accept', 'application/json')
+
+        expect(resb.status).toBe(402)
+        expect(resb.body).toHaveProperty('message')
+        expect(resb.body.message).toMatch(/username y password son obligatorios/i)
     })
 })
