@@ -142,7 +142,7 @@ describe('POST /createuser', () => {
         const res = await request(app)
         .post('/createuser')
         .send({
-            username: 'Test_Username1',
+            username: 'Test_Username_ShortPassw',
             password: '1234'
         })
         .set('Accept', 'application/json')
@@ -161,7 +161,7 @@ describe('POST /createuser', () => {
         const res = await request(app)
         .post('/createuser')
         .send({
-            username: 'Test_Username',
+            username: 'Test_Username_NoMinus',
             password: 'SIN_MINUSCULAS'
         })
         .set('Accept', 'application/json')
@@ -180,7 +180,7 @@ describe('POST /createuser', () => {
         const res = await request(app)
         .post('/createuser')
         .send({
-            username: 'Test_Username',
+            username: 'Test_Username_NoMayus',
             password: 'sin_mayusculas'
         })
         .set('Accept', 'application/json')
@@ -199,7 +199,7 @@ describe('POST /createuser', () => {
         const res = await request(app)
         .post('/createuser')
         .send({
-            username: 'Test_Username',
+            username: 'Test_Username_NoNum',
             password: 'Sin_Numeros'
         })
         .set('Accept', 'application/json')
