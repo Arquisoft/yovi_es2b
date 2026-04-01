@@ -116,6 +116,11 @@ class UserService {
     return `Usuario ${username} ha ganado una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
   }
 
+  async abandonmatch(username, strategy, difficulty) {
+    await abandonmatch(this.usersCollection, username, strategy, difficulty);
+    return `Match ended for ${username}!`;
+  }
+
   async allstats(username) {
     const stats = await allstats(this.usersCollection, username);
     return stats;

@@ -66,6 +66,7 @@ async function startServer() {
   // partida
   app.post('/initmatch',  userController.initmatch);
   app.post('/endmatch',   userController.endmatch);
+  app.post('/abandonmatch', userController.abandonmatch);
 
   // estadisticas
   app.post('/allstats', userController.allstats);

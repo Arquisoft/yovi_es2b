@@ -209,6 +209,37 @@ function checkPassword(password) {
     }
 
     /**
+     * Función de terminación de partida abandonada
+     */
+    async function abandonmatch(users, username, strategy, difficulty) {
+        const existingUser = await users.findOne({ "username": username });
+        if (!existingUser) {
+            throw new UserNotFoundError(username);
+        }
+
+        if (!strats.includes(strategy)) {
+            throw new InvalidStrategyError(strategy);
+        }
+        if (!difs.includes(difficulty)) {
+            throw new InvalidDifficultyError(difficulty);
+        }
+
+        const partidasGeneral = difficulty + strategy + "Abandoned";
+
+        await users.updateOne(
+            { _id: existingUser._id },
+            {
+                $inc: {
+                    totalesAbandonadas: 1,
+                    [partidasGeneral]: 1
+                }
+            }
+        )
+
+        return 'Partida terminada y abandonada correctamente' ;
+    }
+
+    /**
      * Función de calculo de estadisticas segun la dificultad
      */
     async function diffstats(users, username) {
@@ -225,16 +256,18 @@ function checkPassword(password) {
 
             let totalPartidas = 0;
             let totalWins = 0;
+            let totalAbandonadas = 0;
 
             for (const strat of strats) {
                 totalPartidas += existingUser[`${diff}${strat}`] || 0;
                 totalWins += existingUser[`${diff}${strat}Wins`] || 0;
+                totalAbandonadas += existingUser[`${diff}${strat}Abandoned`] || 0;
             }
 
             stats.push({
                 dificultad: diff,
                 jugadas: totalPartidas,
-                perdidas: totalPartidas - totalWins,
+                perdidas: Math.max(totalPartidas - totalWins - totalAbandonadas, 0),
                 ganadas: totalWins,
                 porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
             });
@@ -260,16 +293,18 @@ function checkPassword(password) {
 
             let totalPartidas = 0;
             let totalWins = 0;
+            let totalAbandonadas = 0;
 
             for (const diff of difs) {
                 totalPartidas += existingUser[`${diff}${strat}`] || 0;
                 totalWins += existingUser[`${diff}${strat}Wins`] || 0;
+                totalAbandonadas += existingUser[`${diff}${strat}Abandoned`] || 0;
             }
 
             stats.push({
                 estrategia: strat,
                 jugadas: totalPartidas || 0,
-                perdidas: totalPartidas - totalWins || 0,
+                perdidas: Math.max(totalPartidas - totalWins - totalAbandonadas, 0),
                 ganadas: totalWins || 0,
                 porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
             });
@@ -296,12 +331,13 @@ function checkPassword(password) {
 
                 const partidas = existingUser[`${diff}${strat}`] || 0;
                 const wins = existingUser[`${diff}${strat}Wins`] || 0;
+                const abandonadas = existingUser[`${diff}${strat}Abandoned`] || 0;
 
                 stats.push({
                     dificultad: diff,
                     estrategia: strat,
                     jugadas: partidas,
-                    perdidas: partidas - wins,
+                    perdidas: Math.max(partidas - wins - abandonadas, 0),
                     ganadas: wins,
                     porcentaje: partidas ? ((wins / partidas) * 100).toFixed(2) + ' %' : '0.00 %'
                 });
@@ -310,12 +346,13 @@ function checkPassword(password) {
 
         const pt = existingUser.totales;
         const ptw = existingUser.totalesWins;
+        const pta = existingUser.totalesAbandonadas;
 
         stats.push({
             dificultad: "",
             estrategia: "TOTALES",
             jugadas: pt || 0,
-            perdidas: pt - ptw || 0,
+            perdidas: Math.max((pt || 0) - (ptw || 0) - (pta || 0), 0),
             ganadas: ptw || 0,
             porcentaje: pt ? ((ptw / pt) * 100).toFixed(2) + ' %' : '0.00 %'
         });
