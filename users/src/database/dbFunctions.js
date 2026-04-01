@@ -360,4 +360,4 @@ function checkPassword(password) {
         return stats;
     }
 
-module.exports = { loginuser, createuser, deleteuser, findUser, initmatch, endmatch, diffstats, stratstats, allstats };
+module.exports = { loginuser, createuser, deleteuser, findUser, initmatch, endmatch, abandonmatch, diffstats, stratstats, allstats };
