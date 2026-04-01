@@ -3,7 +3,7 @@ name: Release — Test, Build, Publish, Deploy
 on:
   push:
     branches:
-      - Jimenassue_29
+      - JimenaIssue_29
   release:
     types: [published]
 
