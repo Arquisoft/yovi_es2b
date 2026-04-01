@@ -120,7 +120,7 @@ describe('POST /loginuser', () => {
         })
         .set('Accept', 'application/json')
 
-        expect(res.status).toBe(404)
+        expect(res.status).toBe(410)
         expect(res.body).toHaveProperty('error')
         expect(res.body.error).toMatch("El usuario 'Test_Username_No_Existe' no existe. Prueba de nuevo o regístrate.")
     })

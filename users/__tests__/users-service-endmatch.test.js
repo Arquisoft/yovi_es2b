@@ -69,7 +69,7 @@ describe('POST /endmatch', () => {
         })
         .set('Accept', 'application/json')
 
-        expect(res.status).toBe(404)
+        expect(res.status).toBe(410)
         expect(res.body).toHaveProperty('error')
         expect(res.body.error).toMatch("El usuario 'Test_Username_NoExiste' no existe. Prueba de nuevo o regístrate.")
     })
