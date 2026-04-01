@@ -43,7 +43,7 @@ class InvalidCredentialsError extends UserError {
 // 404 — usuario no encontrado 
 class UserNotFoundError extends UserError {
     constructor(username) {
-        super(`El usuario '${username}' no existe. Prueba de nuevo o regístrate.`, 404);
+        super(`El usuario '${username}' no existe. Prueba de nuevo o regístrate.`, 408);
     }
 }
 
