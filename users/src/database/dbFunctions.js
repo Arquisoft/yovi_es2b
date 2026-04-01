@@ -1,5 +1,4 @@
 const e = require('express');
-const UserError = require('../errors/UserError');
 const {
     InvalidCredentialsError,
     MissingFieldsError,
