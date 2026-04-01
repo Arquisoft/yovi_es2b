@@ -175,11 +175,11 @@
   border: 1px solid #ff5a5a;
 }
 
-#restart-button {
+/* #restart-button {
   background: transparent;
-  color: #ff5a5a;
-  border: 1px solid #ff5a5a;
-}
+  color: #2563eb;
+  border: 1px solid #2563eb;
+} */
 
 #exit-button:hover, #restart-button:hover {
   background: rgba(255, 100, 100, 0.08);

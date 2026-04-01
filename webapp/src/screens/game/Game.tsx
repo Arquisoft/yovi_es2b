@@ -44,6 +44,20 @@ async function getTurnoPartida(gameId: string): Promise<number> {
     return data.kind === 'Ongoing' ? data.next_player : 0;
 }
 
+async function abandonarPartida(username: string, strategy: string, difficulty: string): Promise<void> {
+  const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000';
+  const res = await fetch(`${API_URL}/abandonmatch`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, strategy, difficulty }),
+  });
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || 'Error al terminar la partida');
+  }
+}
+
 export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGameEnd  }: GameProps) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
@@ -109,8 +123,14 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
 
   }
 
-  function handleRestart() {
-    setPlayAgain((prev) => !prev);
+  async function handleExit() {
+    try {
+      await abandonarPartida(username, settings.strategy, settings.difficulty);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setGameState("fin");
+    }
   }
 
   // Si el usuario pulsa "Terminar partida" en el panel de control, volvemos al menú principal
@@ -158,8 +178,7 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
 
         <div className="controls-bottom">
           <ControlPanel
-            onRestart={handleRestart}
-            onExit={() => setGameState("fin")}
+            onExit={handleExit}
           />
         </div>
       </div>
