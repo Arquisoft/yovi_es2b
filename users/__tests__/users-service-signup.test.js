@@ -142,7 +142,7 @@ describe('POST /createuser', () => {
         const res = await request(app)
         .post('/createuser')
         .send({
-            username: 'Test_Username',
+            username: 'Test_Username1',
             password: '1234'
         })
         .set('Accept', 'application/json')
