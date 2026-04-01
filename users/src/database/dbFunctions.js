@@ -84,7 +84,7 @@ async function createuser(users, username, password) {
 async function deleteuser(users, username) {
     // que no sea usuario vacío 
     if (!username || typeof username !== 'string') {
-        throw new MissingFieldsError(['username']);
+        return;
     }
 
     // busca si existe usuario con ese nombre

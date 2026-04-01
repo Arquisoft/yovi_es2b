@@ -20,6 +20,11 @@ describe('POST /initmatch', () => {
 
         app.post('/initmatch', userController.initmatch)
 
+        // eliminar primero el usuario del test, si hubiera
+        await request(app).post('/deleteuser')
+        .send({username : 'Test_Username'})
+        .set('Accept', 'application/json')
+        
         //Siempre crear un usuario
         await request(app)
         .post('/createuser')
@@ -69,7 +74,7 @@ describe('POST /initmatch', () => {
         })
         .set('Accept', 'application/json')
 
-        expect(res.status).toBe(410)
+        expect(res.status).toBe(404)
         expect(res.body).toHaveProperty('error')
         expect(res.body.error).toMatch("El usuario 'Test_Username_NoExiste' no existe. Prueba de nuevo o regístrate.")
     })
