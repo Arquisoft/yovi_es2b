@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-
 import { Board } from "../../components/board/Board";
 import GameInfo from "../../components/board/GameInfo";
 import ControlPanel from "../../components/board/ControlPanel";
 import type { GameSettings } from "../../gameOptions/GameSettings";
 import { getBoardSize } from "../../gameOptions/Difficulty";
 import "./Game.css";
+import { End } from "./End";
+import Home from "./Home";
 
 // Definimos la interfaz de las props
 interface GameProps {
@@ -14,6 +15,8 @@ interface GameProps {
   username2: string;
   twoPlayers: boolean;
   stateStart: boolean;
+  onGoMenu?: () => void;
+  onGameEnd?: (winner: string) => void;
 }
 
 /**
@@ -43,14 +46,41 @@ async function getTurnoPartida(gameId: string): Promise<number> {
     return data.kind === 'Ongoing' ? data.next_player : 0;
 }
 
-export function Game({ settings, username, username2, twoPlayers, stateStart }: GameProps) {
+async function abandonarPartida(username: string, strategy: string, difficulty: string): Promise<void> {
+  const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000';
+  const res = await fetch(`${API_URL}/abandonmatch`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, strategy, difficulty }),
+  });
+
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || 'Error al terminar la partida');
+  }
+}
+
+export function Game({ settings, username, username2, twoPlayers, stateStart, onGoMenu = () => {}, onGameEnd }: GameProps) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
   const [gameId, setGameId] = useState("");
+  const [winner, setWinner] = useState<string | null>(null); // ganador de la partida, null si no hay ganador aún
+  const [showEndScreen, setShowEndScreen] = useState(false);
+  const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal 
 
   // como es función async, llamamos useEffect
   useEffect(() => {
+    // Reinicia todo el estado cuando el padre cambie stateStart o el usuario pulse "Jugar de nuevo"
+    if (!stateStart){
+      return;
+    } 
+    setWinner(null);
+    setShowEndScreen(false);
+    setTurno("Inicio");
+    setGameState("Inicio");
+    setGameId("");
+
     async function nuevaPartida() {
       if (stateStart) {
         const boardSize = getBoardSize(settings.difficulty); // Consigue el tamaño del tablero
@@ -64,7 +94,64 @@ export function Game({ settings, username, username2, twoPlayers, stateStart }: 
       }
     }
     nuevaPartida();
-  }, [stateStart]);
+  }, [stateStart, playAgain]);
+
+  // Efecto para mostrar la pantalla de fin 3 segundos después de detectar un ganador
+  useEffect(() => {
+    // Si el ganador vuelve a ser null (ej. nueva partida), ocultamos la pantalla de fin inmediatamente
+    if (winner === null) {
+      setShowEndScreen(false);
+      return;
+    }
+    // Si hay un ganador, programamos mostrar la pantalla de fin después de 1 segundos
+    const timerId = window.setTimeout(() => {
+      setShowEndScreen(true);
+    }, 1000);
+    // Limpiamos el timeout si el componente se desmonta o si se inicia una nueva partida
+    return () => {
+      window.clearTimeout(timerId);
+    };
+  }, [winner]);
+
+  /**
+   * Funcion para manejar el fin de la partida, llamando a la pantalla de fin y guardando el resultado
+   * Board debe llamar a changeGameState("Terminada") y a un nuevo prop onGameEnd(winner)
+   * cuando detecte que la partida acabó. Aquí lo capturamos
+   */  
+  function handleGameEnd(ganador: string) {
+    setWinner(ganador);
+    setGameState("Terminada");
+    onGameEnd?.(ganador); // notify parent if provided
+
+  }
+
+  async function handleExit() {
+    try {
+      await abandonarPartida(username, settings.strategy, settings.difficulty);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setGameState("fin");
+    }
+  }
+
+  // Si el usuario pulsa "Terminar partida" en el panel de control, volvemos al menú principal
+  if(gameState==="fin") {
+    return <Home username={username}/>;
+  }
+
+  // Mostrar pantalla de fin 3 segundos después de detectar ganador
+  if (winner !== null && showEndScreen) {
+    return (
+      <End
+        winner={winner}
+        username={username}
+        settings={settings}
+        onGoHome={onGoMenu}
+        onPlayAgain={() => setPlayAgain((prev) => !prev)} // toggle dispara el useEffect
+      />
+    );
+  }
 
   return (
     <div className="game-screen">
@@ -89,12 +176,14 @@ export function Game({ settings, username, username2, twoPlayers, stateStart }: 
             username2={username2}
             twoPlayers={twoPlayers}
             changeTurno={setTurno}
-            changeGameState={setGameState}
+            onGameEnd={handleGameEnd}
           />
         </div>
 
         <div className="controls-bottom">
-          <ControlPanel username={username} />
+          <ControlPanel
+            onExit={handleExit}
+          />
         </div>
       </div>
     </div>

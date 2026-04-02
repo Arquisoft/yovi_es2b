@@ -11,7 +11,7 @@
  * Requiere es una función de Node.js que se utiliza para importar módulos o archivos en el código. 
  * En este caso, estamos importando las funciones loginuser y createuser desde el archivo dbFunctions.js, necesarias para el inicio de sesión
  */
-const { loginuser, createuser, findUser, initmatch, endmatch } = require('./database/dbFunctions');
+const { loginuser, createuser, deleteuser, findUser, initmatch, endmatch, abandonmatch , stratstats, allstats, diffstats } = require('./database/dbFunctions');
 //Busca las funciones loginuser y createuser en el archivo dbFunctions.js y las importa para que puedan ser utilizadas en esta clase UserService.
 
 class UserService {
@@ -39,7 +39,7 @@ class UserService {
  */
   async loginUser(username, password) {
         await loginuser(this.usersCollection, username, password);
-        return `Hello ${username}! welcome back!`;
+        return `Sesión iniciada con ${username}.`;
     }
   
 /**
@@ -56,11 +56,21 @@ class UserService {
  */
   async createUser(username, password) {
     const normalizedUsername = username.trim();
-    await createuser(this.usersCollection, normalizedUsername, password);
-    return `Hello ${normalizedUsername}! welcome to the course!`;
+    await createuser(this.usersCollection, username, password);
+    return `Se creó el usuario ${normalizedUsername}`;
   }
 
-   /**
+  /**
+   * Elimino un usuario
+   * Para tests
+   */
+  async deleteuser(username) {
+    const normalizedUsername = username.trim();
+    await deleteuser(this.usersCollection, username);
+    return `Se eliminó el usuario ${normalizedUsername}`;
+  }
+
+  /**
    * Busca un usuario por username.
    * Usado por GET /users/:id y por gamey para verificar existencia.
    * Nunca devuelve la contraseña — se filtra aquí antes de salir del servicio.
@@ -88,7 +98,7 @@ class UserService {
    */
   async initmatch(username, strategy, difficulty) {
     await initmatch(this.usersCollection, username, strategy, difficulty);
-    return `Match started for ${username}!`;
+    return `Usuario ${username} ha iniciado una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
   }
 
   /**
@@ -103,7 +113,27 @@ class UserService {
    */
   async endmatch(username, strategy, difficulty) {
     await endmatch(this.usersCollection, username, strategy, difficulty);
-    return `Match ended for ${username}! You won!`;
+    return `Usuario ${username} ha ganado una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
+  }
+
+  async abandonmatch(username, strategy, difficulty) {
+    await abandonmatch(this.usersCollection, username, strategy, difficulty);
+    return `Match ended for ${username}!`;
+  }
+
+  async allstats(username) {
+    const stats = await allstats(this.usersCollection, username);
+    return stats;
+  }
+
+  async diffstats(username) {
+    const stats = await diffstats(this.usersCollection, username);
+    return stats;
+  }
+
+  async stratstats(username) {
+    const stats = await stratstats(this.usersCollection, username);
+    return stats;
   }
 }
 

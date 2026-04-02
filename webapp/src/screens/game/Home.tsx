@@ -7,6 +7,7 @@ import type { StrategyType } from "../../gameOptions/Strategy";
 import { Difficulty } from "../../gameOptions/Difficulty";
 import "./Home.css";
 import InitialScreen from "../init/InitialScreen";
+import GameStats from "../stats/GameStats";
 
 const yoviLogo = "/yovi_logo.png";
 
@@ -38,49 +39,55 @@ export default function HomePage( {username} : { username: string }) {
         difficulty: Difficulty.EASY
     });
 
-    const [gameStarted, setGameStarted] = useState(false);
     const [twoPlayersStarted, setTwoPlayersStarted] = useState(false);
     const [username2, setUsername2] = useState("");
     const [menuSelected, setMenuSelected] = useState<string>("");
-    const [logOut, setLogOut] = useState(false);
+    const [screen, setScreen] = useState("home");
 
     // como es función async, llamamos useEffect
     useEffect(() => {
-        if (gameStarted) {
+        if (screen==="game") {
             iniciarPartida(username, settings.strategy, settings.difficulty);
         }
-    }, [gameStarted]);
+    }, [screen]);
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
-    if (gameStarted) {
-        return <Game settings={settings} username={username} username2="" twoPlayers={false} stateStart={true}/>;
-    }
-
     if (twoPlayersStarted) {
         return <Game settings={settings} username={username} username2={username2} twoPlayers={true} stateStart={true}/>;
     }
 
-    if (logOut) {
-        return <InitialScreen />;
+    if (screen==="game") {
+        return (
+            <Game
+                settings={settings}
+                username={username}
+                username2=""
+                twoPlayers={false}
+                stateStart={true}
+                onGoMenu={() => setScreen("home")}
+            />
+        );
     }
 
-    /*
-    <button className="home-menu__btn" onClick={() => setMenuSelected("Nueva partida")}>
-                    Nueva partida
-                </button>
-    */
+    if (screen==="login") {
+        return (<InitialScreen />);
+    }
+
+    if (screen==="stats") {
+        return (<GameStats username={username}/>);
+    }
+
 
     return (
         <div className="home-screen">
             <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
             <h2 className="home-screen__title">Bienvenido a tu menú principal, {username}</h2>
-
             
 
             {menuSelected && <p className="home-menu__selected">Seleccionado: {menuSelected}</p>}
 
             <div className="home-config">
-                <button className="home-config__start" onClick={() => setGameStarted(true)}>
+                <button className="home-config__start" onClick={() => setScreen("game")}>
                     Empezar partida
                 </button>
 
@@ -96,10 +103,11 @@ export default function HomePage( {username} : { username: string }) {
                     }
                 >
                     <option value={Strategy.RANDOM}>Random</option>
-                    <option value={Strategy.DEFENSIVE}>Defensiva</option>
-                    <option value={Strategy.OFFENSIVE}>Ofensiva</option>
-                    <option value={Strategy.CENTER_FIRST}>Centro Primero</option>
-                    <option value={Strategy.EDGE_FIRST}>Borde Primero</option>
+                    <option value={Strategy.DEFENSIVO}>Defensiva</option>
+                    <option value={Strategy.OFENSIVO}>Ofensiva</option>
+                    <option value={Strategy.MONTE_CARLO}>Monte Carlo</option>
+                    <option value={Strategy.MONTE_CARLO_MEJORADO}>Monte Carlo Mejorado</option>
+                    <option value={Strategy.MONTE_CARLO_ENDURECIDO}>Monte Carlo Endurecido</option>
                 </select>
 
                 <label className="home-config__label">Dificultad</label>
@@ -141,13 +149,14 @@ export default function HomePage( {username} : { username: string }) {
             <br></br>
             
             <div className="home-menu">
-                <button className="home-menu__btn" onClick={() => setMenuSelected("Mis estadísticas")}>
+                <br></br>
+                <button className="home-menu__btn" onClick={() => setScreen("stats")}>
                     Mis estadísticas
                 </button>
                 <button className="home-menu__btn" onClick={() => setMenuSelected("Ranking")}>
                     Ranking
                 </button>
-                <button className="home-menu-out__btn" onClick={() => setLogOut(true)}>
+                <button className="home-menu-out__btn" onClick={() => setScreen("login")}>
                     Cerrar sesión
                 </button>
             </div>

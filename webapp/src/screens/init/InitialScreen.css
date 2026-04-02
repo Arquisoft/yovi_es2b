@@ -1,6 +1,28 @@
+/* ── Aplicar modo claro a todo ─────────────────────────────────────────────── */
+:root, input, textarea, select {
+  color-scheme: light;
+}
+
+html, body {
+  background-color: #ffffff;
+  color: #24292f;
+}
+
+input:-webkit-autofill { /* para autocompletados */
+  -webkit-box-shadow: 0 0 0 1000px #f6f8fa inset !important;
+  -webkit-text-fill-color: #24292f !important;
+  border: 1px solid #d0d7de;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+input:-webkit-autofill:focus { /* para autocompletados */
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #24292f !important;
+}
+
 /* ── Layout principal ─────────────────────────────────────────────────────── */
 .initial-screen {
-  position: fixed;
+  min-height: 100vh;
   inset: 0;
   display: flex;
   flex-direction: column;
