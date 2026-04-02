@@ -164,7 +164,7 @@ export function Board(props: BoardProps) {
         props.onGameEnd(winnerName);
         desbloquearTablero();
 
-        if(data.status.winner === 0) {
+        if(data.status.winner === 0 && !props.twoPlayers) {
           partidaGanada(props.username, props.strategy, props.difficulty);
         }
 
