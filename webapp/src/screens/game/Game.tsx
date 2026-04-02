@@ -185,6 +185,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
         <div className="controls-bottom">
           <ControlPanel
             onExit={handleExit}
+            onUndo={() => {}}
           />
         </div>
       </div>
