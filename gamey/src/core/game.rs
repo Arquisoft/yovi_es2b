@@ -60,18 +60,13 @@ impl GameY {
 
     /// Creates a new game where the first player is chosen randomly (50/50).
     pub fn new_random_start(board_size: u32) -> Self {
-        let first_player: u32 = if rand::random::<bool>() { 1 } else { 0 };
-        let total_cells = (board_size * (board_size + 1)) / 2;
-        Self {
-            board_size,
-            board_map: HashMap::new(),
-            history: Vec::new(),
-            sets: Vec::new(),
-            status: GameStatus::Ongoing {
-                next_player: PlayerId::new(first_player),
-            },
-            available_cells: (0..total_cells).collect(),
+        let mut game = GameY::new(board_size);
+        if rand::random::<bool>() {
+            game.status = GameStatus::Ongoing {
+                next_player: PlayerId::new(1),
+            };
         }
+        game
     }
 
     /// Returns the current game status.
