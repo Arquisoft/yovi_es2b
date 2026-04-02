@@ -5,7 +5,7 @@
 //!
 //! # Endpoints
 //! - `GET /status` - Health check endpoint
-//! - `POST /{api_version}/ybot/choose/{bot_id}` - Request a move from a bot
+//! - `POST /play` - Request a move from a bot
 //!
 //! # Example
 //! ```no_run
@@ -44,10 +44,7 @@ pub fn create_router(state: AppState) -> axum::Router {
 
     axum::Router::new()
         .route("/status", axum::routing::get(status))
-        .route(
-            "/{api_version}/ybot/choose/{bot_id}",
-            axum::routing::post(choose::choose),
-        )
+        .route("/play", axum::routing::post(choose::choose))
         .merge(game_routes)  // Junta a los end points de los 2 routers
         .layer(cors)
         .with_state(state)

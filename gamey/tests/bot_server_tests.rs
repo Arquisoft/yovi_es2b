@@ -17,6 +17,14 @@ fn test_app_with_state(state: AppState) -> axum::Router {
     create_router(state)
 }
 
+/// Helper to build a JSON body for the /play endpoint
+fn play_body(yen: &YEN, bot_type: Option<&str>) -> String {
+    match bot_type {
+        Some(bot) => serde_json::json!({ "position": yen, "bot_type": bot }).to_string(),
+        None => serde_json::json!({ "position": yen }).to_string(),
+    }
+}
+
 // ============================================================================
 // Status endpoint tests
 // ============================================================================
@@ -42,7 +50,7 @@ async fn test_status_endpoint_returns_ok() {
 }
 
 // ============================================================================
-// Choose endpoint tests - Success cases
+// Play endpoint tests - Success cases
 // ============================================================================
 
 #[tokio::test]
@@ -57,9 +65,9 @@ async fn test_choose_endpoint_with_valid_request() {
         .oneshot(
             Request::builder()
                 .method("POST")
-                .uri("/v1/ybot/choose/random_bot")
+                .uri("/play")
                 .header("content-type", "application/json")
-                .body(Body::from(serde_json::to_string(&yen).unwrap()))
+                .body(Body::from(play_body(&yen, Some("random_bot"))))
                 .unwrap(),
         )
         .await
@@ -70,7 +78,6 @@ async fn test_choose_endpoint_with_valid_request() {
     let body = response.into_body().collect().await.unwrap().to_bytes();
     let move_response: MoveResponse = serde_json::from_slice(&body).unwrap();
 
-    assert_eq!(move_response.api_version, "v1");
     assert_eq!(move_response.bot_id, "random_bot");
     // Coordinates should be valid (we can't predict exactly which one the random bot picks)
 }
@@ -86,9 +93,9 @@ async fn test_choose_endpoint_with_partially_filled_board() {
         .oneshot(
             Request::builder()
                 .method("POST")
-                .uri("/v1/ybot/choose/random_bot")
+                .uri("/play")
                 .header("content-type", "application/json")
-                .body(Body::from(serde_json::to_string(&yen).unwrap()))
+                .body(Body::from(play_body(&yen, Some("random_bot"))))
                 .unwrap(),
         )
         .await
@@ -99,16 +106,11 @@ async fn test_choose_endpoint_with_partially_filled_board() {
     let body = response.into_body().collect().await.unwrap().to_bytes();
     let move_response: MoveResponse = serde_json::from_slice(&body).unwrap();
 
-    assert_eq!(move_response.api_version, "v1");
     assert_eq!(move_response.bot_id, "random_bot");
 }
 
-// ============================================================================
-// Choose endpoint tests - Error cases
-// ============================================================================
-
 #[tokio::test]
-async fn test_choose_endpoint_with_invalid_api_version() {
+async fn test_choose_endpoint_without_bot_type_uses_default() {
     let app = test_app();
 
     let yen = YEN::new(3, 0, vec!['B', 'R'], "./../...".to_string());
@@ -117,22 +119,25 @@ async fn test_choose_endpoint_with_invalid_api_version() {
         .oneshot(
             Request::builder()
                 .method("POST")
-                .uri("/v2/ybot/choose/random_bot") // v2 is not supported
+                .uri("/play")
                 .header("content-type", "application/json")
-                .body(Body::from(serde_json::to_string(&yen).unwrap()))
+                .body(Body::from(play_body(&yen, None)))
                 .unwrap(),
         )
         .await
         .unwrap();
 
-    assert_eq!(response.status(), StatusCode::BAD_REQUEST);
+    assert_eq!(response.status(), StatusCode::OK);
 
     let body = response.into_body().collect().await.unwrap().to_bytes();
-    let error_response: ErrorResponse = serde_json::from_slice(&body).unwrap();
+    let move_response: MoveResponse = serde_json::from_slice(&body).unwrap();
 
-    assert!(error_response.message.contains("Unsupported API version"));
-    assert_eq!(error_response.api_version, Some("v2".to_string()));
+    assert_eq!(move_response.bot_id, "random_bot");
 }
+
+// ============================================================================
+// Play endpoint tests - Error cases
+// ============================================================================
 
 #[tokio::test]
 async fn test_choose_endpoint_with_unknown_bot() {
@@ -144,9 +149,9 @@ async fn test_choose_endpoint_with_unknown_bot() {
         .oneshot(
             Request::builder()
                 .method("POST")
-                .uri("/v1/ybot/choose/unknown_bot")
+                .uri("/play")
                 .header("content-type", "application/json")
-                .body(Body::from(serde_json::to_string(&yen).unwrap()))
+                .body(Body::from(play_body(&yen, Some("unknown_bot"))))
                 .unwrap(),
         )
         .await
@@ -170,7 +175,7 @@ async fn test_choose_endpoint_with_invalid_json() {
         .oneshot(
             Request::builder()
                 .method("POST")
-                .uri("/v1/ybot/choose/random_bot")
+                .uri("/play")
                 .header("content-type", "application/json")
                 .body(Body::from("{ invalid json }"))
                 .unwrap(),
@@ -192,9 +197,9 @@ async fn test_choose_endpoint_with_missing_content_type() {
         .oneshot(
             Request::builder()
                 .method("POST")
-                .uri("/v1/ybot/choose/random_bot")
+                .uri("/play")
                 // No content-type header
-                .body(Body::from(serde_json::to_string(&yen).unwrap()))
+                .body(Body::from(play_body(&yen, Some("random_bot"))))
                 .unwrap(),
         )
         .await
@@ -221,9 +226,9 @@ async fn test_choose_with_custom_bot_registry() {
         .oneshot(
             Request::builder()
                 .method("POST")
-                .uri("/v1/ybot/choose/random_bot")
+                .uri("/play")
                 .header("content-type", "application/json")
-                .body(Body::from(serde_json::to_string(&yen).unwrap()))
+                .body(Body::from(play_body(&yen, Some("random_bot"))))
                 .unwrap(),
         )
         .await
@@ -245,9 +250,9 @@ async fn test_choose_with_empty_bot_registry() {
         .oneshot(
             Request::builder()
                 .method("POST")
-                .uri("/v1/ybot/choose/random_bot")
+                .uri("/play")
                 .header("content-type", "application/json")
-                .body(Body::from(serde_json::to_string(&yen).unwrap()))
+                .body(Body::from(play_body(&yen, None)))
                 .unwrap(),
         )
         .await
@@ -302,14 +307,14 @@ async fn test_wrong_method_on_status_endpoint() {
 }
 
 #[tokio::test]
-async fn test_get_on_choose_endpoint_returns_method_not_allowed() {
+async fn test_get_on_play_endpoint_returns_method_not_allowed() {
     let app = test_app();
 
     let response = app
         .oneshot(
             Request::builder()
                 .method("GET")
-                .uri("/v1/ybot/choose/random_bot")
+                .uri("/play")
                 .body(Body::empty())
                 .unwrap(),
         )
