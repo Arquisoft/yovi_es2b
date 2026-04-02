@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 pub struct PlayRequest {
     /// The current game state in YEN format.
     pub position: YEN,
-    /// The identifier of the bot to use (optional, defaults to "random_bot").
+    /// The identifier of the bot to use (optional, defaults to "montecarlo_endurecido_bot").
     pub bot_type: Option<String>,
 }
 
@@ -36,7 +36,7 @@ pub struct MoveResponse {
 /// # Request Body
 /// A JSON object with:
 /// - `position`: the current game state in YEN format (required)
-/// - `bot_type`: the bot identifier to use (optional, defaults to "random_bot")
+/// - `bot_type`: the bot identifier to use (optional, defaults to "montecarlo_endurecido_bot")
 ///
 /// # Response
 /// On success, returns a `MoveResponse` with the chosen coordinates.
@@ -46,7 +46,7 @@ pub async fn choose(
     State(state): State<AppState>,
     Json(body): Json<PlayRequest>,
 ) -> Result<Json<MoveResponse>, ErrorResponse> {
-    let bot_id = body.bot_type.unwrap_or_else(|| "random_bot".to_string());
+    let bot_id = body.bot_type.unwrap_or_else(|| "montecarlo_endurecido_bot".to_string());
     let game_y = match GameY::try_from(body.position) {
         Ok(game) => game,
         Err(err) => {
@@ -95,21 +95,21 @@ mod tests {
     #[test]
     fn test_move_response_creation() {
         let response = MoveResponse {
-            bot_id: "random_bot".to_string(),
+            bot_id: "montecarlo_endurecido_bot".to_string(),
             coords: Coordinates::new(1, 2, 3),
         };
-        assert_eq!(response.bot_id, "random_bot");
+        assert_eq!(response.bot_id, "montecarlo_endurecido_bot");
         assert_eq!(response.coords, Coordinates::new(1, 2, 3));
     }
 
     #[test]
     fn test_move_response_serialize() {
         let response = MoveResponse {
-            bot_id: "random_bot".to_string(),
+            bot_id: "montecarlo_endurecido_bot".to_string(),
             coords: Coordinates::new(1, 2, 3),
         };
         let json = serde_json::to_string(&response).unwrap();
-        assert!(json.contains("\"bot_id\":\"random_bot\""));
+        assert!(json.contains("\"bot_id\":\"montecarlo_endurecido_bot\""));
     }
 
     #[test]
@@ -122,7 +122,7 @@ mod tests {
     #[test]
     fn test_move_response_clone() {
         let response = MoveResponse {
-            bot_id: "random_bot".to_string(),
+            bot_id: "montecarlo_endurecido_bot".to_string(),
             coords: Coordinates::new(0, 0, 0),
         };
         let cloned = response.clone();
@@ -132,11 +132,11 @@ mod tests {
     #[test]
     fn test_move_response_equality() {
         let r1 = MoveResponse {
-            bot_id: "random_bot".to_string(),
+            bot_id: "montecarlo_endurecido_bot".to_string(),
             coords: Coordinates::new(1, 1, 1),
         };
         let r2 = MoveResponse {
-            bot_id: "random_bot".to_string(),
+            bot_id: "montecarlo_endurecido_bot".to_string(),
             coords: Coordinates::new(1, 1, 1),
         };
         let r3 = MoveResponse {

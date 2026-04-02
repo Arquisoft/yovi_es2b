@@ -132,7 +132,7 @@ async fn test_choose_endpoint_without_bot_type_uses_default() {
     let body = response.into_body().collect().await.unwrap().to_bytes();
     let move_response: MoveResponse = serde_json::from_slice(&body).unwrap();
 
-    assert_eq!(move_response.bot_id, "random_bot");
+    assert_eq!(move_response.bot_id, "montecarlo_endurecido_bot");
 }
 
 // ============================================================================
