@@ -134,10 +134,10 @@ export function Board(props: BoardProps) {
    // Promise<any> -> Devuelve un valor cualquiera de forma async -> json con el estado de tablero actualizado
   async function peticionMovimientoBot(state: unknown): Promise<any> {
     const botId = strategyToBotId(selectedStrategy);
-    const res = await fetch(`${GAMEY_URL}/v1/ybot/choose/${botId}`, {
+    const res = await fetch(`${GAMEY_URL}/play`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state),
+      body: JSON.stringify({ position: state, bot_type: botId }),
     });
     if (!res.ok) throw new Error("Error al obtener movimiento del bot");
     return res.json();
