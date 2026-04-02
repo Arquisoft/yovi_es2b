@@ -131,7 +131,8 @@ export default function HomePage( {username} : { username: string }) {
 
                 <hr className="home-config__divider" />
 
-                <label className="home-config__label">Jugador 2</label>
+                <label className="home-config__label home-config__label--section">Partida de 2 Jugadores</label>
+                <label className="home-config__label">Nombre del jugador 2</label>
                 <input
                     className="home-config__input"
                     type="text"
@@ -141,7 +142,7 @@ export default function HomePage( {username} : { username: string }) {
                 />
 
                 <button className="home-config__two-players" onClick={() => setTwoPlayersStarted(true)}>
-                    Jugar 2 jugadores
+                    Empezar partida 2 jugadores
                 </button>
 
             </div>
