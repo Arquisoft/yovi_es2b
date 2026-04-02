@@ -40,6 +40,7 @@ export default function HomePage( {username} : { username: string }) {
 
     const [gameStarted, setGameStarted] = useState(false);
     const [twoPlayersStarted, setTwoPlayersStarted] = useState(false);
+    const [username2, setUsername2] = useState("");
     const [menuSelected, setMenuSelected] = useState<string>("");
     const [logOut, setLogOut] = useState(false);
 
@@ -52,11 +53,11 @@ export default function HomePage( {username} : { username: string }) {
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (gameStarted) {
-        return <Game settings={settings} username={username} stateStart={true}/>;
+        return <Game settings={settings} username={username} username2="" twoPlayers={false} stateStart={true}/>;
     }
 
     if (twoPlayersStarted) {
-        return <Game settings={settings} username={username} username2="Jugador 2" twoPlayers={true} stateStart={true}/>;
+        return <Game settings={settings} username={username} username2={username2} twoPlayers={true} stateStart={true}/>;
     }
 
     if (logOut) {
@@ -121,6 +122,15 @@ export default function HomePage( {username} : { username: string }) {
                 </div>
 
                 <hr className="home-config__divider" />
+
+                <label className="home-config__label">Jugador 2</label>
+                <input
+                    className="home-config__select"
+                    type="text"
+                    placeholder="Nombre del jugador 2"
+                    value={username2}
+                    onChange={(e) => setUsername2(e.target.value)}
+                />
 
                 <button className="home-config__two-players" onClick={() => setTwoPlayersStarted(true)}>
                     Jugar 2 jugadores
