@@ -178,6 +178,29 @@
 }
 
 
+/* ── Input texto (jugador 2) ──────────────────────────────────────────────── */
+.home-config__input {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  color: #24292f;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.home-config__input::placeholder {
+  color: #8c959f;
+}
+
+.home-config__input:focus {
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.18);
+}
+
 /* ── Separador dentro de config ───────────────────────────────────────────── */
 .home-config__divider {
   border: none;
@@ -187,33 +210,23 @@
 
 /* ── Botón jugar 2 jugadores ──────────────────────────────────────────────── */
 .home-config__two-players {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
   width: 100%;
   padding: 0.7rem 1.2rem;
   background: transparent;
-  color: #2f8a3d;
+  color: #58c458;
   font-size: 1rem;
   font-weight: 600;
-  border: 1px solid #2f8a3d;
+  border: 1px solid #58c458;
   border-radius: 6px;
   cursor: pointer;
-  transition: background 0.2s, transform 0.1s;
+  transition: background 0.2s;
   margin: 0;
-  outline: none;
 }
 
 .home-config__two-players:hover {
-  background: rgba(47, 138, 61, 0.08);
-}
-
-.home-config__two-players:focus,
-.home-config__two-players:focus-visible {
-  outline: 2px solid #2f8a3d;
-  outline-offset: 2px;
-  box-shadow: none;
+  background: rgba(88, 196, 88, 0.08);
+  border: 1px solid #58c458;
+  border-radius: 6px;
 }
 
 .home-config__two-players:active {

@@ -133,7 +133,7 @@ export default function HomePage( {username} : { username: string }) {
 
                 <label className="home-config__label">Jugador 2</label>
                 <input
-                    className="home-config__select"
+                    className="home-config__input"
                     type="text"
                     placeholder="Nombre del jugador 2"
                     value={username2}
