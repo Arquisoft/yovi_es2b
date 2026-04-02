@@ -20,6 +20,7 @@ class UserController {
         // Esto causaría errores al intentar acceder a this.userService.
         this.loginUser = this.loginUser.bind(this);
         this.createUser = this.createUser.bind(this);
+        this.deleteuser = this.deleteuser.bind(this);
         this.getUser = this.getUser.bind(this);
         this.initmatch = this.initmatch.bind(this);
         this.endmatch = this.endmatch.bind(this);
@@ -94,6 +95,27 @@ class UserController {
         }
     }
 
+    async deleteuser(req, res) {
+        let username;
+        try {
+            // Si username o password no están definidos (undifined) da error
+            username = req.body && req.body.username;
+
+            const message = await this.userService.deleteuser(username);
+            //Error 201 Created se devuelve cuando la solicitud ha sido procesada exitosamente y se ha creado un nuevo recurso (en este caso, un nuevo usuario). El mensaje de bienvenida personalizado se incluye en la respuesta para indicar que la creación del usuario fue exitosa.
+            return res.status(201).json({ message });
+
+        } catch (error) {
+            if (error instanceof UserError) {
+                return res.status(error.statusCode).json({ error: error.message });
+            }
+            if (!username) {
+                return res.status(400).json({ error: 'username es obligatorio' });
+            }
+            return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+    }
+
     /**
      * GET /users/:id
      * Params esperados: id (username del usuario)
@@ -135,8 +157,8 @@ class UserController {
             const strategy = req.body && req.body.strategy;
             const difficulty = req.body && req.body.difficulty;
             const message = await this.userService.initmatch(username, strategy, difficulty);
-            //Error 200 OK se devuelve cuando la solicitud se ha procesado correctamente y se ha generado una respuesta exitosa. En este caso, se devuelve un mensaje indicando que la partida ha comenzado para el usuario especificado.
-            return res.status(200).json({ message });
+            //Error 202 Accepted se devuelve cuando la solicitud se ha procesado correctamente y se ha generado una respuesta exitosa. En este caso, se devuelve un mensaje indicando que la partida ha comenzado para el usuario especificado.
+            return res.status(202).json({ message });
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });
@@ -164,8 +186,8 @@ class UserController {
             const strategy = req.body && req.body.strategy;
             const difficulty = req.body && req.body.difficulty;
             const message = await this.userService.endmatch(username, strategy, difficulty);
-            //Error 200 OK se devuelve cuando la solicitud se ha procesado correctamente y se ha generado una respuesta exitosa. En este caso, se devuelve un mensaje indicando que la partida ha terminado para el usuario especificado.
-            return res.status(200).json({ message });
+            //Error 202 Accepted se devuelve cuando la solicitud se ha procesado correctamente y se ha generado una respuesta exitosa. En este caso, se devuelve un mensaje indicando que la partida ha terminado para el usuario especificado.
+            return res.status(202).json({ message });
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });
@@ -197,7 +219,7 @@ class UserController {
         try {
             username = req.body && req.body.username;
             const stats = await this.userService.allstats(username);
-            return res.status(200).json({stats : stats});
+            return res.status(202).json({stats : stats, message : `Se obtienen todas las estadísticas de ${username}.`});
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });
@@ -217,7 +239,7 @@ class UserController {
         try {
             username = req.body && req.body.username;
             const stats = await this.userService.diffstats(username);
-            return res.status(200).json({stats : stats});
+            return res.status(202).json({stats : stats, message : `Se obtienen todas las estadísticas de ${username} por dificultad.`});
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });
@@ -237,7 +259,7 @@ class UserController {
         try {
             username = req.body && req.body.username;
             const stats = await this.userService.stratstats(username);
-            return res.status(200).json({stats : stats});
+            return res.status(202).json({stats : stats, message : `Se obtienen todas las estadísticas de ${username} por estrategia.`});
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });

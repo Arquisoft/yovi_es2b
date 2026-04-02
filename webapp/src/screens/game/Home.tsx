@@ -126,6 +126,7 @@ export default function HomePage( {username} : { username: string }) {
             <br></br>
             
             <div className="home-menu">
+                <br></br>
                 <button className="home-menu__btn" onClick={() => setScreen("stats")}>
                     Mis estadísticas
                 </button>
