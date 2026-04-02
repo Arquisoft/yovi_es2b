@@ -3,7 +3,7 @@ pub mod gameControler;
 
 use crate::bot_server::state::AppState;
 use crate::service::gameControler::{
-    create_game, delete_game, do_action, get_game, get_status, list_games, place_move,
+    create_game, delete_game, do_action, get_game, get_status, list_games, place_move, undo_move,
 };
 
 /// Devuelve el router de Axum con todas las rutas del juego.

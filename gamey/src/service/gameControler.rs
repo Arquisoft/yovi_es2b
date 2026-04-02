@@ -126,6 +126,16 @@ pub async fn do_action(State(state): State<AppState>, Path(game_id): Path<String
         .map(Json)
 }
 
+// POST /v1/games/{game_id}/undo
+// Deshace el último movimiento de la partida
+// Entrada: (sin body)
+// Respuesta: { "game_id": "game-1", "state": { ... }, "status": { ... } }
+#[axum::debug_handler]
+pub async fn undo_move(State(state): State<AppState>, Path(game_id): Path<String>,
+                                                        ) -> Result<Json<GameStateResponse>, GameServiceError> {
+    state.game_service().undo_move(&game_id).map(Json)
+}
+
 // DELETE /v1/games/{game_id}
 // Elimina la partida con el ID indicado
 // Entrada: (sin body) DELETE /v1/games/game-1
