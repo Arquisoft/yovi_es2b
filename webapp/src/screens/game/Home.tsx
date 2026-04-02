@@ -53,7 +53,7 @@ export default function HomePage( {username} : { username: string }) {
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (twoPlayersStarted) {
-        return <Game settings={settings} username={username} username2={username2} twoPlayers={true} stateStart={true}/>;
+        return <Game settings={settings} username={username} username2={username2} twoPlayers={true} stateStart={true} onGoMenu={() => setTwoPlayersStarted(false)}/>;
     }
 
     if (screen==="game") {
