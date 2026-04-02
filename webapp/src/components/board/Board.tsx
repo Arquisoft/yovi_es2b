@@ -17,6 +17,7 @@ type BoardProps = {
   username: string;
   username2: string;
   twoPlayers: boolean;
+  refreshKey: number;
   changeTurno: (turno: string) => void;
   onGameEnd: (winner: string) => void;
 };
@@ -203,7 +204,7 @@ export function Board(props: BoardProps) {
     }
 
     cargarEstadoInicial();
-  }, [props.gameId]);
+  }, [props.gameId, props.refreshKey]);
 
 
 

@@ -17,4 +17,5 @@ pub fn game_router() -> axum::Router<AppState> {
         .route("/v1/games/{game_id}/status",  axum::routing::get(get_status))
         .route("/v1/games/{game_id}/move",    axum::routing::post(place_move))
         .route("/v1/games/{game_id}/action",  axum::routing::post(do_action))
+        .route("/v1/games/{game_id}/undo",    axum::routing::post(undo_move))
 }

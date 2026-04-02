@@ -67,7 +67,8 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
   const [gameId, setGameId] = useState("");
   const [winner, setWinner] = useState<string | null>(null); // ganador de la partida, null si no hay ganador aún
   const [showEndScreen, setShowEndScreen] = useState(false);
-  const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal 
+  const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal
+  const [refreshKey, setRefreshKey] = useState(0);  // incrementar fuerza recarga del tablero 
 
   // como es función async, llamamos useEffect
   useEffect(() => {
@@ -125,6 +126,21 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
 
   }
 
+  async function handleUndo() {
+    const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
+    try {
+      // En partida vs bot deshacemos 2 movimientos (el del bot y el del jugador)
+      const veces = twoPlayers ? 1 : 2;
+      for (let i = 0; i < veces; i++) {
+        const res = await fetch(`${GAMEY_URL}/v1/games/${gameId}/undo`, { method: 'POST' });
+        if (!res.ok) break;
+      }
+      setRefreshKey((k) => k + 1);
+    } catch (err) {
+      console.error("Error al deshacer movimiento:", err);
+    }
+  }
+
   async function handleExit() {
     try {
       await abandonarPartida(username, settings.strategy, settings.difficulty);
@@ -177,6 +193,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
             username={username}
             username2={username2}
             twoPlayers={twoPlayers}
+            refreshKey={refreshKey}
             changeTurno={setTurno}
             onGameEnd={handleGameEnd}
           />
@@ -185,7 +202,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
         <div className="controls-bottom">
           <ControlPanel
             onExit={handleExit}
-            onUndo={() => {}}
+            onUndo={handleUndo}
           />
         </div>
       </div>
