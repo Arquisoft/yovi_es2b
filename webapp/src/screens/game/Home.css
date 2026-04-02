@@ -203,6 +203,13 @@
   background: rgba(47, 138, 61, 0.08);
 }
 
+.home-config__two-players:focus,
+.home-config__two-players:focus-visible {
+  outline: 2px solid #2f8a3d;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
 .home-config__two-players:active {
   transform: scale(0.98);
 }
