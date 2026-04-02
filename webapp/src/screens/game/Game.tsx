@@ -146,6 +146,8 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
       <End
         winner={winner}
         username={username}
+        username2={username2}
+        twoPlayers={twoPlayers}
         settings={settings}
         onGoHome={onGoMenu}
         onPlayAgain={() => setPlayAgain((prev) => !prev)} // toggle dispara el useEffect
