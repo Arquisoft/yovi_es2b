@@ -56,7 +56,7 @@ export default function HomePage( {username} : { username: string }) {
     }
 
     if (twoPlayersStarted) {
-        return <Game settings={settings} username={username} stateStart={true}/>;
+        return <Game settings={settings} username={username} username2="Jugador 2" twoPlayers={true} stateStart={true}/>;
     }
 
     if (logOut) {

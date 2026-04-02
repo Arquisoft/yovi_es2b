@@ -11,6 +11,8 @@ import "./Game.css";
 interface GameProps {
   settings: GameSettings;
   username: string;
+  username2?: string;
+  twoPlayers?: boolean;
   stateStart: boolean;
 }
 
@@ -41,7 +43,7 @@ async function getTurnoPartida(gameId: string): Promise<number> {
     return data.kind === 'Ongoing' ? data.next_player : 0;
 }
 
-export function Game({ settings, username, stateStart }: GameProps) {
+export function Game({ settings, username, username2 = "Jugador 2", twoPlayers = false, stateStart }: GameProps) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
@@ -57,7 +59,7 @@ export function Game({ settings, username, stateStart }: GameProps) {
 
         // para cada atributo
         const nextPlayer = await getTurnoPartida(idG);
-        setTurno(nextPlayer === 0 ? username : "BOT"); // Si es 0 es el anfitrion
+        setTurno(nextPlayer === 0 ? username : twoPlayers ? username2 : "BOT");
         setGameState("Iniciada");
       }
     }
@@ -77,13 +79,15 @@ export function Game({ settings, username, stateStart }: GameProps) {
         </div>
 
         <div className="board-main">
-          <Board 
+          <Board
             strategy={settings.strategy}
             difficulty={settings.difficulty}
-            gameId={gameId} 
-            turno={turno} 
-            gameState={gameState} 
+            gameId={gameId}
+            turno={turno}
+            gameState={gameState}
             username={username}
+            username2={username2}
+            twoPlayers={twoPlayers}
             changeTurno={setTurno}
             changeGameState={setGameState}
           />
