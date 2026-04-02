@@ -39,6 +39,7 @@ export default function HomePage( {username} : { username: string }) {
     });
 
     const [gameStarted, setGameStarted] = useState(false);
+    const [twoPlayersStarted, setTwoPlayersStarted] = useState(false);
     const [menuSelected, setMenuSelected] = useState<string>("");
     const [logOut, setLogOut] = useState(false);
 
@@ -51,6 +52,10 @@ export default function HomePage( {username} : { username: string }) {
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (gameStarted) {
+        return <Game settings={settings} username={username} stateStart={true}/>;
+    }
+
+    if (twoPlayersStarted) {
         return <Game settings={settings} username={username} stateStart={true}/>;
     }
 
@@ -114,7 +119,13 @@ export default function HomePage( {username} : { username: string }) {
                         Difícil
                     </button>
                 </div>
-                
+
+                <hr className="home-config__divider" />
+
+                <button className="home-config__two-players" onClick={() => setTwoPlayersStarted(true)}>
+                    Jugar 2 jugadores
+                </button>
+
             </div>
 
             <br></br>

@@ -172,6 +172,41 @@
 }
 
 
+/* ── Separador dentro de config ───────────────────────────────────────────── */
+.home-config__divider {
+  border: none;
+  border-top: 1px solid #d0d7de;
+  margin: 0;
+}
+
+/* ── Botón jugar 2 jugadores ──────────────────────────────────────────────── */
+.home-config__two-players {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.7rem 1.2rem;
+  background: transparent;
+  color: #2f8a3d;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid #2f8a3d;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin: 0;
+  outline: none;
+}
+
+.home-config__two-players:hover {
+  background: rgba(47, 138, 61, 0.08);
+}
+
+.home-config__two-players:active {
+  transform: scale(0.98);
+}
+
 /* ── Botón empezar partida ────────────────────────────────────────────────── */
 .home-config__start {
   width: 100%;
