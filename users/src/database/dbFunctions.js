@@ -32,7 +32,7 @@ async function loginuser(users, username, password) {
     }
 
     // espera a encontrar el usuario en la base -> Jimena maneja la base
-    const existingUser = await users.findOne({ "username": username });
+    const existingUser = await users.findOne({ "username": String(username) });
     // si el usuario no existe
     if (!existingUser) {
         throw new UserNotFoundError(username);
@@ -62,7 +62,7 @@ async function createuser(users, username, password) {
     }
 
     // busca si existe usuario con ese nombre
-    const existingUser = await users.findOne({ "username": username });
+    const existingUser = await users.findOne({ "username": String(username) });
     if (existingUser) {
         throw new UserAlreadyExistsError(username);
     }
@@ -88,10 +88,10 @@ async function deleteuser(users, username) {
     }
 
     // busca si existe usuario con ese nombre
-    const existingUser = await users.findOne({ "username": username });
+    const existingUser = await users.findOne({ "username": String(username) });
     if (existingUser) {
         // espera a eliminar el usuario en la base -> Jimena maneja la base
-        await users.deleteOne({ "username": username });
+        await users.deleteOne({ "username": String(username) });
     }
 
     // esta correcto
@@ -106,7 +106,7 @@ async function findUser(users, username) {
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
         throw new MissingFieldsError(['username']);
     }
-    const existingUser = await users.findOne({ "username": username });
+    const existingUser = await users.findOne({ "username": String(username) });
 
     if (existingUser == null) {
         throw new UserNotFoundError(username);
@@ -147,7 +147,7 @@ function checkPassword(password) {
     async function initmatch(users, username, strategy, difficulty) {
 
         // espera a encontrar el usuario en la base -> Jimena maneja la base
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         // si el usuario no existe
         if (!existingUser) {
             throw new UserNotFoundError(username);
@@ -180,7 +180,7 @@ function checkPassword(password) {
      */
     async function endmatch(users, username, strategy, difficulty) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
             throw new UserNotFoundError(username);
@@ -212,7 +212,7 @@ function checkPassword(password) {
      * Función de terminación de partida abandonada
      */
     async function abandonmatch(users, username, strategy, difficulty) {
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         if (!existingUser) {
             throw new UserNotFoundError(username);
         }
@@ -244,7 +244,7 @@ function checkPassword(password) {
      */
     async function diffstats(users, username) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
             throw new UserNotFoundError(username);
@@ -281,7 +281,7 @@ function checkPassword(password) {
      */
     async function stratstats(users, username) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
             throw new UserNotFoundError(username);
@@ -318,7 +318,7 @@ function checkPassword(password) {
      */
     async function allstats(users, username) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
             throw new UserNotFoundError(username);
