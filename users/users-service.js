@@ -12,6 +12,7 @@ const UserService = require('./src/user-service'); // La clase con la lógica
 const UserController = require('./src/user-controller');   // El controlador de rutas
 
 const app = express(); //creamos instancia de express para el manejo de las peticiones
+app.disable('x-powered-by');  //Evitar dar datos de la tecnologia empleada
 const port = 3000; //definimos el puerto en el que se ejecutará el servicio de usuarios (3000)
 
 // Estas métricas son útiles para entender el rendimiento del servicio y detectar posibles problemas.
