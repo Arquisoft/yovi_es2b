@@ -129,7 +129,7 @@ impl GameService {
         let id = format!("game-{}", *counter);
         *counter += 1;
 
-        let game = GameY::new(board_size);
+        let game = GameY::new_random_start(board_size);
         self.games.lock().unwrap().insert(id.clone(), vec![game]);
         id
     }
