@@ -17,6 +17,7 @@ type BoardProps = {
   username: string;
   username2: string;
   twoPlayers: boolean;
+  refreshKey: number;
   changeTurno: (turno: string) => void;
   onGameEnd: (winner: string) => void;
 };
@@ -134,10 +135,10 @@ export function Board(props: BoardProps) {
    // Promise<any> -> Devuelve un valor cualquiera de forma async -> json con el estado de tablero actualizado
   async function peticionMovimientoBot(state: unknown): Promise<any> {
     const botId = strategyToBotId(selectedStrategy);
-    const res = await fetch(`${GAMEY_URL}/v1/ybot/choose/${botId}`, {
+    const res = await fetch(`${GAMEY_URL}/play`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(state),
+      body: JSON.stringify({ position: state, bot_type: botId }),
     });
     if (!res.ok) throw new Error("Error al obtener movimiento del bot");
     return res.json();
@@ -201,6 +202,10 @@ export function Board(props: BoardProps) {
       const data = await peticionEstadoPartida(); //Pide el estado y recibe el JSON
       actualizarTablero(data.state.layout);
 
+      if (data.status.kind === 'Ongoing') {
+        props.changeTurno(getPlayerName(data.status.next_player));
+      }
+
       if (!props.twoPlayers && data.status.kind === 'Ongoing' && data.status.next_player !== 0) {
         const botMove = await peticionMovimientoBot(data.state);  //Si le toca al bot, Pide peticion de movimiento
         await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, data.status.next_player);  //Realiza el movimiento que acaba de obtener
@@ -208,7 +213,7 @@ export function Board(props: BoardProps) {
     }
 
     cargarEstadoInicial();
-  }, [props.gameId]);
+  }, [props.gameId, props.refreshKey]);
 
 
 

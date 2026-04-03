@@ -109,7 +109,7 @@ pub struct ActionRequest {
 // ─── METODOS DE SERVICIO ─────────────────────────────────────────────────────────────────
 
 pub struct GameService {
-    games: Mutex<HashMap<GameId, GameY>>,  //Partidas almacenadas en un map
+    games: Mutex<HashMap<GameId, Vec<GameY>>>,  //Historial de estados por partida
     next_id: Mutex<u64>,
 }
 
@@ -127,18 +127,17 @@ impl GameService {
     pub fn create_game(&self, board_size: u32) -> GameId {
         let mut counter = self.next_id.lock().unwrap();
         let id = format!("game-{}", *counter);
-        *counter += 1; // Incrementa el contador de la coleccion mediante puntero
+        *counter += 1;
 
-        let game = GameY::new(board_size);
-        self.games.lock().unwrap().insert(id.clone(), game);
+        let game = GameY::new_random_start(board_size);
+        self.games.lock().unwrap().insert(id.clone(), vec![game]);
         id
     }
 
     // Devuelve state del juego para un id proporcionado
     pub fn get_game_state(&self, game_id: &str) -> Option<GameStateResponse> {
         let games = self.games.lock().unwrap();
-        //Mapea el resultado para devolverlo
-        games.get(game_id).map(|game| GameStateResponse {
+        games.get(game_id).and_then(|h| h.last()).map(|game| GameStateResponse {
             game_id: game_id.to_string(),
             state: game.into(),
             status: GameStatusDto::from(game.status()),
@@ -147,17 +146,42 @@ impl GameService {
 
     // Ejecuta movimiento
     // Devuelve el estado del juego o GameServiceError
-    pub fn place_move(&self, game_id: &str, movement: Movement,) -> Result<GameStateResponse, GameServiceError> {
+    pub fn place_move(&self, game_id: &str, movement: Movement) -> Result<GameStateResponse, GameServiceError> {
         let mut games = self.games.lock().unwrap();
-        let game = games
+        let history = games
             .get_mut(game_id)
             .ok_or_else(|| GameServiceError::GameNotFound(game_id.to_string()))?;
 
+        let mut game = history.last().cloned()
+            .ok_or_else(|| GameServiceError::GameNotFound(game_id.to_string()))?;
         game.add_move(movement)?;
+        history.push(game);
 
+        let game = history.last().unwrap();
         Ok(GameStateResponse {
             game_id: game_id.to_string(),
-            state: (&*game).into(),
+            state: game.into(),
+            status: GameStatusDto::from(game.status()),
+        })
+    }
+
+    // Deshace el último movimiento
+    // Devuelve el estado anterior o error si no hay movimientos que deshacer
+    pub fn undo_move(&self, game_id: &str) -> Result<GameStateResponse, GameServiceError> {
+        let mut games = self.games.lock().unwrap();
+        let history = games
+            .get_mut(game_id)
+            .ok_or_else(|| GameServiceError::GameNotFound(game_id.to_string()))?;
+
+        if history.len() <= 1 {
+            return Err(GameServiceError::GameError("No hay movimientos para deshacer".to_string()));
+        }
+        history.pop();
+
+        let game = history.last().unwrap();
+        Ok(GameStateResponse {
+            game_id: game_id.to_string(),
+            state: game.into(),
             status: GameStatusDto::from(game.status()),
         })
     }
@@ -165,18 +189,12 @@ impl GameService {
     // Devuelve el status de un game ID
     pub fn get_status(&self, game_id: &str) -> Option<GameStatusDto> {
         let games = self.games.lock().unwrap();
-        games
-            .get(game_id)
+        games.get(game_id).and_then(|h| h.last())
             .map(|game| GameStatusDto::from(game.status()))
     }
 
     // Devuelve todos los id de partidas activas
     pub fn list_games(&self) -> Vec<GameId> {
-        // Con lock se bloquea el mutex para acceder al map.
-        // unwarp - Saca el valor despues de bloquearlo
-        // keys - Claves del map
-        // cloned - Hace una copia
-        // collect - Convierte a Vec<>
         self.games.lock().unwrap().keys().cloned().collect()
     }
 
