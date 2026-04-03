@@ -1,10 +1,10 @@
-/* Screen: full viewport, escapando el #root centrado */
+/* Screen: full viewport, fijo respecto al viewport */
 .game-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
-  position: relative;
-  left: 50%;
-  margin-left: -50vw;
   display: flex;
   flex-direction: column;
   background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
