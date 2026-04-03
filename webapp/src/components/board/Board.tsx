@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
 import { Casilla } from "./Casilla";
-import { getBoardSize } from "../../gameOptions/Difficulty";
-import type { DifficultyType } from "../../gameOptions/Difficulty";
+import { getBoardSize } from "../gameOptions/Difficulty";
+import type { DifficultyType } from "../gameOptions/Difficulty";
 import "./Board.css";
-import type { StrategyType } from "../../gameOptions/Strategy";
+import type { StrategyType } from "../gameOptions/Strategy";
 
 const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
 

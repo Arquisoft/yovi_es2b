@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
 import { Game } from "./Game";
-import type { GameSettings } from "../../gameOptions/GameSettings";
-import { Strategy } from "../../gameOptions/Strategy";
-import type { StrategyType } from "../../gameOptions/Strategy";
-import { Difficulty } from "../../gameOptions/Difficulty";
+import type { GameSettings } from "../../components/gameOptions/GameSettings";
+import { Strategy } from "../../components/gameOptions/Strategy";
+import type { StrategyType } from "../../components/gameOptions/Strategy";
+import { Difficulty } from "../../components/gameOptions/Difficulty";
 import "./Home.css";
 import InitialScreen from "../init/InitialScreen";
 import GameStats from "../stats/GameStats";
