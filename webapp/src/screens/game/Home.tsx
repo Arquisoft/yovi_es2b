@@ -5,6 +5,7 @@ import type { GameSettings } from "../../gameOptions/GameSettings";
 import { Strategy } from "../../gameOptions/Strategy";
 import type { StrategyType } from "../../gameOptions/Strategy";
 import { Difficulty } from "../../gameOptions/Difficulty";
+import type { DifficultyType } from "../../gameOptions/Difficulty";
 import "./Home.css";
 import InitialScreen from "../init/InitialScreen";
 import GameStats from "../stats/GameStats";
@@ -42,7 +43,7 @@ export default function HomePage( {username} : { username: string }) {
     const [twoPlayersStarted, setTwoPlayersStarted] = useState(false);
     const [username2, setUsername2] = useState("");
     const [username2Error, setUsername2Error] = useState<string | null>(null);
-    const [menuSelected, setMenuSelected] = useState<string>("");
+    const [difficulty2, setDifficulty2] = useState<DifficultyType>(Difficulty.EASY);
     const [screen, setScreen] = useState("home");
 
     // como es función async, llamamos useEffect
@@ -54,7 +55,7 @@ export default function HomePage( {username} : { username: string }) {
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (twoPlayersStarted) {
-        return <Game settings={settings} username={username} username2={username2} twoPlayers={true} stateStart={true} onGoMenu={() => setTwoPlayersStarted(false)}/>;
+        return <Game settings={{ ...settings, difficulty: difficulty2 }} username={username} username2={username2} twoPlayers={true} stateStart={true} onGoMenu={() => setTwoPlayersStarted(false)}/>;
     }
 
     if (screen==="game") {
@@ -81,100 +82,129 @@ export default function HomePage( {username} : { username: string }) {
 
     return (
         <div className="home-screen">
-            <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
-            <h2 className="home-screen__title">Bienvenido a tu menú principal, {username}</h2>
-            
 
-            {menuSelected && <p className="home-menu__selected">Seleccionado: {menuSelected}</p>}
-
-            <div className="home-config">
-                <button className="home-config__start" onClick={() => setScreen("game")}>
-                    Empezar partida
-                </button>
-
-                <label className="home-config__label">Estrategia</label>
-                <select
-                    className="home-config__select"
-                    value={settings.strategy}
-                    onChange={(e) =>
-                        setSettings({
-                            ...settings,
-                            strategy: e.target.value as StrategyType
-                        })
-                    }
-                >
-                    <option value={Strategy.RANDOM}>Random</option>
-                    <option value={Strategy.DEFENSIVO}>Defensiva</option>
-                    <option value={Strategy.OFENSIVO}>Ofensiva</option>
-                    <option value={Strategy.MONTE_CARLO}>Monte Carlo</option>
-                    <option value={Strategy.MONTE_CARLO_MEJORADO}>Monte Carlo Mejorado</option>
-                    <option value={Strategy.MONTE_CARLO_ENDURECIDO}>Monte Carlo Endurecido</option>
-                </select>
-
-                <label className="home-config__label">Dificultad</label>
-                <div className="home-difficulty">
-                    <button
-                        className={`home-difficulty__btn home-difficulty__btn--easy${settings.difficulty === Difficulty.EASY ? " home-difficulty__btn--easy--active" : ""}`}
-                        onClick={() => setSettings({ ...settings, difficulty: Difficulty.EASY })}>
-                        Fácil
-                    </button>
-                    <button
-                        className={`home-difficulty__btn home-difficulty__btn--medium${settings.difficulty === Difficulty.MEDIUM ? " home-difficulty__btn--medium--active" : ""}`}
-                        onClick={() => setSettings({ ...settings, difficulty: Difficulty.MEDIUM })}>
-                        Media
-                    </button>
-                    <button
-                        className={`home-difficulty__btn home-difficulty__btn--hard${settings.difficulty === Difficulty.HARD ? " home-difficulty__btn--hard--active" : ""}`}
-                        onClick={() => setSettings({ ...settings, difficulty: Difficulty.HARD })}>
-                        Difícil
-                    </button>
-                </div>
-
-                <hr className="home-config__divider" />
-
-                <span className="home-config__label home-config__label--section">Partida de 2 Jugadores</span>
-                <label className="home-config__label" htmlFor="username2">Nombre del jugador 2</label>
-                <input
-                    id="username2"
-                    className="home-config__input"
-                    type="text"
-                    placeholder="Nombre del jugador 2"
-                    value={username2}
-                    onChange={(e) => { setUsername2(e.target.value); setUsername2Error(null); }}
-                />
-                <button
-                    className="home-config__start"
-                    onClick={() => {
-                        if (username2.trim() === "") {
-                            setUsername2Error("El nombre del jugador 2 no puede estar vacío.");
-                            return;
-                        }
-                        setTwoPlayersStarted(true);
-                    }}
-                >
-                    Empezar partida 2 jugadores
-                </button>
-                {username2Error && (
-                    <div className="error-message" style={{ marginTop: 6, color: 'red' }}>
-                        {username2Error}
-                    </div>
-                )}
-
-            </div>
-
-            <br></br>
-            
-            <div className="home-menu">
-                <br></br>
-                <button className="home-menu__btn" onClick={() => setScreen("stats")}>
-                    Mis estadísticas
-                </button>
-                <button className="home-menu__btn" onClick={() => setMenuSelected("Ranking")}>
-                    Ranking
-                </button>
-                <button className="home-menu-out__btn" onClick={() => setScreen("login")}>
+            {/* Header */}
+            <header className="home-header">
+                <img src={yoviLogo} alt="YOVI Logo" className="home-header__logo" />
+                <button className="home-menu-out__btn home-header__logout" onClick={() => setScreen("login")}>
                     Cerrar sesión
                 </button>
+            </header>
+
+            {/* Contenido */}
+            <div className="home-body">
+                <h2 className="home-screen__title">Bienvenido a tu menú principal, {username}</h2>
+
+                <div className="home-panels">
+
+                    {/* Panel VS Bot */}
+                    <div className="home-config">
+                        <span className="home-config__label home-config__label--section">Juega contra el bot</span>
+
+                        <label className="home-config__label">Estrategia</label>
+                        <select
+                            className="home-config__select"
+                            value={settings.strategy}
+                            onChange={(e) => setSettings({ ...settings, strategy: e.target.value as StrategyType })}
+                        >
+                            <option value={Strategy.RANDOM}>Random</option>
+                            <option value={Strategy.DEFENSIVO}>Defensiva</option>
+                            <option value={Strategy.OFENSIVO}>Ofensiva</option>
+                            <option value={Strategy.MONTE_CARLO}>Monte Carlo</option>
+                            <option value={Strategy.MONTE_CARLO_MEJORADO}>Monte Carlo Mejorado</option>
+                            <option value={Strategy.MONTE_CARLO_ENDURECIDO}>Monte Carlo Endurecido</option>
+                        </select>
+
+                        <label className="home-config__label">Dificultad</label>
+                        <div className="home-difficulty">
+                            <button
+                                className={`home-difficulty__btn home-difficulty__btn--easy${settings.difficulty === Difficulty.EASY ? " home-difficulty__btn--easy--active" : ""}`}
+                                onClick={() => setSettings({ ...settings, difficulty: Difficulty.EASY })}>
+                                Fácil
+                            </button>
+                            <button
+                                className={`home-difficulty__btn home-difficulty__btn--medium${settings.difficulty === Difficulty.MEDIUM ? " home-difficulty__btn--medium--active" : ""}`}
+                                onClick={() => setSettings({ ...settings, difficulty: Difficulty.MEDIUM })}>
+                                Media
+                            </button>
+                            <button
+                                className={`home-difficulty__btn home-difficulty__btn--hard${settings.difficulty === Difficulty.HARD ? " home-difficulty__btn--hard--active" : ""}`}
+                                onClick={() => setSettings({ ...settings, difficulty: Difficulty.HARD })}>
+                                Difícil
+                            </button>
+                        </div>
+
+                        <button className="home-config__start" onClick={() => setScreen("game")}>
+                            Empezar partida
+                        </button>
+
+                        <hr className="home-config__divider" />
+
+                        <div className="home-menu">
+                            <button className="home-menu__btn" onClick={() => setScreen("stats")}>
+                                Mis estadísticas
+                            </button>
+                            <button className="home-menu__btn" onClick={() => {}}>
+                                Ranking
+                            </button>
+                        </div>
+                    </div>
+
+                    {/* Panel 2 Jugadores */}
+                    <div className="home-config home-config--pvp">
+                        <span className="home-config__label home-config__label--section">Partida de 2 Jugadores</span>
+
+                        <label className="home-config__label" htmlFor="username2">Nombre del jugador 2</label>
+                        <input
+                            id="username2"
+                            className="home-config__input"
+                            type="text"
+                            placeholder="Nombre del jugador 2"
+                            value={username2}
+                            onChange={(e) => { setUsername2(e.target.value); setUsername2Error(null); }}
+                        />
+
+                        <label className="home-config__label">Tamaño del tablero</label>
+                        <div className="home-difficulty">
+                            <button
+                                className={`home-difficulty__btn home-difficulty__btn--easy${difficulty2 === Difficulty.EASY ? " home-difficulty__btn--easy--active" : ""}`}
+                                onClick={() => setDifficulty2(Difficulty.EASY)}>
+                                Pequeño
+                            </button>
+                            <button
+                                className={`home-difficulty__btn home-difficulty__btn--medium${difficulty2 === Difficulty.MEDIUM ? " home-difficulty__btn--medium--active" : ""}`}
+                                onClick={() => setDifficulty2(Difficulty.MEDIUM)}>
+                                Mediano
+                            </button>
+                            <button
+                                className={`home-difficulty__btn home-difficulty__btn--hard${difficulty2 === Difficulty.HARD ? " home-difficulty__btn--hard--active" : ""}`}
+                                onClick={() => setDifficulty2(Difficulty.HARD)}>
+                                Grande
+                            </button>
+                        </div>
+
+                        <div className="home-config__spacer" />
+
+                        <button
+                            className="home-config__start"
+                            onClick={() => {
+                                if (username2.trim() === "") {
+                                    setUsername2Error("El nombre del jugador 2 no puede estar vacío.");
+                                    return;
+                                }
+                                setTwoPlayersStarted(true);
+                            }}
+                        >
+                            Empezar partida 2 jugadores
+                        </button>
+                        {username2Error && (
+                            <div style={{ marginTop: 6, color: 'red', fontSize: '0.85rem' }}>
+                                {username2Error}
+                            </div>
+                        )}
+                    </div>
+
+                </div>
             </div>
         </div>
     );

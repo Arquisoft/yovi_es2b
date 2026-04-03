@@ -1,13 +1,13 @@
 /* ── Layout principal ─────────────────────────────────────────────────────── */
 .home-screen {
-  min-height: 100vh;
-  inset: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   background: #ffffff;
-  padding: 2rem;
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -242,4 +242,84 @@
   background: #a0a3d4;
   cursor: not-allowed;
   transform: none;
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────── */
+.home-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  width: 100%;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #d0d7de;
+  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  box-sizing: border-box;
+}
+
+.home-header__logo {
+  height: 40px;
+  width: auto;
+}
+
+.home-header__logout {
+  width: auto;
+  padding: 0.45rem 1rem;
+}
+
+/* ── Cuerpo bajo el header ────────────────────────────────────────────────── */
+.home-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  gap: 1.5rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* ── Dos paneles en columnas ──────────────────────────────────────────────── */
+.home-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 860px;
+  align-items: stretch;
+}
+
+/* Los paneles dentro del grid ocupan todo el ancho disponible */
+.home-panels .home-config {
+  max-width: none;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1.5rem;
+}
+
+/* Panel 2 jugadores: flex para empujar el botón al fondo */
+.home-config--pvp {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-config__spacer {
+  flex: 1;
+}
+
+/* El home-menu dentro del panel no necesita margen extra */
+.home-panels .home-menu {
+  margin-bottom: 0;
+  max-width: none;
+  width: 100%;
+}
+
+@media (max-width: 680px) {
+  .home-panels { grid-template-columns: 1fr; }
+  .home-header  { padding: 0 1rem; }
 }
