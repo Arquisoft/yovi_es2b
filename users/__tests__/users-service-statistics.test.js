@@ -115,7 +115,7 @@ describe('POST /allstats', () => {
 
         expect(res.status).toBe(202)
         expect(res.body).toHaveProperty('message')
-        expect(res.body.message).toMatch("Se obtienen todas las estadísticas de Test_Username por dificultad.")
+        expect(res.body.message).toMatch("Se obtienen todas las estadísticas de Test_Username_Stats_ByDiff por dificultad.")
     
         await takedown('Test_Username_Stats_ByDiff')
 
