@@ -16,7 +16,12 @@ export function End({ winner, username, username2 = "", twoPlayers = false, sett
   const playerWon = winner === username;
 
   // En 2 jugadores siempre hay un ganador, mostramos quién ganó
-  const title = (twoPlayers || playerWon) ? "¡Victoria!" : "Derrota";
+  let title: string;
+  if (twoPlayers) {
+    title = `¡Ganó ${winner}!`;
+  } else {
+    title = playerWon ? "¡Victoria!" : "Derrota";
+  }
 
   let icon: string;
   if (twoPlayers || playerWon) {
