@@ -1,6 +1,6 @@
 interface ControlPanelProps {
-  onExit: () => void;
-  onUndo: () => void;
+  readonly onExit: () => void;
+  readonly onUndo: () => void;
 }
 
 export default function ControlPanel({ onExit, onUndo }: ControlPanelProps) {
