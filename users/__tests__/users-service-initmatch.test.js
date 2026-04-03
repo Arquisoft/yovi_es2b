@@ -17,7 +17,6 @@ describe('POST /initmatch', () => {
         const userController = new UserController(userService)
 
         app.post('/initmatch', userController.initmatch)
-
     });
 
    /**
