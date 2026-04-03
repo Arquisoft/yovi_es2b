@@ -36,14 +36,14 @@ async function iniciarPartida(username: string, strategy: string, difficulty: st
 
 export default function HomePage( {username} : { username: string }) {
     const [settings, setSettings] = useState<GameSettings>({
-        strategy: Strategy.RANDOM,
-        difficulty: Difficulty.EASY
+        strategy: Strategy.MONTE_CARLO_ENDURECIDO,
+        difficulty: Difficulty.MEDIUM
     });
 
     const [twoPlayersStarted, setTwoPlayersStarted] = useState(false);
     const [username2, setUsername2] = useState("");
     const [username2Error, setUsername2Error] = useState<string | null>(null);
-    const [difficulty2, setDifficulty2] = useState<DifficultyType>(Difficulty.EASY);
+    const [difficulty2, setDifficulty2] = useState<DifficultyType>(Difficulty.MEDIUM);
     const [screen, setScreen] = useState("home");
 
     // como es función async, llamamos useEffect
