@@ -1,0 +1,35 @@
+import request from 'supertest'
+import app from '../users-service.js'
+const { connectDB, getDB } = require('../src/database/db.js')
+const UserService = require('../src/user-service.js')
+const UserController = require('../src/user-controller.js')
+
+async function setup(username, password) {
+    await connectDB()
+    const db = getDB()
+    const userService = new UserService(db)
+    const userController = new UserController(userService)
+        
+    app.post('/createuser', userController.createUser)
+        
+    return request(app)
+        .post('/createuser')
+        .send({ username, password })
+        .set('Accept', 'application/json')
+}
+
+async function takedown(username) {
+    await connectDB()
+    const db = getDB()
+    const userService = new UserService(db)
+    const userController = new UserController(userService)
+        
+    app.post('/deleteuser', userController.deleteuser)
+
+    return request(app)
+        .post('/deleteuser')
+        .send({ username })
+        .set('Accept', 'application/json')
+}
+
+export { setup, takedown };
