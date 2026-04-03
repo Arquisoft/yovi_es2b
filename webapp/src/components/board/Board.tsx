@@ -202,6 +202,10 @@ export function Board(props: BoardProps) {
       const data = await peticionEstadoPartida(); //Pide el estado y recibe el JSON
       actualizarTablero(data.state.layout);
 
+      if (data.status.kind === 'Ongoing') {
+        props.changeTurno(getPlayerName(data.status.next_player));
+      }
+
       if (!props.twoPlayers && data.status.kind === 'Ongoing' && data.status.next_player !== 0) {
         const botMove = await peticionMovimientoBot(data.state);  //Si le toca al bot, Pide peticion de movimiento
         await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, data.status.next_player);  //Realiza el movimiento que acaba de obtener
