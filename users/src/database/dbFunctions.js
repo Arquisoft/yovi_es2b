@@ -71,7 +71,7 @@ async function createuser(users, username, password) {
     checkPassword(password);
 
     // espera a crear el usuario en la base -> Jimena maneja la base
-    await users.insertOne({ username, password, createdAt: new Date() });
+    await users.insertOne({ username: String(username), password: String(password), createdAt: new Date() });
 
     // esta correcto
     return 'Usuario creado exitosamente. Iniciando sesión...' ;
