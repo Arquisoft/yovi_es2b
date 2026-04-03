@@ -178,6 +178,43 @@
 }
 
 
+/* ── Label sección (Jugador 2) ────────────────────────────────────────────── */
+.home-config__label--section {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #191a1c;
+}
+
+/* ── Input texto (jugador 2) ──────────────────────────────────────────────── */
+.home-config__input {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  color: #24292f;
+  font-size: 1rem;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.home-config__input::placeholder {
+  color: #8c959f;
+}
+
+.home-config__input:focus {
+  border-color: #646cff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.18);
+}
+
+/* ── Separador dentro de config ───────────────────────────────────────────── */
+.home-config__divider {
+  border: none;
+  border-top: 1px solid #d0d7de;
+  margin: 0;
+}
+
 /* ── Botón empezar partida ────────────────────────────────────────────────── */
 .home-config__start {
   width: 100%;
@@ -199,4 +236,10 @@
 
 .home-config__start:active {
   transform: scale(0.98);
+}
+
+.home-config__start:disabled {
+  background: #a0a3d4;
+  cursor: not-allowed;
+  transform: none;
 }
