@@ -142,12 +142,6 @@ export default function HomePage( {username} : { username: string }) {
                     value={username2}
                     onChange={(e) => { setUsername2(e.target.value); setUsername2Error(null); }}
                 />
-                {username2Error && (
-                    <div className="error-message" style={{ marginTop: 6, color: 'red' }}>
-                        {username2Error}
-                    </div>
-                )}
-
                 <button
                     className="home-config__start"
                     onClick={() => {
@@ -160,6 +154,11 @@ export default function HomePage( {username} : { username: string }) {
                 >
                     Empezar partida 2 jugadores
                 </button>
+                {username2Error && (
+                    <div className="error-message" style={{ marginTop: 6, color: 'red' }}>
+                        {username2Error}
+                    </div>
+                )}
 
             </div>
 
