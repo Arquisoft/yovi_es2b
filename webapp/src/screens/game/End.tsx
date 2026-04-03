@@ -58,10 +58,12 @@ export function End({ winner, username, username2 = "", twoPlayers = false, sett
             <dt>Dificultad</dt>
             <dd>{settings.difficulty}</dd>
           </div>
-          <div className="end-summary-row">
-            <dt>Estrategia</dt>
-            <dd>{settings.strategy}</dd>
-          </div>
+          {!twoPlayers && (
+            <div className="end-summary-row">
+              <dt>Estrategia</dt>
+              <dd>{settings.strategy}</dd>
+            </div>
+          )}
           {!twoPlayers && (
             <div className="end-summary-row">
               <dt>Resultado</dt>
