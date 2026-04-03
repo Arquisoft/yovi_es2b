@@ -151,7 +151,7 @@ function checkPassword(password) {
         if (!existingUser) {
             throw new UserNotFoundError(username);
         }
-
+ 
         if (!strats.includes(strategy)) {
             throw new InvalidStrategyError(strategy);
         }
