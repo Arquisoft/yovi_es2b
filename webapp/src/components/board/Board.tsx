@@ -14,9 +14,7 @@ type BoardProps = {
   gameId: string;
   turno: string;
   gameState: string;
-  username: string;
-  username2: string;
-  twoPlayers: boolean;
+  username:string;
   changeTurno: (turno: string) => void;
   onGameEnd: (winner: string) => void;
 };
@@ -150,11 +148,6 @@ export function Board(props: BoardProps) {
    * del la aplicacion.
    *
    */
-  function getPlayerName(playerIndex: number): string {
-    if (playerIndex === 0) return props.username;
-    return props.twoPlayers ? props.username2 : "BOT";
-  }
-
   async function realizarMovimiento(x: number, y: number, z: number, player: number): Promise<void> {
     bloquearTablero();
     try {
@@ -163,13 +156,13 @@ export function Board(props: BoardProps) {
 
       //Si partida finalizada
       if (data.status.kind === 'Finished') {
-        const winnerName: string = getPlayerName(data.status.winner);
+        const winnerName: string = data.status.winner === 0 ? props.username : "BOT";
         setGameOver(true);
         props.changeTurno(winnerName);
         props.onGameEnd(winnerName);
         desbloquearTablero();
 
-        if(data.status.winner === 0 && !props.twoPlayers) {
+        if(data.status.winner === 0) {
           partidaGanada(props.username, props.strategy, props.difficulty);
         }
 
@@ -178,9 +171,9 @@ export function Board(props: BoardProps) {
 
       //Actualiza siguiente jugador
       const nextPlayer: number = data.status.next_player;
-      props.changeTurno(getPlayerName(nextPlayer));
+      props.changeTurno(nextPlayer === 0 ? props.username : "BOT");
 
-      if (!props.twoPlayers && nextPlayer !== 0) {
+      if (nextPlayer !== 0) {
         const botMove = await peticionMovimientoBot(data.state);
         await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, nextPlayer);
       } else {
@@ -201,7 +194,7 @@ export function Board(props: BoardProps) {
       const data = await peticionEstadoPartida(); //Pide el estado y recibe el JSON
       actualizarTablero(data.state.layout);
 
-      if (!props.twoPlayers && data.status.kind === 'Ongoing' && data.status.next_player !== 0) {
+      if (data.status.kind === 'Ongoing' && data.status.next_player !== 0) {
         const botMove = await peticionMovimientoBot(data.state);  //Si le toca al bot, Pide peticion de movimiento
         await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, data.status.next_player);  //Realiza el movimiento que acaba de obtener
       }
@@ -215,8 +208,7 @@ export function Board(props: BoardProps) {
   const manejarClick = async (id: string) => {
     if (bloq || gameOver) return;
     const { x, y, z } = keyToCoords(id, BOARDHIGHT);
-    const playerActual = props.twoPlayers && props.turno === props.username2 ? 1 : 0;
-    await realizarMovimiento(x, y, z, playerActual);
+    await realizarMovimiento(x, y, z, 0);
   };
 
   /**

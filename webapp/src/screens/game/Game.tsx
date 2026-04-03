@@ -12,8 +12,6 @@ import Home from "./Home";
 interface GameProps {
   settings: GameSettings;
   username: string;
-  username2: string;
-  twoPlayers: boolean;
   stateStart: boolean;
   onGoMenu?: () => void;
   onGameEnd?: (winner: string) => void;
@@ -60,7 +58,7 @@ async function abandonarPartida(username: string, strategy: string, difficulty: 
   }
 }
 
-export function Game({ settings, username, username2, twoPlayers, stateStart, onGoMenu = () => {}, onGameEnd }: Readonly<GameProps>) {
+export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGameEnd  }: GameProps) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
@@ -89,13 +87,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
 
         // para cada atributo
         const nextPlayer = await getTurnoPartida(idG);
-        let firstTurno: string;
-        if (nextPlayer === 0) {
-          firstTurno = username;
-        } else {
-          firstTurno = twoPlayers ? username2 : "BOT";
-        }
-        setTurno(firstTurno);
+        setTurno(nextPlayer === 0 ? username : "BOT"); // Si es 0 es el anfitrion
         setGameState("Iniciada");
       }
     }
@@ -152,8 +144,6 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
       <End
         winner={winner}
         username={username}
-        username2={username2}
-        twoPlayers={twoPlayers}
         settings={settings}
         onGoHome={onGoMenu}
         onPlayAgain={() => setPlayAgain((prev) => !prev)} // toggle dispara el useEffect
@@ -170,25 +160,17 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
             settings={settings}
             currentPlayer={turno}
             gameStatus={gameState}
-            twoPlayers={twoPlayers}
           />
         </div>
 
         <div className="board-main">
-          {twoPlayers && (
-            <div className="turn-indicator">
-              Turno de <strong>{turno}</strong>
-            </div>
-          )}
-          <Board
+          <Board 
             strategy={settings.strategy}
             difficulty={settings.difficulty}
-            gameId={gameId}
-            turno={turno}
-            gameState={gameState}
+            gameId={gameId} 
+            turno={turno} 
+            gameState={gameState} 
             username={username}
-            username2={username2}
-            twoPlayers={twoPlayers}
             changeTurno={setTurno}
             onGameEnd={handleGameEnd}
           />

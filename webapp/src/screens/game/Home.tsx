@@ -39,8 +39,6 @@ export default function HomePage( {username} : { username: string }) {
         difficulty: Difficulty.EASY
     });
 
-    const [twoPlayersStarted, setTwoPlayersStarted] = useState(false);
-    const [username2, setUsername2] = useState("");
     const [menuSelected, setMenuSelected] = useState<string>("");
     const [screen, setScreen] = useState("home");
 
@@ -52,17 +50,11 @@ export default function HomePage( {username} : { username: string }) {
     }, [screen]);
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
-    if (twoPlayersStarted) {
-        return <Game settings={settings} username={username} username2={username2} twoPlayers={true} stateStart={true} onGoMenu={() => setTwoPlayersStarted(false)}/>;
-    }
-
     if (screen==="game") {
         return (
             <Game
                 settings={settings}
                 username={username}
-                username2=""
-                twoPlayers={false}
                 stateStart={true}
                 onGoMenu={() => setScreen("home")}
             />
@@ -128,28 +120,7 @@ export default function HomePage( {username} : { username: string }) {
                         Difícil
                     </button>
                 </div>
-
-                <hr className="home-config__divider" />
-
-                <span className="home-config__label home-config__label--section">Partida de 2 Jugadores</span>
-                <label className="home-config__label" htmlFor="username2">Nombre del jugador 2</label>
-                <input
-                    id="username2"
-                    className="home-config__input"
-                    type="text"
-                    placeholder="Nombre del jugador 2"
-                    value={username2}
-                    onChange={(e) => setUsername2(e.target.value)}
-                />
-
-                <button
-                    className="home-config__start"
-                    onClick={() => setTwoPlayersStarted(true)}
-                    disabled={username2.trim() === ""}
-                >
-                    Empezar partida 2 jugadores
-                </button>
-
+                
             </div>
 
             <br></br>

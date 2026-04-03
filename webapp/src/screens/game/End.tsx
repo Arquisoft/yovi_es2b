@@ -4,57 +4,39 @@ import type { GameSettings } from "../../gameOptions/GameSettings";
 // Definimos la interfaz de las props, necesaria para mostrar el resultado de la partida y ofrecer opciones al usuario
 interface EndProps {
   winner: string;        // id del ganador tal como lo devuelve el juego
-  username: string;      // id del jugador humano (jugador 1)
-  username2?: string;    // id del jugador 2 (solo en modo 2 jugadores)
-  twoPlayers?: boolean;  // true si es partida de 2 jugadores
+  username: string;      // id del jugador humano
   settings: GameSettings;
   onGoHome: () => void; // función para volver al menú principal
   onPlayAgain: () => void; // función para iniciar una nueva partida con las mismas configuraciones
 }
 
-export function End({ winner, username, username2 = "", twoPlayers = false, settings, onGoHome, onPlayAgain }: Readonly<EndProps>) {
+export function End({ winner, username, settings, onGoHome, onPlayAgain }: EndProps) {
+  //=== Lógica para determinar si el jugador ganó o perdió ===//
+  //=== es un tipo de operador ternario que asigna true a playerWon si el ganador es el jugador humano, false en caso contrario ===//
   const playerWon = winner === username;
-
-  // En 2 jugadores siempre hay un ganador, mostramos quién ganó
-  let title: string;
-  if (twoPlayers) {
-    title = `¡Ganó ${winner}!`;
-  } else {
-    title = playerWon ? "¡Victoria!" : "Derrota";
-  }
-
-  let icon: string;
-  if (twoPlayers || playerWon) {
-    icon = "🏆";
-  } else {
-    icon = "💀";
-  }
-
-  let subtitle: string;
-  if (twoPlayers) {
-    subtitle = `¡Enhorabuena, ${winner}, ganaste la partida!`;
-  } else if (playerWon) {
-    subtitle = `¡Enhorabuena, ${username}, ganaste la partida!`;
-  } else {
-    subtitle = "Has perdido. ¡Intentalo de nuevo!";
-  }
 
   return (
     <div className="end-screen">
-
+      
       {/* Tarjeta de resultado. Es dinámica, depende de si el jugador ganó o perdió */}
-      <div className={`end-card ${(twoPlayers || playerWon) ? "end-card-win" : "end-card-lose"}`}>
-
+      <div className={`end-card ${playerWon ? "end-card-win" : "end-card-lose"}`}>
+        
         {/* Icono grande */}
-        <div className="end-icon">
-          {icon}
+        <div className="end-icon" >
+          {playerWon ? "🏆" : "💀"}
         </div>
 
         {/* Título */}
-        <h1 className="end-title">{title}</h1>
+        <h1 className="end-title">
+          {playerWon ? "¡Victoria!" : "Derrota"}
+        </h1>
 
         {/* Subtítulo contextual */}
-        <p className="end-subtitle">{subtitle}</p>
+        <p className="end-subtitle">
+          {playerWon
+            ? `¡Enhorabuena, ${username}, ganaste la partida!.`
+            : `Has perdido. ¡Intentalo de nuevo!`}
+        </p>
 
         {/* Divider decorativo */}
         <div className="end-divider" aria-hidden="true" />
@@ -62,15 +44,9 @@ export function End({ winner, username, username2 = "", twoPlayers = false, sett
         {/* Resumen de la partida */}
         <dl className="end-summary">
           <div className="end-summary-row">
-            <dt>{twoPlayers ? "Ganador" : "Jugador"}</dt>
-            <dd>{twoPlayers ? winner : username}</dd>
+            <dt>Jugador</dt>
+            <dd>{username}</dd>
           </div>
-          {twoPlayers && (
-            <div className="end-summary-row">
-              <dt>Perdedor</dt>
-              <dd>{winner === username ? username2 : username}</dd>
-            </div>
-          )}
           <div className="end-summary-row">
             <dt>Dificultad</dt>
             <dd>{settings.difficulty}</dd>
@@ -79,14 +55,12 @@ export function End({ winner, username, username2 = "", twoPlayers = false, sett
             <dt>Estrategia</dt>
             <dd>{settings.strategy}</dd>
           </div>
-          {!twoPlayers && (
-            <div className="end-summary-row">
-              <dt>Resultado</dt>
-              <dd className={playerWon ? "result-win" : "result-lose"}>
-                {playerWon ? "Victoria" : "Derrota"}
-              </dd>
-            </div>
-          )}
+          <div className="end-summary-row">
+            <dt>Resultado</dt>
+            <dd className={playerWon ? "result-win" : "result-lose"}>
+              {playerWon ? "Victoria" : "Derrota"}
+            </dd>
+          </div>
         </dl>
 
         {/* Botones de acción */}
