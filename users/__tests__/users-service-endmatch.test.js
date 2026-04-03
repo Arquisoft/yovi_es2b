@@ -2,6 +2,7 @@ import { describe, it, expect, beforeAll, afterAll } from 'vitest'
 import request from 'supertest'
 import app from '../users-service.js'
 const { connectDB, getDB } = require('../src/database/db.js')
+import { setup, takedown } from './users-service-fortest.js'
 const UserService = require('../src/user-service.js')
 const UserController = require('../src/user-controller.js')
 
@@ -14,37 +15,22 @@ describe('POST /endmatch', () => {
         const db = getDB()
         const userService = new UserService(db)
         const userController = new UserController(userService)
-        
-        app.post('/createuser', userController.createUser)
-        app.post('/deleteuser', userController.deleteuser)
 
         app.post('/endmatch', userController.endmatch)
 
-        //Siempre crear un usuario
-        await request(app)
-        .post('/createuser')
-        .send({
-            username: 'Test_Username',
-            password: 'Test_Password1'
-        })
-        .set('Accept', 'application/json')
-    });
-
-    afterAll(async () => {
-        // Siempre eliminar el usuario
-        await request(app).post('/deleteuser')
-        .send({username : 'Test_Username'})
-        .set('Accept', 'application/json')
     });
 
    /**
     * finalización de partida correcta
     */
     it('se finaliza una partida', async () => {
+
+        await setup('Test_Username_Win', 'Test_Password1')
+
         const res = await request(app)
         .post('/endmatch')
         .send({
-            username: 'Test_Username',
+            username: 'Test_Username_Win',
             strategy: 'RANDOM',
             difficulty: 'EASY'
         })
@@ -52,7 +38,9 @@ describe('POST /endmatch', () => {
 
         expect(res.status).toBe(202)
         expect(res.body).toHaveProperty('message')
-        expect(res.body.message).toMatch("Usuario Test_Username ha ganado una partida: estrategia RANDOM, dificultad EASY.")
+        expect(res.body.message).toMatch("Usuario Test_Username_Win ha ganado una partida: estrategia RANDOM, dificultad EASY.")
+
+        await takedown('Test_Username_Win')
     })
 
    /**
@@ -79,10 +67,13 @@ describe('POST /endmatch', () => {
     * estrategia no existe
     */
     it('no se finaliza una partida por estrategia inexistente', async () => {
+
+        await setup('Test_Username_Win_Strat', 'Test_Password1')
+
         const res = await request(app)
         .post('/endmatch')
         .send({
-            username: 'Test_Username',
+            username: 'Test_Username_Win_Strat',
             strategy: 'Estrategia_Inexistente',
             difficulty: 'EASY'
         })
@@ -91,6 +82,8 @@ describe('POST /endmatch', () => {
         expect(res.status).toBe(406)
         expect(res.body).toHaveProperty('error')
         expect(res.body.error).toMatch("La estrategia 'Estrategia_Inexistente' no es válida.")
+
+        await takedown('Test_Username_Win_Strat')
     })
    
     /**
@@ -98,10 +91,13 @@ describe('POST /endmatch', () => {
     * dificultad no existe
     */
     it('no se finaliza una partida por dificultad inexistente', async () => {
+
+        await setup('Test_Username_Win_Diff', 'Test_Password1')
+
         const res = await request(app)
         .post('/endmatch')
         .send({
-            username: 'Test_Username',
+            username: 'Test_Username_Win_Diff',
             strategy: 'RANDOM',
             difficulty: 'Dificultad_Inexistente'
         })
@@ -110,5 +106,7 @@ describe('POST /endmatch', () => {
         expect(res.status).toBe(405)
         expect(res.body).toHaveProperty('error')
         expect(res.body.error).toMatch("La dificultad 'Dificultad_Inexistente' no es válida.")
+
+        await takedown('Test_Username_Win_Diff')
     })
 })
