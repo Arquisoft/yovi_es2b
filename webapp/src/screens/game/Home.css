@@ -215,31 +215,6 @@
   margin: 0;
 }
 
-/* ── Botón jugar 2 jugadores ──────────────────────────────────────────────── */
-.home-config__two-players {
-  width: 100%;
-  padding: 0.7rem 1.2rem;
-  background: transparent;
-  color: #58c458;
-  font-size: 1rem;
-  font-weight: 600;
-  border: 1px solid #58c458;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin: 0;
-}
-
-.home-config__two-players:hover {
-  background: rgba(88, 196, 88, 0.08);
-  border: 1px solid #58c458;
-  border-radius: 6px;
-}
-
-.home-config__two-players:active {
-  transform: scale(0.98);
-}
-
 /* ── Botón empezar partida ────────────────────────────────────────────────── */
 .home-config__start {
   width: 100%;
@@ -261,4 +236,10 @@
 
 .home-config__start:active {
   transform: scale(0.98);
+}
+
+.home-config__start:disabled {
+  background: #a0a3d4;
+  cursor: not-allowed;
+  transform: none;
 }

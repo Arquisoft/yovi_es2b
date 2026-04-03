@@ -131,9 +131,10 @@ export default function HomePage( {username} : { username: string }) {
 
                 <hr className="home-config__divider" />
 
-                <label className="home-config__label home-config__label--section">Partida de 2 Jugadores</label>
-                <label className="home-config__label">Nombre del jugador 2</label>
+                <span className="home-config__label home-config__label--section">Partida de 2 Jugadores</span>
+                <label className="home-config__label" htmlFor="username2">Nombre del jugador 2</label>
                 <input
+                    id="username2"
                     className="home-config__input"
                     type="text"
                     placeholder="Nombre del jugador 2"
@@ -141,7 +142,11 @@ export default function HomePage( {username} : { username: string }) {
                     onChange={(e) => setUsername2(e.target.value)}
                 />
 
-                <button className="home-config__two-players" onClick={() => setTwoPlayersStarted(true)}>
+                <button
+                    className="home-config__start"
+                    onClick={() => setTwoPlayersStarted(true)}
+                    disabled={username2.trim() === ""}
+                >
                     Empezar partida 2 jugadores
                 </button>
 

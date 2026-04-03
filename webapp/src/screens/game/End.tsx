@@ -12,15 +12,32 @@ interface EndProps {
   onPlayAgain: () => void; // función para iniciar una nueva partida con las mismas configuraciones
 }
 
-export function End({ winner, username, username2 = "", twoPlayers = false, settings, onGoHome, onPlayAgain }: EndProps) {
+export function End({ winner, username, username2 = "", twoPlayers = false, settings, onGoHome, onPlayAgain }: Readonly<EndProps>) {
   const playerWon = winner === username;
 
   // En 2 jugadores siempre hay un ganador, mostramos quién ganó
-  const title = twoPlayers ? "¡Victoria!" : (playerWon ? "¡Victoria!" : "Derrota");
-  const icon  = twoPlayers ? "🏆" : (playerWon ? "🏆" : "💀");
-  const subtitle = twoPlayers
-    ? `¡Enhorabuena, ${winner}, ganaste la partida!`
-    : (playerWon ? `¡Enhorabuena, ${username}, ganaste la partida!` : "Has perdido. ¡Intentalo de nuevo!");
+  let title: string;
+  if (twoPlayers) {
+    title = `¡Ganó ${winner}!`;
+  } else {
+    title = playerWon ? "¡Victoria!" : "Derrota";
+  }
+
+  let icon: string;
+  if (twoPlayers || playerWon) {
+    icon = "🏆";
+  } else {
+    icon = "💀";
+  }
+
+  let subtitle: string;
+  if (twoPlayers) {
+    subtitle = `¡Enhorabuena, ${winner}, ganaste la partida!`;
+  } else if (playerWon) {
+    subtitle = `¡Enhorabuena, ${username}, ganaste la partida!`;
+  } else {
+    subtitle = "Has perdido. ¡Intentalo de nuevo!";
+  }
 
   return (
     <div className="end-screen">

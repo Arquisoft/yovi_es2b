@@ -151,6 +151,11 @@ export function Board(props: BoardProps) {
    * del la aplicacion.
    *
    */
+  function getPlayerName(playerIndex: number): string {
+    if (playerIndex === 0) return props.username;
+    return props.twoPlayers ? props.username2 : "BOT";
+  }
+
   async function realizarMovimiento(x: number, y: number, z: number, player: number): Promise<void> {
     bloquearTablero();
     try {
@@ -159,7 +164,7 @@ export function Board(props: BoardProps) {
 
       //Si partida finalizada
       if (data.status.kind === 'Finished') {
-        const winnerName: string = data.status.winner === 0 ? props.username : props.twoPlayers ? props.username2 : "BOT";
+        const winnerName: string = getPlayerName(data.status.winner);
         setGameOver(true);
         props.changeTurno(winnerName);
         props.onGameEnd(winnerName);
@@ -174,7 +179,7 @@ export function Board(props: BoardProps) {
 
       //Actualiza siguiente jugador
       const nextPlayer: number = data.status.next_player;
-      props.changeTurno(nextPlayer === 0 ? props.username : props.twoPlayers ? props.username2 : "BOT");
+      props.changeTurno(getPlayerName(nextPlayer));
 
       if (!props.twoPlayers && nextPlayer !== 0) {
         const botMove = await peticionMovimientoBot(data.state);
