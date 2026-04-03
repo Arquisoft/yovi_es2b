@@ -141,7 +141,11 @@ export default function HomePage( {username} : { username: string }) {
                     onChange={(e) => setUsername2(e.target.value)}
                 />
 
-                <button className="home-config__two-players" onClick={() => setTwoPlayersStarted(true)}>
+                <button
+                    className="home-config__start"
+                    onClick={() => setTwoPlayersStarted(true)}
+                    disabled={username2.trim() === ""}
+                >
                     Empezar partida 2 jugadores
                 </button>
 
