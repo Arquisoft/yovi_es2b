@@ -164,10 +164,16 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
             settings={settings}
             currentPlayer={turno}
             gameStatus={gameState}
+            twoPlayers={twoPlayers}
           />
         </div>
 
         <div className="board-main">
+          {twoPlayers && (
+            <div className="turn-indicator">
+              Turno de <strong>{turno}</strong>
+            </div>
+          )}
           <Board
             strategy={settings.strategy}
             difficulty={settings.difficulty}
