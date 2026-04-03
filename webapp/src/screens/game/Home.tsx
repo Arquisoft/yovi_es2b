@@ -41,6 +41,7 @@ export default function HomePage( {username} : { username: string }) {
 
     const [twoPlayersStarted, setTwoPlayersStarted] = useState(false);
     const [username2, setUsername2] = useState("");
+    const [username2Error, setUsername2Error] = useState<string | null>(null);
     const [menuSelected, setMenuSelected] = useState<string>("");
     const [screen, setScreen] = useState("home");
 
@@ -139,13 +140,23 @@ export default function HomePage( {username} : { username: string }) {
                     type="text"
                     placeholder="Nombre del jugador 2"
                     value={username2}
-                    onChange={(e) => setUsername2(e.target.value)}
+                    onChange={(e) => { setUsername2(e.target.value); setUsername2Error(null); }}
                 />
+                {username2Error && (
+                    <div className="error-message" style={{ marginTop: 6, color: 'red' }}>
+                        {username2Error}
+                    </div>
+                )}
 
                 <button
                     className="home-config__start"
-                    onClick={() => setTwoPlayersStarted(true)}
-                    disabled={username2.trim() === ""}
+                    onClick={() => {
+                        if (username2.trim() === "") {
+                            setUsername2Error("El nombre del jugador 2 no puede estar vacío.");
+                            return;
+                        }
+                        setTwoPlayersStarted(true);
+                    }}
                 >
                     Empezar partida 2 jugadores
                 </button>
