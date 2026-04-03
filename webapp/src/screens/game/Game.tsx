@@ -60,7 +60,7 @@ async function abandonarPartida(username: string, strategy: string, difficulty: 
   }
 }
 
-export function Game({ settings, username, username2, twoPlayers, stateStart, onGoMenu = () => {}, onGameEnd }: GameProps) {
+export function Game({ settings, username, username2, twoPlayers, stateStart, onGoMenu = () => {}, onGameEnd }: Readonly<GameProps>) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
@@ -89,7 +89,13 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
 
         // para cada atributo
         const nextPlayer = await getTurnoPartida(idG);
-        setTurno(nextPlayer === 0 ? username : twoPlayers ? username2 : "BOT");
+        let firstTurno: string;
+        if (nextPlayer === 0) {
+          firstTurno = username;
+        } else {
+          firstTurno = twoPlayers ? username2 : "BOT";
+        }
+        setTurno(firstTurno);
         setGameState("Iniciada");
       }
     }
