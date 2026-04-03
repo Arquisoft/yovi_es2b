@@ -193,7 +193,13 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
         <div className="board-main">
           {twoPlayers && (
             <div className="turn-indicator">
-              Turno de <strong>{turno}</strong>
+              <span className="turn-indicator__label">Turno de</span>
+              <span
+                className="turn-indicator__player"
+                style={{ color: turno === username ? "#3b82f6" : "#ef4444" }}
+              >
+                {turno}
+              </span>
             </div>
           )}
           <Board
