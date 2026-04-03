@@ -93,6 +93,7 @@ export default function HomePage( {username} : { username: string }) {
 
             {/* Contenido */}
             <div className="home-body">
+                <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
                 <h2 className="home-screen__title">Bienvenido a tu menú principal, {username}</h2>
 
                 <div className="home-panels">
@@ -185,6 +186,11 @@ export default function HomePage( {username} : { username: string }) {
 
                         <div className="home-config__spacer" />
 
+                        {username2Error && (
+                            <div style={{ color: 'red', fontSize: '0.85rem' }}>
+                                {username2Error}
+                            </div>
+                        )}
                         <button
                             className="home-config__start"
                             onClick={() => {
@@ -197,11 +203,6 @@ export default function HomePage( {username} : { username: string }) {
                         >
                             Empezar partida 2 jugadores
                         </button>
-                        {username2Error && (
-                            <div style={{ marginTop: 6, color: 'red', fontSize: '0.85rem' }}>
-                                {username2Error}
-                            </div>
-                        )}
                     </div>
 
                 </div>
