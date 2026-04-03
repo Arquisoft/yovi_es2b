@@ -8,6 +8,7 @@ import { Difficulty } from "../../components/gameOptions/Difficulty";
 import "./Home.css";
 import InitialScreen from "../init/InitialScreen";
 import GameStats from "../stats/GameStats";
+import Ranking from "../ranking/Ranking";
 
 const yoviLogo = "/yovi_logo.png";
 
@@ -76,6 +77,10 @@ export default function HomePage( {username} : { username: string }) {
 
     if (screen==="stats") {
         return (<GameStats username={username}/>);
+    }
+
+    if (screen === "ranking"){
+        return <Ranking username={username} />;
     }
 
 
@@ -169,7 +174,7 @@ export default function HomePage( {username} : { username: string }) {
                 <button className="home-menu__btn" onClick={() => setScreen("stats")}>
                     Mis estadísticas
                 </button>
-                <button className="home-menu__btn" onClick={() => setMenuSelected("Ranking")}>
+                <button className="home-menu__btn" onClick={() => setScreen("ranking")}>
                     Ranking
                 </button>
                 <button className="home-menu-out__btn" onClick={() => setScreen("login")}>
