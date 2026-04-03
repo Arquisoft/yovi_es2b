@@ -196,7 +196,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
               <span className="turn-indicator__label">Turno de</span>
               <span
                 className="turn-indicator__player"
-                style={{ color: turno === username ? "#3b82f6" : "#ef4444" }}
+                style={{ color: turno === username ? "#0c55c0" : "#b91c1c" }}
               >
                 {turno}
               </span>
