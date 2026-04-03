@@ -19,6 +19,19 @@
     gap: 14px;
 }
 
+.ranking-btn-filtered {
+    padding: 12px 32px;
+    font-size: 1rem;
+    font-weight: 600;
+    background: #1a56db;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+.ranking-btn-filtered:hover { background: #1241a8; }
+
 .ranking-btn-back {
     padding: 10px 28px;
     font-size: 0.95rem;

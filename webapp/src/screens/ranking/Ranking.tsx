@@ -1,22 +1,23 @@
 import { useState } from "react";
 import Home from "../game/Home";
 import "./Ranking.css";
-
-
-const yoviLogo = "/yovi_logo.png";
+import RankingFiltered from "./RankingFiltered";
 
 export default function Ranking({ username }: { username: string }) {
     const [goBack, setGoBack] = useState(false);
+    const [goFiltered, setGoFiltered] = useState(false);
+
 
     if (goBack) return <Home username={username} />;
+    if (goFiltered) return <RankingFiltered username={username} />;
 
     return (
         <div className="ranking-screen">
-            <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
+            <img src={"/yovi_logo.png"} alt="YOVI Logo" />
             <h1 className="ranking-screen-title">Ranking global</h1>
 
             <div className="ranking-menu">
-                <button className="ranking-btn-filtered">
+                <button className="ranking-btn-filtered" onClick={() => setGoFiltered(true)}>
                     Ver ranking
                 </button>
 
