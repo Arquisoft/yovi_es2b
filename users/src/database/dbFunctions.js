@@ -17,7 +17,6 @@ const {
  * Función de registro de un usuario existente
  */
 async function loginuser(users, username, password) {
-
     // que no sea vacío o ERROR
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
         throw new MissingFieldsError(['username']);
@@ -26,8 +25,13 @@ async function loginuser(users, username, password) {
         throw new MissingFieldsError(['password']);
     }
 
+    //
+    if(username.trim() !== username) {
+        throw new InvalidCredentialsError();
+    }
+
     // espera a encontrar el usuario en la base -> Jimena maneja la base
-    const existingUser = await users.findOne({ "username": username });
+    const existingUser = await users.findOne({ "username": String(username) });
     // si el usuario no existe
     if (!existingUser) {
         throw new UserNotFoundError(username);
@@ -37,7 +41,7 @@ async function loginuser(users, username, password) {
         throw new InvalidCredentialsError();
     }
 
-    // todo bien
+    // esta correcto
     return 'Usuario encontrado exitosamente. Iniciando sesión...' ;
 }
 
@@ -45,8 +49,10 @@ async function loginuser(users, username, password) {
  * Función de creación de usuario
  */
 async function createuser(users, username, password) {
+    username = username.trim();
+
     // que no sea usuario vacío 
-    if (!username || typeof username !== 'string') {
+    if (!username || typeof username !== 'string' || username.length === 0) {
         throw new MissingFieldsError(['username']);
     }
     // que no sea contraseña vacía
@@ -55,7 +61,7 @@ async function createuser(users, username, password) {
     }
 
     // busca si existe usuario con ese nombre
-    const existingUser = await users.findOne({ "username": username });
+    const existingUser = await users.findOne({ "username": String(username) });
     if (existingUser) {
         throw new UserAlreadyExistsError(username);
     }
@@ -66,8 +72,29 @@ async function createuser(users, username, password) {
     // espera a crear el usuario en la base -> Jimena maneja la base
     await users.insertOne({ username, password, createdAt: new Date() });
 
-    // todo bien
+    // esta correcto
     return 'Usuario creado exitosamente. Iniciando sesión...' ;
+}
+
+/**
+ * Función de eliminar usuario
+ * Para test
+ */
+async function deleteuser(users, username) {
+    // que no sea usuario vacío 
+    if (!username || typeof username !== 'string') {
+        return;
+    }
+
+    // busca si existe usuario con ese nombre
+    const existingUser = await users.findOne({ "username": String(username) });
+    if (existingUser) {
+        // espera a eliminar el usuario en la base -> Jimena maneja la base
+        await users.deleteOne({ "username": String(username) });
+    }
+
+    // esta correcto
+    return 'Usuario eliminado exitosamente.' ;
 }
 
 /**
@@ -78,7 +105,7 @@ async function findUser(users, username) {
     if (!username || typeof username !== 'string' || username.trim().length === 0) {
         throw new MissingFieldsError(['username']);
     }
-    const existingUser = await users.findOne({ "username": username });
+    const existingUser = await users.findOne({ "username": String(username) });
 
     if (existingUser == null) {
         throw new UserNotFoundError(username);
@@ -94,22 +121,22 @@ async function findUser(users, username) {
 function checkPassword(password) {
     // contraseña de más de 5 caracteres
     if (password.length < 5) {
-        throw new WeakPasswordError('La contraseña debe tener 6 o más caracteres.');
+        throw new WeakPasswordError('La contraseña debe tener 5 o más caracteres.');
     }
 
     // contraseña tiene una minúscula
     if (!password.match(/[a-z]/)) {
-        throw new WeakPasswordError('La contraseña debe contener al menos una minúscula');
+        throw new WeakPasswordError('La contraseña debe contener al menos una minúscula.');
     }
 
     // contraseña tiene una mayúscula
     if (!password.match(/[A-Z]/)) {
-        throw new WeakPasswordError('La contraseña debe contener al menos una mayúscula');
+        throw new WeakPasswordError('La contraseña debe contener al menos una mayúscula.');
     }
 
     // contraseña tiene un número
     if (!password.match(/[0-9]/)) {
-        throw new WeakPasswordError('La contraseña debe contener al menos un número');
+        throw new WeakPasswordError('La contraseña debe contener al menos un número.');
     }
 }
 
@@ -119,7 +146,7 @@ function checkPassword(password) {
     async function initmatch(users, username, strategy, difficulty) {
 
         // espera a encontrar el usuario en la base -> Jimena maneja la base
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         // si el usuario no existe
         if (!existingUser) {
             throw new UserNotFoundError(username);
@@ -152,7 +179,7 @@ function checkPassword(password) {
      */
     async function endmatch(users, username, strategy, difficulty) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
             throw new UserNotFoundError(username);
@@ -184,7 +211,7 @@ function checkPassword(password) {
      * Función de terminación de partida abandonada
      */
     async function abandonmatch(users, username, strategy, difficulty) {
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         if (!existingUser) {
             throw new UserNotFoundError(username);
         }
@@ -216,7 +243,7 @@ function checkPassword(password) {
      */
     async function diffstats(users, username) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
             throw new UserNotFoundError(username);
@@ -253,7 +280,7 @@ function checkPassword(password) {
      */
     async function stratstats(users, username) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
             throw new UserNotFoundError(username);
@@ -290,7 +317,7 @@ function checkPassword(password) {
      */
     async function allstats(users, username) {
         // espera a encontrar el usuario en la base -> Jimena maneja la base
-        const existingUser = await users.findOne({ "username": username });
+        const existingUser = await users.findOne({ "username": String(username) });
         // si el usuario no existe. Habla con Jimena
         if (!existingUser) {
             throw new UserNotFoundError(username);
@@ -332,4 +359,4 @@ function checkPassword(password) {
         return stats;
     }
 
-module.exports = { loginuser, createuser, findUser, initmatch, endmatch, abandonmatch, diffstats, stratstats, allstats };
+module.exports = { loginuser, createuser, deleteuser, findUser, initmatch, endmatch, abandonmatch, diffstats, stratstats, allstats };

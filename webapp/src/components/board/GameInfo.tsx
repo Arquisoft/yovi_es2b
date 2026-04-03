@@ -5,6 +5,7 @@ interface Props {
   settings: GameSettings;
   currentPlayer: string; //cambaiar al nombre del jugador cuando este hecho el inicio de sesion
   gameStatus: string;
+  twoPlayers?: boolean;
 }
 
 export default function GameInfo(props: Props) {
@@ -12,16 +13,15 @@ export default function GameInfo(props: Props) {
     <div className="game-info">
       <h2>Información de partida</h2>
       <div className="info-section">
-        <p><strong>Jugador: </strong> {props.currentPlayer}</p>
-        {/*cambiar al nombre del jugador cuando este hecho el inicio de sesion*/}
-        <p><strong>Oponente: </strong> BOT</p>
+        {!props.twoPlayers && <p><strong>Jugador: </strong> {props.currentPlayer}</p>}
+        {!props.twoPlayers && <p><strong>Oponente: </strong> BOT</p>}
       </div>
       <div className="info-section">
-        <p><strong>Estrategia: </strong> {props.settings.strategy}</p>
+        {!props.twoPlayers && <p><strong>Estrategia: </strong> {props.settings.strategy}</p>}
         <p><strong>Dificultad: </strong> {props.settings.difficulty}</p>
       </div>
       <div className="info-section">
-        <p><strong>Turno actual: </strong> {props.currentPlayer}</p>
+        {!props.twoPlayers && <p><strong>Turno actual: </strong> {props.currentPlayer}</p>}
         <p><strong>Estado: </strong> {props.gameStatus}</p>
       </div>
     </div>

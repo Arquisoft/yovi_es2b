@@ -1,3 +1,4 @@
+use rand;
 use crate::core::SetIdx;
 use crate::core::player_set::PlayerSet;
 use crate::{Coordinates, GameAction, GameYError, Movement, PlayerId, RenderOptions, YEN};
@@ -42,7 +43,7 @@ pub enum Cell {
 }
 
 impl GameY {
-    /// Creates a new game with the specified board size and number of players.
+    /// Creates a new game with the specified board size. Player 0 always goes first.
     pub fn new(board_size: u32) -> Self {
         let total_cells = (board_size * (board_size + 1)) / 2;
         Self {
@@ -55,6 +56,17 @@ impl GameY {
             },
             available_cells: (0..total_cells).collect(),
         }
+    }
+
+    /// Creates a new game where the first player is chosen randomly (50/50).
+    pub fn new_random_start(board_size: u32) -> Self {
+        let mut game = GameY::new(board_size);
+        if rand::random::<bool>() {
+            game.status = GameStatus::Ongoing {
+                next_player: PlayerId::new(1),
+            };
+        }
+        game
     }
 
     /// Returns the current game status.

@@ -12,6 +12,8 @@ import Home from "./Home";
 interface GameProps {
   settings: GameSettings;
   username: string;
+  username2: string;
+  twoPlayers: boolean;
   stateStart: boolean;
   onGoMenu?: () => void;
   onGameEnd?: (winner: string) => void;
@@ -58,14 +60,15 @@ async function abandonarPartida(username: string, strategy: string, difficulty: 
   }
 }
 
-export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGameEnd  }: GameProps) {
+export function Game({ settings, username, username2, twoPlayers, stateStart, onGoMenu = () => {}, onGameEnd }: Readonly<GameProps>) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
   const [gameId, setGameId] = useState("");
   const [winner, setWinner] = useState<string | null>(null); // ganador de la partida, null si no hay ganador aún
   const [showEndScreen, setShowEndScreen] = useState(false);
-  const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal 
+  const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal
+  const [refreshKey, setRefreshKey] = useState(0);  // incrementar fuerza recarga del tablero 
 
   // como es función async, llamamos useEffect
   useEffect(() => {
@@ -87,7 +90,13 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
 
         // para cada atributo
         const nextPlayer = await getTurnoPartida(idG);
-        setTurno(nextPlayer === 0 ? username : "BOT"); // Si es 0 es el anfitrion
+        let firstTurno: string;
+        if (nextPlayer === 0) {
+          firstTurno = username;
+        } else {
+          firstTurno = twoPlayers ? username2 : "BOT";
+        }
+        setTurno(firstTurno);
         setGameState("Iniciada");
       }
     }
@@ -123,6 +132,21 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
 
   }
 
+  async function handleUndo() {
+    const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
+    try {
+      // En partida vs bot deshacemos 2 movimientos (el del bot y el del jugador)
+      const veces = twoPlayers ? 1 : 2;
+      for (let i = 0; i < veces; i++) {
+        const res = await fetch(`${GAMEY_URL}/v1/games/${gameId}/undo`, { method: 'POST' });
+        if (!res.ok) break;
+      }
+      setRefreshKey((k) => k + 1);
+    } catch (err) {
+      console.error("Error al deshacer movimiento:", err);
+    }
+  }
+
   async function handleExit() {
     try {
       await abandonarPartida(username, settings.strategy, settings.difficulty);
@@ -144,6 +168,8 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
       <End
         winner={winner}
         username={username}
+        username2={username2}
+        twoPlayers={twoPlayers}
         settings={settings}
         onGoHome={onGoMenu}
         onPlayAgain={() => setPlayAgain((prev) => !prev)} // toggle dispara el useEffect
@@ -160,17 +186,32 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
             settings={settings}
             currentPlayer={turno}
             gameStatus={gameState}
+            twoPlayers={twoPlayers}
           />
         </div>
 
         <div className="board-main">
-          <Board 
+          {twoPlayers && (
+            <div className="turn-indicator">
+              <span className="turn-indicator__label">Turno de</span>
+              <span
+                className="turn-indicator__player"
+                style={{ color: turno === username ? "#0c55c0" : "#b91c1c" }}
+              >
+                {turno}
+              </span>
+            </div>
+          )}
+          <Board
             strategy={settings.strategy}
             difficulty={settings.difficulty}
-            gameId={gameId} 
-            turno={turno} 
-            gameState={gameState} 
+            gameId={gameId}
+            turno={turno}
+            gameState={gameState}
             username={username}
+            username2={username2}
+            twoPlayers={twoPlayers}
+            refreshKey={refreshKey}
             changeTurno={setTurno}
             onGameEnd={handleGameEnd}
           />
@@ -179,6 +220,7 @@ export function Game({ settings, username, stateStart, onGoMenu = () => {}, onGa
         <div className="controls-bottom">
           <ControlPanel
             onExit={handleExit}
+            onUndo={handleUndo}
           />
         </div>
       </div>
