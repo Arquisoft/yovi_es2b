@@ -17,6 +17,12 @@ const DIFFICULTY_LABELS: Record<DifficultyFilter, string> = {
     HARD:   "Difícil",
 };
 
+const DIFFICULTY_COLORS: Record<DifficultyFilter, string> = {
+    EASY: "ranking-info--green",
+    MEDIUM: "ranking-info--orange",
+    HARD: "ranking-info--red",
+};
+
 export default function RankingDifficulty({ username, obtenerDatos, getMedal }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal }) {
 
     const [difficulty, setDifficulty] = useState<DifficultyFilter>("EASY");
@@ -39,7 +45,7 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal }: 
                 {(Object.keys(DIFFICULTY_LABELS) as DifficultyFilter[]).map((d) => (
                     <button
                         key={d}
-                        className={difficulty === d ? "ranking-info ranking-info--active" : "ranking-info"}
+                        className={difficulty === d ? `ranking-info ${DIFFICULTY_COLORS[d]} ${DIFFICULTY_COLORS[d]}--active` : `ranking-info ${DIFFICULTY_COLORS[d]}`}
                         onClick={() => setDifficulty(d)}
                     >
                         {DIFFICULTY_LABELS[d]}

@@ -6,6 +6,12 @@
     min-height: 100vh;
 }
 
+.ranking-logo {
+    width: clamp(80px, 12vw, 120px);
+    height: auto;
+    margin-bottom: 8px;
+}
+
 .ranking-screen-title {
     font-size: 2rem;
     margin-bottom: 32px;

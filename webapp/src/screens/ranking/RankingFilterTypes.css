@@ -44,6 +44,57 @@
     color: #fff;
 }
 
+.ranking-info--green {
+    border-color: #86efac;
+    color: #166534;
+    background: #f0fdf4;
+}
+
+.ranking-info--green:hover {
+    border-color: #22c55e;
+    color: #14532d;
+}
+
+.ranking-info--green--active {
+    background: #16a34a;
+    border-color: #16a34a;
+    color: #fff;
+}
+
+.ranking-info--orange {
+    border-color: #fed7aa;
+    color: #9a3412;
+    background: #fff7ed;
+}
+
+.ranking-info--orange:hover {
+    border-color: #f97316;
+    color: #7c2d12;
+}
+
+.ranking-info--orange--active {
+    background: #ea580c;
+    border-color: #ea580c;
+    color: #fff;
+}
+
+.ranking-info--red {
+    border-color: #fecaca;
+    color: #991b1b;
+    background: #fef2f2;
+}
+
+.ranking-info--red:hover {
+    border-color: #ef4444;
+    color: #7f1d1d;
+}
+
+.ranking-info--red--active {
+    background: #dc2626;
+    border-color: #dc2626;
+    color: #fff;
+}
+
 /* ── Table ── */
 
 .ranking-table {

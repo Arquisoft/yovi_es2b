@@ -13,7 +13,7 @@ export default function Ranking({ username }: { username: string }) {
 
     return (
         <div className="ranking-screen">
-            <img src={"/yovi_logo.png"} alt="YOVI Logo" />
+            <img className="ranking-logo" src={"/yovi_logo.png"} alt="YOVI Logo" />
             <h1 className="ranking-screen-title">Ranking global</h1>
 
             <div className="ranking-menu">

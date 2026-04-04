@@ -23,6 +23,12 @@ const ENDPOINTS: Record<FilterKey, string> = {
     abandonadas: "/ranking/abandoned",
 };
 
+const FILTER_COLORS: Record<FilterKey, string> = {
+    victorias: "ranking-info--green",
+    derrotas: "ranking-info--red",
+    abandonadas: "ranking-info--orange",
+};
+
 export default function RankingGeneral({ username, obtenerDatos, getMedal }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal }) {
 
     const [filter, setFilter] = useState<FilterKey>("victorias"); // Estado para el filtro seleccionado. Por defecto, se muestra el ranking por victorias.
@@ -53,7 +59,7 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal }: { u
                     <button
                     // La clase del botón cambia según si el filtro está activo o no, para mostrar visualmente cuál es el filtro seleccionado.
                         key={f}
-                        className={filter === f ? "ranking-info ranking-info--active" : "ranking-info"}
+                        className={filter === f ? `ranking-info ${FILTER_COLORS[f]} ${FILTER_COLORS[f]}--active` : `ranking-info ${FILTER_COLORS[f]}`}
                         onClick={() => setFilter(f)}
                     >
                         {/*El texto del botón se obtiene del objeto FILTER_LABELS, que asigna una etiqueta legible a cada clave de filtro.*/}
