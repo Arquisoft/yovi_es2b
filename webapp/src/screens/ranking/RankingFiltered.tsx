@@ -99,6 +99,7 @@ export default function RankingFiltered({ username }: { username: string }) {
             throw new Error("Network error");
         }
     };
+
     return (
         <div className="ranking-filtered-screen">
 

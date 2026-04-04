@@ -18,9 +18,9 @@ const FILTER_LABELS: Record<FilterKey, string> = {
 };
 
 const ENDPOINTS: Record<FilterKey, string> = {
-    victorias:   "/rankingvictories",
-    derrotas:    "/rankingdefeats",
-    abandonadas: "/rankingabandon",
+    victorias:   "/ranking/wins",
+    derrotas:    "/ranking/defeats",
+    abandonadas: "/ranking/abandonments",
 };
 
 const FILTER_COLORS: Record<FilterKey, string> = {
@@ -73,7 +73,7 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal }: { u
                     <tr>
                         <td>Posición</td>
                         <td>Jugador</td>
-                        <td>{FILTER_LABELS[filter]} (%)</td>
+                        <td>{FILTER_LABELS[filter]}</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -89,7 +89,7 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal }: { u
                                     <span className="ranking-user-tag">Tú</span>
                                 )}
                             </td>
-                            <td>{entry.value.toFixed(2)} %</td>
+                            <td>{entry.value}</td>
                         </tr>
                     ))}
                 </tbody>

@@ -75,11 +75,11 @@ async function startServer() {
   app.post('/stratstats', userController.stratstats);
 
   // rankings
-  app.get('/rankingvictories', userController.rankingvictories);
-  app.get('/rankingdefeats', userController.rankingdefeats);
-  app.get('/rankingabandon', userController.rankingabandon);
-  app.get('/rankingwinsbydifficulty', userController.rankingwinsbydifficulty);
-  app.get('/rankingwinsbystrategy', userController.rankingwinsbystrategy);
+  app.get('/ranking/wins', userController.rankingvictories);
+  app.get('/ranking/defeats', userController.rankingdefeats);
+  app.get('/ranking/abandonments', userController.rankingabandon);
+  app.post('/ranking/wins/difficulty', userController.rankingwinsbydifficulty);
+  app.post('/ranking/wins/strategy', userController.rankingwinsbystrategy);
 
 }
 

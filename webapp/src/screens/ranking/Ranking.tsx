@@ -19,11 +19,7 @@ export default function Ranking({ username }: { username: string }) {
         const obtenerPosicion = async () => {
             try {
                 const API_URL = import.meta.env.VITE_API_URL_WA ?? "";
-                const res = await fetch(`${API_URL}/ranking/wins`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({}),
-                });
+                const res = await fetch(`${API_URL}/ranking/wins`); // GET sin body
 
                 const data = await res.json();
                 if (!res.ok || !Array.isArray(data.ranking)) {
@@ -46,7 +42,6 @@ export default function Ranking({ username }: { username: string }) {
 
         obtenerPosicion();
     }, [username]);
-
 
     if (goBack) return <Home username={username} />;
     if (goFiltered) return <RankingFiltered username={username} />;

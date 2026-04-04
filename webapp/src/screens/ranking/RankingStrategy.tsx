@@ -32,7 +32,7 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal }: { 
 
     useEffect(() => {
         const cargarDatos = async () => {
-            const resultado = await obtenerDatos("/rankingwinsbystrategy", { strategy });
+            const resultado = await obtenerDatos("/ranking/wins/strategy", { strategy });
             setData(resultado);
         };
         cargarDatos();
@@ -60,7 +60,7 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal }: { 
                     <tr>
                         <td>Posición</td>
                         <td>Jugador</td>
-                        <td>Victorias ({STRATEGY_LABELS[strategy]}) (%)</td>
+                        <td>Victorias ({STRATEGY_LABELS[strategy]})</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -76,7 +76,7 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal }: { 
                                     <span className="ranking-user-tag">Tú</span>
                                 )}
                             </td>
-                            <td>{entry.value.toFixed(2)} %</td>
+                            <td>{entry.value}</td>
                         </tr>
                     ))}
                 </tbody>
