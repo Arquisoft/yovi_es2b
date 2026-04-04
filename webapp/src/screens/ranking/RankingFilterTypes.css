@@ -1,0 +1,92 @@
+.ranking-general-screen,
+.ranking-diff-screen,
+.ranking-strat-screen {
+    width: 100%;
+}
+
+.ranking-table-title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #374151;
+    margin-bottom: 12px;
+}
+
+/* ── Filter chips ── */
+
+.ranking-filter-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.ranking-chip {
+    border: 1px solid #d1d5db;
+    background: #fff;
+    color: #6b7280;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+.ranking-chip:hover {
+    border-color: #1a56db;
+    color: #1a56db;
+}
+.ranking-chip--active {
+    background: #1a56db;
+    border-color: #1a56db;
+    color: #fff;
+}
+
+/* ── Table ── */
+
+.ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ranking-table thead tr {
+    background: #f3f4f6;
+}
+
+.ranking-table thead tr td {
+    padding: 10px 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #6b7280;
+}
+
+.ranking-table tbody tr {
+    border-bottom: 1px solid #f3f4f6;
+    transition: background 0.15s;
+}
+.ranking-table tbody tr:hover { background: #eff6ff; }
+
+.ranking-table tbody tr td {
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #111827;
+}
+
+/* highlight del usuario actual */
+.ranking-row--me {
+    background: #eff6ff;
+    outline: 1px solid #bfdbfe;
+}
+
+.ranking-user-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #1a56db;
+    margin-left: 8px;
+    background: #eff6ff;
+    padding: 2px 7px;
+    border-radius: 4px;
+}
