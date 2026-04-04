@@ -475,25 +475,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_nivel_1_visión_general_del_sistema">5.1. Nivel 1 – Visión general del sistema</a></li>
 <li><a href="#_nivel_2_descomposición_interna_de_los_bloques">5.2. Nivel 2 – Descomposición interna de los bloques</a></li>
 <li><a href="#_nivel_3_interfaces_entre_componentes">5.3. Nivel 3: Interfaces entre componentes</a></li>
-<li><a href="#_diagrama_de_clases">5.4. Diagrama de clases</a></li>
 </ul>
 </li>
-<li><a href="#section-runtime-view">6. Vista en tiempo de ejecución</a></li>
-<li><a href="#section-deployment-view">7. Vista de despliegue</a></li>
-<li><a href="#section-concepts">8. Conceptos transversales</a></li>
-<li><a href="#section-design-decisions">9. Decisiones arquitectónicas</a>
+<li><a href="#_imageyovi_interfazusers_pnginterfaz_users_yovi">image::yovi-interfazusers.png[interfaz-users-yovi]</a>
+<ul class="sectlevel3">
+<li><a href="#_interfaz_frontend_microservicio_gamey">.1. Interfaz Frontend – Microservicio GameY</a></li>
+<li><a href="#_interfaz_de_acceso_a_datos">.2. Interfaz de acceso a datos</a></li>
+<li><a href="#_diagrama_de_clases">.3. Diagrama de clases</a></li>
+<li><a href="#section-runtime-view">4. Vista en tiempo de ejecución</a></li>
+<li><a href="#section-deployment-view">5. Vista de despliegue</a></li>
+<li><a href="#section-concepts">6. Conceptos transversales</a></li>
+<li><a href="#section-design-decisions">7. Decisiones arquitectónicas</a>
 <ul class="sectlevel2">
-<li><a href="#_tabla_de_decisiones">9.1. Tabla de decisiones</a></li>
+<li><a href="#_tabla_de_decisiones">7.1. Tabla de decisiones</a></li>
 </ul>
 </li>
-<li><a href="#section-quality-scenarios">10. Requisitos de calidad</a></li>
-<li><a href="#section-technical-risks">11. Riesgos y deuda técnica</a>
+<li><a href="#section-quality-scenarios">8. Requisitos de calidad</a></li>
+<li><a href="#section-technical-risks">9. Riesgos y deuda técnica</a>
 <ul class="sectlevel2">
-<li><a href="#_tabla_de_riesgos">11.1. Tabla de riesgos</a></li>
+<li><a href="#_tabla_de_riesgos">9.1. Tabla de riesgos</a></li>
 </ul>
 </li>
-<li><a href="#section-glossary">12. Tests</a></li>
-<li><a href="#section-glossary">13. Glosario</a></li>
+<li><a href="#section-glossary">10. Tests</a></li>
+<li><a href="#section-glossary">11. Glosario</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -1050,7 +1056,7 @@ Se trata de una base de datos NoSQL orientada a documentos, adecuada para almace
 <h4 id="_esquema_del_sistema">5.1.5. Esquema del sistema</h4>
 <div class="paragraph">
 <p>Este es el esquema del juego completo:
-image::yovi-estructura.png[componentes-yovi]</p>
+= image::yovi-estructura.png[componentes-yovi]</p>
 </div>
 </div>
 </div>
@@ -1179,23 +1185,22 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </li>
 <li>
 <p>POST /createuser – crea un nuevo usuario, validando que no exista</p>
-<div class="literalblock">
-<div class="content">
-<pre>image::yovi-interfazusers.png[interfaz-users-yovi]</pre>
-</div>
-</div>
 </li>
 </ul>
 </div>
 </div>
+</div>
+</div>
+</div>
+<h1 id="_imageyovi_interfazusers_pnginterfaz_users_yovi" class="sect0">image::yovi-interfazusers.png[interfaz-users-yovi]</h1>
 <div class="sect3">
-<h4 id="_interfaz_frontend_microservicio_gamey">5.3.2. Interfaz Frontend – Microservicio GameY</h4>
+<h4 id="_interfaz_frontend_microservicio_gamey">.1. Interfaz Frontend – Microservicio GameY</h4>
 <div class="paragraph">
 <p>El frontend interactúa con el microservicio GameY para gestionar el desarrollo de las partidas gracias a la API REST . La información de la partida se representa mediante la notación YEN, que describe el tamaño del tablero, el turno actual y la disposición de las piezas.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_interfaz_de_acceso_a_datos">5.3.3. Interfaz de acceso a datos</h4>
+<h4 id="_interfaz_de_acceso_a_datos">.2. Interfaz de acceso a datos</h4>
 <div class="paragraph">
 <p>Los microservicios del sistema acceden a la base de datos de MongoDB para almacenar y recuperar la información persistente. Entre las principales operaciones destacan el almacenamiento de usuarios ya registrados, el registro de las partidas jugadas, la consulta de estadísticas del juego o del ranking, &#8230;&#8203;</p>
 </div>
@@ -1203,21 +1208,18 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <p>El acceso a la base de datos se realiza a través de los métodos de acceso a datos definidos dentro de cada microservicio, evitando que otros componentes interactúen directamente con la base de datos.</p>
 </div>
 </div>
-</div>
 <div class="sect2">
-<h3 id="_diagrama_de_clases">5.4. Diagrama de clases</h3>
+<h3 id="_diagrama_de_clases">.3. Diagrama de clases</h3>
 <div class="literalblock">
 <div class="content">
 <pre> Vemos en la siguiente imagen el diagrama de clases de este proyecto.
-image::gamey_uml.png[gamey_uml]</pre>
+= image::gamey_uml.png[gamey_uml]</pre>
 </div>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
-</div>
-</div>
 <div class="sect1">
-<h2 id="section-runtime-view">6. Vista en tiempo de ejecución</h2>
+<h2 id="section-runtime-view">4. Vista en tiempo de ejecución</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Ahora podremos ver diferentes diagramas, que representarán el juego a lo largo de su tiempo de vida para casos concretos en tiempo de ejecución. Más específicamente, se verá la interacción entre usuario y el resto del sistema (interfaces, servicio, base de datos, etc.), y cómo afectará al juego en cada caso.</p>
@@ -1234,7 +1236,7 @@ image::gamey_uml.png[gamey_uml]</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-deployment-view">7. Vista de despliegue</h2>
+<h2 id="section-deployment-view">5. Vista de despliegue</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>En este caso, habrá un diagrama que represente las relaciones entre elementos que participarán en las acciones de despliegue y cómo se hará para distribuir el proyecto sobre un producto final y la infraestructura para soportarlo.</p>
@@ -1246,7 +1248,7 @@ image::gamey_uml.png[gamey_uml]</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-concepts">8. Conceptos transversales</h2>
+<h2 id="section-concepts">6. Conceptos transversales</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>En este apartado se explicarán distintos aspectos de la gestión del proyecto, centrándose en los niveles de prioridad para abordar las tareas, los patrones de diseño seguidos, la testeabilidad y seguridad del proyecto y las librerías usadas. Además, mencionaremos algunos aspectos extras del desarrollo si se acaban implementando.</p>
@@ -1255,13 +1257,13 @@ image::gamey_uml.png[gamey_uml]</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-design-decisions">9. Decisiones arquitectónicas</h2>
+<h2 id="section-design-decisions">7. Decisiones arquitectónicas</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Son criterios importantes respecto al proyecto que nos puedan costar recursos, no tanto monetarios en este caso, pero más de tiempo y esfuerzo humano. Se explayarán por duplas de términos “Decisión-Consecuencia”.</p>
 </div>
 <div class="sect2">
-<h3 id="_tabla_de_decisiones">9.1. Tabla de decisiones</h3>
+<h3 id="_tabla_de_decisiones">7.1. Tabla de decisiones</h3>
 <div class="paragraph">
 <p>Este apartado trata de explicar que las decisiones tomadas se llevaron a cabo tras una reflexión grupal, conociendo inconvenientes de cada una.</p>
 </div>
@@ -1300,7 +1302,7 @@ image::gamey_uml.png[gamey_uml]</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-quality-scenarios">10. Requisitos de calidad</h2>
+<h2 id="section-quality-scenarios">8. Requisitos de calidad</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Se definirán los requisitos de calidad necesarios para que el proyecto esté realmente correcto y finalizado.</p>
@@ -1309,13 +1311,13 @@ image::gamey_uml.png[gamey_uml]</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-technical-risks">11. Riesgos y deuda técnica</h2>
+<h2 id="section-technical-risks">9. Riesgos y deuda técnica</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Aquí definiremos también mediante duplas de “Título-Descripción” de algunos riesgos que surgidos a lo largo del tiempo de vida del proyecto. Esta tabla estará ordenada en orden de prioridad para tener en cuenta.</p>
 </div>
 <div class="sect2">
-<h3 id="_tabla_de_riesgos">11.1. Tabla de riesgos</h3>
+<h3 id="_tabla_de_riesgos">9.1. Tabla de riesgos</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1343,7 +1345,7 @@ image::gamey_uml.png[gamey_uml]</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-glossary">12. Tests</h2>
+<h2 id="section-glossary">10. Tests</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Se explicarán los tests hechos para comprobar el funcionamiento del juego.</p>
@@ -1352,7 +1354,7 @@ image::gamey_uml.png[gamey_uml]</pre>
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-glossary">13. Glosario</h2>
+<h2 id="section-glossary">11. Glosario</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Se explicarán varios conceptos necesarios para comprender la documentación y el producto final de forma completa.</p>
@@ -1394,7 +1396,7 @@ See <a href="https://arc42.org" class="bare">https://arc42.org</a>.</p>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-14 14:07:11 +0100
+Last updated 2026-04-01 21:46:48 +0200
 </div>
 </div>
 </body>
