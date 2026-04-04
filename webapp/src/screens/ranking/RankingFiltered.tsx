@@ -147,10 +147,10 @@ export default function RankingFiltered({ username }: { username: string }) {
 
 
             <div className="btn-menu">
-                <button className="ranking-btn-back" onClick={() => setGoBack(true)}>
+                <button className="ranking-btn-back-ranking" onClick={() => setGoBack(true)}>
                     Volver al ranking general
                 </button>
-                <button className="ranking-btn-menu" onClick={() => setGoHome(true)}>
+                <button className="ranking-btn-back-menu" onClick={() => setGoHome(true)}>
                     Volver al menú principal
                 </button>
             </div>

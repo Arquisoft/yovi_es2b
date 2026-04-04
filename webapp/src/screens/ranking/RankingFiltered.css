@@ -82,20 +82,7 @@
 }
 
 /* ── Nav buttons ── */
-
-.ranking-btn-back {
-    padding: 10px 28px;
-    font-size: 0.95rem;
-    background: transparent;
-    color: #6b7280;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.18s;
-}
-.ranking-btn-back:hover { background: #f3f4f6; color: #374151; }
-
-.ranking-btn-home {
+.ranking-btn-back-ranking {
     padding: 10px 28px;
     font-size: 0.95rem;
     background: #1a56db;
@@ -105,9 +92,9 @@
     cursor: pointer;
     transition: background 0.18s;
 }
-.ranking-btn-home:hover { background: #1241a8; }
+.ranking-btn-back-ranking:hover { background: #1241a8; }
 
-.ranking-btn-menu {
+.ranking-btn-back-menu {
     padding: 10px 28px;
     font-size: 0.95rem;
     background: #dc2626;
@@ -118,7 +105,7 @@
     transition: background 0.18s;
 }
 
-.ranking-btn-menu:hover { background: #b91c1c; }
+.ranking-btn-back-menu:hover { background: #b91c1c; }
 
 .btn-menu {
     display: flex;
