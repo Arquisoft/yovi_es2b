@@ -543,7 +543,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <h2 id="section-introduction-and-goals">1. Introducción y Objetivos</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>La empresa de desarrollo de juegos <strong>Micrati</strong> ha decidido apostar por el  desarrollar un juego en formato webapp basado en el "Juego Y", que tendrá el nombre <strong>YOVI</strong>. Estamos ante un juego de mesa de estrategia de dos jugadores que transformaremos y modificaremos para que se pueda jugar con el ordenador.</p>
+<p>La empresa de desarrollo de juegos <strong>Micrati</strong> ha decidido apostar por el  desarrollar un juego en formato webapp basado en el "Juego Y", que tendrá el nombre <strong>YOVI 2B</strong>. Estamos ante un juego de mesa de estrategia de dos jugadores que transformaremos y modificaremos para que se pueda jugar con el ordenador.</p>
 </div>
 <div class="sect2">
 <h3 id="_resumen_de_requisitos">1.1. Resumen de Requisitos</h3>
@@ -556,25 +556,25 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <p><strong class="cite_start">Frontend Web:</strong> Permitir a las personas jugar partidas del juego Y a través del navegador.</p>
 </li>
 <li>
-<p><strong>Versión Clásica:</strong> Implementar el juego contra la máquina con un tamaño de tablero variable.</p>
+<p><strong>Versión Clásica:</strong> Implementar el juego contra la máquina con un tamaño de tablero variable, esto se definirá con "Dificultad" o "Tamaño" según se juegue contra un bot o un jugador local respectivamente.</p>
 </li>
 <li>
-<p><strong>Estrategias de IA:</strong> El juego contra la computadora debe implementar más de una estrategia seleccionable.</p>
+<p><strong>Estrategias de BOT:</strong> El juego contra la computadora debe implementar más de una estrategia seleccionable que seguirá el bot contra el que se juegue. En nuestro caso, se han implementado 6: Random, Ofensiva, Defensiva y estrategia que usa el algoritmo de MonteCarlo, que tiene 3 variaciones que aumenta la dificultad.</p>
 </li>
 <li>
-<p><strong>Niveles de Dificultad:</strong> El jugador podrá elegir el nivel de dificultad de las estrategias.</p>
+<p><strong>Niveles de Dificultad:</strong> El jugador podrá elegir el nivel de dificultad de las estrategias. Como lo mencionado antes, esto inidica el tamaño de los tableros exclusivamente al jugar contra un bot.</p>
 </li>
 <li>
-<p><strong>Despliegue:</strong> La aplicación deberá estar desplegada y ser accesible de forma pública en la Web.</p>
+<p><strong>Despliegue:</strong> La aplicación deberá estar desplegada y ser accesible de forma pública en la Web. Podemos seguir el siguiente enlace: <a href="http://gameyes2b.duckdns.org/" class="bare">http://gameyes2b.duckdns.org/</a>.</p>
 </li>
 <li>
-<p><strong>Gestión de Usuarios:</strong> Registro en el sistema y consulta de histórico (partidas, estadísticas, etc.).</p>
+<p><strong>Gestión de Usuarios:</strong> Registro en el sistema y consulta de histórico. Esto significa que se pueden crear usuarios, para registrar las estadísticas y guardarlas, para poder verlas y hacer un ranking de todos los usuarios.</p>
 </li>
 <li>
-<p><strong>API Documentada:</strong> Una interfaz que permita a bots interactuar con la gestión de usuarios y partidas.</p>
+<p><strong>API Documentada:</strong> Se refiere a una interfaz que permite que los bots con las estrategias para que puedan interactuar con el juego y la gestión de usuarios y partidas.</p>
 </li>
 <li>
-<p><strong class="cite_start">Modo Bot:</strong> El API expondrá un método <code>play</code> con notación YEN para que un bot juegue contra la aplicación.</p>
+<p><strong class="cite_start">Modo Bot:</strong> El API expondrá un método <code>play</code> con notación YEN para que un bot ajeno a nosotros juegue contra la aplicación.</p>
 </li>
 </ul>
 </div>
@@ -600,6 +600,14 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Mantenibilidad</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">El sistema se puede adaptar y/o modificar fácilmente ante cambios en el entorno o requisitos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usabilidad</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La aplicación ha de poder ser utilizada con facilidad por cualquier usuario.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Escalabilidad</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La aplicación tiene que poder ser usada en varios dispositivos al mismo tiempo.</p></td>
 </tr>
 </tbody>
 </table>
@@ -632,25 +640,21 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <td class="tableblock halign-left valign-top"><p class="tableblock">Sara Naredo Fernández (<a href="https://github.com/saranaredo" class="bare">https://github.com/saranaredo</a>)</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Carolina González García (<a href="https://github.com/arigl-gh" class="bare">https://github.com/arigl-gh</a>)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Compañía</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Compañía</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Micrati</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Cumplir y dictar los requisitos del juego para presentar la aplicación.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usuarios</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Usuarios</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Futuros usuarios del juego YOVI</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Aprender y disfrutar del juego YOVI, logrando entretenimiento, competición sana y ocio de la aplicación.</p></td>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock"><strong>Equipo de supervisión</strong></p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock"><strong>Equipo de supervisión</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">José Emilio Labra Gayo</p></td>
 <td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">Evaluar el resultado y aconsejar durante el desarrollo de la aplicación.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Celia Melendi Lavandera</p></td>
 </tr>
 </tbody>
 </table>
