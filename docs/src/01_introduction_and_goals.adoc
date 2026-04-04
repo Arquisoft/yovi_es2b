@@ -35,8 +35,8 @@ El sistema debe cumplir con las siguientes funcionalidades principales:
 |===
 |Rol|Nombre / Contacto|Expectativas
 
-.3+|**Equipo de desarrolladores** | Iyán Iglesias Ibaseta (https://github.com/iyaniglesias) 
-.3+|Desarrollar YOVI con las herramientas adecuadas, cumpliendo los requisitos y asegurando que permita a los usuarios competir y conseguir una puntuación en base a la partida jugada.
+.2+|**Equipo de desarrolladores** | Iyán Iglesias Ibaseta (https://github.com/iyaniglesias) 
+.2+|Desarrollar YOVI con las herramientas adecuadas, cumpliendo los requisitos y asegurando que permita a los usuarios competir y conseguir una puntuación en base a la partida jugada.
 
 | Jimena Vázquez Suárez (https://github.com/JimenaVazquez)
 | Sara Naredo Fernández (https://github.com/saranaredo)
