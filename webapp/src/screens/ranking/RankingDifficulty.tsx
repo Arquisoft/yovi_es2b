@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import type { GetMedal, ObtenerDatosRanking } from "./RankingFiltered";
-import "./RankingTable.css";
+import "./RankingFilterTypes.css";
 
 type DifficultyFilter = "EASY" | "MEDIUM" | "HARD";
 

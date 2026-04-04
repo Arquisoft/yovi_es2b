@@ -43,7 +43,7 @@ export default function HomePage( {username} : { username: string }) {
     const [twoPlayersStarted, setTwoPlayersStarted] = useState(false);
     const [username2, setUsername2] = useState("");
     const [username2Error, setUsername2Error] = useState<string | null>(null);
-    const [menuSelected, setMenuSelected] = useState<string>("");
+    const [menuSelected] = useState<string>("");
     const [screen, setScreen] = useState("home");
 
     // como es función async, llamamos useEffect
