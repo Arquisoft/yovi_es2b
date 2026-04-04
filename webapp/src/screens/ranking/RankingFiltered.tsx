@@ -70,43 +70,35 @@ export default function RankingFiltered({ username }: { username: string }) {
 
     // Función para obtener la clase CSS de un botón del menú de filtrado.
     // Si la regla está activa, se añade una clase adicional para indicar que el botón está activo.
-    const getButtonClass = (rule: FilerRule) => 
+    const getButtonClass = (rule: FilerRule) =>
         active.has(rule) ? "ranking-toggle-btn ranking-toggle-btn--active" : "ranking-toggle-btn";
 
     // Función para obtener los datos del ranking desde el backend.
     // Recibe un endpoint y un body, hace una petición POST al backend y devuelve los datos formateados como un array de RankingEntry.
     const obtenerDatos: ObtenerDatosRanking = async (endpoint, body) => {
         try {
-            const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
+            const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000';
+            const tieneBody = Object.keys(body).length > 0;
             const res = await fetch(`${API_URL}${endpoint}`, {
-                method: "POST",
+                method: tieneBody ? "POST" : "GET",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(body),
+                ...(tieneBody && { body: JSON.stringify(body) }),
             });
 
             const data = await res.json();
-            if (!res.ok) {
-                throw new Error("Server error");
-            }
+            if (!res.ok) throw new Error("Server error");
 
             const ranking: RankingEntry[] = [];
             let posicion = 1;
-
             for (const entry of data.ranking as Array<{ username: string; value: number }>) {
-                ranking.push({
-                    position: posicion,
-                    username: entry.username,
-                    value: entry.value,
-                });
+                ranking.push({ position: posicion, username: entry.username, value: entry.value });
                 posicion += 1;
             }
-
             return ranking;
         } catch (err: any) {
             throw new Error("Network error");
         }
     };
-
     return (
         <div className="ranking-filtered-screen">
 

@@ -30,7 +30,7 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal }: 
 
     useEffect(() => {
         const cargarDatos = async () => {
-            const resultado = await obtenerDatos("/ranking/wins/difficulty", { difficulty });
+            const resultado = await obtenerDatos("/rankingwinsbydifficulty", { difficulty });
             setData(resultado);
         };
         cargarDatos();
@@ -58,7 +58,7 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal }: 
                     <tr>
                         <td>Posición</td>
                         <td>Jugador</td>
-                        <td>Victorias ({DIFFICULTY_LABELS[difficulty]})</td>
+                        <td>Victorias ({DIFFICULTY_LABELS[difficulty]}) (%)</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,7 +74,7 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal }: 
                                     <span className="ranking-user-tag">Tú</span>
                                 )}
                             </td>
-                            <td>{entry.value}</td>
+                            <td>{entry.value.toFixed(2)} %</td>
                         </tr>
                     ))}
                 </tbody>

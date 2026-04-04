@@ -374,7 +374,6 @@ function checkPassword(password) {
 
             ranking.push({
                 username: u.username,
-                ganadas: wins,
                 value: percentage
             });
         }
@@ -402,7 +401,6 @@ function checkPassword(password) {
 
             ranking.push({
                 username: u.username,
-                perdidas: derrotas,
                 value: percentage
             });
         }
@@ -426,7 +424,6 @@ function checkPassword(password) {
 
             ranking.push({
                 username: u.username,
-                abandonadas: abandonadas,
                 value: percentage
             });
         }
@@ -457,7 +454,6 @@ function checkPassword(password) {
 
             ranking.push({
                 username: u.username,
-                ganadas: wins,
                 value: partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0
             });
         }
@@ -488,7 +484,6 @@ function checkPassword(password) {
 
             ranking.push({
                 username: u.username,
-                ganadas: wins,
                 value: partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0
             });
         }
