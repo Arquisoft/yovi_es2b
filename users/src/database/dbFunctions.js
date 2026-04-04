@@ -361,7 +361,6 @@ function checkPassword(password) {
 
     /**
      * Ranking global por porcentaje de victorias.
-     * value = (victorias / totales) * 100.
      */
     async function rankingvictories(users) {
         const allUsers = await users.find({}).toArray();
@@ -374,7 +373,7 @@ function checkPassword(password) {
 
             ranking.push({
                 username: u.username,
-                value: percentage
+                value: wins
             });
         }
 
@@ -386,7 +385,6 @@ function checkPassword(password) {
     /**
      * Ranking global por porcentaje de derrotas.
      * Derrotas = totales - wins - abandonadas.
-     * value = (derrotas / totales) * 100.
      */
     async function rankingdefeats(users) {
         const allUsers = await users.find({}).toArray();
@@ -401,7 +399,7 @@ function checkPassword(password) {
 
             ranking.push({
                 username: u.username,
-                value: percentage
+                value: derrotas
             });
         }
 
@@ -411,7 +409,6 @@ function checkPassword(password) {
 
     /**
      * Ranking global por porcentaje de abandonadas.
-     * value = (abandonadas / totales) * 100.
      */
     async function rankingabandon(users) {
         const allUsers = await users.find({}).toArray();
@@ -424,7 +421,7 @@ function checkPassword(password) {
 
             ranking.push({
                 username: u.username,
-                value: percentage
+                value: abandonadas
             });
         }
 
@@ -434,7 +431,6 @@ function checkPassword(password) {
 
     /**
      * Ranking de porcentaje de victorias para una dificultad concreta.
-     * value = (wins_dificultad / partidas_dificultad) * 100.
      */
     async function rankingwinsbydifficulty(users, difficulty) {
         if (!difs.includes(difficulty)) {
@@ -451,10 +447,12 @@ function checkPassword(password) {
                 wins += u[`${difficulty}${strat}Wins`] || 0;
                 partidas += u[`${difficulty}${strat}`] || 0;
             }
+            const percentage = partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0
+
 
             ranking.push({
                 username: u.username,
-                value: partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0
+                value: wins
             });
         }
 
@@ -464,7 +462,6 @@ function checkPassword(password) {
 
     /**
      * Ranking de porcentaje de victorias para una estrategia concreta.
-     * value = (wins_estrategia / partidas_estrategia) * 100.
      */
     async function rankingwinsbystrategy(users, strategy) {
         if (!strats.includes(strategy)) {
@@ -481,10 +478,11 @@ function checkPassword(password) {
                 wins += u[`${diff}${strategy}Wins`] || 0;
                 partidas += u[`${diff}${strategy}`] || 0;
             }
+            const percentage = partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0;
 
             ranking.push({
                 username: u.username,
-                value: partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0
+                value: wins
             });
         }
 
