@@ -1,9 +1,38 @@
 import { useState } from "react";
 import Home from "../game/Home.tsx";
 import Ranking from "./Ranking.tsx";
+import RankingGeneral from "./RankingGeneral.tsx";
+import RankingDifficulty from "./RankingDifficulty.tsx";
+import RankingStrategy from "./RankingStrategy.tsx";
 import "./RankingFiltered.css";
 
 type FilerRule = "general" | "dificultad" | "estrategia";
+
+// Tipo para las entradas del ranking, con posición, nombre de usuario y valor (partidas ganadas, victorias por dificultad o victorias por estrategia).
+type RankingEntry = {
+    position: number;
+    username: string;
+    value: number;
+};
+
+export type ObtenerDatosRanking = (
+    endpoint: string,
+    body: Record<string, unknown>
+) => Promise<RankingEntry[]>;
+
+export type GetMedal = (pos: number) => string;
+
+/**
+ *  Funcino para obtener la medalla correspondiente a una posición en el ranking. 
+ * @param pos 
+ * @returns 
+ */
+export const getMedal: GetMedal = (pos) => {
+    if (pos === 1) return "🥇";
+    if (pos === 2) return "🥈";
+    if (pos === 3) return "🥉";
+    return `#${pos}`;
+};
 
 //Username se muestra en el header y se pasa a los componentes de ranking para mostrar el ranking filtrado por ese usuario. ç
 // Se mantiene en este componente para que no se pierda al navegar entre las diferentes vistas del ranking filtrado.
@@ -44,6 +73,40 @@ export default function RankingFiltered({ username }: { username: string }) {
     const getButtonClass = (rule: FilerRule) => 
         active.has(rule) ? "ranking-toggle-btn ranking-toggle-btn--active" : "ranking-toggle-btn";
 
+    // Función para obtener los datos del ranking desde el backend.
+    // Recibe un endpoint y un body, hace una petición POST al backend y devuelve los datos formateados como un array de RankingEntry.
+    const obtenerDatos: ObtenerDatosRanking = async (endpoint, body) => {
+        try {
+            const apiUrl = import.meta.env.VITE_API_URL_WA || "";
+            const res = await fetch(`${apiUrl}${endpoint}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(body),
+            });
+
+            const data = await res.json();
+            if (!res.ok) {
+                throw new Error("Server error");
+            }
+
+            const ranking: RankingEntry[] = [];
+            let posicion = 1;
+
+            for (const entry of data.ranking as Array<{ username: string; value: number }>) {
+                ranking.push({
+                    position: posicion,
+                    username: entry.username,
+                    value: entry.value,
+                });
+                posicion += 1;
+            }
+
+            return ranking;
+        } catch (err: any) {
+            throw new Error("Network error");
+        }
+    };
+
     return (
         <div className="ranking-filtered-screen">
 
@@ -66,6 +129,27 @@ export default function RankingFiltered({ username }: { username: string }) {
                     {active.has("estrategia") && <span className="ranking-toggle-check">✓ </span>}
                     Por estrategia
                 </button>
+            </div>
+
+            <div className="ranking-filtered-body">
+                {active.has("general") && (
+                    <div className="ranking-filtered-section">
+                        <RankingGeneral username={username} obtenerDatos={obtenerDatos} getMedal={getMedal} />
+                    </div>
+                )}
+                {active.has("dificultad") && (
+                    <div className="ranking-filtered-section">
+                        <RankingDifficulty username={username} obtenerDatos={obtenerDatos} getMedal={getMedal} />
+                    </div>
+                )}
+                {active.has("estrategia") && (
+                    <div className="ranking-filtered-section">
+                        <RankingStrategy username={username} obtenerDatos={obtenerDatos} getMedal={getMedal} />
+                    </div>
+                )}
+                {active.size === 0 && (
+                    <p className="ranking-empty">Selecciona al menos una vista del menu superior.</p>
+                )}
             </div>
 
 

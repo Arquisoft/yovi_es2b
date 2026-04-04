@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import type { GetMedal, ObtenerDatosRanking } from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
 type FilterKey = "victorias" | "derrotas" | "abandonadas";
@@ -22,51 +23,7 @@ const ENDPOINTS: Record<FilterKey, string> = {
     abandonadas: "/ranking/abandoned",
 };
 
-async function obtenerDatos(filter: FilterKey) {
-    try {
-        const apiUrl = import.meta.env.VITE_API_URL_WA || "";
-        const res = await fetch(`${apiUrl}${ENDPOINTS[filter]}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({}),
-        });
-
-        const data = await res.json();
-        if (!res.ok) {
-            throw new Error("Server error");
-        }
-
-        const ranking: RankingEntry[] = [];
-        let posicion = 1;
-
-        for (const entry of data.ranking as Array<{ username: string; value: number }>) {
-            ranking.push({
-                position: posicion,
-                username: entry.username,
-                value: entry.value,
-            });
-            posicion += 1;
-        }
-
-        return ranking;
-    } catch (err: any) {
-        throw new Error("Network error");
-    }
-}
-
-/**
- * Funcion para mostrar medalla según la posición.
- * @param pos 
- * @returns 
- */
-function getMedal(pos: number): string {
-    if (pos === 1) return "🥇";
-    if (pos === 2) return "🥈";
-    if (pos === 3) return "🥉";
-    return `#${pos}`;
-}
-
-export default function RankingGeneral({ username }: { username: string }) {
+export default function RankingGeneral({ username, obtenerDatos, getMedal }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal }) {
 
     const [filter, setFilter] = useState<FilterKey>("victorias"); // Estado para el filtro seleccionado. Por defecto, se muestra el ranking por victorias.
     const [data, setData] = useState<RankingEntry[]>([]); // Estado para los datos del ranking. Se actualiza cada vez que cambia el filtro.
@@ -75,7 +32,7 @@ export default function RankingGeneral({ username }: { username: string }) {
     // Llama a la función obtenerDatos y actualiza el estado "data" con los resultados.
     const cargarDatos = async () =>
         {
-            const resultado = await obtenerDatos(filter);
+            const resultado = await obtenerDatos(ENDPOINTS[filter], {});
             setData(resultado);
         };
 
@@ -96,7 +53,7 @@ export default function RankingGeneral({ username }: { username: string }) {
                     <button
                     // La clase del botón cambia según si el filtro está activo o no, para mostrar visualmente cuál es el filtro seleccionado.
                         key={f}
-                        className={filter === f ? "ranking-chip ranking-chip--active" : "ranking-chip"}
+                        className={filter === f ? "ranking-info ranking-info--active" : "ranking-info"}
                         onClick={() => setFilter(f)}
                     >
                         {/*El texto del botón se obtiene del objeto FILTER_LABELS, que asigna una etiqueta legible a cada clave de filtro.*/}

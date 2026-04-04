@@ -20,7 +20,8 @@
     margin-bottom: 14px;
 }
 
-.ranking-chip {
+.ranking-chip,
+.ranking-info {
     border: 1px solid #d1d5db;
     background: #fff;
     color: #6b7280;
@@ -31,11 +32,13 @@
     cursor: pointer;
     transition: all 0.18s;
 }
-.ranking-chip:hover {
+.ranking-chip:hover,
+.ranking-info:hover {
     border-color: #1a56db;
     color: #1a56db;
 }
-.ranking-chip--active {
+.ranking-chip--active,
+.ranking-info--active {
     background: #1a56db;
     border-color: #1a56db;
     color: #fff;
