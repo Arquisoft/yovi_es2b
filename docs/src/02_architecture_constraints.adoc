@@ -12,7 +12,8 @@ Entendemos por restricciones los elementos que influyen sobre un proyecto y que 
 |Restricción|Descripción
 |**Entorno tecnológico**|Usaremos **VisualCode** y/o **IntelliJ** ya que ofrece sencillez en cuanto al manejo de GitHub (uso reflejado más adelante), además, este entorno ya nos era conocido gracias al uso en otras asignaturas.
 |**Front-end**|Para la programación front-end se usará **React**. Esta biblioteca favorece la construcción de interfaces mediante el lenguaje JavaScript.
-|**Back-end**|En cuanto a programar el back-end usaremos el lenguaje **Rust**. Lenguaje compilado de alto rendimiento desarrollado por ingenieros de Mozilla.
+|**Back-end -> Juego**|En cuanto a programar el back-end usaremos el lenguaje **Rust**. Lenguaje compilado de alto rendimiento desarrollado por ingenieros de Mozilla.
+|**Back-end -> Base de datos**|En cuanto a la comunicación con la base de datos usaremos **NodeJs**. Este entorno de ejecución que usa **JavaScript** para la comunicación de nuestra app con la base de datos, comentada a continuación.
 |**Despliegue**|Usamos la plataforma de **Docker**, que nos permitirá ejecutar y gestionar la aplicación de forma sencilla. Para contener las aplicaciones que se usarán en las diversas partes del proyecto, usaremos **Amazon Web Services (AWS)** para tener este contenedor en la nube.
 |**Base de datos**|Nos decidimos por **MongoDB**, ya que, aunque no es una base de datos relacional, es más sencilla tanto de montar al servidor como para aprender desde cero respecto a otras opciones barajadas.
 |**Organización grupal**|Para la capacidad de realizar tareas se usará GitHub. Para más información, lea el apartado de restricciones organizativas.
