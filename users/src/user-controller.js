@@ -28,6 +28,8 @@ class UserController {
         this.allstats = this.allstats.bind(this);
         this.diffstats = this.diffstats.bind(this);
         this.stratstats = this.stratstats.bind(this);
+
+
     }
 
     /**

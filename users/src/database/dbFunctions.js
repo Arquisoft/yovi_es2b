@@ -363,7 +363,7 @@ function checkPassword(password) {
      * Ranking global por porcentaje de victorias.
      * value = (victorias / totales) * 100.
      */
-    async function rankingWins(users) {
+    async function rankingvictories(users) {
         const allUsers = await users.find({}).toArray();
         const ranking = [];
 
@@ -389,7 +389,7 @@ function checkPassword(password) {
      * Derrotas = totales - wins - abandonadas.
      * value = (derrotas / totales) * 100.
      */
-    async function rankingLosses(users) {
+    async function rankingdefeats(users) {
         const allUsers = await users.find({}).toArray();
         const ranking = [];
 
@@ -415,7 +415,7 @@ function checkPassword(password) {
      * Ranking global por porcentaje de abandonadas.
      * value = (abandonadas / totales) * 100.
      */
-    async function rankingAbandoned(users) {
+    async function rankingabandon(users) {
         const allUsers = await users.find({}).toArray();
         const ranking = [];
 
@@ -439,7 +439,7 @@ function checkPassword(password) {
      * Ranking de porcentaje de victorias para una dificultad concreta.
      * value = (wins_dificultad / partidas_dificultad) * 100.
      */
-    async function rankingWinsByDifficulty(users, difficulty) {
+    async function rankingwinsbydifficulty(users, difficulty) {
         if (!difs.includes(difficulty)) {
             throw new InvalidDifficultyError(difficulty);
         }
@@ -470,7 +470,7 @@ function checkPassword(password) {
      * Ranking de porcentaje de victorias para una estrategia concreta.
      * value = (wins_estrategia / partidas_estrategia) * 100.
      */
-    async function rankingWinsByStrategy(users, strategy) {
+    async function rankingwinsbystrategy(users, strategy) {
         if (!strats.includes(strategy)) {
             throw new InvalidStrategyError(strategy);
         }
@@ -501,5 +501,5 @@ module.exports = {
     loginuser, createuser, deleteuser, findUser,
     initmatch, endmatch, abandonmatch,
     diffstats, stratstats, allstats,
-    rankingWins, rankingLosses, rankingAbandoned, rankingWinsByDifficulty, rankingWinsByStrategy
+    rankingvictories, rankingdefeats, rankingabandon, rankingwinsbydifficulty, rankingwinsbystrategy
 };
