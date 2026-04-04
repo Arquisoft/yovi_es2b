@@ -359,4 +359,147 @@ function checkPassword(password) {
         return stats;
     }
 
-module.exports = { loginuser, createuser, deleteuser, findUser, initmatch, endmatch, abandonmatch, diffstats, stratstats, allstats };
+    /**
+     * Ranking global por porcentaje de victorias.
+     * value = (victorias / totales) * 100.
+     */
+    async function rankingWins(users) {
+        const allUsers = await users.find({}).toArray();
+        const ranking = [];
+
+        for (const u of allUsers) {
+            const totales = u.totales || 0;
+            const wins = u.totalesWins || 0;
+            const percentage = totales > 0 ? Number(((wins / totales) * 100).toFixed(2)) : 0;
+
+            ranking.push({
+                username: u.username,
+                ganadas: wins,
+                value: percentage
+            });
+        }
+
+        // Ordenamos de mayor a menor porcentaje de victorias
+        ranking.sort((a, b) => b.value - a.value);
+        return ranking;
+    }
+
+    /**
+     * Ranking global por porcentaje de derrotas.
+     * Derrotas = totales - wins - abandonadas.
+     * value = (derrotas / totales) * 100.
+     */
+    async function rankingLosses(users) {
+        const allUsers = await users.find({}).toArray();
+        const ranking = [];
+
+        for (const u of allUsers) {
+            const totales = u.totales || 0;
+            const wins = u.totalesWins || 0;
+            const abandonadas = u.totalesAbandonadas || 0;
+            const derrotas = Math.max(totales - wins - abandonadas, 0);
+            const percentage = totales > 0 ? Number(((derrotas / totales) * 100).toFixed(2)) : 0;
+
+            ranking.push({
+                username: u.username,
+                perdidas: derrotas,
+                value: percentage
+            });
+        }
+
+        ranking.sort((a, b) => b.value - a.value);
+        return ranking;
+    }
+
+    /**
+     * Ranking global por porcentaje de abandonadas.
+     * value = (abandonadas / totales) * 100.
+     */
+    async function rankingAbandoned(users) {
+        const allUsers = await users.find({}).toArray();
+        const ranking = [];
+
+        for (const u of allUsers) {
+            const totales = u.totales || 0;
+            const abandonadas = u.totalesAbandonadas || 0;
+            const percentage = totales > 0 ? Number(((abandonadas / totales) * 100).toFixed(2)) : 0;
+
+            ranking.push({
+                username: u.username,
+                abandonadas: abandonadas,
+                value: percentage
+            });
+        }
+
+        ranking.sort((a, b) => b.value - a.value);
+        return ranking;
+    }
+
+    /**
+     * Ranking de porcentaje de victorias para una dificultad concreta.
+     * value = (wins_dificultad / partidas_dificultad) * 100.
+     */
+    async function rankingWinsByDifficulty(users, difficulty) {
+        if (!difs.includes(difficulty)) {
+            throw new InvalidDifficultyError(difficulty);
+        }
+
+        const allUsers = await users.find({}).toArray();
+        const ranking = [];
+
+        for (const u of allUsers) {
+            let wins = 0;
+            let partidas = 0;
+            for (const strat of strats) {
+                wins += u[`${difficulty}${strat}Wins`] || 0;
+                partidas += u[`${difficulty}${strat}`] || 0;
+            }
+
+            ranking.push({
+                username: u.username,
+                ganadas: wins,
+                value: partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0
+            });
+        }
+
+        ranking.sort((a, b) => b.value - a.value);
+        return ranking;
+    }
+
+    /**
+     * Ranking de porcentaje de victorias para una estrategia concreta.
+     * value = (wins_estrategia / partidas_estrategia) * 100.
+     */
+    async function rankingWinsByStrategy(users, strategy) {
+        if (!strats.includes(strategy)) {
+            throw new InvalidStrategyError(strategy);
+        }
+
+        const allUsers = await users.find({}).toArray();
+        const ranking = [];
+
+        for (const u of allUsers) {
+            let wins = 0;
+            let partidas = 0;
+            for (const diff of difs) {
+                wins += u[`${diff}${strategy}Wins`] || 0;
+                partidas += u[`${diff}${strategy}`] || 0;
+            }
+
+            ranking.push({
+                username: u.username,
+                ganadas: wins,
+                value: partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0
+            });
+        }
+
+        ranking.sort((a, b) => b.value - a.value);
+        return ranking;
+    }
+
+module.exports = {
+    loginuser, createuser, deleteuser, findUser,
+    initmatch, endmatch, abandonmatch,
+    diffstats, stratstats, allstats,
+    rankingWins, rankingLosses, rankingAbandoned, rankingWinsByDifficulty, rankingWinsByStrategy
+};
