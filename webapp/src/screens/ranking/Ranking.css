@@ -4,27 +4,65 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 40px 20px;
+    padding: 54px 20px;
     min-height: 100vh;
 }
 
 .ranking-logo {
-    width: clamp(80px, 12vw, 120px);
+    width: clamp(110px, 16vw, 170px);
     height: auto;
-    margin-bottom: 8px;
+    margin-bottom: 18px;
 }
 
 .ranking-screen-title {
     font-size: 2rem;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
     color: var(--color-primary, #1a56db);
+}
+
+.ranking-position-card {
+    width: min(560px, 92vw);
+    margin: 0 auto 36px;
+    padding: 24px 28px;
+    border: 1px solid #dbeafe;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #eff6ff 0%, #f8fafc 100%);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    animation: ranking-card-in 500ms ease-out;
+}
+
+.ranking-position-label {
+    margin: 0;
+    color: #1e3a8a;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    font-weight: 600;
+}
+
+.ranking-position-value {
+    margin: 14px 0 0;
+    color: #0f172a;
+    font-size: clamp(2.4rem, 8vw, 4rem);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+@keyframes ranking-card-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .ranking-menu {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 14px;
+    gap: 20px;
 }
 
 .ranking-btn-filtered {
