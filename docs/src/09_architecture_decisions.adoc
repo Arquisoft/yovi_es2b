@@ -15,5 +15,5 @@ Este apartado trata de explicar que las decisiones tomadas se llevaron a cabo tr
 |Uso de MongoDB como base de datos |Debemos aprender a usarlo, ya que, a contrario de otras bases de datos, no la hemos usado en otras asignaturas, no usa el lenguaje SQL y tiene métodos propios que deberemos de conocer.
 |Uso de React con TypeScript |Debemos revisar de cómo usar esta biblioteca, ya que, aunque conocemos el lenguaje, en pocas ocasiones se ha utilizado (de momento).
 |Uso de Rust |Debemos aprender a usar este lenguaje, ya que se nos pide desde la propia asignatura.
-|GitHub |Más fluidez al compartir el proyecto, también se nos pide desde la asignatura, ya que se nos dió un esqueleto en esta web y se evaluará aquí.
+|GitHub |Más fluidez al compartir el proyecto, también se nos pide desde la asignatura, ya que se nos dió un esqueleto en esta web y se evaluará desde ahí.
 |===
