@@ -18,7 +18,7 @@ export default function Ranking({ username }: { username: string }) {
     useEffect(() => {
         const obtenerPosicion = async () => {
             try {
-                const API_URL = import.meta.env.VITE_API_URL_WA ?? "";
+                const API_URL = import.meta.env.VITE_API_URL_WA ?? "http://localhost:3000";
                 const res = await fetch(`${API_URL}/ranking/wins`); // GET sin body
 
                 const data = await res.json();
