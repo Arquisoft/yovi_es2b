@@ -77,8 +77,8 @@ export default function RankingFiltered({ username }: { username: string }) {
     // Recibe un endpoint y un body, hace una petición POST al backend y devuelve los datos formateados como un array de RankingEntry.
     const obtenerDatos: ObtenerDatosRanking = async (endpoint, body) => {
         try {
-            const apiUrl = import.meta.env.VITE_API_URL_WA || "";
-            const res = await fetch(`${apiUrl}${endpoint}`, {
+            const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
+            const res = await fetch(`${API_URL}${endpoint}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),
