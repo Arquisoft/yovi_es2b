@@ -18,7 +18,8 @@ export default function GameInfo(props: Props) {
       </div>
       <div className="info-section">
         {!props.twoPlayers && <p><strong>Estrategia: </strong> {props.settings.strategy}</p>}
-        <p><strong>Dificultad: </strong> {props.settings.difficulty}</p>
+        {!props.twoPlayers && <p><strong>Dificultad: </strong> {props.settings.difficulty}</p>}
+        {props.twoPlayers && <p><strong>Tamaño del tablero: </strong> {{ EASY: "Pequeño", MEDIUM: "Mediano", HARD: "Grande" }[props.settings.difficulty]}</p>}
       </div>
       <div className="info-section">
         {!props.twoPlayers && <p><strong>Turno actual: </strong> {props.currentPlayer}</p>}
