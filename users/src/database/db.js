@@ -1,12 +1,8 @@
 // para la creación de cliente mongo
 // asi nos conectamos a la base de datos mediante un cliente para cada peticion de juego
 const { MongoClient } = require("mongodb");
-const uri = process.env.MONGO_URI;
 
-const {
-    InvalidDBDefinition,
-    MissingDB
-} = require('../errors/DatabaseErrorsTypes');
+const uri = process.env.MONGO_URI;
 
 
 let db;
@@ -18,7 +14,7 @@ let client;
 async function connectDB() {
   // error con la URI
   if (uri == null) {
-    throw new InvalidDBDefinition();
+    throw new Error("MONGO_URI mal definida -> Habla con Jimena");
   }
 
   // crea un cliente nuevo para cada conexión
@@ -44,7 +40,7 @@ async function connectDB() {
  */
 function getDB() {
   if (!db) {
-    throw new MissingDB();
+    throw new Error("Base de datos inexistente -> Habla con Jimena");
   }
 
   return db;
