@@ -72,8 +72,8 @@ export function End({ winner, username, username2 = "", twoPlayers = false, sett
             </div>
           )}
           <div className="end-summary-row">
-            <dt>Dificultad</dt>
-            <dd>{settings.difficulty}</dd>
+            <dt>{twoPlayers ? "Tamaño del tablero" : "Dificultad"}</dt>
+            <dd>{twoPlayers ? ({ EASY: "Pequeño", MEDIUM: "Mediano", HARD: "Grande" } as Record<string, string>)[settings.difficulty] : settings.difficulty}</dd>
           </div>
           {!twoPlayers && (
             <div className="end-summary-row">
