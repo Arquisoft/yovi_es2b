@@ -75,8 +75,6 @@ export default function Ranking({ username }: { username: string }) {
                     Ver ranking
                 </button>
 
-                <br />
-
                 <button className="ranking-btn-menu" onClick={() => setGoBack(true)}>
                     Volver al menú principal
                 </button>
