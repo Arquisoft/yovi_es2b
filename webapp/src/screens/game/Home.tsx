@@ -102,8 +102,9 @@ export default function HomePage( {username} : { username: string }) {
                     <div className="home-config">
                         <span className="home-config__label home-config__label--section">Juega contra el bot</span>
 
-                        <label className="home-config__label">Estrategia</label>
+                        <label className="home-config__label" htmlFor="estrategia">Estrategia</label>
                         <select
+                            id="estrategia"
                             className="home-config__select"
                             value={settings.strategy}
                             onChange={(e) => setSettings({ ...settings, strategy: e.target.value as StrategyType })}
@@ -116,7 +117,7 @@ export default function HomePage( {username} : { username: string }) {
                             <option value={Strategy.MONTE_CARLO_ENDURECIDO}>Monte Carlo Endurecido</option>
                         </select>
 
-                        <label className="home-config__label">Dificultad</label>
+                        <span className="home-config__label">Dificultad</span>
                         <div className="home-difficulty">
                             <button
                                 className={`home-difficulty__btn home-difficulty__btn--easy${settings.difficulty === Difficulty.EASY ? " home-difficulty__btn--easy--active" : ""}`}
