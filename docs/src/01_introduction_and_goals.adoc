@@ -3,20 +3,20 @@ ifndef::imagesdir[:imagesdir: ../images]
 [[section-introduction-and-goals]]
 == Introducción y Objetivos
 
-La empresa de desarrollo de juegos **Micrati** ha decidido apostar por el  desarrollar un juego en formato webapp basado en el "Juego Y", que tendrá el nombre **YOVI**. Estamos ante un juego de mesa de estrategia de dos jugadores que transformaremos y modificaremos para que se pueda jugar con el ordenador.
+La empresa de desarrollo de juegos **Micrati** ha decidido apostar por el  desarrollar un juego en formato webapp basado en el "Juego Y", que tendrá el nombre **YOVI 2B**. Estamos ante un juego de mesa de estrategia de dos jugadores que transformaremos y modificaremos para que se pueda jugar con el ordenador.
 
 === Resumen de Requisitos
 
 El sistema debe cumplir con las siguientes funcionalidades principales:
 
 * [cite_start]**Frontend Web:** Permitir a las personas jugar partidas del juego Y a través del navegador.
-* **Versión Clásica:** Implementar el juego contra la máquina con un tamaño de tablero variable.
-* **Estrategias de IA:** El juego contra la computadora debe implementar más de una estrategia seleccionable.
-* **Niveles de Dificultad:** El jugador podrá elegir el nivel de dificultad de las estrategias.
-* **Despliegue:** La aplicación deberá estar desplegada y ser accesible de forma pública en la Web.
-* **Gestión de Usuarios:** Registro en el sistema y consulta de histórico (partidas, estadísticas, etc.).
-* **API Documentada:** Una interfaz que permita a bots interactuar con la gestión de usuarios y partidas.
-* [cite_start]**Modo Bot:** El API expondrá un método `play` con notación YEN para que un bot juegue contra la aplicación.
+* **Versión Clásica:** Implementar el juego contra la máquina con un tamaño de tablero variable, esto se definirá con "Dificultad" o "Tamaño" según se juegue contra un bot o un jugador local respectivamente.
+* **Estrategias de BOT:** El juego contra la computadora debe implementar más de una estrategia seleccionable que seguirá el bot contra el que se juegue. En nuestro caso, se han implementado 6: Random, Ofensiva, Defensiva y estrategia que usa el algoritmo de MonteCarlo, que tiene 3 variaciones que aumenta la dificultad.
+* **Niveles de Dificultad:** El jugador podrá elegir el nivel de dificultad de las estrategias. Como lo mencionado antes, esto inidica el tamaño de los tableros exclusivamente al jugar contra un bot.
+* **Despliegue:** La aplicación deberá estar desplegada y ser accesible de forma pública en la Web. Podemos seguir el siguiente enlace: http://gameyes2b.duckdns.org/.
+* **Gestión de Usuarios:** Registro en el sistema y consulta de histórico. Esto significa que se pueden crear usuarios, para registrar las estadísticas y guardarlas, para poder verlas y hacer un ranking de todos los usuarios.
+* **API Documentada:** Se refiere a una interfaz que permite que los bots con las estrategias para que puedan interactuar con el juego y la gestión de usuarios y partidas.
+* [cite_start]**Modo Bot:** El API expondrá un método `play` con notación YEN para que un bot ajeno a nosotros juegue contra la aplicación.
 
 === Objetivos de Calidad
 
@@ -25,6 +25,8 @@ El sistema debe cumplir con las siguientes funcionalidades principales:
 |Objetivo|Descripción
 |**Funcionalidad**|El sistema cumple con las necesidades esperadas de juego y gestión.
 |**Mantenibilidad**|El sistema se puede adaptar y/o modificar fácilmente ante cambios en el entorno o requisitos.
+|**Usabilidad**|La aplicación ha de poder ser utilizada con facilidad por cualquier usuario.
+|**Escalabilidad**|La aplicación tiene que poder ser usada en varios dispositivos al mismo tiempo.
 |===
 
 === Stakeholders
@@ -38,7 +40,6 @@ El sistema debe cumplir con las siguientes funcionalidades principales:
 
 | Jimena Vázquez Suárez (https://github.com/JimenaVazquez)
 | Sara Naredo Fernández (https://github.com/saranaredo)
-| Carolina González García (https://github.com/arigl-gh)
 
 |**Compañía** | Micrati 
 | Cumplir y dictar los requisitos del juego para presentar la aplicación.
