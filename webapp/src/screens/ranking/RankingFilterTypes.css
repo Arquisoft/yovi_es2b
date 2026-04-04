@@ -2,6 +2,10 @@
 .ranking-diff-screen,
 .ranking-strat-screen {
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .ranking-table-title {
@@ -16,6 +20,7 @@
 .ranking-filter-row {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
     gap: 8px;
     margin-bottom: 14px;
 }
@@ -69,11 +74,11 @@
 
 .ranking-info--orange:hover {
     border-color: #f97316;
-    color: #7c2d12;
+    color: #d83600;
 }
 
 .ranking-info--orange--active {
-    background: #ea580c;
+    background: #ff8441;
     border-color: #ea580c;
     color: #fff;
 }
@@ -86,7 +91,7 @@
 
 .ranking-info--red:hover {
     border-color: #ef4444;
-    color: #7f1d1d;
+    color: #7a1010;
 }
 
 .ranking-info--red--active {
@@ -99,6 +104,8 @@
 
 .ranking-table {
     width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
     border-collapse: collapse;
 }
 
@@ -113,6 +120,7 @@
     letter-spacing: 1px;
     text-transform: uppercase;
     color: #6b7280;
+    text-align: center;
 }
 
 .ranking-table tbody tr {
@@ -125,6 +133,7 @@
     padding: 12px 14px;
     font-size: 14px;
     color: #111827;
+    text-align: center;
 }
 
 /* highlight del usuario actual */

@@ -23,7 +23,7 @@ export default function Ranking({ username }: { username: string }) {
 
                 <br />
 
-                <button className="ranking-btn-back" onClick={() => setGoBack(true)}>
+                <button className="ranking-btn-menu" onClick={() => setGoBack(true)}>
                     Volver al menú principal
                 </button>
             </div>

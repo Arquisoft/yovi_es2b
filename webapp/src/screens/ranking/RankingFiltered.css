@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     padding: 32px 16px 60px;
     min-height: 100vh;
     width: 100%;
@@ -40,6 +41,19 @@
     border: 1px solid #e5e7eb;
     border-radius: 14px;
     width: 100%;
+}
+
+.ranking-filtered-body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.ranking-filtered-section {
+    width: 100%;
+    max-width: 860px;
 }
 
 .ranking-toggle-btn {
@@ -92,3 +106,24 @@
     transition: background 0.18s;
 }
 .ranking-btn-home:hover { background: #1241a8; }
+
+.ranking-btn-menu {
+    padding: 10px 28px;
+    font-size: 0.95rem;
+    background: #dc2626;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+
+.ranking-btn-menu:hover { background: #b91c1c; }
+
+.btn-menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 22px;
+}
