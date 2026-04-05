@@ -8,5 +8,8 @@ Se explicarán varios conceptos necesarios para comprender la documentación y e
 [options="header",cols="1,3"]
 |===
 |Concepto|Definición
+|**Entorno de ejecución (NodeJS)**|Es una plataforma que facilita la ejecución de programas directamente desde el sistema operativo, y que funcione de forma escalable y concurrente.
+|**Microservicio**|Parte de una aplicación (servicio) que maneja esa parte y se comunica con el resto para crear un producto mayor sin necesidad de que esté entero en un solo lenguaje.
+|**Algoritmo de Monte Carlo**|Algoritmo complejo usado en los bots de nuestra aplicación que evalúa las decisiones (o movimientos) del usuario mediante expresiones matemáticas complejas y costosas para elegir sus movimientos y poder ganar.
 |**WebApp**|Aplicación ejecutada desde algún navegador.
 |===

@@ -18,6 +18,8 @@ A alto nivel, el sistema está compuesto por cuatro bloques principales, uno de 
 
 Estos componentes interactúan entre sí mediante API REST (modelo, servicio y controlers) y mensajes en formato JSON.
 
+image:app_static.png[aplicacion estatica sencilla]
+
 ==== Frontend Web: WEBAPP
 
 El frontend es una aplicación web desarrollada en React y que es ejecutada en el navegador del usuario. Divide el códgio en screens y componentes, que interactúan directamente con los controllers del juego
@@ -26,11 +28,13 @@ Sus responsabilidades principales son:
 
 * Mostrar la interfaz del juego.
 * Representar el tablero y las fichas.
-* Gestionar las acciones del usuario (movimientos, selección de estrategias, inicio de partidas).
-* Enviar solicitudes al controller por los endpoints del backend.
-* Mostrar los resultados y el estado actualizado de la partida.
+* Gestionar las acciones del usuario (movimientos, selección de estrategias, inicio de partidas) para que se reflejen en el tablero.
+* Enviar solicitudes al controller por los endpoints del backend (tanto para el juego como para la gestión de usuarios).
+* Mostrar los resultados y el estado actualizado de la partida, las estadísticas y ranking.
 
 El frontend no contiene lógica del juego. Toda la validación de movimientos y cálculo del estado del tablero se delega al backend para garantizar la integridad de las partidas.
+
+image:app_static_webapp.png[aplicacion estatica sencilla, parte webapp]
 
 ==== Microservicio User
 
@@ -38,9 +42,9 @@ El microservicio User está implementado en Node.js y se encarga de gestionar to
 
 Entre sus responsabilidades se incluyen:
 
-* Registro y gestión de usuarios.
+* Controlar el registro y gestión de usuarios.
 * Consulta y gestión de estadísticas de juego.
-* Almacenamiento del ranking de partidas.
+* Consulta y gestión del ranking de partidas.
 * Gestión de la información de perfil del jugador.
 
 
@@ -65,17 +69,13 @@ Para representar el estado del juego se utiliza la notación YEN, que permite de
 El sistema utiliza MongoDB como sistema de persistencia.
 Se trata de una base de datos NoSQL orientada a documentos, adecuada para almacenar estructuras de datos flexibles como partidas de juego y estadísticas.
 
-La base de datos almacena principalmente:
+La base de datos almacena los usuarios registrados, con sus partidas jugadas y ganadas, que se usarán para las estadísticas y ranking.
 
-* Información de usuarios.
-* Partidas jugadas.
-* Estadísticas de juego.
-
-Los microservicios acceden a la base de datos para almacenar y recuperar la información necesaria para su funcionamiento.
+El resto de microservicios se comunican con el microservicio de NodeJs, que manejará la conexión con la base de datos, que almacena los datos, y recuperará la información necesaria para su funcionamiento.
 
 ==== Esquema del sistema
 Este es el esquema del juego completo:
-= image::yovi-estructura.png[componentes-yovi]
+image:yovi-estructura.png[componentes-yovi]
 
 === Nivel 2 – Descomposición interna de los bloques
 
@@ -138,7 +138,7 @@ Las peticiones se realizan mediante HTTP y utilizan mensajes en formato JSON par
 * GET /users/{id} – obtener información de un usuario.
 * POST /createuser – crea un nuevo usuario, validando que no exista
 
-= image::yovi-interfazusers.png[interfaz-users-yovi]
+image:yovi-interfazusers.png[interfaz-users-yovi]
 
 
 ==== Interfaz Frontend – Microservicio GameY
@@ -154,4 +154,4 @@ El acceso a la base de datos se realiza a través de los métodos de acceso a da
 
 === Diagrama de clases
  Vemos en la siguiente imagen el diagrama de clases de este proyecto.
-= image::gamey_uml.png[gamey_uml]
+image:gamey_uml.png[gamey_uml]

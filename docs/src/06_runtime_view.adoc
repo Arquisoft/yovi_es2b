@@ -6,7 +6,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 Ahora podremos ver diferentes diagramas, que representarán el juego a lo largo de su tiempo de vida para casos concretos en tiempo de ejecución. Más específicamente, se verá la interacción entre usuario y el resto del sistema (interfaces, servicio, base de datos, etc.), y cómo afectará al juego en cada caso.
 
 En un primer punto vemos el flujo de ejecución de una petición. Es decir, una sola interacción entre el usuario y el juego.
-= image:gamey_peticion.png[gamey_peticion]
+image:gamey_peticion.png[gamey_peticion]
 
 Mediante este otro diagrama veremos los flujos de la petición, pero según su tipo. Aquí se especificarán de manera más clara los endpoint.
-= image:gamey_endpoint.png[gamey_endpoint]
+image:gamey_endpoint.png[gamey_endpoint]
