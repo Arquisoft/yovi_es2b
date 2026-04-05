@@ -12,32 +12,22 @@ interface EndProps {
   onPlayAgain: () => void; // función para iniciar una nueva partida con las mismas configuraciones
 }
 
+function getTitle(twoPlayers: boolean, winner: string, playerWon: boolean): string {
+  if (twoPlayers) return `¡Ganó ${winner}!`;
+  return playerWon ? "¡Victoria!" : "Derrota";
+}
+
+function getSubtitle(twoPlayers: boolean, winner: string, username: string, playerWon: boolean): string {
+  if (twoPlayers) return `¡Enhorabuena, ${winner}, ganaste la partida!`;
+  if (playerWon)  return `¡Enhorabuena, ${username}, ganaste la partida!`;
+  return "Has perdido. ¡Intentalo de nuevo!";
+}
+
 export function End({ winner, username, username2 = "", twoPlayers = false, settings, onGoHome, onPlayAgain }: Readonly<EndProps>) {
   const playerWon = winner === username;
-
-  // En 2 jugadores siempre hay un ganador, mostramos quién ganó
-  let title: string;
-  if (twoPlayers) {
-    title = `¡Ganó ${winner}!`;
-  } else {
-    title = playerWon ? "¡Victoria!" : "Derrota";
-  }
-
-  let icon: string;
-  if (twoPlayers || playerWon) {
-    icon = "🏆";
-  } else {
-    icon = "💀";
-  }
-
-  let subtitle: string;
-  if (twoPlayers) {
-    subtitle = `¡Enhorabuena, ${winner}, ganaste la partida!`;
-  } else if (playerWon) {
-    subtitle = `¡Enhorabuena, ${username}, ganaste la partida!`;
-  } else {
-    subtitle = "Has perdido. ¡Intentalo de nuevo!";
-  }
+  const title    = getTitle(twoPlayers, winner, playerWon);
+  const icon     = (twoPlayers || playerWon) ? "🏆" : "💀";
+  const subtitle = getSubtitle(twoPlayers, winner, username, playerWon);
 
   return (
     <div className="end-screen">
@@ -72,8 +62,8 @@ export function End({ winner, username, username2 = "", twoPlayers = false, sett
             </div>
           )}
           <div className="end-summary-row">
-            <dt>Dificultad</dt>
-            <dd>{settings.difficulty}</dd>
+            <dt>{twoPlayers ? "Tamaño del tablero" : "Dificultad"}</dt>
+            <dd>{twoPlayers ? ({ EASY: "Pequeño", MEDIUM: "Mediano", HARD: "Grande" } as Record<string, string>)[settings.difficulty] : settings.difficulty}</dd>
           </div>
           {!twoPlayers && (
             <div className="end-summary-row">

@@ -15,19 +15,19 @@ Los principales objetivos de YOVI son los siguientes:
 * Fomentar enfrentamientos amistosos con partidas multijugador (2 jugadores) y con un ranking de usuarios a partir de la puntuación obtenida.
 * Contribuir al entretenimiento y al desarrollo estratégico por las reglas del juego, fácil de entender gracias a la interfaz.
 
-El alcance inicial del sistema se centra en la versión clásica del juego Y, con partidas de un jugador contra la máquina y soporte para diferentes estrategias y niveles de dificultad. No se incluyen funcionalidades avanzadas como partidas simultáneas con varios jugadores, chat en tiempo real o ranking complejo de usuarios, aunque la arquitectura se plantea de forma que estas funcionalidades puedan incorporarse en futuras versiones sin necesidad de reestructurar el sistema.
+El alcance inicial del sistema se centra en la versión clásica del juego Y, con partidas de un jugador contra la máquina y soporte para diferentes estrategias y niveles de dificultad. Además de que cada usuario puede visualizar estadísticas sobre sus propias partidas. También se ha decidido implementar algunas funcionalidades avanzadas como por ejemplo permitir jugar jugador vs jugador de forma local (mismo oredenador) o poder ver un ranking complejo de usuarios global.
 
 === Contexto técnico
 
-YOVI se desarrolla como una aplicación web compuesta por distintos módulos y múltiples tecnologías.
+**YOVI 2B** se desarrolla como una aplicación web compuesta por distintos módulos y múltiples tecnologías. Esto se refiere al uso de varios microservicios, donde cada caso se centrará en su función y en la comunicación con el resto, haciendo repose poca carga sobre cada parte. 
 
 Los componentes principales de la aplicación son:
 
-* **El frontend web:** desarrollado en React, se ejecuta en el navegador del usuario y se encarga de la presentación visual del tablero, la gestión de interacciones de los jugadores y la comunicación con el backend.
-* **El backend:** se divide en dos microservicios independientes que gestionan distintas responsabilidades del sistema, el microservicio de GameY, en Rust, y el de los usuarios, en NOde.js
-* **La persistencia de datos:** se realiza mediante MongoDB, que almacena información estructurada de usuarios, partidas y resultados. Elegimos el modelo noSQL por la facilidad de despliegue y la capacidad de ver los datos en tiempo real.
-* **La comunicación entre frontend y backend:** se realiza mediante mensajes JSON siguiendo la notación YEN. Esta notación permite representar de manera precisa la situación de cada partida en un instante dado, facilitando tanto la interacción con la interfaz web como la integración con bots a través del API.
-* **El sistema se despliega en un entorno contenerizado:** mediante Docker, lo que asegura reproducibilidad y consistencia en el entorno de ejecución. La aplicación se ejecuta en una máquina virtual en la nube, proporcionando disponibilidad remota y facilitando el acceso para usuarios y pruebas. 
+* **El frontend web:** Desarrollado en React, hace que la aplicación se pueda ejecutar en el navegador. También se encarga de la presentación visual del juego, es decir, de la interfaz; la gestión de interacciones de los jugadores y la comunicación con el backend.
+* **El backend:** Se divide en dos microservicios independientes que gestionan distintas responsabilidades del sistema. El microservicio de GameY, en Rust, que tiene por función el manejo del juego como tal, los turnos del juego, los bots y sus estrategias, etc. El otro microservicio es el que maneja los usuarios, aquí, usaremos Node.js, que resultará más sencillo para la cominucación con la base de datos.
+* **La persistencia de datos:** Se realiza mediante MongoDB, que almacena la información de los usuarios con sus partidas y resultados. Elegimos el modelo noSQL por la facilidad de despliegue y la capacidad de ver los datos en tiempo real.
+* **La comunicación entre frontend y backend:** Se realiza mediante mensajes JSON siguiendo la notación YEN. Esta notación permite representar de manera precisa la situación de cada partida en un instante dado, facilitando tanto la interacción con la interfaz web como la integración con bots a través del API.
+* **El sistema se despliega en un entorno contenerizado:** Mediante Docker, lo que asegura reproducibilidad y consistencia en el entorno de ejecución. La aplicación se ejecuta en una máquina virtual en la nube, proporcionando disponibilidad remota y facilitando el acceso para usuarios y pruebas. 
 
-La comunicación se realiza mediante una API REST que intercambia mensajes JSON.. Esta arquitectura modular y distribuida permite que el sistema sea escalable y extensible para futuras versiones que incluyan variantes adicionales del juego, soporte para varios jugadores o funcionalidades opcionales avanzadas.
+La comunicación se realiza mediante una API REST que intercambia mensajes JSON. Esta arquitectura modular y distribuida permite que el sistema sea escalable y extensible para futuras versiones que incluyan variantes adicionales del juego, soporte para varios jugadores o funcionalidades opcionales avanzadas.
 

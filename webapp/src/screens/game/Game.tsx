@@ -221,6 +221,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
           <ControlPanel
             onExit={handleExit}
             onUndo={handleUndo}
+            twoPlayers={twoPlayers}
           />
         </div>
       </div>

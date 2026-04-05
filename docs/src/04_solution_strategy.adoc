@@ -11,22 +11,22 @@ La arquitectura general del sistema se basa en una separación estricta entre pr
 
 Se han usado muchas otras tecnologías, entre ellas:
 
-* **React:** para el frontend, una de las principales bibliotecas de JavaScript para construir interfaces de usuario. Permite la representación del tablero con componentes independientes.
-* **Rust:** para el backend, lenguaje de programación que garantiza rendimiento y seguridad.
+* **React:** Para el frontend, una de las principales bibliotecas de JavaScript para construir interfaces de usuario. Permite la representación del tablero con componentes independientes.
+* **Rust:** Para el backend, lenguaje de programación que garantiza rendimiento y seguridad.
 * **Node.js:** Entorno de ejecución de JS caracterizado por su rendimiento y seguridad que será usado para el juego.
-* **MongoDB:** base de datos no relacional. Más intuitiva y sencilla de montar en el servidor, además de estar orientada a JSON.
-* **Docker:** para el despliegue del sistema.
-* **AWS:** aplicación donde se alojará una máquina virtual para la disponibilidad remota.
-* **CSS:** lenguaje de programación en el que se definirán los estilos y el aspecto de la interfaz en un documento.
-* **GitHub:** servicio basado en la nube donde se subirán las distintas versiones, cambios, reuniones, decisiones, … en torno a la aplicación.
-* **Gatling:** software que se usará para las pruebas de carga del juego.
+* **MongoDB:** Base de datos no relacional. Más intuitiva y sencilla de montar en el servidor, además de estar orientada a JSON, que facilita la implementación.
+* **Docker:** Para el despliegue del sistema.
+* **AWS:** Aplicación donde se alojará una máquina virtual para la disponibilidad remota.
+* **CSS:** Lenguaje de programación en el que se definirán los estilos y el aspecto de la interfaz en un documento.
+* **GitHub:** Servicio web en la nube donde se subirán las distintas versiones, cambios, reuniones, decisiones, … en torno a la aplicación.
+* **Gatling:** Software que se usará para las pruebas de carga del juego.
 
 === Decisiones sobre los objetivos de calidad
 
 Los principales objetivos de calidad para el juego son el rendimiento, la consistencia y fiabilidad, la mantenibilidad y la usabilidad, además de la seguridad:
 
-* **Rendimiento:** se espera principalmente minimizar tiempos de respuesta de para que la experiencia de juego resulte fluida y sin interrupciones tras cada movimiento, por lo que se buscara que el sistema procese los movimientos de forma prácticamente inmediata desde la perspectiva del usuario, evitando retrasos que puedan romper la dinámica del turno. No será necesario el acceso constante a la base de datos, lo que reducirá la latencia.
-* **Consistencia y fiabilidad:** el objetivo principal es garantizar que el estado del tablero sea siempre único, coherente y compartido entre ambos jugadores, impidiendo movimientos ilegales y asegurando el cumplimiento de las reglas. Evitando inconsistencias en el backend, se espera también como objetivo de calidad que el jugador no pueda alterar el estado del juego fuera de su turno, que también será consistente.
-* **Mantenibilidad:** se busca que el sistema pueda modificarse sin afectar profundamente a varias partes del código. Ya sea por incluir nuevas características o cambiar las ya existentes, los cambios deben poder implementarse de manera controlada y localizada, estando el juego adaptado y con una clara separación entre backend y frontend. También es importante el bajo acoplamiento y la gran cohesión para alcanzar este objetivo, así como la documentación.
-* **Usabilidad:** tratando que los jugadores entiendan completamente el juego con su interfaz, se buscará evitar la sobrecarga cognitiva y se priorizará retroalimentación, representación clara del turno o el movimiento hecho y un tablero simple pero comprensible. La interfaz del juego será clara, intuitiva y familiar para el usuario para conseguir esto.
-* **Robustez y seguridad:** el objetivo es que el sistema resista comportamientos inesperados o intentos de manipulación. Se espera evitar que el jugador pueda alterar directamente el tablero o que los puntos ganados sean inconsistentes. Además, el juego debe ser capaz de gestionar situaciones como desconexiones, intentos de jugadas invalidas, …
+* **Rendimiento:** Se espera principalmente minimizar tiempos de respuesta de para que la experiencia de juego resulte fluida y con interrupciones mínimas tras cada movimiento, por lo que se buscara que el sistema procese los movimientos de forma prácticamente inmediata desde la perspectiva del usuario, evitando retrasos que puedan romper la dinámica del turno. No será necesario el acceso constante a la base de datos, lo que reducirá la latencia.
+* **Consistencia y fiabilidad:** El objetivo principal es garantizar que el estado del tablero sea siempre único, coherente y compartido entre ambos jugadores, impidiendo movimientos ilegales y asegurando el cumplimiento de las reglas. Evitando inconsistencias en el backend, se espera también como objetivo de calidad que el jugador no pueda alterar el estado del juego fuera de su turno, que también será consistente.
+* **Mantenibilidad:** Se busca que el sistema pueda modificarse sin afectar profundamente a varias partes del código. Ya sea por incluir nuevas características o cambiar las ya existentes, los cambios deben poder implementarse de manera controlada y localizada, estando el juego adaptado y con una clara separación entre backend y frontend. También es importante el bajo acoplamiento y la gran cohesión para alcanzar este objetivo, así como la documentación.
+* **Usabilidad:** Tratando que los jugadores entiendan completamente el juego con su interfaz, se buscará evitar la sobrecarga cognitiva y se priorizará retroalimentación, representación clara del turno o el movimiento hecho y un tablero simple pero comprensible. La interfaz del juego será clara, intuitiva y familiar para el usuario para conseguir esto.
+* **Robustez y seguridad:** El objetivo es que el sistema resista comportamientos inesperados o intentos de manipulación. Se espera evitar que el jugador pueda alterar directamente el tablero o que los puntos ganados sean inconsistentes. Además, el juego debe ser capaz de gestionar situaciones como desconexiones, intentos de jugadas inválidas, …
