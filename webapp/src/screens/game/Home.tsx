@@ -5,6 +5,7 @@ import type { GameSettings } from "../../components/gameOptions/GameSettings";
 import { Strategy } from "../../components/gameOptions/Strategy";
 import type { StrategyType } from "../../components/gameOptions/Strategy";
 import { Difficulty } from "../../components/gameOptions/Difficulty";
+import type { DifficultyType } from "../../components/gameOptions/Difficulty";
 import "./Home.css";
 import InitialScreen from "../init/InitialScreen";
 import GameStats from "../stats/GameStats";
@@ -43,7 +44,6 @@ export default function HomePage( {username} : { username: string }) {
     const [twoPlayersStarted, setTwoPlayersStarted] = useState(false);
     const [username2, setUsername2] = useState("");
     const [username2Error, setUsername2Error] = useState<string | null>(null);
-    const [menuSelected] = useState<string>("");
     const [difficulty2, setDifficulty2] = useState<DifficultyType>(Difficulty.MEDIUM);
     const [screen, setScreen] = useState("home");
 
@@ -151,7 +151,7 @@ export default function HomePage( {username} : { username: string }) {
                             <button className="home-menu__btn" onClick={() => setScreen("stats")}>
                                 Mis estadísticas
                             </button>
-                            <button className="home-menu__btn" onClick={() => {}}>
+                            <button className="home-menu__btn" onClick={() => setScreen("ranking")}>
                                 Ranking
                             </button>
                         </div>
@@ -210,21 +210,8 @@ export default function HomePage( {username} : { username: string }) {
                             Empezar partida 2 jugadores
                         </button>
                     </div>
-
-            <br></br>
-            
-            <div className="home-menu">
-                <br></br>
-                <button className="home-menu__btn" onClick={() => setScreen("stats")}>
-                    Mis estadísticas
-                </button>
-                <button className="home-menu__btn" onClick={() => setScreen("ranking")}>
-                    Ranking
-                </button>
-                <button className="home-menu-out__btn" onClick={() => setScreen("login")}>
-                    Cerrar sesión
-                </button>
             </div>
         </div>
+    </div>
     );
 }
