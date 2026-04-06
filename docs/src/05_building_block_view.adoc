@@ -153,5 +153,5 @@ El acceso a la base de datos se realiza a través de los métodos de acceso a da
 
 
 === Diagrama de clases
- Vemos en la siguiente imagen el diagrama de clases de este proyecto.
+Vemos en la siguiente imagen el diagrama de clases de este proyecto.
 image:gamey_uml.png[gamey_uml]

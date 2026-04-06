@@ -1,6 +1,6 @@
 ifndef::imagesdir[:imagesdir: ../images]
 
-[[section-glossary]]
+[[section-testing]]
 == Tests
 
 Se explicarán los tests hechos para comprobar el funcionamiento del juego.
@@ -8,7 +8,8 @@ Se explicarán los tests hechos para comprobar el funcionamiento del juego.
 === Test del microservicio Users
 
 Estos son test serán ejecutados después de cada actualización al programa principal. En este caso, se probará la capacidad de la base de datos para todo lo que tenga que ver con usuarios, desde creación y registro de usuario, hasta la obtención y gestión de estadísticas. Estos test no son pruebas respecto al usuario, a la interacción con este, si no al manejo de la base de datos, de que se llama correctamente a los endpoint y lo que devuelve es correcto, sea error o no.
-Para ello, separamos los test por funcionalidad en clases **users-service-[funcionalidad].test.js, haciendo que en cada una pruebe test con casos específicos de cada tipo.
+Para ello, separamos los test por funcionalidad en clases **users-service-[funcionalidad].test.js**, haciendo que en cada una pruebe test con casos específicos de cada tipo.
+
 * **users-service-login: ** Que prueba que un usuario ya creado se registre bien, además de contener los casos donde faltan datos al llamar el endpoint o que el inicio de sesión falló por contraseña incorrecta.
 * **users-service-signup: ** Que prueba que un usuario se puede iniciar sesión, si los datos son correctos, y que lanza en error en su defecto.
 * **users-service-initmatch: ** Que prueba que el inicio de una partida es correcto, o lanza error cuando debería.
