@@ -1210,11 +1210,9 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </div>
 <div class="sect2">
 <h3 id="_diagrama_de_clases">5.4. Diagrama de clases</h3>
-<div class="literalblock">
-<div class="content">
-<pre> Vemos en la siguiente imagen el diagrama de clases de este proyecto.
-image:gamey_uml.png[gamey_uml]</pre>
-</div>
+<div class="paragraph">
+<p>Vemos en la siguiente imagen el diagrama de clases de este proyecto.
+<span class="image"><img src="./images/gamey_uml.png" alt="gamey_uml"></span></p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1356,12 +1354,26 @@ image:gamey_uml.png[gamey_uml]</pre>
 <h3 id="_test_del_microservicio_users">12.1. Test del microservicio Users</h3>
 <div class="paragraph">
 <p>Estos son test serán ejecutados después de cada actualización al programa principal. En este caso, se probará la capacidad de la base de datos para todo lo que tenga que ver con usuarios, desde creación y registro de usuario, hasta la obtención y gestión de estadísticas. Estos test no son pruebas respecto al usuario, a la interacción con este, si no al manejo de la base de datos, de que se llama correctamente a los endpoint y lo que devuelve es correcto, sea error o no.
-Para ello, separamos los test por funcionalidad en clases <strong>users-service-[funcionalidad].test.js, haciendo que en cada una pruebe test con casos específicos de cada tipo.
-* </strong>users-service-login: <strong> Que prueba que un usuario ya creado se registre bien, además de contener los casos donde faltan datos al llamar el endpoint o que el inicio de sesión falló por contraseña incorrecta.
-* </strong>users-service-signup: <strong> Que prueba que un usuario se puede iniciar sesión, si los datos son correctos, y que lanza en error en su defecto.
-* </strong>users-service-initmatch: <strong> Que prueba que el inicio de una partida es correcto, o lanza error cuando debería.
-* </strong>users-service-endmatch: <strong> Que prueba que el fin de una partida ganada es correcta, o lanza error cuando debería.
-* </strong>users-service-statistics: ** Que prueba que la recuperación de estadísticas, tanto las totales como las parciales, funciona de forma correcta, o lanza error cuando debería.</p>
+Para ello, separamos los test por funcionalidad en clases **users-service-[funcionalidad].test.js, haciendo que en cada una pruebe test con casos específicos de cada tipo.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>users-service-login: </strong> Que prueba que un usuario ya creado se registre bien, además de contener los casos donde faltan datos al llamar el endpoint o que el inicio de sesión falló por contraseña incorrecta.</p>
+</li>
+<li>
+<p><strong>users-service-signup: </strong> Que prueba que un usuario se puede iniciar sesión, si los datos son correctos, y que lanza en error en su defecto.</p>
+</li>
+<li>
+<p><strong>users-service-initmatch: </strong> Que prueba que el inicio de una partida es correcto, o lanza error cuando debería.</p>
+</li>
+<li>
+<p><strong>users-service-endmatch: </strong> Que prueba que el fin de una partida ganada es correcta, o lanza error cuando debería.</p>
+</li>
+<li>
+<p><strong>users-service-statistics: </strong> Que prueba que la recuperación de estadísticas, tanto las totales como las parciales, funciona de forma correcta, o lanza error cuando debería.</p>
+</li>
+</ul>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1386,16 +1398,16 @@ Para ello, separamos los test por funcionalidad en clases <strong>users-service-
 </thead>
 <tbody>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Algoritmo de Monte Carlo</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Algoritmo complejo usado en los bots de nuestra aplicación que evalúa las decisiones (o movimientos) del usuario mediante expresiones matemáticas complejas y costosas para elegir sus movimientos y poder ganar.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Entorno de ejecución (NodeJS)</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Es una plataforma que facilita la ejecución de programas directamente desde el sistema operativo, y que funcione de forma escalable y concurrente.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Microservicio</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Parte de una aplicación (servicio) que maneja esa parte y se comunica con el resto para crear un producto mayor sin necesidad de que esté entero en un solo lenguaje.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Algoritmo de Monte Carlo</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Algoritmo complejo usado en los bots de nuestra aplicación que evalúa las decisiones (o movimientos) del usuario mediante expresiones matemáticas complejas y costosas para elegir sus movimientos y poder ganar.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>WebApp</strong></p></td>
