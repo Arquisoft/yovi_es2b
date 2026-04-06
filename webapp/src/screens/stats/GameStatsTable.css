@@ -9,6 +9,7 @@
   border-radius: 10px;
   overflow: hidden;
   table-layout: fixed;
+  padding: 1rem;
 }
 
 /* ── Contenedores de tablas ───────────────────────────────────── */
@@ -52,7 +53,7 @@
 /* FACIL */
 .stats-total-table tbody tr:nth-child(1),  .stats-total-table tbody tr:nth-child(2),  .stats-total-table tbody tr:nth-child(3),
 .stats-total-table tbody tr:nth-child(4),  .stats-total-table tbody tr:nth-child(5),  .stats-total-table tbody tr:nth-child(6),
-.stats-diff-table tbody tr:nth-child(1) {
+.stats-diff-table tbody tr:nth-child(1),   .stats-total-table tbody tr:nth-child(19) {
   background: #f6f8fa;
 }
 /* MEDIO */
