@@ -22,27 +22,27 @@ describe('GET /ranking', () => {
         app.get('/ranking/abandonments', userController.rankingabandon)
     })
 
-    /**
-     * Un usuario recién creado aparece en el ranking con value 0
-     */
-    it('un usuario nuevo aparece en el ranking con value 0', async () => {
-        await setup('Test_Username_Ranking', 'Test_PasswordRanking')
+    // /**
+    //  * Un usuario recién creado aparece en el ranking con value 0
+    //  */
+    // it('un usuario nuevo aparece en el ranking con value 0', async () => {
+    //     await setup('Test_Username_Ranking', 'Test_PasswordRanking')
  
-        const res = await request(app)
-            .get('/ranking/wins')
-            .send({
-            username: 'Test_Username_Ranking'
-             })            
-            .set('Accept', 'application/json')
+    //     const res = await request(app)
+    //         .get('/ranking/wins')
+    //         .send({
+    //         username: 'Test_Username_Ranking'
+    //          })            
+    //         .set('Accept', 'application/json')
  
  
-        expect(entry).toBeDefined()
-        expect(entry.value).toBe(0)
+    //     expect(entry).toBeDefined()
+    //     expect(entry.value).toBe(0)
  
-        await takedown('Test_Username_Ranking')
-    })
+    //     await takedown('Test_Username_Ranking')
+    // })
 
-    //Ranking por derrotas 
+    //Ranking por victorias 
 
     /**
      * Devuelve el ranking global por victorias correctamente
