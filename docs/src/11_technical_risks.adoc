@@ -10,6 +10,7 @@ Aquí definiremos también mediante duplas de “Título-Descripción” de algu
 [options="header",cols="1,2"]
 |===
 |Título|Descripción
-|Riesgo de conocimiento |Los lenguajes, bases de datos, etc. a usar en este proyecto nos resultan nuevos en su mayoría.
-|Riesgo de seguridad |Según como insertemos la base de datos en el proyecto, el producto final puede tener errores en cuanto a responder a ataques de externos.
+|Riesgo de conocimiento|Los lenguajes, bases de datos, etc. a usar en este proyecto nos resultan nuevos en su mayoría.
+|Riesgo de seguridad|Según como insertemos la base de datos en el proyecto, el producto final puede tener errores en cuanto a responder a ataques de externos.
+|Riesgo de comunicación|Como estamos en un trabajo grupal, pueden surgir algunos malentendidos entre los participantes, lo que puede costar en términos de tiempo al intentar entender, modificar o arreglar apartados hechos por otro(s) participante(s).
 |===

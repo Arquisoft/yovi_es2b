@@ -1,7 +1,4 @@
-// header file for arc42-template,
-// including all help texts
-//
-// ====================================
+// Comienzo de la documentación de YOVI_ES2B
 
 // configure EN settings for asciidoc
 include::src/config.adoc[]
@@ -97,7 +94,3 @@ include::src/12_testing.adoc[]
 <<<<
 // 13. Glosario
 include::src/13_glossary.adoc[]
-
-<<<<
-// about arc42
-include::src/about-arc42.adoc[]
