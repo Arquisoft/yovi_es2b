@@ -26,7 +26,7 @@ describe('GET /ranking', () => {
      * Un usuario recién creado aparece en el ranking con value 0
      */
     it('un usuario nuevo aparece en el ranking con value 0', async () => {
-        await setup('Test_Username_Ranking', 'Test_Password1')
+        await setup('Test_Username_Ranking', 'Test_PasswordRanking')
  
         const res = await request(app)
             .get('/ranking/wins')
@@ -49,7 +49,7 @@ describe('GET /ranking', () => {
      */
     it('se obtiene el ranking por victorias', async () => {
 
-        await setup('Test_Username_Stats_All', 'Test_Password1')
+        await setup('Test_Username_Ranking_WIns', 'Test_Password_Wins')
 
         const res = await request(app)
             .get('/ranking/wins')
