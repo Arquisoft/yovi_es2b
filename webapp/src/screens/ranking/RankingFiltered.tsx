@@ -13,6 +13,7 @@ type RankingEntry = {
     position: number;
     username: string;
     value: number;
+    percentage?: number;
 };
 
 export type ObtenerDatosRanking = (
@@ -90,8 +91,13 @@ export default function RankingFiltered({ username }: { username: string }) {
 
             const ranking: RankingEntry[] = [];
             let posicion = 1;
-            for (const entry of data.ranking as Array<{ username: string; value: number }>) {
-                ranking.push({ position: posicion, username: entry.username, value: entry.value });
+            for (const entry of data.ranking as Array<{ username: string; value: number; percentage?: number }>) {
+                ranking.push({
+                    position: posicion,
+                    username: entry.username,
+                    value: entry.value,
+                    percentage: entry.percentage,
+                });
                 posicion += 1;
             }
             return ranking;
@@ -141,7 +147,7 @@ export default function RankingFiltered({ username }: { username: string }) {
                     </div>
                 )}
                 {active.size === 0 && (
-                    <p className="ranking-empty">Selecciona al menos una vista del menu superior.</p>
+                    <p className="ranking-empty">Selecciona al menos una categoría del menu superior.</p>
                 )}
             </div>
 

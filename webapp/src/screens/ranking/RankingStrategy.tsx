@@ -14,6 +14,7 @@ type RankingEntry = {
     position: number;
     username: string;
     value: number;
+    percentage: number;
 };
 
 const STRATEGY_LABELS: Record<StrategyFilter, string> = {
@@ -33,7 +34,13 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal }: { 
     useEffect(() => {
         const cargarDatos = async () => {
             const resultado = await obtenerDatos("/ranking/wins/strategy", { strategy });
-            setData(resultado);
+            const rankingNormalizado = resultado.map((entry) => ({
+                position: entry.position,
+                username: entry.username,
+                value: entry.value,
+                percentage: entry.percentage ?? 0,
+            }));
+            setData(rankingNormalizado);
         };
         cargarDatos();
     }, [strategy]);
@@ -61,6 +68,7 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal }: { 
                         <td>Posición</td>
                         <td>Jugador</td>
                         <td>Victorias ({STRATEGY_LABELS[strategy]})</td>
+                        <td>%</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,6 +85,7 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal }: { 
                                 )}
                             </td>
                             <td>{entry.value}</td>
+                            <td>{entry.percentage}%</td>
                         </tr>
                     ))}
                 </tbody>

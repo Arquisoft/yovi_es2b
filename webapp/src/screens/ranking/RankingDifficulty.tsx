@@ -9,6 +9,7 @@ type RankingEntry = {
     position: number;
     username: string;
     value: number;
+    percentage: number;
 };
 
 const DIFFICULTY_LABELS: Record<DifficultyFilter, string> = {
@@ -31,7 +32,13 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal }: 
     useEffect(() => {
         const cargarDatos = async () => {
             const resultado = await obtenerDatos("/ranking/wins/difficulty", { difficulty });
-            setData(resultado);
+            const rankingNormalizado = resultado.map((entry) => ({
+                position: entry.position,
+                username: entry.username,
+                value: entry.value,
+                percentage: entry.percentage ?? 0,
+            }));
+            setData(rankingNormalizado);
         };
         cargarDatos();
     }, [difficulty]);
@@ -59,6 +66,7 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal }: 
                         <td>Posición</td>
                         <td>Jugador</td>
                         <td>Victorias ({DIFFICULTY_LABELS[difficulty]})</td>
+                        <td>%</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -75,6 +83,7 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal }: 
                                 )}
                             </td>
                             <td>{entry.value} </td>
+                            <td>{entry.percentage}%</td>
                         </tr>
                     ))}
                 </tbody>

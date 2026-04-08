@@ -9,6 +9,7 @@ type RankingEntry = {
     position: number; // posición en el ranking 
     username: string; // nombre del jugador
     value: number; // número de victorias, derrotas o abandonos según el filtro
+    percentage: number; // porcentaje de victorias, derrotas o abandonos sobre el total de partidas
 };
 
 const FILTER_LABELS: Record<FilterKey, string> = {
@@ -36,11 +37,17 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal }: { u
 
     //Funcion definida dentro de RankingGeneral para cargar los datos del ranking según el filtro seleccionado
     // Llama a la función obtenerDatos y actualiza el estado "data" con los resultados.
-    const cargarDatos = async () =>
-        {
-            const resultado = await obtenerDatos(ENDPOINTS[filter], {});
-            setData(resultado);
-        };
+    const cargarDatos = async () => {
+        const resultado = await obtenerDatos(ENDPOINTS[filter], {});
+        // Normaliza los datos recibidos para asegurarse de que tienen la estructura esperada (position, username, value y percentage). Esto es útil en caso de que el backend no devuelva exactamente estos campos o si se necesitan transformar de alguna manera.
+        const rankingNormalizado = resultado.map((entry) => ({
+            position: entry.position,
+            username: entry.username,
+            value: entry.value,
+            percentage: entry.percentage ?? 0,
+        }));
+        setData(rankingNormalizado);
+    };
 
     // useEffect para cargar los datos del ranking cada vez que cambia el filtro. Llama a la función obtenerDatos con el filtro seleccionado y actualiza el estado "data" con los resultados.
     useEffect(() => {
@@ -74,6 +81,7 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal }: { u
                         <td>Posición</td>
                         <td>Jugador</td>
                         <td>{FILTER_LABELS[filter]}</td>
+                        <td>%</td>
                     </tr>
                 </thead>
                 <tbody>
@@ -90,6 +98,7 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal }: { u
                                 )}
                             </td>
                             <td>{entry.value}</td>
+                            <td>{entry.percentage}%</td>
                         </tr>
                     ))}
                 </tbody>
