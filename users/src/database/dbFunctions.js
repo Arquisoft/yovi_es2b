@@ -266,7 +266,7 @@ function checkPassword(password) {
             stats.push({
                 dificultad: diff,
                 jugadas: totalPartidas,
-                perdidas: Math.max(totalPartidas - totalWins - totalAbandonadas, 0),
+                perdidas: Math.max(totalPartidas - totalWins, 0),
                 ganadas: totalWins,
                 porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
             });
@@ -303,7 +303,7 @@ function checkPassword(password) {
             stats.push({
                 estrategia: strat,
                 jugadas: totalPartidas || 0,
-                perdidas: Math.max(totalPartidas - totalWins - totalAbandonadas, 0),
+                perdidas: Math.max(totalPartidas - totalWins, 0),
                 ganadas: totalWins || 0,
                 porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
             });
@@ -336,7 +336,7 @@ function checkPassword(password) {
                     dificultad: diff,
                     estrategia: strat,
                     jugadas: partidas,
-                    perdidas: Math.max(partidas - wins - abandonadas, 0),
+                    perdidas: Math.max(partidas - wins, 0),
                     ganadas: wins,
                     porcentaje: partidas ? ((wins / partidas) * 100).toFixed(2) + ' %' : '0.00 %'
                 });
@@ -345,13 +345,12 @@ function checkPassword(password) {
 
         const pt = existingUser.totales;
         const ptw = existingUser.totalesWins;
-        const pta = existingUser.totalesAbandonadas;
 
         stats.push({
             dificultad: "",
             estrategia: "TOTALES",
             jugadas: pt || 0,
-            perdidas: Math.max((pt || 0) - (ptw || 0) - (pta || 0), 0),
+            perdidas: Math.max((pt || 0) - (ptw || 0), 0),
             ganadas: ptw || 0,
             porcentaje: pt ? ((ptw / pt) * 100).toFixed(2) + ' %' : '0.00 %'
         });
