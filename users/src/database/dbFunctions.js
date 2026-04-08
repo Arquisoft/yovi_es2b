@@ -366,15 +366,29 @@ function checkPassword(password) {
         const allUsers = await users.find({}).toArray();
         const ranking = [];
 
-        for (const u of allUsers) {
-            const totales = u.totales || 0;
-            const wins = u.totalesWins || 0;
-            const porcentaje = totales > 0 ? Number(((wins / totales) * 100).toFixed(2)) : 0;
-
+               for (const u of allUsers) {
+            let wins = 0;
+            let jugadasTotal = 0;
+            let abandonadas = 0;
+            for (const diff of difs) {
+                for (const strat of strats) {
+                    const jugadas = u[`${diff}${strat}`] || 0;
+                    const ganadas = u[`${diff}${strat}Wins`] || 0;
+                    const abandon = u[`${diff}${strat}Abandoned`] || 0;
+                    wins         += ganadas;
+                    abandonadas  += abandon;
+                    jugadasTotal += jugadas;
+                }
+            }
+            // Usamos max(jugadasTotal, wins + abandonadas) para evitar >100%
+            // cuando hay inconsistencias en los datos (wins > jugadas)
+            const total = Math.max(jugadasTotal, wins + abandonadas);
+            const pct = total > 0 ? Number(((wins / total) * 100).toFixed(2)) : 0;
+ 
             ranking.push({
                 username: u.username,
                 value: wins,
-                percentage: porcentaje
+                percentage: pct
             });
         }
 
