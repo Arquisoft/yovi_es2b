@@ -367,14 +367,8 @@ function checkPassword(password) {
         const ranking = [];
 
         for (const u of allUsers) {
-            let totales = 0;
-            let wins = 0;
-            for (const diff of difs) {
-                for (const strat of strats) {
-                    totales += u[`${diff}${strat}`] || 0;
-                    wins    += u[`${diff}${strat}Wins`] || 0;
-                }
-            }
+            const totales = u.totales || 0;
+            const wins = u.totalesWins || 0;
             const porcentaje = totales > 0 ? Number(((wins / totales) * 100).toFixed(2)) : 0;
 
             ranking.push({
@@ -398,16 +392,9 @@ function checkPassword(password) {
         const ranking = [];
 
         for (const u of allUsers) {
-            let totales = 0;
-            let wins = 0;
-            let abandonadas = 0;
-            for (const diff of difs) {
-                for (const strat of strats) {
-                    totales += u[`${diff}${strat}`] || 0;
-                    wins    += u[`${diff}${strat}Wins`] || 0;
-                    abandonadas += u[`${diff}${strat}Abandoned`] || 0;
-                }
-            }
+            const totales = u.totales || 0;
+            const wins = u.totalesWins || 0;
+            const abandonadas = u.totalesAbandonadas || 0;
             const derrotas = Math.max(totales - wins - abandonadas, 0);
             const porcentaje = totales > 0 ? Number(((derrotas / totales) * 100).toFixed(2)) : 0;
 
@@ -430,14 +417,27 @@ function checkPassword(password) {
         const ranking = [];
 
         for (const u of allUsers) {
-            const totales = u.totales || 0;
-            const abandonadas = u.totalesAbandonadas || 0;
-            const porcentaje = totales > 0 ? Number(((abandonadas / totales) * 100).toFixed(2)) : 0;
-
+            let wins = 0;
+            let derrotas = 0;
+            let abandonadas = 0;
+            for (const diff of difs) {
+                for (const strat of strats) {
+                    const jugadas = u[`${diff}${strat}`] || 0;
+                    const ganadas = u[`${diff}${strat}Wins`] || 0;
+                    const abandon = u[`${diff}${strat}Abandoned`] || 0;
+                    wins += ganadas;
+                    abandonadas += abandon;
+                    derrotas += Math.max(jugadas - ganadas - abandon, 0);
+                }
+            }
+            
+            const total = wins + derrotas + abandonadas;
+            const pct = total > 0 ? Number(((abandonadas / total) * 100).toFixed(2)) : 0;
+ 
             ranking.push({
                 username: u.username,
                 value: abandonadas,
-                percentage: porcentaje
+                percentage: pct
             });
         }
 

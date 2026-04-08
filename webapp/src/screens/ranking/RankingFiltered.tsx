@@ -35,7 +35,7 @@ export const getMedal: GetMedal = (pos) => {
     return `#${pos}`;
 };
 
-/** Convierte cualquier valor de porcentaje del backend a string limpio (sin %). */
+// Convierte cualquier valor de porcentaje del backend a string limpio (sin %). Si el valor es null, undefined o no es un número válido, devuelve "0".
 function toPercentageString(raw: unknown): string {
     if (raw === null || raw === undefined) return "0";
     if (typeof raw === "number") return Number.isFinite(raw) ? String(raw) : "0";
