@@ -367,8 +367,14 @@ function checkPassword(password) {
         const ranking = [];
 
         for (const u of allUsers) {
-            const totales = u.totales || 0;
-            const wins = u.totalesWins || 0;
+            let totales = 0;
+            let wins = 0;
+            for (const diff of difs) {
+                for (const strat of strats) {
+                    totales += u[`${diff}${strat}`] || 0;
+                    wins    += u[`${diff}${strat}Wins`] || 0;
+                }
+            }
             const porcentaje = totales > 0 ? Number(((wins / totales) * 100).toFixed(2)) : 0;
 
             ranking.push({
@@ -392,9 +398,16 @@ function checkPassword(password) {
         const ranking = [];
 
         for (const u of allUsers) {
-            const totales = u.totales || 0;
-            const wins = u.totalesWins || 0;
-            const abandonadas = u.totalesAbandonadas || 0;
+            let totales = 0;
+            let wins = 0;
+            let abandonadas = 0;
+            for (const diff of difs) {
+                for (const strat of strats) {
+                    totales += u[`${diff}${strat}`] || 0;
+                    wins    += u[`${diff}${strat}Wins`] || 0;
+                    abandonadas += u[`${diff}${strat}Abandoned`] || 0;
+                }
+            }
             const derrotas = Math.max(totales - wins - abandonadas, 0);
             const porcentaje = totales > 0 ? Number(((derrotas / totales) * 100).toFixed(2)) : 0;
 
