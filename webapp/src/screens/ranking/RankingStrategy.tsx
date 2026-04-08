@@ -34,11 +34,11 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal }: { 
     useEffect(() => {
         const cargarDatos = async () => {
             const resultado = await obtenerDatos("/ranking/wins/strategy", { strategy });
-            const   rankingNormalizado = resultado.map((entry) => ({
+            const rankingNormalizado = resultado.map((entry) => ({
                 position: entry.position,
                 username: entry.username,
                 value: entry.value,
-                percentage: String(entry.percentage ?? "0"),
+                percentage: entry.percentage ?? "0",
             }));
             setData(rankingNormalizado);
         };

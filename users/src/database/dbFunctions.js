@@ -369,12 +369,12 @@ function checkPassword(password) {
         for (const u of allUsers) {
             const totales = u.totales || 0;
             const wins = u.totalesWins || 0;
-            const pct = totales > 0 ? Number(((wins / totales) * 100).toFixed(2)) : 0;
+            const porcentaje = totales > 0 ? Number(((wins / totales) * 100).toFixed(2)) : 0;
 
             ranking.push({
                 username: u.username,
                 value: wins,
-                percentage: pct
+                percentage: porcentaje
             });
         }
 
@@ -396,12 +396,12 @@ function checkPassword(password) {
             const wins = u.totalesWins || 0;
             const abandonadas = u.totalesAbandonadas || 0;
             const derrotas = Math.max(totales - wins - abandonadas, 0);
-            const pct = totales > 0 ? Number(((derrotas / totales) * 100).toFixed(2)) : 0;
+            const porcentaje = totales > 0 ? Number(((derrotas / totales) * 100).toFixed(2)) : 0;
 
             ranking.push({
                 username: u.username,
                 value: derrotas,
-                percentage: pct
+                percentage: porcentaje
             });
         }
 
@@ -419,12 +419,12 @@ function checkPassword(password) {
         for (const u of allUsers) {
             const totales = u.totales || 0;
             const abandonadas = u.totalesAbandonadas || 0;
-            const pct = totales > 0 ? Number(((abandonadas / totales) * 100).toFixed(2)) : 0;
+            const porcentaje = totales > 0 ? Number(((abandonadas / totales) * 100).toFixed(2)) : 0;
 
             ranking.push({
                 username: u.username,
                 value: abandonadas,
-                percentage: pct
+                percentage: porcentaje
             });
         }
 
@@ -450,13 +450,13 @@ function checkPassword(password) {
                 wins += u[`${difficulty}${strat}Wins`] || 0;
                 partidas += u[`${difficulty}${strat}`] || 0;
             }
-            const pct = partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0
+            const porcentaje = partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0;
 
 
             ranking.push({
                 username: u.username,
                 value: wins,
-                percentage: pct
+                percentage: porcentaje
             });
         }
 
@@ -482,12 +482,12 @@ function checkPassword(password) {
                 wins += u[`${diff}${strategy}Wins`] || 0;
                 partidas += u[`${diff}${strategy}`] || 0;
             }
-            const pct = partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0;
+            const porcentaje = partidas > 0 ? Number(((wins / partidas) * 100).toFixed(2)) : 0;
 
             ranking.push({
                 username: u.username,
                 value: wins,
-                percentage: pct
+                percentage: porcentaje
             });
         }
 

@@ -6,14 +6,14 @@ import RankingDifficulty from "./RankingDifficulty.tsx";
 import RankingStrategy from "./RankingStrategy.tsx";
 import "./RankingFiltered.css";
 
-type FilerRule = "general" | "dificultad" | "estrategia";
+type FilterRule = "general" | "dificultad" | "estrategia";
 
 // Tipo para las entradas del ranking, con posición, nombre de usuario y valor (partidas ganadas, victorias por dificultad o victorias por estrategia).
 type RankingEntry = {
     position: number;
     username: string;
     value: number;
-    percentage?: number;
+    percentage: string;
 };
 
 export type ObtenerDatosRanking = (
@@ -35,13 +35,24 @@ export const getMedal: GetMedal = (pos) => {
     return `#${pos}`;
 };
 
+/** Convierte cualquier valor de porcentaje del backend a string limpio (sin %). */
+function toPercentageString(raw: unknown): string {
+    if (raw === null || raw === undefined) return "0";
+    if (typeof raw === "number") return Number.isFinite(raw) ? String(raw) : "0";
+    if (typeof raw === "string") {
+        const clean = raw.replace("%", "").trim();
+        return clean.length > 0 ? clean : "0";
+    }
+    return "0";
+}
+
 //Username se muestra en el header y se pasa a los componentes de ranking para mostrar el ranking filtrado por ese usuario. ç
 // Se mantiene en este componente para que no se pierda al navegar entre las diferentes vistas del ranking filtrado.
 export default function RankingFiltered({ username }: { username: string }) {
 
     const [goBack, setGoBack] = useState(false); // Para volver a la vista general del ranking
     const [goHome, setGoHome] = useState(false); // Para volver al menú principal (Home)
-    const [active, setActive] = useState<Set<FilerRule>>(new Set(["general"])); // Estado para controlar qué vistas del ranking filtrado están activas. Por defecto, se muestra la vista general.
+    const [active, setActive] = useState<Set<FilterRule>>(new Set(["general"])); // Estado para controlar qué vistas del ranking filtrado están activas. Por defecto, se muestra la vista general.
 
     if (goBack) {
         return <Ranking username={username} />;
@@ -55,7 +66,7 @@ export default function RankingFiltered({ username }: { username: string }) {
      * Esto permite mostrar u ocultar las diferentes secciones del ranking filtrado según las opciones seleccionadas en el menú.
      * @param rule, la regla de filtrado que se ha toggled (general, dificultad o estrategia) 
      */
-    function filterRanking(rule: FilerRule) {
+    function filterRanking(rule: FilterRule) {
         setActive((prev) => {
             //Set no permite mutar ni duplicados
             const next = new Set(prev);
@@ -71,7 +82,7 @@ export default function RankingFiltered({ username }: { username: string }) {
 
     // Función para obtener la clase CSS de un botón del menú de filtrado.
     // Si la regla está activa, se añade una clase adicional para indicar que el botón está activo.
-    const getButtonClass = (rule: FilerRule) =>
+    const getButtonClass = (rule: FilterRule) =>
         active.has(rule) ? "ranking-toggle-btn ranking-toggle-btn--active" : "ranking-toggle-btn";
 
     // Función para obtener los datos del ranking desde el backend.
@@ -91,12 +102,12 @@ export default function RankingFiltered({ username }: { username: string }) {
 
             const ranking: RankingEntry[] = [];
             let posicion = 1;
-            for (const entry of data.ranking as Array<{ username: string; value: number; percentage?: number }>) {
+            for (const entry of data.ranking as Array<{ username: string; value: number; percentage?: string }>) {
                 ranking.push({
                     position: posicion,
                     username: entry.username,
                     value: entry.value,
-                    percentage: entry.percentage,
+                    percentage: toPercentageString(entry.percentage),
                 });
                 posicion += 1;
             }
