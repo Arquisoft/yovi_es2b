@@ -9,7 +9,7 @@ type RankingEntry = {
     position: number;
     username: string;
     value: number;
-    percentage: number;
+    percentage: string;
 };
 
 const DIFFICULTY_LABELS: Record<DifficultyFilter, string> = {
@@ -36,7 +36,7 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal }: 
                 position: entry.position,
                 username: entry.username,
                 value: entry.value,
-                percentage: entry.percentage ?? 0,
+                percentage: String(entry.percentage ?? 0),
             }));
             setData(rankingNormalizado);
         };

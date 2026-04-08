@@ -9,7 +9,7 @@ type RankingEntry = {
     position: number; // posición en el ranking 
     username: string; // nombre del jugador
     value: number; // número de victorias, derrotas o abandonos según el filtro
-    percentage: number; // porcentaje de victorias, derrotas o abandonos sobre el total de partidas
+    percentage: string; // porcentaje de victorias, derrotas o abandonos sobre el total de partidas
 };
 
 const FILTER_LABELS: Record<FilterKey, string> = {
@@ -44,7 +44,7 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal }: { u
             position: entry.position,
             username: entry.username,
             value: entry.value,
-            percentage: entry.percentage ?? 0,
+            percentage: String(entry.percentage ?? 0),
         }));
         setData(rankingNormalizado);
     };
