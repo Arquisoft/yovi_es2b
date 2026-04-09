@@ -27,11 +27,14 @@ const STRATEGY_LABELS: Record<StrategyFilter, string> = {
 };
 
 function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
-    return data.slice().sort((a, b) =>
-        sortBy === "percentage"
-            ? Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage)
-            : b.value - a.value
-    );
+    return data.slice().sort((a, b) => {
+        if (sortBy === "percentage") {
+            const diff = Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
+            return diff !== 0 ? diff : b.value - a.value;
+        }
+        const diff = b.value - a.value;
+        return diff !== 0 ? diff : Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
+    });
 }
 
 export default function RankingStrategy({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
