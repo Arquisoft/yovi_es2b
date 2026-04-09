@@ -233,7 +233,7 @@ function checkPassword(password) {
             stats.push({
                 dificultad: diff,
                 jugadas: totalPartidas,
-                perdidas: Math.max(totalPartidas - totalWins, 0),
+                perdidas: totalPartidas - totalWins,
                 ganadas: totalWins,
                 porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
             });
@@ -268,7 +268,7 @@ function checkPassword(password) {
             stats.push({
                 estrategia: strat,
                 jugadas: totalPartidas || 0,
-                perdidas: Math.max(totalPartidas - totalWins, 0),
+                perdidas: totalPartidas - totalWins,
                 ganadas: totalWins || 0,
                 porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
             });
@@ -300,7 +300,7 @@ function checkPassword(password) {
                     dificultad: diff,
                     estrategia: strat,
                     jugadas: partidas,
-                    perdidas: Math.max(partidas - wins, 0),
+                    perdidas: partidas - wins,
                     ganadas: wins,
                     porcentaje: partidas ? ((wins / partidas) * 100).toFixed(2) + ' %' : '0.00 %'
                 });
@@ -314,7 +314,7 @@ function checkPassword(password) {
             dificultad: "",
             estrategia: "TOTALES",
             jugadas: pt || 0,
-            perdidas: Math.max((pt || 0) - (ptw || 0), 0),
+            perdidas: (pt || 0) - (ptw || 0),
             ganadas: ptw || 0,
             porcentaje: pt ? ((ptw / pt) * 100).toFixed(2) + ' %' : '0.00 %'
         });
@@ -366,7 +366,7 @@ function checkPassword(password) {
         for (const u of allUsers) {
             const totales = u.totales || 0;
             const wins = u.totalesWins || 0;
-            const derrotas = Math.max(totales - wins, 0);
+            const derrotas = totales - wins;
             const porcentaje = totales > 0 ? Number(((derrotas / totales) * 100).toFixed(2)) : 0;
 
             ranking.push({
