@@ -294,49 +294,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
-  /defeatmatch:
-    post:
-      summary: Registra una partida perdida
-      description: Marca como perdida una partida para el usuario indicado con la estrategia y dificultad especificadas.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/MatchRequest'
-      responses:
-        '202':
-          description: Derrota registrada correctamente
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/MessageResponse'
-        '404':
-          description: Usuario no encontrado
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '405':
-          description: Dificultad no válida
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '406':
-          description: Estrategia no válida
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-        '500':
-          description: Error interno del servidor
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
-
+                
   /allstats:
     post:
       summary: Obtiene todas las estadísticas del usuario
@@ -535,10 +493,6 @@ components:
           type: integer
           description: Total de partidas ganadas
           example: 4
-        totalesDefeats:
-          type: integer
-          description: Total de partidas perdidas
-          example: 2
 
     AllStatEntry:
       type: object

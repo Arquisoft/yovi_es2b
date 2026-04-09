@@ -208,37 +208,6 @@ function checkPassword(password) {
     }
 
     /**
-     * Función de terminación de partida perdida
-     */
-    async function defeatmatch(users, username, strategy, difficulty) {
-        const existingUser = await users.findOne({ "username": String(username) });
-        if (!existingUser) {
-            throw new UserNotFoundError(username);
-        }
-
-        if (!strats.includes(strategy)) {
-            throw new InvalidStrategyError(strategy);
-        }
-        if (!difs.includes(difficulty)) {
-            throw new InvalidDifficultyError(difficulty);
-        }
-
-        const partidasGeneral = difficulty + strategy + "Defeats";
-
-        await users.updateOne(
-            { _id: existingUser._id },
-            {
-                $inc: {
-                    totalesDefeats: 1,
-                    [partidasGeneral]: 1
-                }
-            }
-        )
-
-        return 'Partida perdida registrada correctamente' ;
-    }
-
-    /**
      * Función de calculo de estadisticas segun la dificultad
      */
     async function diffstats(users, username) {
@@ -255,6 +224,7 @@ function checkPassword(password) {
 
             let totalPartidas = 0;
             let totalWins = 0;
+
             for (const strat of strats) {
                 totalPartidas += existingUser[`${diff}${strat}`] || 0;
                 totalWins += existingUser[`${diff}${strat}Wins`] || 0;
@@ -263,7 +233,7 @@ function checkPassword(password) {
             stats.push({
                 dificultad: diff,
                 jugadas: totalPartidas,
-                perdidas: Math.max(totalPartidas - totalWins, 0),
+                perdidas: totalPartidas - totalWins,
                 ganadas: totalWins,
                 porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
             });
@@ -289,6 +259,7 @@ function checkPassword(password) {
 
             let totalPartidas = 0;
             let totalWins = 0;
+
             for (const diff of difs) {
                 totalPartidas += existingUser[`${diff}${strat}`] || 0;
                 totalWins += existingUser[`${diff}${strat}Wins`] || 0;
@@ -297,7 +268,7 @@ function checkPassword(password) {
             stats.push({
                 estrategia: strat,
                 jugadas: totalPartidas || 0,
-                perdidas: Math.max(totalPartidas - totalWins, 0),
+                perdidas: totalPartidas - totalWins,
                 ganadas: totalWins || 0,
                 porcentaje: totalPartidas ? ((totalWins / totalPartidas) * 100).toFixed(2) + ' %' : '0.00 %'
             });
@@ -324,11 +295,12 @@ function checkPassword(password) {
 
                 const partidas = existingUser[`${diff}${strat}`] || 0;
                 const wins = existingUser[`${diff}${strat}Wins`] || 0;
+
                 stats.push({
                     dificultad: diff,
                     estrategia: strat,
                     jugadas: partidas,
-                    perdidas: Math.max(partidas - wins, 0),
+                    perdidas: partidas - wins,
                     ganadas: wins,
                     porcentaje: partidas ? ((wins / partidas) * 100).toFixed(2) + ' %' : '0.00 %'
                 });
@@ -342,7 +314,7 @@ function checkPassword(password) {
             dificultad: "",
             estrategia: "TOTALES",
             jugadas: pt || 0,
-            perdidas: Math.max((pt || 0) - (ptw || 0), 0),
+            perdidas: (pt || 0) - (ptw || 0),
             ganadas: ptw || 0,
             porcentaje: pt ? ((ptw / pt) * 100).toFixed(2) + ' %' : '0.00 %'
         });
@@ -357,7 +329,7 @@ function checkPassword(password) {
         const allUsers = await users.find({}).toArray();
         const ranking = [];
 
-               for (const u of allUsers) {
+        for (const u of allUsers) {
             let wins = 0;
             let jugadasTotal = 0;
             for (const diff of difs) {
@@ -368,9 +340,8 @@ function checkPassword(password) {
                     jugadasTotal += jugadas;
                 }
             }
-            // Usamos max(jugadasTotal, wins) para evitar >100%
-            // cuando hay inconsistencias en los datos (wins > jugadas)
-            const total = Math.max(jugadasTotal, wins);
+
+            const total = jugadasTotal;
             const pct = total > 0 ? Number(((wins / total) * 100).toFixed(2)) : 0;
  
             ranking.push({
@@ -387,7 +358,6 @@ function checkPassword(password) {
 
     /**
      * Ranking global por porcentaje de derrotas.
-        * Derrotas = totales - wins.
      */
     async function rankingdefeats(users) {
         const allUsers = await users.find({}).toArray();
@@ -396,7 +366,7 @@ function checkPassword(password) {
         for (const u of allUsers) {
             const totales = u.totales || 0;
             const wins = u.totalesWins || 0;
-            const derrotas = Math.max(totales - wins, 0);
+            const derrotas = totales - wins;
             const porcentaje = totales > 0 ? Number(((derrotas / totales) * 100).toFixed(2)) : 0;
 
             ranking.push({
@@ -475,7 +445,7 @@ function checkPassword(password) {
 
 module.exports = {
     loginuser, createuser, deleteuser, findUser,
-    initmatch, endmatch, defeatmatch,
+    initmatch, endmatch,
     diffstats, stratstats, allstats,
     rankingvictories, rankingdefeats, rankingwinsbydifficulty, rankingwinsbystrategy
 };

@@ -13,7 +13,7 @@
  */
 
 const { loginuser, createuser, deleteuser, findUser,
-  initmatch, endmatch, defeatmatch,
+  initmatch, endmatch, 
   stratstats, allstats, diffstats,
   rankingvictories, rankingdefeats, rankingwinsbydifficulty, rankingwinsbystrategy
 } = require('./database/dbFunctions');
@@ -121,10 +121,6 @@ class UserService {
     return `Usuario ${username} ha ganado una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
   }
 
-  async defeatmatch(username, strategy, difficulty) {
-    await defeatmatch(this.usersCollection, username, strategy, difficulty);
-    return `Usuario ${username} ha perdido una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
-  }
 
   async allstats(username) {
     const stats = await allstats(this.usersCollection, username);
