@@ -133,48 +133,75 @@
   padding: 0.6rem 0;
   font-size: 0.9rem;
   font-weight: 600;
-  border: none;
   border-radius: 6px;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s;
+  transition: background 0.2s, transform 0.1s;
   margin: 0;
+  outline: none;
 }
 
 .home-difficulty__btn:active {
   transform: scale(0.97);
 }
 
+/* Fácil — verde */
 .home-difficulty__btn--easy {
-  background: #2f8a3d;
-  color: #fff;
+  background: #dcfce7;
+  color: #15803d;
+  border: 1.5px solid #86efac;
 }
-
+.home-difficulty__btn--easy:hover {
+  background: #bbf7d0;
+  border: 1.5px solid #86efac;
+}
 .home-difficulty__btn--easy--active {
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
-  background-color: #4ee464;
-  color: #181818;
+  background: #22c55e;
+  border: 1.5px solid #15803d;
+  color: #fff;
+}
+.home-difficulty__btn--easy--active:hover {
+  background: #16a34a;
+  border: 1.5px solid #15803d;
 }
 
+/* Media — amarillo */
 .home-difficulty__btn--medium {
-  background: #f9a825;
-  color: #fff;
+  background: #fef9c3;
+  color: #a16207;
+  border: 1.5px solid #fde047;
 }
-
+.home-difficulty__btn--medium:hover {
+  background: #fef08a;
+  border: 1.5px solid #fde047;
+}
 .home-difficulty__btn--medium--active {
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
-  background-color: #ffe32b;
-  color: #181818;
-}
-
-.home-difficulty__btn--hard {
-  background: #c62828;
+  background: #eab308;
+  border: 1.5px solid #a16207;
   color: #fff;
 }
+.home-difficulty__btn--medium--active:hover {
+  background: #d4a017;
+  border: 1.5px solid #a16207;
+}
 
+/* Difícil — rojo */
+.home-difficulty__btn--hard {
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1.5px solid #fca5a5;
+}
+.home-difficulty__btn--hard:hover {
+  background: #fecaca;
+  border: 1.5px solid #fca5a5;
+}
 .home-difficulty__btn--hard--active {
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.25);
-  background-color: #ff5c5c;
-  color: #181818;
+  background: #991b1b;
+  border: 1.5px solid #7f1d1d;
+  color: #fff;
+}
+.home-difficulty__btn--hard--active:hover {
+  background: #7f1d1d;
+  border: 1.5px solid #7f1d1d;
 }
 
 

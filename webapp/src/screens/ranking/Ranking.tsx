@@ -52,7 +52,7 @@ export default function Ranking({ username }: Readonly<{ username: string }>) {
             <h1 className="ranking-screen-title">Ranking global</h1>
 
             <div className="ranking-position-card">
-                <p className="ranking-position-label">Tu posicion en el ranking es...</p>
+                <p className="ranking-position-label">Tu posición en el ranking es...</p>
                 {loadingPosition && <p className="ranking-position-value">...</p>}
                 {!loadingPosition && !positionError && position !== null && (
                     <p className="ranking-position-value">#{position}</p>

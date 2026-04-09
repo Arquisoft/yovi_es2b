@@ -9,15 +9,16 @@
 }
 
 .ranking-logo {
-    width: clamp(260px, 34vw, 420px);
+    width: clamp(180px, 22vw, 280px);
     height: auto;
     margin-bottom: 38px;
 }
 
 .ranking-screen-title {
     font-size: 2rem;
+    font-weight: 750;
     margin-bottom: 38px;
-    color: var(--color-primary, #1a56db);
+    color: #191a1c;
 }
 
 .ranking-position-card {
@@ -40,7 +41,7 @@
 
 .ranking-position-value {
     margin: 14px 0 0;
-    color: #0f172a;
+    color: #1a56db;
     font-size: clamp(2.4rem, 8vw, 4rem);
     line-height: 1;
     font-weight: 800;
@@ -95,4 +96,7 @@
     transition: background 0.2s;
     margin: 0;
 }
-.ranking-btn-menu:hover { background: rgba(255, 100, 100, 0.08); }
+.ranking-btn-menu:hover {
+    background: rgba(255, 100, 100, 0.08);
+    border: 1px solid #ff5858;
+}
