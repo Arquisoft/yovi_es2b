@@ -17,6 +17,7 @@ interface GameProps {
   stateStart: boolean;
   onGoMenu?: () => void;
   onGameEnd?: (winner: string) => void;
+  onPlayAgain?: () => void;
 }
 
 /**
@@ -46,7 +47,7 @@ async function getTurnoPartida(gameId: string): Promise<number> {
     return data.kind === 'Ongoing' ? data.next_player : 0;
 }
 
-export function Game({ settings, username, username2, twoPlayers, stateStart, onGoMenu = () => {}, onGameEnd }: Readonly<GameProps>) {
+export function Game({ settings, username, username2, twoPlayers, stateStart, onGoMenu = () => {}, onGameEnd, onPlayAgain }: Readonly<GameProps>) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
@@ -152,7 +153,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
         twoPlayers={twoPlayers}
         settings={settings}
         onGoHome={onGoMenu}
-        onPlayAgain={() => setPlayAgain((prev) => !prev)} // toggle dispara el useEffect
+        onPlayAgain={() => { setPlayAgain((prev) => !prev); onPlayAgain?.(); }} // toggle dispara el useEffect
       />
     );
   }

@@ -68,6 +68,7 @@ export default function HomePage( {username} : { username: string }) {
                 twoPlayers={false}
                 stateStart={true}
                 onGoMenu={() => setScreen("home")}
+                onPlayAgain={() => iniciarPartida(username, settings.strategy, settings.difficulty)}
             />
         );
     }
