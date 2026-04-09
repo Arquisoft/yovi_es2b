@@ -116,6 +116,8 @@ describe('GET /ranking', () => {
         }
     })
  
+})
+ 
 /**
  * COMPRUEBA LA FUNCIONALIDAD DE LA BASE DE DATOS
  * EN LOS RANKINGS GLOBALES — RUTAS POST

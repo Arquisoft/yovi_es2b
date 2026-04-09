@@ -1,51 +1,47 @@
 .ranking-screen {
-  position: fixed;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #ffffff;
-  padding: 2rem;
-  box-sizing: border-box;
-  overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 66px 20px;
+    min-height: 100vh;
+}
+
+.ranking-logo {
+    width: clamp(260px, 34vw, 420px);
+    height: auto;
+    margin-bottom: 38px;
 }
 
 .ranking-screen-title {
     font-size: 2rem;
     margin-bottom: 38px;
-    color: #191a1c;
+    color: var(--color-primary, #1a56db);
 }
 
-.ranking-position-card {  
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-  margin: 0 auto 50px;
-  width: 100%;
-  max-width: 380px;
-
-  padding: 2rem 2rem;
-  background: #ffffff;
-  border: 1px solid #d0d7de;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-
-  animation: ranking-card-in 500ms ease-out;
+.ranking-position-card {
+    width: min(560px, 92vw);
+    margin: 0 auto 50px;
+    padding: 24px 28px;
+    border: 1px solid #dbeafe;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #eff6ff 0%, #f8fafc 100%);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    animation: ranking-card-in 500ms ease-out;
 }
 
 .ranking-position-label {
     margin: 0;
-    color: #191a1c;
-    font-size: 1.2rem;
+    color: #1e3a8a;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
     font-weight: 600;
 }
 
 .ranking-position-value {
     margin: 14px 0 0;
-    color: #023eb6;
-    font-size: 3rem;
+    color: #0f172a;
+    font-size: clamp(2.4rem, 8vw, 4rem);
     line-height: 1;
     font-weight: 800;
     letter-spacing: 1px;
@@ -72,38 +68,30 @@
 }
 
 .ranking-btn-filtered {
-    width: 100%;
-  padding: 0.7rem 1.2rem;
-  background: transparent;
-  color: #646cff;
-  font-size: 1rem;
-  font-weight: 600;
-  border: 1px solid #646cff;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin: 0;
+    padding: 14px 42px;
+    font-size: 1.08rem;
+    min-width: 230px;
+    font-weight: 600;
+    background: #1a56db;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.18s;
 }
-.ranking-btn-filtered:hover { 
-    background: rgba(100, 108, 255, 0.08); 
-}
+.ranking-btn-filtered:hover { background: #1241a8; }
 
 .ranking-btn-menu {
-    width: 100%;
-  padding: 0.7rem 1.2rem;
-  background: transparent;
-  color: #ff5858;
-  font-size: 1rem;
-  font-weight: 600;
-  border: 1px solid #ff5858;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-  margin: 0;
+    padding: 14px 42px;
+    font-size: 1.08rem;
+    min-width: 230px;
+    font-weight: 600;
+    background: #db1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.18s;
 }
 
-.ranking-btn-menu:hover { 
-    background: rgba(255, 100, 100, 0.08);
-    border: 1px solid #ff5858;
-    border-radius: 6px;
-}
+.ranking-btn-menu:hover { background: #b91c1c; }

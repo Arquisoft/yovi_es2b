@@ -9,6 +9,7 @@ import "./RankingFiltered.css";
 const yoviLogo = "/yovi_logo.png";
 
 type FilterRule = "general" | "dificultad" | "estrategia";
+export type SortRule = "value" | "percentage";
 
 // Tipo para las entradas del ranking, con posición, nombre de usuario y valor (partidas ganadas, victorias por dificultad o victorias por estrategia).
 type RankingEntry = {
@@ -50,11 +51,13 @@ function toPercentageString(raw: unknown): string {
 
 //Username se muestra en el header y se pasa a los componentes de ranking para mostrar el ranking filtrado por ese usuario. ç
 // Se mantiene en este componente para que no se pierda al navegar entre las diferentes vistas del ranking filtrado.
-export default function RankingFiltered({ username }: { username: string }) {
+export default function RankingFiltered({ username }: Readonly<{ username: string }>) {
 
     const [goBack, setGoBack] = useState(false); // Para volver a la vista general del ranking
     const [goHome, setGoHome] = useState(false); // Para volver al menú principal (Home)
     const [active, setActive] = useState<Set<FilterRule>>(new Set(["general"])); // Estado para controlar qué vistas del ranking filtrado están activas. Por defecto, se muestra la vista general.
+    const [sortBy, setSortBy] = useState<SortRule>("value");
+
 
     if (goBack) {
         return <Ranking username={username} />;
@@ -87,6 +90,11 @@ export default function RankingFiltered({ username }: { username: string }) {
     const getButtonClass = (rule: FilterRule) =>
         active.has(rule) ? "ranking-toggle-btn ranking-toggle-btn--active" : "ranking-toggle-btn";
 
+    // Función para obtener la clase CSS de un botón de ordenación.
+    // Si la regla de ordenación coincide con la seleccionada, se añade una clase adicional para indicar que el botón está activo.
+    const getSortClass = (key: SortRule) =>
+        sortBy === key ? "ranking-sort-btn ranking-sort-btn--active" : "ranking-sort-btn";
+
     // Función para obtener los datos del ranking desde el backend.
     // Recibe un endpoint y un body, hace una petición POST al backend y devuelve los datos formateados como un array de RankingEntry.
     const obtenerDatos: ObtenerDatosRanking = async (endpoint, body) => {
@@ -114,8 +122,8 @@ export default function RankingFiltered({ username }: { username: string }) {
                 posicion += 1;
             }
             return ranking;
-        } catch (err: any) {
-            throw new Error("Network error");
+        } catch (err) {
+            throw new Error("Network error", { cause: err });
         }
     };
 
@@ -129,35 +137,48 @@ export default function RankingFiltered({ username }: { username: string }) {
             </div>
 
             {/* menu */}
-            <div className="ranking-toggle-menu">
-                <button className={getButtonClass("general")} onClick={() => filterRanking("general")}>
-                    {active.has("general") && <span className="ranking-toggle-check">✓ </span>}
-                    Por partidas
-                </button>
-                <button className={getButtonClass("dificultad")} onClick={() => filterRanking("dificultad")}>
-                    {active.has("dificultad") && <span className="ranking-toggle-check">✓ </span>}
-                    Por dificultad
-                </button>
-                <button className={getButtonClass("estrategia")} onClick={() => filterRanking("estrategia")}>
-                    {active.has("estrategia") && <span className="ranking-toggle-check">✓ </span>}
-                    Por estrategia
-                </button>
+            <div className="ranking-controls-row">
+                <div className="ranking-toggle-menu">
+                    <button className={getButtonClass("general")} onClick={() => filterRanking("general")}>
+                        {active.has("general") && <span className="ranking-toggle-check">✓ </span>}
+                        Por partidas
+                    </button>
+                    <button className={getButtonClass("dificultad")} onClick={() => filterRanking("dificultad")}>
+                        {active.has("dificultad") && <span className="ranking-toggle-check">✓ </span>}
+                        Por dificultad
+                    </button>
+                    <button className={getButtonClass("estrategia")} onClick={() => filterRanking("estrategia")}>
+                        {active.has("estrategia") && <span className="ranking-toggle-check">✓ </span>}
+                        Por estrategia
+                    </button>
+                </div>
+
+                <div className="ranking-sort-menu">
+                    <span className="ranking-sort-label">Ordenar</span>
+                    <button className={getSortClass("value")} onClick={() => setSortBy("value")}>
+                        Nº
+                    </button>
+                    <button className={getSortClass("percentage")} onClick={() => setSortBy("percentage")}>
+                        %
+                    </button>
+                </div>
             </div>
+            
 
             <div className="ranking-filtered-body">
                 {active.has("general") && (
                     <div className="ranking-filtered-section">
-                        <RankingGeneral username={username} obtenerDatos={obtenerDatos} getMedal={getMedal} />
+                        <RankingGeneral username={username} obtenerDatos={obtenerDatos} getMedal={getMedal} sortBy={sortBy} />
                     </div>
                 )}
                 {active.has("dificultad") && (
                     <div className="ranking-filtered-section">
-                        <RankingDifficulty username={username} obtenerDatos={obtenerDatos} getMedal={getMedal} />
+                        <RankingDifficulty username={username} obtenerDatos={obtenerDatos} getMedal={getMedal} sortBy={sortBy} />
                     </div>
                 )}
                 {active.has("estrategia") && (
                     <div className="ranking-filtered-section">
-                        <RankingStrategy username={username} obtenerDatos={obtenerDatos} getMedal={getMedal} />
+                        <RankingStrategy username={username} obtenerDatos={obtenerDatos} getMedal={getMedal} sortBy={sortBy} />
                     </div>
                 )}
                 {active.size === 0 && (

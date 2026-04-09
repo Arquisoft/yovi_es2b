@@ -351,8 +351,8 @@ function checkPassword(password) {
             });
         }
 
-        // Ordenamos de mayor a menor victorias; a igual número, por porcentaje
-        ranking.sort((a, b) => b.value - a.value || b.percentage - a.percentage);
+        // Ordenamos de mayor a menor porcentaje de victorias
+        ranking.sort((a, b) => b.value - a.value);
         return ranking;
     }
 
@@ -376,7 +376,7 @@ function checkPassword(password) {
             });
         }
 
-        ranking.sort((a, b) => b.value - a.value || b.percentage - a.percentage);
+        ranking.sort((a, b) => b.value - a.value);
         return ranking;
     }
 
@@ -408,7 +408,7 @@ function checkPassword(password) {
             });
         }
 
-        ranking.sort((a, b) => b.value - a.value || b.percentage - a.percentage);
+        ranking.sort((a, b) => b.value - a.value);
         return ranking;
     }
 
@@ -439,7 +439,7 @@ function checkPassword(password) {
             });
         }
 
-        ranking.sort((a, b) => b.value - a.value || b.percentage - a.percentage);
+        ranking.sort((a, b) => b.value - a.value);
         return ranking;
     }
 

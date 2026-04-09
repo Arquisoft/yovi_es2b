@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { GetMedal, ObtenerDatosRanking } from "./RankingFiltered";
+import type { GetMedal, ObtenerDatosRanking, SortRule} from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
 type FilterKey = "victorias" | "derrotas";
@@ -8,26 +8,34 @@ type FilterKey = "victorias" | "derrotas";
 type RankingEntry = {
     position: number; // posición en el ranking 
     username: string; // nombre del jugador
-    value: number; // número de victorias o derrotas según el filtro
-    percentage: string; // porcentaje de victorias o derrotas sobre el total de partidas
+    value: number; // número de victorias, derrotas o abandonos según el filtro
+    percentage: string; // porcentaje de victorias, derrotas o abandonos sobre el total de partidas
 };
 
 const FILTER_LABELS: Record<FilterKey, string> = {
     victorias:   "Victorias",
-    derrotas:    "Derrotas"
+    derrotas:    "Derrotas",
 };
 
 const ENDPOINTS: Record<FilterKey, string> = {
     victorias:   "/ranking/wins",
-    derrotas:    "/ranking/defeats"
+    derrotas:    "/ranking/defeats",
 };
 
 const FILTER_COLORS: Record<FilterKey, string> = {
     victorias: "ranking-info--green",
-    derrotas: "ranking-info--red"
+    derrotas: "ranking-info--red",
 };
 
-export default function RankingGeneral({ username, obtenerDatos, getMedal }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal }) {
+function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
+    return data.slice().sort((a, b) =>
+        sortBy === "percentage"
+            ? Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage)
+            : b.value - a.value
+    );
+}
+
+export default function RankingGeneral({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
 
     const [filter, setFilter] = useState<FilterKey>("victorias"); // Estado para el filtro seleccionado. Por defecto, se muestra el ranking por victorias.
     const [data, setData] = useState<RankingEntry[]>([]); // Estado para los datos del ranking. Se actualiza cada vez que cambia el filtro.
@@ -82,7 +90,7 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal }: { u
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((entry) => (
+                    {sortData(data, sortBy).map((entry) => (
                         <tr
                             key={entry.username}
                             className={entry.username === username ? "ranking-row--me" : ""}

@@ -121,6 +121,7 @@ class UserService {
     return `Usuario ${username} ha ganado una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
   }
 
+
   async allstats(username) {
     const stats = await allstats(this.usersCollection, username);
     return stats;

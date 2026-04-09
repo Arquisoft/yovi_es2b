@@ -24,15 +24,6 @@ interface GameProps {
  * Declaración primera de esto, para que funcione el guardar datos de la partida
  * Recibe el tamaño del tablero para crear el juego y retorna el id que tendra.
  */
-async function iniciarPartidaUsuarios(username: string, strategy: string, difficulty: string): Promise<void> {
-  const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000';
-  await fetch(`${API_URL}/initmatch`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, strategy, difficulty }),
-  });
-}
-
 async function crearPartida(boardSize: number): Promise<string> {
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     const res = await fetch(`${GAMEY_URL}/v1/games`, {
@@ -80,9 +71,6 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
 
     async function nuevaPartida() {
       if (stateStart) {
-        if (!twoPlayers) {
-          await iniciarPartidaUsuarios(username, settings.strategy, settings.difficulty);
-        }
         const boardSize = getBoardSize(settings.difficulty); // Consigue el tamaño del tablero
         const idG = await crearPartida(boardSize);           // Crea la partida y asigna el idGame
         setGameId(idG);

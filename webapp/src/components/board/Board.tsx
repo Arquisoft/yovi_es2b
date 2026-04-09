@@ -65,8 +65,8 @@ async function partidaGanada(username: string, strategy: string, difficulty: str
     if (!res.ok) {
       throw new Error(data.error || 'Server error');
     }
-  } catch (err: any) {
-    throw new Error(err.message || 'Network error');
+  } catch (err) {
+    throw new Error(err instanceof Error ? err.message : 'Network error', { cause: err });
   }
 }
 
