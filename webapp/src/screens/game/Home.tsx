@@ -28,10 +28,10 @@ async function iniciarPartida(username: string, strategy: string, difficulty: st
 
         const data = await res.json();
         if (!res.ok) {
-            throw new Error(data.error || 'Server error');
+            throw new Error(data.error || 'Server error', { cause: err });
         }
-    } catch (err: any) {
-        throw new Error(err.message || 'Network error');
+    } catch (err) {
+        throw new Error(err.message || 'Network error', { cause: err });
     }
 }
 

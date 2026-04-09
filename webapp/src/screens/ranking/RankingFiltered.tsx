@@ -120,8 +120,8 @@ export default function RankingFiltered({ username }: Readonly<{ username: strin
                 posicion += 1;
             }
             return ranking;
-        } catch (err: any) {
-            throw new Error("Network error");
+        } catch (err) {
+            throw new Error("Network error", { cause: err });
         }
     };
 

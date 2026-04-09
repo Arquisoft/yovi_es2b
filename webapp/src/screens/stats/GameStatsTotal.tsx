@@ -29,10 +29,10 @@ async function obtenerDatos(username: string) {
         if(res.ok) {
             return stats.stats;
         } else {
-            throw new Error(stats.error || 'Server error');
+            throw new Error(stats.error || 'Server error', { cause: err });
         }
-    } catch (err: any) {
-        throw new Error(err.message || 'Network error');
+    } catch (err) {
+        throw new Error(err.message || 'Network error', { cause: err });
     } 
 }
 
