@@ -78,9 +78,6 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal }: 
                             <td>{getMedal(entry.position)}</td>
                             <td>
                                 {entry.username}
-                                {entry.username === username && (
-                                    <span className="ranking-user-tag">Tú</span>
-                                )}
                             </td>
                             <td>{entry.value} </td>
                             <td>{entry.percentage}%</td>

@@ -9,9 +9,8 @@
 }
 
 .ranking-table-title {
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    color: #374151;
     margin-bottom: 12px;
 }
 
@@ -21,21 +20,20 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 8px;
-    margin-bottom: 14px;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
 .ranking-chip,
 .ranking-info {
-    border: 1px solid #d1d5db;
-    background: #fff;
-    color: #6b7280;
-    font-size: 13px;
-    font-weight: 500;
-    padding: 6px 14px;
-    border-radius: 999px;
-    cursor: pointer;
-    transition: all 0.18s;
+  padding: 0.6rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  margin: 0;
 }
 .ranking-chip:hover,
 .ranking-info:hover {
@@ -50,106 +48,133 @@
 }
 
 .ranking-info--green {
-    border-color: #86efac;
-    color: #166534;
-    background: #f0fdf4;
+  padding: 0.6rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  margin: 0;
+
+  background: #2f8a3d;
+  color: #fff;
 }
 
 .ranking-info--green:hover {
-    border-color: #22c55e;
-    color: #14532d;
+  background: #2f8a3d4b;
+  color: #fff;
 }
 
 .ranking-info--green--active {
-    background: #16a34a;
-    border-color: #16a34a;
-    color: #fff;
+  background-color: #4ee464;
+  color: #181818;
+}
+
+.ranking-info--green--active:hover {
+  background-color: #4ee4644b;
+  color: #181818;
 }
 
 .ranking-info--orange {
-    border-color: #fed7aa;
-    color: #9a3412;
-    background: #fff7ed;
+  padding: 0.6rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  margin: 0;
+
+  background: #f9a825;
+  color: #fff;
 }
 
 .ranking-info--orange:hover {
-    border-color: #f97316;
-    color: #d83600;
+  background: #f9a8254b;
+  color: #fff;
 }
 
 .ranking-info--orange--active {
-    background: #ff8441;
-    border-color: #ea580c;
-    color: #fff;
+  background-color: #ffe32b;
+  color: #181818;
+}
+
+.ranking-info--orange--active:hover {
+  background-color: #ffe32b4b;
+  color: #181818;
 }
 
 .ranking-info--red {
-    border-color: #fecaca;
-    color: #991b1b;
-    background: #fef2f2;
+  padding: 0.6rem 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  margin: 0;
+
+  background: #c62828;
+  color: #fff;
 }
 
 .ranking-info--red:hover {
-    border-color: #ef4444;
-    color: #7a1010;
+  background: #c628284b;
+  color: #fff;
 }
 
 .ranking-info--red--active {
-    background: #dc2626;
-    border-color: #dc2626;
-    color: #fff;
+  background-color: #ff5c5c;
+  color: #181818;
+}
+
+.ranking-info--red--active:hover {
+  background-color: #ff5c5c4b;
+  color: #181818;
 }
 
 /* ── Table ── */
 
 .ranking-table {
-    width: 100%;
-    max-width: 860px;
-    margin: 0 auto;
-    border-collapse: collapse;
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 10px;
+  overflow: hidden;
+  table-layout: fixed;
+  padding: 1rem;
 }
 
-.ranking-table thead tr {
-    background: #f3f4f6;
+.ranking-table thead {
+  background: #023eb6;
 }
 
-.ranking-table thead tr td {
-    padding: 10px 14px;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: #6b7280;
-    text-align: center;
+.ranking-table thead td {
+  padding: 0.6rem 0.5rem;
+  font-weight: 750;
+  color: #ffffff;
+  text-align: center;
+  font-size: 1rem;
+  border-right: 1px solid rgba(255, 255, 255, 0.2);
+  word-break: break-word;
 }
 
-.ranking-table tbody tr {
-    border-bottom: 1px solid #f3f4f6;
-    transition: background 0.15s;
+.ranking-table thead td:last-child {
+  border-right: none;
 }
-.ranking-table tbody tr:hover { background: #eff6ff; }
 
-.ranking-table tbody tr td {
-    padding: 12px 14px;
-    font-size: 14px;
-    color: #111827;
-    text-align: center;
+.ranking-table tbody td {
+  font-weight: 600;
+  font-size: 1rem;
+  background: #f6f8fa;
+  border-bottom: 1px solid #e6edf3;
 }
 
 /* highlight del usuario actual */
-.ranking-row--me {
-    background: #eff6ff;
-    outline: 1px solid #bfdbfe;
-}
-
-.ranking-user-tag {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: #1a56db;
-    margin-left: 8px;
-    background: #eff6ff;
-    padding: 2px 7px;
-    border-radius: 4px;
+.ranking-table tbody tr.ranking-row--me td {
+  background: #dbe8f5;
 }

@@ -90,9 +90,6 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal }: { u
                             <td>{getMedal(entry.position)}</td>
                             <td>
                                 {entry.username}
-                                {entry.username === username && (
-                                    <span className="ranking-user-tag">Tú</span>
-                                )}
                             </td>
                             <td>{entry.value}</td>
                             <td>{entry.percentage}%</td>
