@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { GetMedal, ObtenerDatosRanking } from "./RankingFiltered";
+import type { GetMedal, ObtenerDatosRanking, SortRule } from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
 type DifficultyFilter = "EASY" | "MEDIUM" | "HARD";
@@ -24,7 +24,15 @@ const DIFFICULTY_COLORS: Record<DifficultyFilter, string> = {
     HARD: "ranking-info--red",
 };
 
-export default function RankingDifficulty({ username, obtenerDatos, getMedal }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal }) {
+function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
+    return data.slice().sort((a, b) =>
+        sortBy === "percentage"
+            ? parseFloat(b.percentage) - parseFloat(a.percentage)
+            : b.value - a.value
+    );
+}
+
+export default function RankingDifficulty({ username, obtenerDatos, getMedal, sortBy }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal, sortBy: SortRule }) {
 
     const [difficulty, setDifficulty] = useState<DifficultyFilter>("EASY");
     const [data, setData] = useState<RankingEntry[]>([]);
@@ -70,7 +78,7 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal }: 
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((entry) => (
+                    {sortData(data, sortBy).map((entry) => (
                         <tr
                             key={entry.username}
                             className={entry.username === username ? "ranking-row--me" : ""}

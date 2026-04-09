@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { GetMedal, ObtenerDatosRanking } from "./RankingFiltered";
+import type { GetMedal, ObtenerDatosRanking, SortRule } from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
 type StrategyFilter =
@@ -26,7 +26,15 @@ const STRATEGY_LABELS: Record<StrategyFilter, string> = {
     MONTE_CARLO_ENDURECIDO: "Monte Carlo Endurecido",
 };
 
-export default function RankingStrategy({ username, obtenerDatos, getMedal }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal }) {
+function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
+    return data.slice().sort((a, b) =>
+        sortBy === "percentage"
+            ? parseFloat(b.percentage) - parseFloat(a.percentage)
+            : b.value - a.value
+    );
+}
+
+export default function RankingStrategy({ username, obtenerDatos, getMedal, sortBy }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal, sortBy: SortRule }) {
 
     const [strategy, setStrategy] = useState<StrategyFilter>("RANDOM");
     const [data, setData] = useState<RankingEntry[]>([]);
@@ -62,6 +70,7 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal }: { 
                 ))}
             </div>
 
+
             <table className="ranking-table">
                 <thead>
                     <tr>
@@ -72,7 +81,7 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal }: { 
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((entry) => (
+                    {sortData(data, sortBy).map((entry) => (
                         <tr
                             key={entry.username}
                             className={entry.username === username ? "ranking-row--me" : ""}

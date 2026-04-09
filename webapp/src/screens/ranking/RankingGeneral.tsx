@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import type { GetMedal, ObtenerDatosRanking } from "./RankingFiltered";
+import type { GetMedal, ObtenerDatosRanking, SortRule} from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
 type FilterKey = "victorias" | "derrotas";
@@ -27,7 +27,15 @@ const FILTER_COLORS: Record<FilterKey, string> = {
     derrotas: "ranking-info--red",
 };
 
-export default function RankingGeneral({ username, obtenerDatos, getMedal }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal }) {
+function sortData(data: RankingEntry[], sortBy: SortKey): RankingEntry[] {
+    return data.slice().sort((a, b) =>
+        sortBy === "percentage"
+            ? parseFloat(b.percentage) - parseFloat(a.percentage)
+            : b.value - a.value
+    );
+}
+
+export default function RankingGeneral({ username, obtenerDatos, getMedal, sortBy }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal, sortBy: SortRule }) {
 
     const [filter, setFilter] = useState<FilterKey>("victorias"); // Estado para el filtro seleccionado. Por defecto, se muestra el ranking por victorias.
     const [data, setData] = useState<RankingEntry[]>([]); // Estado para los datos del ranking. Se actualiza cada vez que cambia el filtro.
@@ -82,7 +90,7 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal }: { u
                     </tr>
                 </thead>
                 <tbody>
-                    {data.map((entry) => (
+                    {sortData(data, sortBy).map((entry) => (
                         <tr
                             key={entry.username}
                             className={entry.username === username ? "ranking-row--me" : ""}
