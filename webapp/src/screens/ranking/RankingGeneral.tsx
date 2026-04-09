@@ -27,7 +27,7 @@ const FILTER_COLORS: Record<FilterKey, string> = {
     derrotas: "ranking-info--red",
 };
 
-function sortData(data: RankingEntry[], sortBy: SortKey): RankingEntry[] {
+function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
     return data.slice().sort((a, b) =>
         sortBy === "percentage"
             ? parseFloat(b.percentage) - parseFloat(a.percentage)
