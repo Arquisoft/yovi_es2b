@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import type { GetMedal, ObtenerDatosRanking } from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
-type FilterKey = "victorias" | "derrotas" | "abandonadas";
+type FilterKey = "victorias" | "derrotas";
 
 // TIPO DE ENTRADA DEL RANKING. 
 type RankingEntry = {
@@ -15,19 +15,16 @@ type RankingEntry = {
 const FILTER_LABELS: Record<FilterKey, string> = {
     victorias:   "Victorias",
     derrotas:    "Derrotas",
-    abandonadas: "Partidas abandonadas",
 };
 
 const ENDPOINTS: Record<FilterKey, string> = {
     victorias:   "/ranking/wins",
     derrotas:    "/ranking/defeats",
-    abandonadas: "/ranking/abandonments",
 };
 
 const FILTER_COLORS: Record<FilterKey, string> = {
     victorias: "ranking-info--green",
     derrotas: "ranking-info--red",
-    abandonadas: "ranking-info--orange",
 };
 
 export default function RankingGeneral({ username, obtenerDatos, getMedal }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal }) {

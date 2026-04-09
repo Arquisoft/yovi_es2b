@@ -19,6 +19,19 @@ interface GameProps {
   onGameEnd?: (winner: string) => void;
 }
 
+async function iniciarPartida(username: string, strategy: string, difficulty: string): Promise<void> {
+  const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000';
+  const res = await fetch(`${API_URL}/initmatch`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ username, strategy, difficulty }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({}));
+    throw new Error(data.error || 'Error al iniciar la partida');
+  }
+}
+
 /**
  * Declaración primera de esto, para que funcione el guardar datos de la partida
  * Recibe el tamaño del tablero para crear el juego y retorna el id que tendra.
@@ -46,9 +59,9 @@ async function getTurnoPartida(gameId: string): Promise<number> {
     return data.kind === 'Ongoing' ? data.next_player : 0;
 }
 
-async function abandonarPartida(username: string, strategy: string, difficulty: string): Promise<void> {
+async function perderPartida(username: string, strategy: string, difficulty: string): Promise<void> {
   const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000';
-  const res = await fetch(`${API_URL}/abandonmatch`, {
+  const res = await fetch(`${API_URL}/defeatmatch`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ username, strategy, difficulty }),
@@ -84,6 +97,11 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
 
     async function nuevaPartida() {
       if (stateStart) {
+        // Registra la partida en la BD (igual que hace Home al pulsar "Empezar partida")
+        if (!twoPlayers) {
+          await iniciarPartida(username, settings.strategy, settings.difficulty);
+        }
+
         const boardSize = getBoardSize(settings.difficulty); // Consigue el tamaño del tablero
         const idG = await crearPartida(boardSize);           // Crea la partida y asigna el idGame
         setGameId(idG);
@@ -149,7 +167,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
 
   async function handleExit() {
     try {
-      await abandonarPartida(username, settings.strategy, settings.difficulty);
+      await perderPartida(username, settings.strategy, settings.difficulty);
     } catch (error) {
       console.error(error);
     } finally {

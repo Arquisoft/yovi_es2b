@@ -19,7 +19,6 @@ describe('GET /ranking', () => {
  
         app.get('/ranking/wins',         userController.rankingvictories)
         app.get('/ranking/defeats',      userController.rankingdefeats)
-        app.get('/ranking/abandonments', userController.rankingabandon)
     })
 
     // /**
@@ -117,34 +116,6 @@ describe('GET /ranking', () => {
         }
     })
  
-    // Ranking por abandonos
- 
-    /**
-     * Devuelve el ranking global por abandonos correctamente
-     */
-    it('se obtiene el ranking por abandonos', async () => {
-        const res = await request(app)
-            .get('/ranking/abandonments')
-            .set('Accept', 'application/json')
- 
-        expect(res.status).toBe(202)
-        expect(res.body).toHaveProperty('ranking')
-        expect(Array.isArray(res.body.ranking)).toBe(true)
-    })
- 
-    /**
-     * El ranking por abandonos está ordenado de mas a menos
-     */
-    it('el ranking por abandonos está ordenado de mas a menos', async () => {
-        const res = await request(app)
-            .get('/ranking/abandonments')
-            .set('Accept', 'application/json')
- 
-        const ranking = res.body.ranking
-        for (let i = 0; i < ranking.length - 1; i++) {
-            expect(ranking[i].value).toBeGreaterThanOrEqual(ranking[i + 1].value)
-        }
-    })
 })
  
 /**

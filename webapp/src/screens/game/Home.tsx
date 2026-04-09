@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { Game } from "./Game";
 import type { GameSettings } from "../../components/gameOptions/GameSettings";
@@ -13,27 +13,7 @@ import Ranking from "../ranking/Ranking";
 
 const yoviLogo = "/yovi_logo.png";
 
-/**
- * Declaración primera de esto, para que funcione el guardar datos de la partida
- */
-async function iniciarPartida(username: string, strategy: string, difficulty: string) {
-    try {
-        const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
-        const res = await fetch(`${API_URL}/initmatch`, {
-            method: 'POST', headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ username, strategy, difficulty })
-        });
 
-        const data = await res.json();
-        if (!res.ok) {
-            throw new Error(data.error || 'Server error');
-        }
-    } catch (err: any) {
-        throw new Error(err.message || 'Network error');
-    }
-}
 
 export default function HomePage( {username} : { username: string }) {
     const [settings, setSettings] = useState<GameSettings>({
@@ -47,12 +27,7 @@ export default function HomePage( {username} : { username: string }) {
     const [difficulty2, setDifficulty2] = useState<DifficultyType>(Difficulty.MEDIUM);
     const [screen, setScreen] = useState("home");
 
-    // como es función async, llamamos useEffect
-    useEffect(() => {
-        if (screen==="game") {
-            iniciarPartida(username, settings.strategy, settings.difficulty);
-        }
-    }, [screen]);
+
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (twoPlayersStarted) {

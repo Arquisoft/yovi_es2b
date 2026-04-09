@@ -13,9 +13,9 @@
  */
 
 const { loginuser, createuser, deleteuser, findUser,
-  initmatch, endmatch, abandonmatch,
+  initmatch, endmatch, defeatmatch,
   stratstats, allstats, diffstats,
-  rankingvictories, rankingdefeats, rankingabandon, rankingwinsbydifficulty, rankingwinsbystrategy
+  rankingvictories, rankingdefeats, rankingwinsbydifficulty, rankingwinsbystrategy
 } = require('./database/dbFunctions');
 //Busca las funciones en el archivo dbFunctions.js y las importa para que puedan ser utilizadas en esta clase UserService.
 
@@ -121,9 +121,9 @@ class UserService {
     return `Usuario ${username} ha ganado una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
   }
 
-  async abandonmatch(username, strategy, difficulty) {
-    await abandonmatch(this.usersCollection, username, strategy, difficulty);
-    return `Match ended for ${username}!`;
+  async defeatmatch(username, strategy, difficulty) {
+    await defeatmatch(this.usersCollection, username, strategy, difficulty);
+    return `Usuario ${username} ha perdido una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
   }
 
   async allstats(username) {
@@ -148,11 +148,6 @@ class UserService {
 
   async rankingdefeats() {
     const ranking = await rankingdefeats(this.usersCollection);
-    return ranking;
-  }
-
-  async rankingabandon() {
-    const ranking = await rankingabandon(this.usersCollection);
     return ranking;
   }
 

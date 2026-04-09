@@ -295,10 +295,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /abandonmatch:
+  /defeatmatch:
     post:
-      summary: Registra una partida abandonada
-      description: Marca como abandonada una partida para el usuario indicado con la estrategia y dificultad especificadas.
+      summary: Registra una partida perdida
+      description: Marca como perdida una partida para el usuario indicado con la estrategia y dificultad especificadas.
       requestBody:
         required: true
         content:
@@ -306,8 +306,8 @@ paths:
             schema:
               $ref: '#/components/schemas/MatchRequest'
       responses:
-        '200':
-          description: Abandono registrado correctamente
+        '202':
+          description: Derrota registrada correctamente
           content:
             application/json:
               schema:
@@ -535,9 +535,9 @@ components:
           type: integer
           description: Total de partidas ganadas
           example: 4
-        totalesAbandonadas:
+        totalesDefeats:
           type: integer
-          description: Total de partidas abandonadas
+          description: Total de partidas perdidas
           example: 2
 
     AllStatEntry:
