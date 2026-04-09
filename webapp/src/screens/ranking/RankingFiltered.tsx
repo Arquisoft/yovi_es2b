@@ -6,6 +6,8 @@ import RankingDifficulty from "./RankingDifficulty.tsx";
 import RankingStrategy from "./RankingStrategy.tsx";
 import "./RankingFiltered.css";
 
+const yoviLogo = "/yovi_logo.png";
+
 type FilterRule = "general" | "dificultad" | "estrategia";
 
 // Tipo para las entradas del ranking, con posición, nombre de usuario y valor (partidas ganadas, victorias por dificultad o victorias por estrategia).
@@ -120,9 +122,10 @@ export default function RankingFiltered({ username }: { username: string }) {
     return (
         <div className="ranking-filtered-screen">
 
+            <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
+
             <div className="ranking-filtered-header">
                 <h1 className="ranking-filtered-title">Ranking global</h1>
-                <h2 className="ranking-filtered-username">{username}</h2>
             </div>
 
             {/* menu */}
