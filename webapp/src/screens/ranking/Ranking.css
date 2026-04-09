@@ -68,30 +68,31 @@
 }
 
 .ranking-btn-filtered {
-    padding: 14px 42px;
-    font-size: 1.08rem;
-    min-width: 230px;
+    width: 100%;
+    padding: 0.7rem 1.2rem;
+    background: transparent;
+    color: #646cff;
+    font-size: 1rem;
     font-weight: 600;
-    background: #1a56db;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
+    border: 1px solid #646cff;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.18s;
+    transition: background 0.2s;
+    margin: 0;
 }
-.ranking-btn-filtered:hover { background: #1241a8; }
+.ranking-btn-filtered:hover { background: rgba(100, 108, 255, 0.08); }
 
 .ranking-btn-menu {
-    padding: 14px 42px;
-    font-size: 1.08rem;
-    min-width: 230px;
+    width: 100%;
+    padding: 0.7rem 1.2rem;
+    background: transparent;
+    color: #ff5858;
+    font-size: 1rem;
     font-weight: 600;
-    background: #db1a1a;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
+    border: 1px solid #ff5858;
+    border-radius: 6px;
     cursor: pointer;
-    transition: background 0.18s;
+    transition: background 0.2s;
+    margin: 0;
 }
-
-.ranking-btn-menu:hover { background: #b91c1c; }
+.ranking-btn-menu:hover { background: rgba(255, 100, 100, 0.08); }
