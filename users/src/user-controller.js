@@ -24,13 +24,12 @@ class UserController {
         this.getUser = this.getUser.bind(this);
         this.initmatch = this.initmatch.bind(this);
         this.endmatch = this.endmatch.bind(this);
-        this.abandonmatch = this.abandonmatch.bind(this);
         this.allstats = this.allstats.bind(this);
         this.diffstats = this.diffstats.bind(this);
         this.stratstats = this.stratstats.bind(this);
         this.rankingvictories = this.rankingvictories.bind(this);
         this.rankingdefeats = this.rankingdefeats.bind(this);
-        this.rankingabandon = this.rankingabandon.bind(this);
+
         this.rankingwinsbydifficulty = this.rankingwinsbydifficulty.bind(this);
         this.rankingwinsbystrategy = this.rankingwinsbystrategy.bind(this);
 
@@ -206,21 +205,6 @@ class UserController {
         }
     }
 
-    async abandonmatch(req, res) {
-        try {
-            const username = req.body && req.body.username;
-            const strategy = req.body && req.body.strategy;
-            const difficulty = req.body && req.body.difficulty;
-            const message = await this.userService.abandonmatch(username, strategy, difficulty);
-            return res.status(200).json({ message });
-        } catch (error) {
-            if (error instanceof UserError) {
-                return res.status(error.statusCode).json({ error: error.message });
-            }
-            return res.status(500).json({ error: 'Error interno del servidor' });
-        }
-    }
-
     async allstats(req, res) {
         let username;
         try {
@@ -310,21 +294,6 @@ class UserController {
             });
         }
 
-    }
-
-    async rankingabandon(req, res) {
-        try {
-            const ranking = await this.userService.rankingabandon();
-            return res.status(202).json({ ranking, message: 'Ranking global por porcentaje de abandonadas.' });
-        } catch (error) {
-            if (error instanceof UserError) {
-                return res.status(error.statusCode).json({ error: error.message });
-            }
-            return res.status(500).json({
-                error: error.message,
-                stack: error.stack
-            });
-        }
     }
 
     async rankingwinsbydifficulty(req, res) {

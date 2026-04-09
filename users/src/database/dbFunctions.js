@@ -208,37 +208,6 @@ function checkPassword(password) {
     }
 
     /**
-     * Función de terminación de partida abandonada
-     */
-    async function abandonmatch(users, username, strategy, difficulty) {
-        const existingUser = await users.findOne({ "username": String(username) });
-        if (!existingUser) {
-            throw new UserNotFoundError(username);
-        }
-
-        if (!strats.includes(strategy)) {
-            throw new InvalidStrategyError(strategy);
-        }
-        if (!difs.includes(difficulty)) {
-            throw new InvalidDifficultyError(difficulty);
-        }
-
-        const partidasGeneral = difficulty + strategy + "Abandoned";
-
-        await users.updateOne(
-            { _id: existingUser._id },
-            {
-                $inc: {
-                    totalesAbandonadas: 1,
-                    [partidasGeneral]: 1
-                }
-            }
-        )
-
-        return 'Partida terminada y abandonada correctamente' ;
-    }
-
-    /**
      * Función de calculo de estadisticas segun la dificultad
      */
     async function diffstats(users, username) {
@@ -255,12 +224,10 @@ function checkPassword(password) {
 
             let totalPartidas = 0;
             let totalWins = 0;
-            let totalAbandonadas = 0;
 
             for (const strat of strats) {
                 totalPartidas += existingUser[`${diff}${strat}`] || 0;
                 totalWins += existingUser[`${diff}${strat}Wins`] || 0;
-                totalAbandonadas += existingUser[`${diff}${strat}Abandoned`] || 0;
             }
 
             stats.push({
@@ -292,12 +259,10 @@ function checkPassword(password) {
 
             let totalPartidas = 0;
             let totalWins = 0;
-            let totalAbandonadas = 0;
 
             for (const diff of difs) {
                 totalPartidas += existingUser[`${diff}${strat}`] || 0;
                 totalWins += existingUser[`${diff}${strat}Wins`] || 0;
-                totalAbandonadas += existingUser[`${diff}${strat}Abandoned`] || 0;
             }
 
             stats.push({
@@ -330,7 +295,6 @@ function checkPassword(password) {
 
                 const partidas = existingUser[`${diff}${strat}`] || 0;
                 const wins = existingUser[`${diff}${strat}Wins`] || 0;
-                const abandonadas = existingUser[`${diff}${strat}Abandoned`] || 0;
 
                 stats.push({
                     dificultad: diff,
@@ -365,23 +329,19 @@ function checkPassword(password) {
         const allUsers = await users.find({}).toArray();
         const ranking = [];
 
-               for (const u of allUsers) {
+        for (const u of allUsers) {
             let wins = 0;
             let jugadasTotal = 0;
-            let abandonadas = 0;
             for (const diff of difs) {
                 for (const strat of strats) {
                     const jugadas = u[`${diff}${strat}`] || 0;
                     const ganadas = u[`${diff}${strat}Wins`] || 0;
-                    const abandon = u[`${diff}${strat}Abandoned`] || 0;
                     wins         += ganadas;
-                    abandonadas  += abandon;
                     jugadasTotal += jugadas;
                 }
             }
-            // Usamos max(jugadasTotal, wins + abandonadas) para evitar >100%
-            // cuando hay inconsistencias en los datos (wins > jugadas)
-            const total = Math.max(jugadasTotal, wins + abandonadas);
+
+            const total = jugadasTotal;
             const pct = total > 0 ? Number(((wins / total) * 100).toFixed(2)) : 0;
  
             ranking.push({
@@ -398,7 +358,6 @@ function checkPassword(password) {
 
     /**
      * Ranking global por porcentaje de derrotas.
-     * Derrotas = totales - wins - abandonadas.
      */
     async function rankingdefeats(users) {
         const allUsers = await users.find({}).toArray();
@@ -407,50 +366,13 @@ function checkPassword(password) {
         for (const u of allUsers) {
             const totales = u.totales || 0;
             const wins = u.totalesWins || 0;
-            const abandonadas = u.totalesAbandonadas || 0;
-            const derrotas = Math.max(totales - wins - abandonadas, 0);
+            const derrotas = Math.max(totales - wins, 0);
             const porcentaje = totales > 0 ? Number(((derrotas / totales) * 100).toFixed(2)) : 0;
 
             ranking.push({
                 username: u.username,
                 value: derrotas,
                 percentage: porcentaje
-            });
-        }
-
-        ranking.sort((a, b) => b.value - a.value);
-        return ranking;
-    }
-
-    /**
-     * Ranking global por porcentaje de abandonadas.
-     */
-    async function rankingabandon(users) {
-        const allUsers = await users.find({}).toArray();
-        const ranking = [];
-
-        for (const u of allUsers) {
-            let wins = 0;
-            let derrotas = 0;
-            let abandonadas = 0;
-            for (const diff of difs) {
-                for (const strat of strats) {
-                    const jugadas = u[`${diff}${strat}`] || 0;
-                    const ganadas = u[`${diff}${strat}Wins`] || 0;
-                    const abandon = u[`${diff}${strat}Abandoned`] || 0;
-                    wins += ganadas;
-                    abandonadas += abandon;
-                    derrotas += Math.max(jugadas - ganadas - abandon, 0);
-                }
-            }
-            
-            const total = wins + derrotas + abandonadas;
-            const pct = total > 0 ? Number(((abandonadas / total) * 100).toFixed(2)) : 0;
- 
-            ranking.push({
-                username: u.username,
-                value: abandonadas,
-                percentage: pct
             });
         }
 
@@ -523,7 +445,7 @@ function checkPassword(password) {
 
 module.exports = {
     loginuser, createuser, deleteuser, findUser,
-    initmatch, endmatch, abandonmatch,
+    initmatch, endmatch,
     diffstats, stratstats, allstats,
-    rankingvictories, rankingdefeats, rankingabandon, rankingwinsbydifficulty, rankingwinsbystrategy
+    rankingvictories, rankingdefeats, rankingwinsbydifficulty, rankingwinsbystrategy
 };

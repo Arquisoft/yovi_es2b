@@ -2,32 +2,29 @@ import { useState, useEffect } from "react";
 import type { GetMedal, ObtenerDatosRanking } from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
-type FilterKey = "victorias" | "derrotas" | "abandonadas";
+type FilterKey = "victorias" | "derrotas";
 
 // TIPO DE ENTRADA DEL RANKING. 
 type RankingEntry = {
     position: number; // posición en el ranking 
     username: string; // nombre del jugador
-    value: number; // número de victorias, derrotas o abandonos según el filtro
-    percentage: string; // porcentaje de victorias, derrotas o abandonos sobre el total de partidas
+    value: number; // número de victorias o derrotas según el filtro
+    percentage: string; // porcentaje de victorias o derrotas sobre el total de partidas
 };
 
 const FILTER_LABELS: Record<FilterKey, string> = {
     victorias:   "Victorias",
-    derrotas:    "Derrotas",
-    abandonadas: "Partidas abandonadas",
+    derrotas:    "Derrotas"
 };
 
 const ENDPOINTS: Record<FilterKey, string> = {
     victorias:   "/ranking/wins",
-    derrotas:    "/ranking/defeats",
-    abandonadas: "/ranking/abandonments",
+    derrotas:    "/ranking/defeats"
 };
 
 const FILTER_COLORS: Record<FilterKey, string> = {
     victorias: "ranking-info--green",
-    derrotas: "ranking-info--red",
-    abandonadas: "ranking-info--orange",
+    derrotas: "ranking-info--red"
 };
 
 export default function RankingGeneral({ username, obtenerDatos, getMedal }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal }) {
