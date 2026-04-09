@@ -1,0 +1,97 @@
+.ranking-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 66px 20px;
+    min-height: 100vh;
+}
+
+.ranking-logo {
+    width: clamp(260px, 34vw, 420px);
+    height: auto;
+    margin-bottom: 38px;
+}
+
+.ranking-screen-title {
+    font-size: 2rem;
+    margin-bottom: 38px;
+    color: var(--color-primary, #1a56db);
+}
+
+.ranking-position-card {
+    width: min(560px, 92vw);
+    margin: 0 auto 50px;
+    padding: 24px 28px;
+    border: 1px solid #dbeafe;
+    border-radius: 14px;
+    background: linear-gradient(145deg, #eff6ff 0%, #f8fafc 100%);
+    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    animation: ranking-card-in 500ms ease-out;
+}
+
+.ranking-position-label {
+    margin: 0;
+    color: #1e3a8a;
+    font-size: clamp(1.2rem, 2.2vw, 1.55rem);
+    font-weight: 600;
+}
+
+.ranking-position-value {
+    margin: 14px 0 0;
+    color: #0f172a;
+    font-size: clamp(2.4rem, 8vw, 4rem);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+@keyframes ranking-card-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.ranking-menu {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 24px;
+}
+
+.ranking-btn-filtered {
+    padding: 14px 42px;
+    font-size: 1.08rem;
+    min-width: 230px;
+    font-weight: 600;
+    background: #1a56db;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+.ranking-btn-filtered:hover { background: #1241a8; }
+
+.ranking-btn-menu {
+    padding: 14px 42px;
+    font-size: 1.08rem;
+    min-width: 230px;
+    font-weight: 600;
+    background: #db1a1a;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+
+.ranking-btn-menu:hover { background: #b91c1c; }

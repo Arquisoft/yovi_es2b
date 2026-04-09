@@ -1,14 +1,15 @@
 import { useEffect, useState } from "react";
 
 import { Game } from "./Game";
-import type { GameSettings } from "../../gameOptions/GameSettings";
-import { Strategy } from "../../gameOptions/Strategy";
-import type { StrategyType } from "../../gameOptions/Strategy";
-import { Difficulty } from "../../gameOptions/Difficulty";
-import type { DifficultyType } from "../../gameOptions/Difficulty";
+import type { GameSettings } from "../../components/gameOptions/GameSettings";
+import { Strategy } from "../../components/gameOptions/Strategy";
+import type { StrategyType } from "../../components/gameOptions/Strategy";
+import { Difficulty } from "../../components/gameOptions/Difficulty";
+import type { DifficultyType } from "../../components/gameOptions/Difficulty";
 import "./Home.css";
 import InitialScreen from "../init/InitialScreen";
 import GameStats from "../stats/GameStats";
+import Ranking from "../ranking/Ranking";
 
 const yoviLogo = "/yovi_logo.png";
 
@@ -29,8 +30,8 @@ async function iniciarPartida(username: string, strategy: string, difficulty: st
         if (!res.ok) {
             throw new Error(data.error || 'Server error');
         }
-    } catch (err: any) {
-        throw new Error(err.message || 'Network error');
+    } catch (err) {
+        throw new Error(err instanceof Error ? err.message : 'Network error', { cause: err });
     }
 }
 
@@ -67,6 +68,7 @@ export default function HomePage( {username} : { username: string }) {
                 twoPlayers={false}
                 stateStart={true}
                 onGoMenu={() => setScreen("home")}
+                onPlayAgain={() => iniciarPartida(username, settings.strategy, settings.difficulty)}
             />
         );
     }
@@ -77,6 +79,10 @@ export default function HomePage( {username} : { username: string }) {
 
     if (screen==="stats") {
         return (<GameStats username={username}/>);
+    }
+
+    if (screen === "ranking"){
+        return <Ranking username={username} />;
     }
 
 
@@ -146,7 +152,7 @@ export default function HomePage( {username} : { username: string }) {
                             <button className="home-menu__btn" onClick={() => setScreen("stats")}>
                                 Mis estadísticas
                             </button>
-                            <button className="home-menu__btn" onClick={() => {}}>
+                            <button className="home-menu__btn" onClick={() => setScreen("ranking")}>
                                 Ranking
                             </button>
                         </div>
@@ -205,9 +211,8 @@ export default function HomePage( {username} : { username: string }) {
                             Empezar partida 2 jugadores
                         </button>
                     </div>
-
-                </div>
             </div>
         </div>
+    </div>
     );
 }

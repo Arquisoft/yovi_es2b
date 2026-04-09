@@ -1,0 +1,177 @@
+.ranking-filtered-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px 60px;
+    min-height: 100vh;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.ranking-filtered-header {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+.ranking-filtered-title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #1a56db;
+}
+
+.ranking-filtered-username {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+/* ── Toggle menu ── */
+
+.ranking-toggle-menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 0;
+    padding: 16px 20px;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    flex: 1;
+    min-width: 0;
+}
+
+.ranking-controls-row {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+.ranking-sort-menu {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    background: #f9fafb;
+}
+
+.ranking-sort-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #4b5563;
+    margin-right: 2px;
+}
+
+.ranking-filtered-body {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.ranking-filtered-section {
+    width: 100%;
+    max-width: 860px;
+}
+
+.ranking-toggle-btn {
+    padding: 8px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    background: #fff;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+.ranking-toggle-btn:hover {
+    border-color: #1a56db;
+    color: #1a56db;
+}
+.ranking-toggle-btn--active {
+    background: #1a56db;
+    border-color: #1a56db;
+    color: #fff;
+}
+
+.ranking-toggle-check {
+    font-weight: 700;
+}
+
+.ranking-sort-btn {
+    padding: 6px 12px;
+    margin: 0;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid #c7d2fe;
+    border-radius: 7px;
+    background: #eef2ff;
+    color: #1e3a8a;
+    cursor: pointer;
+    transition: all 0.18s;
+}
+
+.ranking-sort-btn:hover {
+    background: #dbeafe;
+    border-color: #93c5fd;
+}
+
+.ranking-sort-btn--active {
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+    color: #fff;
+}
+
+@media (max-width: 860px) {
+    .ranking-controls-row {
+        flex-direction: column;
+    }
+
+    .ranking-sort-menu {
+        justify-content: center;
+        width: 100%;
+    }
+}
+
+/* ── Nav buttons ── */
+.ranking-btn-back-ranking {
+    padding: 10px 28px;
+    font-size: 0.95rem;
+    background: #1a56db;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+.ranking-btn-back-ranking:hover { background: #1241a8; }
+
+.ranking-btn-back-menu {
+    padding: 10px 28px;
+    font-size: 0.95rem;
+    background: #dc2626;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.18s;
+}
+
+.ranking-btn-back-menu:hover { background: #b91c1c; }
+
+.btn-menu {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 22px;
+}

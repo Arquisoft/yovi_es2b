@@ -11,8 +11,13 @@
  * Requiere es una función de Node.js que se utiliza para importar módulos o archivos en el código. 
  * En este caso, estamos importando las funciones loginuser y createuser desde el archivo dbFunctions.js, necesarias para el inicio de sesión
  */
-const { loginuser, createuser, deleteuser, findUser, initmatch, endmatch, abandonmatch , stratstats, allstats, diffstats } = require('./database/dbFunctions');
-//Busca las funciones loginuser y createuser en el archivo dbFunctions.js y las importa para que puedan ser utilizadas en esta clase UserService.
+
+const { loginuser, createuser, deleteuser, findUser,
+  initmatch, endmatch, 
+  stratstats, allstats, diffstats,
+  rankingvictories, rankingdefeats, rankingwinsbydifficulty, rankingwinsbystrategy
+} = require('./database/dbFunctions');
+//Busca las funciones en el archivo dbFunctions.js y las importa para que puedan ser utilizadas en esta clase UserService.
 
 class UserService {
 
@@ -116,10 +121,6 @@ class UserService {
     return `Usuario ${username} ha ganado una partida: estrategia ${strategy}, dificultad ${difficulty}.`;
   }
 
-  async abandonmatch(username, strategy, difficulty) {
-    await abandonmatch(this.usersCollection, username, strategy, difficulty);
-    return `Match ended for ${username}!`;
-  }
 
   async allstats(username) {
     const stats = await allstats(this.usersCollection, username);
@@ -134,6 +135,26 @@ class UserService {
   async stratstats(username) {
     const stats = await stratstats(this.usersCollection, username);
     return stats;
+  }
+
+  async rankingvictories() {
+    const ranking = await rankingvictories(this.usersCollection);
+    return ranking;
+  }
+
+  async rankingdefeats() {
+    const ranking = await rankingdefeats(this.usersCollection);
+    return ranking;
+  }
+
+  async rankingwinsbydifficulty(difficulty) {
+    const ranking = await rankingwinsbydifficulty(this.usersCollection, difficulty);
+    return ranking;
+  }
+
+  async rankingwinsbystrategy(strategy) {
+    const ranking = await rankingwinsbystrategy(this.usersCollection, strategy);
+    return ranking;
   }
 }
 

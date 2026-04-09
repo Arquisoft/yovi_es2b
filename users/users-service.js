@@ -67,12 +67,17 @@ async function startServer() {
   // partida
   app.post('/initmatch',  userController.initmatch);
   app.post('/endmatch',   userController.endmatch);
-  app.post('/abandonmatch', userController.abandonmatch);
 
   // estadisticas
   app.post('/allstats', userController.allstats);
   app.post('/diffstats', userController.diffstats);
   app.post('/stratstats', userController.stratstats);
+
+  // rankings
+  app.get('/ranking/wins', userController.rankingvictories);
+  app.get('/ranking/defeats', userController.rankingdefeats);
+  app.post('/ranking/wins/difficulty', userController.rankingwinsbydifficulty);
+  app.post('/ranking/wins/strategy', userController.rankingwinsbystrategy);
 
 }
 

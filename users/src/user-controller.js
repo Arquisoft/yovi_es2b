@@ -7,7 +7,7 @@
 const UserError = require('./errors/UserError');
 
 class UserController {
- 
+
     /**
      * @param {UserService} userService - Servicio inyectado desde el entry point
      * Necesario para que el controlador pueda delegar en los métodos definidos en service, que a su vez llaman a las funciones de la base de datos.
@@ -24,10 +24,16 @@ class UserController {
         this.getUser = this.getUser.bind(this);
         this.initmatch = this.initmatch.bind(this);
         this.endmatch = this.endmatch.bind(this);
-        this.abandonmatch = this.abandonmatch.bind(this);
         this.allstats = this.allstats.bind(this);
         this.diffstats = this.diffstats.bind(this);
         this.stratstats = this.stratstats.bind(this);
+        this.rankingvictories = this.rankingvictories.bind(this);
+        this.rankingdefeats = this.rankingdefeats.bind(this);
+
+        this.rankingwinsbydifficulty = this.rankingwinsbydifficulty.bind(this);
+        this.rankingwinsbystrategy = this.rankingwinsbystrategy.bind(this);
+
+
     }
 
     /**
@@ -141,17 +147,17 @@ class UserController {
         }
     }
 
-   /**
-    * POST /initmatch
-    * Body esperado: { username: string, strategy: string, difficulty: string }
-    * 
-    * Metodo para manejar la lógica de inicio de una nueva partida.
-    * Recibe el nombre de usuario, la estrategia y la dificultad como parámetros en el cuerpo de la solicitud, y devuelve un mensaje indicando que la partida ha comenzado si los parámetros son válidos.
-    * Si el usuario no existe o si los parámetros no son válidos, se lanzan errores que son manejados por el controlador para devolver respuestas adecuadas al cliente.
-    * Req y res son los objetos de solicitud (request) y respuesta de Express, que permiten manejar la comunicación HTTP.
-    * Express esta definido en users-service.js,  pero se usa aqui para manejar las solicitudes HTTP que llegan a los endpoints definidos en users.js.
-    */
-    async initmatch(req, res) {    
+    /**
+     * POST /initmatch
+     * Body esperado: { username: string, strategy: string, difficulty: string }
+     * 
+     * Metodo para manejar la lógica de inicio de una nueva partida.
+     * Recibe el nombre de usuario, la estrategia y la dificultad como parámetros en el cuerpo de la solicitud, y devuelve un mensaje indicando que la partida ha comenzado si los parámetros son válidos.
+     * Si el usuario no existe o si los parámetros no son válidos, se lanzan errores que son manejados por el controlador para devolver respuestas adecuadas al cliente.
+     * Req y res son los objetos de solicitud (request) y respuesta de Express, que permiten manejar la comunicación HTTP.
+     * Express esta definido en users-service.js,  pero se usa aqui para manejar las solicitudes HTTP que llegan a los endpoints definidos en users.js.
+     */
+    async initmatch(req, res) {
         try {
             const username = req.body && req.body.username;
             const strategy = req.body && req.body.strategy;
@@ -165,7 +171,7 @@ class UserController {
             }
             if (!username || !strategy || !difficulty) {
                 return res.status(400).json({ error: 'username, strategy y difficulty son obligatorios' });
-            }   
+            }
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
     }
@@ -180,7 +186,7 @@ class UserController {
     * Req y res son los objetos de solicitud (request) y respuesta de Express, que permiten manejar la comunicación HTTP.
     * Express esta definido en users-service.js,  pero se usa aqui para manejar las solicitudes HTTP que llegan a los endpoints definidos en users.js.
     */
-    async endmatch(req, res) {    
+    async endmatch(req, res) {
         try {
             const username = req.body && req.body.username;
             const strategy = req.body && req.body.strategy;
@@ -194,21 +200,6 @@ class UserController {
             }
             if (!username || !strategy || !difficulty) {
                 return res.status(400).json({ error: 'username, strategy y difficulty son obligatorios' });
-            }   
-            return res.status(500).json({ error: 'Error interno del servidor' });
-        }
-    }
-
-    async abandonmatch(req, res) {
-        try {
-            const username = req.body && req.body.username;
-            const strategy = req.body && req.body.strategy;
-            const difficulty = req.body && req.body.difficulty;
-            const message = await this.userService.abandonmatch(username, strategy, difficulty);
-            return res.status(200).json({ message });
-        } catch (error) {
-            if (error instanceof UserError) {
-                return res.status(error.statusCode).json({ error: error.message });
             }
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
@@ -219,7 +210,7 @@ class UserController {
         try {
             username = req.body && req.body.username;
             const stats = await this.userService.allstats(username);
-            return res.status(202).json({stats : stats, message : `Se obtienen todas las estadísticas de ${username}.`});
+            return res.status(202).json({ stats: stats, message: `Se obtienen todas las estadísticas de ${username}.` });
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });
@@ -227,7 +218,7 @@ class UserController {
             if (!username) {
                 return res.status(400).json({ error: 'username es obligatorio' });
             }
-            return res.status(500).json({ 
+            return res.status(500).json({
                 error: error.message,
                 stack: error.stack
             });
@@ -239,7 +230,7 @@ class UserController {
         try {
             username = req.body && req.body.username;
             const stats = await this.userService.diffstats(username);
-            return res.status(202).json({stats : stats, message : `Se obtienen todas las estadísticas de ${username} por dificultad.`});
+            return res.status(202).json({ stats: stats, message: `Se obtienen todas las estadísticas de ${username} por dificultad.` });
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });
@@ -247,7 +238,7 @@ class UserController {
             if (!username) {
                 return res.status(400).json({ error: 'username es obligatorio' });
             }
-            return res.status(500).json({ 
+            return res.status(500).json({
                 error: error.message,
                 stack: error.stack
             });
@@ -259,7 +250,7 @@ class UserController {
         try {
             username = req.body && req.body.username;
             const stats = await this.userService.stratstats(username);
-            return res.status(202).json({stats : stats, message : `Se obtienen todas las estadísticas de ${username} por estrategia.`});
+            return res.status(202).json({ stats: stats, message: `Se obtienen todas las estadísticas de ${username} por estrategia.` });
         } catch (error) {
             if (error instanceof UserError) {
                 return res.status(error.statusCode).json({ error: error.message });
@@ -267,13 +258,83 @@ class UserController {
             if (!username) {
                 return res.status(400).json({ error: 'username es obligatorio' });
             }
-            return res.status(500).json({ 
+            return res.status(500).json({
                 error: error.message,
                 stack: error.stack
             });
         }
     }
- 
+
+    async rankingvictories(req, res) {
+        try {
+            const ranking = await this.userService.rankingvictories();
+            return res.status(202).json({ ranking, message: 'Ranking global por porcentaje de victorias.' });
+        } catch (error) {
+            if (error instanceof UserError) {
+                return res.status(error.statusCode).json({ error: error.message });
+            }
+            return res.status(500).json({
+                error: error.message,
+                stack: error.stack
+            });
+        }
+    }
+
+    async rankingdefeats(req, res) {
+        try {
+            const ranking = await this.userService.rankingdefeats();
+            return res.status(202).json({ ranking, message: 'Ranking global por porcentaje de derrotas.' });
+        } catch (error) {
+            if (error instanceof UserError) {
+                return res.status(error.statusCode).json({ error: error.message });
+            }
+            return res.status(500).json({
+                error: error.message,
+                stack: error.stack
+            });
+        }
+
+    }
+
+    async rankingwinsbydifficulty(req, res) {
+        const difficulty = req.body && req.body.difficulty;
+        try {
+            const ranking = await this.userService.rankingwinsbydifficulty(difficulty);
+            return res.status(202).json({ ranking, message: `Ranking de porcentaje de victorias para dificultad ${difficulty}.` });
+        } catch (error) {
+            if (error instanceof UserError) {
+                return res.status(error.statusCode).json({ error: error.message });
+            }
+            if (!difficulty) {
+                return res.status(400).json({ error: 'difficulty es obligatorio' });
+            }
+            return res.status(500).json({
+                error: error.message,
+                stack: error.stack
+            });
+        }
+
+    }
+
+    async rankingwinsbystrategy(req, res) {
+        const strategy = req.body && req.body.strategy;
+        try {
+            const ranking = await this.userService.rankingwinsbystrategy(strategy);
+            return res.status(202).json({ ranking, message: `Ranking de porcentaje de victorias para estrategia ${strategy}.` });
+        } catch (error) {
+            if (error instanceof UserError) {
+                return res.status(error.statusCode).json({ error: error.message });
+            }
+            if (!strategy) {
+                return res.status(400).json({ error: 'strategy es obligatorio' });
+            }
+            return res.status(500).json({
+                error: error.message,
+                stack: error.stack
+            });
+        }
+
+    }
 }
 
 module.exports = UserController;

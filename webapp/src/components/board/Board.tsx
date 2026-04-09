@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 
 import { Casilla } from "./Casilla";
-import { getBoardSize } from "../../gameOptions/Difficulty";
-import type { DifficultyType } from "../../gameOptions/Difficulty";
+import { getBoardSize } from "../gameOptions/Difficulty";
+import type { DifficultyType } from "../gameOptions/Difficulty";
 import "./Board.css";
-import type { StrategyType } from "../../gameOptions/Strategy";
+import type { StrategyType } from "../gameOptions/Strategy";
 
 const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
 
@@ -65,8 +65,8 @@ async function partidaGanada(username: string, strategy: string, difficulty: str
     if (!res.ok) {
       throw new Error(data.error || 'Server error');
     }
-  } catch (err: any) {
-    throw new Error(err.message || 'Network error');
+  } catch (err) {
+    throw new Error(err instanceof Error ? err.message : 'Network error', { cause: err });
   }
 }
 

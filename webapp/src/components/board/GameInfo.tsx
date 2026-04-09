@@ -1,4 +1,4 @@
-import type { GameSettings } from "../../gameOptions/GameSettings";
+import type { GameSettings } from "../gameOptions/GameSettings";
 import "./Board.css";
 
 interface Props {

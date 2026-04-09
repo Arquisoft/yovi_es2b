@@ -1,5 +1,5 @@
 import "./End.css";
-import type { GameSettings } from "../../gameOptions/GameSettings";
+import type { GameSettings } from "../../components/gameOptions/GameSettings";
 
 // Definimos la interfaz de las props, necesaria para mostrar el resultado de la partida y ofrecer opciones al usuario
 interface EndProps {

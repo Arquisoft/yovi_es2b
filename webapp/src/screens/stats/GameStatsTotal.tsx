@@ -31,8 +31,8 @@ async function obtenerDatos(username: string) {
         } else {
             throw new Error(stats.error || 'Server error');
         }
-    } catch (err: any) {
-        throw new Error(err.message || 'Network error');
+    } catch (err) {
+        throw new Error(err instanceof Error ? err.message : 'Network error', { cause: err });
     } 
 }
 
