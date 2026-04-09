@@ -3,6 +3,8 @@ import Home from "../game/Home";
 import "./Ranking.css";
 import RankingFiltered from "./RankingFiltered";
 
+const yoviLogo = "/yovi_logo.png";
+
 type RankingApiEntry = {
     username: string;
     value: number;
@@ -48,11 +50,11 @@ export default function Ranking({ username }: { username: string }) {
 
     return (
         <div className="ranking-screen">
-            <img className="ranking-logo" src={"/yovi_logo.png"} alt="YOVI Logo" />
+            <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
             <h1 className="ranking-screen-title">Ranking global</h1>
 
             <div className="ranking-position-card">
-                <p className="ranking-position-label">Tu posicion en el ranking es...</p>
+                <p className="ranking-position-label">Tu posición en el ranking es...</p>
                 {loadingPosition && <p className="ranking-position-value">...</p>}
                 {!loadingPosition && !positionError && position !== null && (
                     <p className="ranking-position-value">#{position}</p>
