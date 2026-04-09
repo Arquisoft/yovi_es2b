@@ -30,12 +30,12 @@ const FILTER_COLORS: Record<FilterKey, string> = {
 function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
     return data.slice().sort((a, b) =>
         sortBy === "percentage"
-            ? parseFloat(b.percentage) - parseFloat(a.percentage)
+            ? Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage)
             : b.value - a.value
     );
 }
 
-export default function RankingGeneral({ username, obtenerDatos, getMedal, sortBy }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal, sortBy: SortRule }) {
+export default function RankingGeneral({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
 
     const [filter, setFilter] = useState<FilterKey>("victorias"); // Estado para el filtro seleccionado. Por defecto, se muestra el ranking por victorias.
     const [data, setData] = useState<RankingEntry[]>([]); // Estado para los datos del ranking. Se actualiza cada vez que cambia el filtro.

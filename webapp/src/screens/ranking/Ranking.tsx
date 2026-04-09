@@ -8,7 +8,7 @@ type RankingApiEntry = {
     value: number;
 };
 
-export default function Ranking({ username }: { username: string }) {
+export default function Ranking({ username }: Readonly<{ username: string }>) {
     const [goBack, setGoBack] = useState(false);
     const [goFiltered, setGoFiltered] = useState(false);
     const [position, setPosition] = useState<number | null>(null);

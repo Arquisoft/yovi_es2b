@@ -27,12 +27,12 @@ const DIFFICULTY_COLORS: Record<DifficultyFilter, string> = {
 function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
     return data.slice().sort((a, b) =>
         sortBy === "percentage"
-            ? parseFloat(b.percentage) - parseFloat(a.percentage)
+            ? Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage)
             : b.value - a.value
     );
 }
 
-export default function RankingDifficulty({ username, obtenerDatos, getMedal, sortBy }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal, sortBy: SortRule }) {
+export default function RankingDifficulty({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
 
     const [difficulty, setDifficulty] = useState<DifficultyFilter>("EASY");
     const [data, setData] = useState<RankingEntry[]>([]);

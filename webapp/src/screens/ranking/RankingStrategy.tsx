@@ -29,12 +29,12 @@ const STRATEGY_LABELS: Record<StrategyFilter, string> = {
 function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
     return data.slice().sort((a, b) =>
         sortBy === "percentage"
-            ? parseFloat(b.percentage) - parseFloat(a.percentage)
+            ? Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage)
             : b.value - a.value
     );
 }
 
-export default function RankingStrategy({ username, obtenerDatos, getMedal, sortBy }: { username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal, sortBy: SortRule }) {
+export default function RankingStrategy({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
 
     const [strategy, setStrategy] = useState<StrategyFilter>("RANDOM");
     const [data, setData] = useState<RankingEntry[]>([]);

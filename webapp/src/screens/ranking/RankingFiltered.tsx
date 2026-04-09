@@ -49,7 +49,7 @@ function toPercentageString(raw: unknown): string {
 
 //Username se muestra en el header y se pasa a los componentes de ranking para mostrar el ranking filtrado por ese usuario. ç
 // Se mantiene en este componente para que no se pierda al navegar entre las diferentes vistas del ranking filtrado.
-export default function RankingFiltered({ username }: { username: string }) {
+export default function RankingFiltered({ username }: Readonly<{ username: string }>) {
 
     const [goBack, setGoBack] = useState(false); // Para volver a la vista general del ranking
     const [goHome, setGoHome] = useState(false); // Para volver al menú principal (Home)
