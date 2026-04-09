@@ -26,7 +26,7 @@ type BoardProps = {
 // Convierte la clave "f{fila}-c{col}" del tablero a coordenadas (x, y, z) con las que trabaja GAME Y
 function keyToCoords(key: string, boardSize: number): { x: number; y: number; z: number } {
   const match = key.match(/f(\d+)-c(\d+)/);     // Aplica la expresion regular para sacar fila y columna
-  if (!match) throw new Error(`Clave de casilla inválida: ${key}`, { cause: err });  //Error de casilla
+  if (!match) throw new Error(`Clave de casilla inválida: ${key}`);  //Error de casilla
   const fila = parseInt(match[1]);
   const col  = parseInt(match[2]);
   return {
@@ -63,10 +63,10 @@ async function partidaGanada(username: string, strategy: string, difficulty: str
 
     const data = await res.json();
     if (!res.ok) {
-      throw new Error(data.error || 'Server error', { cause: err });
+      throw new Error(data.error || 'Server error');
     }
   } catch (err) {
-    throw new Error(err.message || 'Network error', { cause: err });
+    throw new Error(err instanceof Error ? err.message : 'Network error', { cause: err });
   }
 }
 
@@ -105,7 +105,7 @@ export function Board(props: BoardProps) {
       body: JSON.stringify({ player, x, y, z }),
     });
 
-    if (!res.ok) throw new Error("Movimiento rechazado por el servidor", { cause: err });
+    if (!res.ok) throw new Error("Movimiento rechazado por el servidor");
     return res.json();
   }
 
@@ -113,7 +113,7 @@ export function Board(props: BoardProps) {
   async function peticionEstadoPartida(): Promise<any> {
     const res = await fetch(`${GAMEY_URL}/v1/games/${props.gameId}`);
     if (!res.ok) {
-      throw new Error("Error al obtener el estado de la partida", { cause: err });
+      throw new Error("Error al obtener el estado de la partida");
     } 
     return res.json();
   }
@@ -140,7 +140,7 @@ export function Board(props: BoardProps) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ position: state, bot_type: botId }),
     });
-    if (!res.ok) throw new Error("Error al obtener movimiento del bot", { cause: err });
+    if (!res.ok) throw new Error("Error al obtener movimiento del bot");
     return res.json();
   }
 

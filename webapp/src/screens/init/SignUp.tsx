@@ -38,7 +38,7 @@ const SignUp: React.FC = () => {
                 setError(data.error || 'Server error');
             }
         } catch (err) {
-            setError(err.message || 'Network error');
+            setError(err instanceof Error ? err.message : 'Network error');
         } finally {
             setLoading(false);
         }
