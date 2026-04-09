@@ -32,7 +32,7 @@ export default function Ranking({ username }: Readonly<{ username: string }>) {
 
                 setPosition(index >= 0 ? index + 1 : null);
                 setPositionError(false);
-            } catch (_err) {
+            } catch {
                 setPosition(null);
                 setPositionError(true);
             } finally {
