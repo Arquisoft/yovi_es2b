@@ -20,118 +20,104 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 10px;
-    margin-bottom: 15px;
+    gap: 8px;
+    margin-bottom: 16px;
+    padding: 0 0.5rem;
 }
 
 .ranking-chip,
 .ranking-info {
-  padding: 0.6rem 0.5rem;
-  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.85rem;
   font-weight: 600;
-  border: none;
+  background: transparent;
+  color: #646cff;
+  border: 1.5px solid #646cff;
   border-radius: 6px;
   cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s;
+  transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
   margin: 0;
+  white-space: nowrap;
+  outline: none;
 }
 .ranking-chip:hover,
 .ranking-info:hover {
-    border-color: #1a56db;
-    color: #1a56db;
+  background: rgba(100, 108, 255, 0.08);
+}
+.ranking-chip:active,
+.ranking-info:active {
+  transform: scale(0.97);
 }
 .ranking-chip--active,
 .ranking-info--active {
-    background: #1a56db;
-    border-color: #1a56db;
-    color: #fff;
+  background: #646cff;
+  border-color: #646cff;
+  color: #fff;
+  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.25);
+}
+.ranking-chip--active:hover,
+.ranking-info--active:hover {
+  background: #535bf2;
 }
 
+/* ── Fácil — verde ── */
 .ranking-info--green {
-  padding: 0.6rem 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s;
-  margin: 0;
-
-  background: #2f8a3d;
-  color: #fff;
+  background: #dcfce7;
+  color: #15803d;
+  border: 1.5px solid #86efac;
 }
-
 .ranking-info--green:hover {
-  background: #2f8a3d4b;
-  color: #fff;
+  background: #bbf7d0;
+  border: 1.5px solid #86efac;
 }
-
 .ranking-info--green--active {
-  background-color: #4ee464;
-  color: #181818;
+  background: #22c55e;
+  border: 1.5px solid #15803d;
+  color: #fff;
 }
-
 .ranking-info--green--active:hover {
-  background-color: #4ee4644b;
-  color: #181818;
+  background: #16a34a;
+  border: 1.5px solid #15803d;
 }
 
+/* ── Media — amarillo ── */
 .ranking-info--orange {
-  padding: 0.6rem 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s;
-  margin: 0;
-
-  background: #f9a825;
-  color: #fff;
+  background: #fef9c3;
+  color: #a16207;
+  border: 1.5px solid #fde047;
 }
-
 .ranking-info--orange:hover {
-  background: #f9a8254b;
-  color: #fff;
+  background: #fef08a;
+  border: 1.5px solid #fde047;
 }
-
 .ranking-info--orange--active {
-  background-color: #ffe32b;
-  color: #181818;
+  background: #eab308;
+  border: 1.5px solid #a16207;
+  color: #fff;
 }
-
 .ranking-info--orange--active:hover {
-  background-color: #ffe32b4b;
-  color: #181818;
+  background: #d4a017;
+  border: 1.5px solid #a16207;
 }
 
+/* ── Difícil — rojo ── */
 .ranking-info--red {
-  padding: 0.6rem 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: opacity 0.2s, transform 0.1s;
-  margin: 0;
-
-  background: #c62828;
-  color: #fff;
+  background: #fee2e2;
+  color: #b91c1c;
+  border: 1.5px solid #fca5a5;
 }
-
 .ranking-info--red:hover {
-  background: #c628284b;
+  background: #fecaca;
+  border: 1.5px solid #fca5a5;
+}
+.ranking-info--red--active {
+  background: #991b1b;
+  border: 1.5px solid #7f1d1d;
   color: #fff;
 }
-
-.ranking-info--red--active {
-  background-color: #ff5c5c;
-  color: #181818;
-}
-
 .ranking-info--red--active:hover {
-  background-color: #ff5c5c4b;
-  color: #181818;
+  background: #7f1d1d;
+  border: 1.5px solid #7f1d1d;
 }
 
 /* ── Table ── */

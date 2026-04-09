@@ -64,11 +64,11 @@
 
 .ranking-menu {
     display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    gap: 24px;
+    gap: 8px;
+    width: 100%;
+    max-width: 380px;
 }
 
 .ranking-btn-filtered {
