@@ -84,12 +84,12 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal, sort
                     </tr>
                 </thead>
                 <tbody>
-                    {sortData(data, sortBy).map((entry) => (
+                    {sortData(data, sortBy).map((entry, idx) => (
                         <tr
                             key={entry.username}
                             className={entry.username === username ? "ranking-row--me" : ""}
                         >
-                            <td>{getMedal(entry.position)}</td>
+                            <td>{getMedal(idx + 1)}</td>
                             <td>
                                 {entry.username}
                             </td>

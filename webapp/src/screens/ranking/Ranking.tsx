@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Home from "../game/Home";
 import "./Ranking.css";
 import RankingFiltered from "./RankingFiltered";
+import InitialScreen from "../init/InitialScreen";
+import AppHeader from "../../components/AppHeader";
 
 type RankingApiEntry = {
     username: string;
@@ -11,6 +13,7 @@ type RankingApiEntry = {
 export default function Ranking({ username }: Readonly<{ username: string }>) {
     const [goBack, setGoBack] = useState(false);
     const [goFiltered, setGoFiltered] = useState(false);
+    const [goLogin, setGoLogin] = useState(false);
     const [position, setPosition] = useState<number | null>(null);
     const [loadingPosition, setLoadingPosition] = useState(true);
     const [positionError, setPositionError] = useState(false);
@@ -43,12 +46,14 @@ export default function Ranking({ username }: Readonly<{ username: string }>) {
         obtenerPosicion();
     }, [username]);
 
+    if (goLogin) return <InitialScreen />;
     if (goBack) return <Home username={username} />;
     if (goFiltered) return <RankingFiltered username={username} />;
 
     return (
         <div className="ranking-screen">
-            <img className="ranking-logo" src={"/yovi_logo.png"} alt="YOVI Logo" />
+            <AppHeader onLogout={() => setGoLogin(true)} />
+            <img className="ranking-logo" src="/yovi_logo.png" alt="YOVI Logo" />
             <h1 className="ranking-screen-title">Ranking global</h1>
 
             <div className="ranking-position-card">

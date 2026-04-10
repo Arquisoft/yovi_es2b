@@ -3,22 +3,23 @@ import Home from "../game/Home.tsx";
 import GameStats from "./GameStats.tsx";
 import GameStatsDifficulty from "./GameStatsDifficuty.tsx";
 import GameStatsStrategy from "./GameStatsStrategy.tsx";
+import InitialScreen from "../init/InitialScreen.tsx";
 import "./GameStats.css";
+import AppHeader from "../../components/AppHeader";
 
 export default function GameStatsFiltered( {username} : { username: string }) {
 
     const [goBack, setGoBack] = useState(false);
     const [goHome, setGoHome] = useState(false);
+    const [goLogin, setGoLogin] = useState(false);
 
-    if (goBack) {
-        return <GameStats username={username}/>;
-    }
-    if (goHome) {
-        return <Home username={username}/>;
-    }
+    if (goLogin) return <InitialScreen />;
+    if (goBack) return <GameStats username={username}/>;
+    if (goHome) return <Home username={username}/>;
 
     return (
         <div className="stats-screen-filter">
+            <AppHeader onLogout={() => setGoLogin(true)} />
             <div className="header">
                 <h1 className="stats-screen-filter-title">Estadísticas filtradas de:</h1>
                 <h2 className="stats-filter-screen-username">{username}</h2>

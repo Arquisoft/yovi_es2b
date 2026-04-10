@@ -2,19 +2,19 @@ import { useState } from "react";
 import Home from "../game/Home.tsx";
 import GameStatsTotal from "./GameStatsTotal.tsx";
 import GameStatsFiltered from "./GameStatsFiltered.tsx";
+import InitialScreen from "../init/InitialScreen.tsx";
 import "./GameStats.css";
-
-const yoviLogo = "/yovi_logo.png";
+import AppHeader from "../../components/AppHeader";
 
 export default function GameStats( {username} : { username: string }) {
 
     const [goBack, setGoBack] = useState(false);
     const [goTotal, setGoTotal] = useState(false);
     const [goFiltered, setGoFiltered] = useState(false);
+    const [goLogin, setGoLogin] = useState(false);
 
-    if (goBack) {
-        return <Home username={username}/>;
-    }
+    if (goLogin) return <InitialScreen />;
+    if (goBack) return <Home username={username}/>;
     if (goTotal) {
         return <GameStatsTotal username={username}/>;
     }
@@ -24,7 +24,7 @@ export default function GameStats( {username} : { username: string }) {
 
     return (
         <div className="stats-screen">
-            <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
+            <AppHeader onLogout={() => setGoLogin(true)} />
             <h1 className="stats-screen-title">Eliga que estadísticas desea ver</h1>
 
             <div className="stats-menu">

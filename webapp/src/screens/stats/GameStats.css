@@ -8,6 +8,7 @@
   justify-content: center;
   background: #ffffff;
   padding: 2rem;
+  padding-top: calc(64px + 2rem);
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -22,6 +23,7 @@
   justify-content: center;
   background: #ffffff;
   padding: 1rem;
+  padding-top: calc(64px + 1rem);
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
@@ -36,6 +38,7 @@
   justify-content: center;
   background: #ffffff;
   padding: 1rem;
+  padding-top: calc(64px + 1rem);
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;

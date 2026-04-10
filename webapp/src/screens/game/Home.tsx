@@ -10,8 +10,7 @@ import "./Home.css";
 import InitialScreen from "../init/InitialScreen";
 import GameStats from "../stats/GameStats";
 import Ranking from "../ranking/Ranking";
-
-const yoviLogo = "/yovi_logo.png";
+import AppHeader from "../../components/AppHeader";
 
 /**
  * Declaración primera de esto, para que funcione el guardar datos de la partida
@@ -90,16 +89,11 @@ export default function HomePage( {username} : { username: string }) {
         <div className="home-screen">
 
             {/* Header */}
-            <header className="home-header">
-                <img src={yoviLogo} alt="YOVI Logo" className="home-header__logo" />
-                <button className="home-menu-out__btn home-header__logout" onClick={() => setScreen("login")}>
-                    Cerrar sesión
-                </button>
-            </header>
+            <AppHeader onLogout={() => setScreen("login")} />
 
             {/* Contenido */}
             <div className="home-body">
-                <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
+                <img src="/yovi_logo.png" alt="YOVI Logo" className="home-screen__logo" />
                 <h2 className="home-screen__title">Bienvenido a tu menú principal, {username}</h2>
 
                 <div className="home-panels">

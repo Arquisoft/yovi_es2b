@@ -1,8 +1,10 @@
 import { useState, useEffect } from "react";
 import Home from "../game/Home.tsx";
 import GameStats from "./GameStats.tsx";
+import InitialScreen from "../init/InitialScreen.tsx";
 import "./GameStats.css";
 import "./GameStatsTable.css"
+import AppHeader from "../../components/AppHeader";
 
 // TIPO ESTADISTICA PARA USO EN LA TABLA
 type AllStat = {
@@ -40,6 +42,7 @@ export default function GameStatsTotal( {username} : { username: string }) {
 
     const [goBack, setGoBack] = useState(false);
     const [goHome, setGoHome] = useState(false);
+    const [goLogin, setGoLogin] = useState(false);
 
     const [data, setData] = useState<AllStat[]>([]);
 
@@ -51,16 +54,14 @@ export default function GameStatsTotal( {username} : { username: string }) {
         cargarDatos();
     }, [username]);
 
-    if (goBack) {
-        return <GameStats username={username}/>;
-    }
-    if (goHome) {
-        return <Home username={username}/>;
-    }
+    if (goLogin) return <InitialScreen />;
+    if (goBack) return <GameStats username={username}/>;
+    if (goHome) return <Home username={username}/>;
 
 
     return (
         <div className="stats-total-screen">
+            <AppHeader onLogout={() => setGoLogin(true)} />
             <div className="header">
                 <h1 className="stats-total-screen-title">Todas las estadísticas de:</h1>
                 <h2 className="stats-total-screen-username">{username}</h2>

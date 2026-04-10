@@ -1,12 +1,12 @@
 import { useState } from "react";
 import Home from "../game/Home.tsx";
 import Ranking from "./Ranking.tsx";
+import InitialScreen from "../init/InitialScreen.tsx";
 import RankingGeneral from "./RankingGeneral.tsx";
 import RankingDifficulty from "./RankingDifficulty.tsx";
 import RankingStrategy from "./RankingStrategy.tsx";
 import "./RankingFiltered.css";
-
-const yoviLogo = "/yovi_logo.png";
+import AppHeader from "../../components/AppHeader";
 
 type FilterRule = "general" | "dificultad" | "estrategia";
 export type SortRule = "value" | "percentage";
@@ -55,16 +55,13 @@ export default function RankingFiltered({ username }: Readonly<{ username: strin
 
     const [goBack, setGoBack] = useState(false); // Para volver a la vista general del ranking
     const [goHome, setGoHome] = useState(false); // Para volver al menú principal (Home)
+    const [goLogin, setGoLogin] = useState(false);
     const [active, setActive] = useState<Set<FilterRule>>(new Set(["general"])); // Estado para controlar qué vistas del ranking filtrado están activas. Por defecto, se muestra la vista general.
     const [sortBy, setSortBy] = useState<SortRule>("value");
 
-
-    if (goBack) {
-        return <Ranking username={username} />;
-    }
-    if (goHome) {
-        return <Home username={username} />;
-    }
+    if (goLogin) return <InitialScreen />;
+    if (goBack) return <Ranking username={username} />;
+    if (goHome) return <Home username={username} />;
 
     /**
      * Funcion para el menu de filtrado. Recibe una FilterRule y la agrega o elimina del estado "active" dependiendo de si ya está activa o no.
@@ -130,7 +127,7 @@ export default function RankingFiltered({ username }: Readonly<{ username: strin
     return (
         <div className="ranking-filtered-screen">
 
-            <img src={yoviLogo} alt="YOVI Logo" className="home-screen__logo" />
+            <AppHeader onLogout={() => setGoLogin(true)} />
 
             <div className="ranking-filtered-header">
                 <h1 className="ranking-filtered-title">Ranking global</h1>

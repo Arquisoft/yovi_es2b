@@ -6,6 +6,7 @@
     align-items: center;
     background: #ffffff;
     padding: 2rem;
+    padding-top: calc(64px + 2rem);
     box-sizing: border-box;
     overflow-y: auto;
 }
@@ -128,7 +129,7 @@
     transition: all 0.18s;
 }
 
-.ranking-sort-btn:hover {
+.ranking-sort-btn:not(.ranking-sort-btn--active):hover {
     background: #dbeafe;
     border-color: #93c5fd;
 }
