@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(sed -i 's/} catch \\(err: any\\) {/} catch \\(err\\) {/' \"c:/Users/Karma/Desktop/ASW/yovi_es2b/webapp/src/screens/ranking/RankingFiltered.tsx\")",
-      "Bash(sed -i 's/throw new Error\\(\"Network error\"\\);/throw new Error\\(\"Network error\", { cause: err }\\);/' \"c:/Users/Karma/Desktop/ASW/yovi_es2b/webapp/src/screens/ranking/RankingFiltered.tsx\")"
-    ]
-  }
-}
