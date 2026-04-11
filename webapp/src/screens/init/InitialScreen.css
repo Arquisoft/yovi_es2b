@@ -119,7 +119,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
 }
 
 .submit-button:hover:not(:disabled) {
-  background: #535bf2;
+  background: #01247a;
 }
 
 .submit-button:active:not(:disabled) {

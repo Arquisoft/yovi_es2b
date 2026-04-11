@@ -15,10 +15,10 @@ export type DifficultyType = keyof typeof Difficulty;
 export function getBoardSize(difficulty: DifficultyType) {
   switch (difficulty) {
     case "MEDIUM":
-      return 8;
-    case "HARD":
       return 10;
+    case "HARD":
+      return 12;
     default:
-      return 6;
+      return 8;
   }
 }

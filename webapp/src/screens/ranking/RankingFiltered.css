@@ -108,8 +108,8 @@
 }
 
 .ranking-toggle-btn--active:hover {
-    background: rgba(2, 62, 182, 0.129);
-    color: #023eb6;
+    background: #01247a;
+    color: #fff;
 }
 
 .ranking-toggle-check {
