@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import type { GetMedal, ObtenerDatosRanking, SortRule } from "./RankingFiltered";
+import type { GetMedal, ObtenerDatosRanking, SortRule, RankingEntryShared } from "./RankingFiltered";
+import { sortData } from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
 type StrategyFilter =
@@ -10,12 +11,7 @@ type StrategyFilter =
     | "MONTE_CARLO_MEJORADO"
     | "MONTE_CARLO_ENDURECIDO";
 
-type RankingEntry = {
-    position: number;
-    username: string;
-    value: number;
-    percentage: string;
-};
+type RankingEntry = RankingEntryShared;
 
 const STRATEGY_LABELS: Record<StrategyFilter, string> = {
     RANDOM:                 "Random",
@@ -25,14 +21,6 @@ const STRATEGY_LABELS: Record<StrategyFilter, string> = {
     MONTE_CARLO_MEJORADO:   "Monte Carlo Mejorado",
     MONTE_CARLO_ENDURECIDO: "Monte Carlo Endurecido",
 };
-
-function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
-    return data.slice().sort((a, b) =>
-        sortBy === "percentage"
-            ? Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage)
-            : b.value - a.value
-    );
-}
 
 export default function RankingStrategy({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
 
@@ -89,9 +77,6 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal, sort
                             <td>{getMedal(entry.position)}</td>
                             <td>
                                 {entry.username}
-                                {entry.username === username && (
-                                    <span className="ranking-user-tag">Tú</span>
-                                )}
                             </td>
                             <td>{entry.value}</td>
                             <td>{entry.percentage}%</td>

@@ -99,8 +99,8 @@ input:-webkit-autofill:focus { /* para autocompletados */
 
 .form-input:focus { /* si input enfocado */
   outline: none;
-  border-color: #646cff;
-  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.18);
+  border-color: #023eb6;
+  box-shadow: 0 0 0 3px rgba(2, 62, 182, 0.18);
   background: #ffffff;
 }
 
@@ -108,7 +108,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
 .submit-button {
   margin-top: 0.5rem;
   padding: 0.7rem 1.2rem;
-  background: #646cff;
+  background: #023eb6;
   color: #fff;
   font-size: 1rem;
   font-weight: 600;
@@ -119,7 +119,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
 }
 
 .submit-button:hover:not(:disabled) {
-  background: #535bf2;
+  background: #01247a;
 }
 
 .submit-button:active:not(:disabled) {
@@ -169,8 +169,8 @@ input:-webkit-autofill:focus { /* para autocompletados */
 .signup button {
   padding: 0.5rem 1.4rem;
   background: transparent;
-  color: #646cff;
-  border: 1px solid #646cff;
+  color: #023eb6;
+  border: 1px solid #023eb6;
   border-radius: 6px;
   font-size: 0.9rem;
   font-weight: 500;
@@ -179,5 +179,5 @@ input:-webkit-autofill:focus { /* para autocompletados */
 }
 
 .signup button:hover {
-  background: rgba(100, 108, 255, 0.08);
+  background: rgba(2, 62, 182, 0.08);
 }
