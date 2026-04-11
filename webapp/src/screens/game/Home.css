@@ -43,10 +43,10 @@
   width: 100%;
   padding: 0.7rem 1.2rem;
   background: transparent;
-  color: #646cff;
+  color: #023eb6;
   font-size: 1rem;
   font-weight: 600;
-  border: 1px solid #646cff;
+  border: 1px solid #023eb6;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
@@ -54,7 +54,7 @@
 }
 
 .home-menu__btn:hover {
-  background: rgba(100, 108, 255, 0.08);
+  background: rgba(2, 62, 182, 0.08);
 }
 
 .home-menu__btn:active {
@@ -118,8 +118,8 @@
 }
 
 .home-config__select:focus {
-  border-color: #646cff;
-  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.18);
+  border-color: #023eb6;
+  box-shadow: 0 0 0 3px rgba(2, 62, 182, 0.18);
   background: #ffffff;
 }
 
@@ -232,8 +232,8 @@
 }
 
 .home-config__input:focus {
-  border-color: #646cff;
-  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.18);
+  border-color: #023eb6;
+  box-shadow: 0 0 0 3px rgba(2, 62, 182, 0.18);
 }
 
 /* ── Separador dentro de config ───────────────────────────────────────────── */
@@ -247,7 +247,7 @@
 .home-config__start {
   width: 100%;
   padding: 0.7rem 1.2rem;
-  background: #646cff;
+  background: #023eb6;
   color: #fff;
   font-size: 1rem;
   font-weight: 600;
@@ -259,7 +259,7 @@
 }
 
 .home-config__start:hover {
-  background: #535bf2;
+  background: #014694;
 }
 
 .home-config__start:active {

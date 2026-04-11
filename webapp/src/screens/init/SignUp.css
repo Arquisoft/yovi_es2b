@@ -77,8 +77,8 @@
 
 .form-input:focus { /* si input enfocado */
   outline: none;
-  border-color: #646cff;
-  box-shadow: 0 0 0 3px rgba(100, 108, 255, 0.18);
+  border-color: #023eb6;
+  box-shadow: 0 0 0 3px rgba(2, 62, 182, 0.18);
   background: #ffffff;
 }
 
@@ -86,7 +86,7 @@
 .submit-button {
   margin-top: 0.5rem;
   padding: 0.7rem 1.2rem;
-  background: #646cff;
+  background: #023eb6;
   color: #fff;
   font-size: 1rem;
   font-weight: 600;
