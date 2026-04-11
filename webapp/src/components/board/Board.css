@@ -13,14 +13,14 @@
 .board {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 .row-container {
   display: flex;
   justify-content: center;
   gap: 2px;
-  margin-top: -18px;
+  margin-top: -12px;
 }
 
 .row-container:first-child {
@@ -30,8 +30,8 @@
 /* Casilla con forma de hexágono */
 .cell {
   position: relative;
-  width: 80px;
-  height: 80px;
+  width: 67px;
+  height: 67px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background-color: #b8c0cc; /* color del borde gris */
   cursor: pointer;

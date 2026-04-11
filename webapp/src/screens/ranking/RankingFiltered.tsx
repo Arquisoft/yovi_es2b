@@ -1,10 +1,12 @@
 import { useState } from "react";
 import Home from "../game/Home.tsx";
 import Ranking from "./Ranking.tsx";
+import InitialScreen from "../init/InitialScreen.tsx";
 import RankingGeneral from "./RankingGeneral.tsx";
 import RankingDifficulty from "./RankingDifficulty.tsx";
 import RankingStrategy from "./RankingStrategy.tsx";
 import "./RankingFiltered.css";
+import AppHeader from "../../components/AppHeader";
 
 type FilterRule = "general" | "dificultad" | "estrategia";
 export type SortRule = "value" | "percentage";
@@ -23,6 +25,40 @@ export type ObtenerDatosRanking = (
 ) => Promise<RankingEntry[]>;
 
 export type GetMedal = (pos: number) => string;
+
+export type RankingEntryShared = {
+    position: number;
+    username: string;
+    value: number;
+    percentage: string;
+};
+
+export function sortData(data: RankingEntryShared[], sortBy: SortRule): RankingEntryShared[] {
+    const sorted = data.slice().sort((a, b) => {
+        if (sortBy === "percentage") {
+            const diff = Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
+            return diff || b.value - a.value;
+        }
+        const diff = b.value - a.value;
+        return diff || Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
+    });
+    const result: RankingEntryShared[] = [];
+    for (let i = 0; i < sorted.length; i++) {
+        let position: number;
+        if (i === 0) {
+            position = 1;
+        } else {
+            const prev = result[i - 1];
+            if (sorted[i].value === sorted[i - 1].value && sorted[i].percentage === sorted[i - 1].percentage) {
+                position = prev.position;
+            } else {
+                position = i + 1;
+            }
+        }
+        result.push({ ...sorted[i], position });
+    }
+    return result;
+}
 
 /**
  *  Funcino para obtener la medalla correspondiente a una posición en el ranking. 
@@ -53,16 +89,13 @@ export default function RankingFiltered({ username }: Readonly<{ username: strin
 
     const [goBack, setGoBack] = useState(false); // Para volver a la vista general del ranking
     const [goHome, setGoHome] = useState(false); // Para volver al menú principal (Home)
+    const [goLogin, setGoLogin] = useState(false);
     const [active, setActive] = useState<Set<FilterRule>>(new Set(["general"])); // Estado para controlar qué vistas del ranking filtrado están activas. Por defecto, se muestra la vista general.
     const [sortBy, setSortBy] = useState<SortRule>("value");
 
-
-    if (goBack) {
-        return <Ranking username={username} />;
-    }
-    if (goHome) {
-        return <Home username={username} />;
-    }
+    if (goLogin) return <InitialScreen />;
+    if (goBack) return <Ranking username={username} />;
+    if (goHome) return <Home username={username} />;
 
     /**
      * Funcion para el menu de filtrado. Recibe una FilterRule y la agrega o elimina del estado "active" dependiendo de si ya está activa o no.
@@ -128,9 +161,10 @@ export default function RankingFiltered({ username }: Readonly<{ username: strin
     return (
         <div className="ranking-filtered-screen">
 
+            <AppHeader onLogout={() => setGoLogin(true)} />
+
             <div className="ranking-filtered-header">
                 <h1 className="ranking-filtered-title">Ranking global</h1>
-                <h2 className="ranking-filtered-username">{username}</h2>
             </div>
 
             {/* menu */}

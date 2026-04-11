@@ -8,6 +8,7 @@
   justify-content: center;
   background: #ffffff;
   padding: 2rem;
+  padding-top: calc(64px + 2rem);
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -22,6 +23,7 @@
   justify-content: center;
   background: #ffffff;
   padding: 1rem;
+  padding-top: calc(64px + 1rem);
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
@@ -36,6 +38,7 @@
   justify-content: center;
   background: #ffffff;
   padding: 1rem;
+  padding-top: calc(64px + 1rem);
   box-sizing: border-box;
   overflow-y: auto;
   overflow-x: hidden;
@@ -142,10 +145,10 @@
   width: 100%;
   padding: 0.7rem 1.2rem;
   background: transparent;
-  color: #646cff;
+  color: #023eb6;
   font-size: 1rem;
   font-weight: 600;
-  border: 1px solid #646cff;
+  border: 1px solid #023eb6;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
@@ -153,17 +156,17 @@
 }
 
 .stats-btn-total:hover {
-  background: rgba(100, 108, 255, 0.08);
+  background: rgba(2, 62, 182, 0.08);
 }
 
 .stats-btn-filt {
   width: 100%;
   padding: 0.7rem 1.2rem;
   background: transparent;
-  color: #646cff;
+  color: #023eb6;
   font-size: 1rem;
   font-weight: 600;
-  border: 1px solid #646cff;
+  border: 1px solid #023eb6;
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s;
@@ -171,7 +174,7 @@
 }
 
 .stats-btn-filt:hover {
-  background: rgba(100, 108, 255, 0.08);
+  background: rgba(2, 62, 182, 0.08);
 }
 
 /* ── Volver ───────────────────────────────────────────────────── */

@@ -2,15 +2,19 @@ import { useEffect, useState } from "react";
 import Home from "../game/Home";
 import "./Ranking.css";
 import RankingFiltered from "./RankingFiltered";
+import InitialScreen from "../init/InitialScreen";
+import AppHeader from "../../components/AppHeader";
 
 type RankingApiEntry = {
     username: string;
     value: number;
+    percentage?: string | number;
 };
 
 export default function Ranking({ username }: Readonly<{ username: string }>) {
     const [goBack, setGoBack] = useState(false);
     const [goFiltered, setGoFiltered] = useState(false);
+    const [goLogin, setGoLogin] = useState(false);
     const [position, setPosition] = useState<number | null>(null);
     const [loadingPosition, setLoadingPosition] = useState(true);
     const [positionError, setPositionError] = useState(false);
@@ -26,11 +30,23 @@ export default function Ranking({ username }: Readonly<{ username: string }>) {
                     throw new Error("Ranking no disponible");
                 }
 
-                const index = (data.ranking as RankingApiEntry[]).findIndex(
-                    (entry) => entry.username === username
-                );
+                const entries = data.ranking as RankingApiEntry[];
+                const positions: number[] = [];
+                for (let i = 0; i < entries.length; i++) {
+                    let pos: number;
+                    if (i === 0) {
+                        pos = 1;
+                    } else {
+                        const prev = entries[i - 1];
+                        const sameValue = entries[i].value === prev.value;
+                        const samePct = String(entries[i].percentage ?? "0").replace("%", "") === String(prev.percentage ?? "0").replace("%", "");
+                        pos = (sameValue && samePct) ? positions[i - 1] : i + 1;
+                    }
+                    positions.push(pos);
+                }
 
-                setPosition(index >= 0 ? index + 1 : null);
+                const index = entries.findIndex((entry) => entry.username === username);
+                setPosition(index >= 0 ? positions[index] : null);
                 setPositionError(false);
             } catch {
                 setPosition(null);
@@ -43,16 +59,18 @@ export default function Ranking({ username }: Readonly<{ username: string }>) {
         obtenerPosicion();
     }, [username]);
 
+    if (goLogin) return <InitialScreen />;
     if (goBack) return <Home username={username} />;
     if (goFiltered) return <RankingFiltered username={username} />;
 
     return (
         <div className="ranking-screen">
-            <img className="ranking-logo" src={"/yovi_logo.png"} alt="YOVI Logo" />
+            <AppHeader onLogout={() => setGoLogin(true)} />
+            <img className="ranking-logo" src="/yovi_logo.png" alt="YOVI Logo" />
             <h1 className="ranking-screen-title">Ranking global</h1>
 
             <div className="ranking-position-card">
-                <p className="ranking-position-label">Tu posicion en el ranking es...</p>
+                <p className="ranking-position-label">Tu posición en el ranking es...</p>
                 {loadingPosition && <p className="ranking-position-value">...</p>}
                 {!loadingPosition && !positionError && position !== null && (
                     <p className="ranking-position-value">#{position}</p>
