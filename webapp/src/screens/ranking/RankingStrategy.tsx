@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import type { GetMedal, ObtenerDatosRanking, SortRule } from "./RankingFiltered";
+import type { GetMedal, ObtenerDatosRanking, SortRule, RankingEntryShared } from "./RankingFiltered";
+import { sortData } from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
 type StrategyFilter =
@@ -10,12 +11,7 @@ type StrategyFilter =
     | "MONTE_CARLO_MEJORADO"
     | "MONTE_CARLO_ENDURECIDO";
 
-type RankingEntry = {
-    position: number;
-    username: string;
-    value: number;
-    percentage: string;
-};
+type RankingEntry = RankingEntryShared;
 
 const STRATEGY_LABELS: Record<StrategyFilter, string> = {
     RANDOM:                 "Random",
@@ -25,33 +21,6 @@ const STRATEGY_LABELS: Record<StrategyFilter, string> = {
     MONTE_CARLO_MEJORADO:   "Monte Carlo Mejorado",
     MONTE_CARLO_ENDURECIDO: "Monte Carlo Endurecido",
 };
-
-function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
-    const sorted = data.slice().sort((a, b) => {
-        if (sortBy === "percentage") {
-            const diff = Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
-            return diff || b.value - a.value;
-        }
-        const diff = b.value - a.value;
-        return diff || Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
-    });
-    const result: RankingEntry[] = [];
-    for (let i = 0; i < sorted.length; i++) {
-        let position: number;
-        if (i === 0) {
-            position = 1;
-        } else {
-            const prev = result[i - 1];
-            if (sorted[i].value === sorted[i - 1].value && sorted[i].percentage === sorted[i - 1].percentage) {
-                position = prev.position;
-            } else {
-                position = i + 1;
-            }
-        }
-        result.push({ ...sorted[i], position });
-    }
-    return result;
-}
 
 export default function RankingStrategy({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
 
