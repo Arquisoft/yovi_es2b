@@ -14,7 +14,7 @@ interface EndProps {
 
 function getTitle(twoPlayers: boolean, winner: string, playerWon: boolean): string {
   if (twoPlayers) return `¡Ganó ${winner}!`;
-  return playerWon ? "¡Victoria!" : "Derrota";
+  return playerWon ? "¡Victoria!" : "¡Derrota!";
 }
 
 function getSubtitle(twoPlayers: boolean, winner: string, username: string, playerWon: boolean): string {

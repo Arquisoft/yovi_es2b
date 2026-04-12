@@ -57,7 +57,7 @@ const SignUp: React.FC = () => {
             <h1>Bienvenido, regístrate aquí</h1>
             
             <form onSubmit={handleLogin} className="signup-form">
-                <h1>Crea tu usuario y contraseña para registrárte en Yovi.</h1>
+                <h1>Crea tu usuario y contraseña para registrarte en Yovi.</h1>
                 <div className="form-group">
                     <label htmlFor="username">Usuario</label>
                     <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} className="form-input"/>
