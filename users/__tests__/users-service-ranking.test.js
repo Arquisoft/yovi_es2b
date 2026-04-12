@@ -54,7 +54,7 @@ describe('GET /ranking', () => {
     })
 
 
-    //Ranking por victorias 
+    //Ranking por victorias  
 
     /**
      * Devuelve el ranking global por victorias correctamente
