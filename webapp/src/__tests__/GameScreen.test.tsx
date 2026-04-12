@@ -1,0 +1,142 @@
+import { render, screen, waitFor } from '@testing-library/react'
+import userEvent from '@testing-library/user-event'
+import { Game } from '../screens/game/Game'
+import { afterEach, describe, expect, test, vi } from 'vitest'
+import '@testing-library/jest-dom'
+import { Difficulty } from '../components/gameOptions/Difficulty'
+import { Strategy } from '../components/gameOptions/Strategy'
+
+const baseSettings = {
+    strategy: Strategy.RANDOM,
+    difficulty: Difficulty.EASY }
+
+// Mock completo de todas las llamadas fetch que hace Game + Board:
+//El mock se usa para simular las respuestas de la API sin necesidad de hacer llamadas reales.
+// 1. POST /v1/games         → crearPartida
+// 2. GET  /v1/games/:id/status → getTurnoPartida
+// 3. GET  /v1/games/:id     → peticionEstadoPartida (Board)
+// mockFetch acepta cuántas veces repetir el mock de estado (una por test que lo necesite)
+function mockFetch() {
+    const boardStateMock = {
+        ok: true,
+        json: async () => ({
+            state: { layout: '000/000/000' },// estado del tablero vacío
+            status: { kind: 'Ongoing', next_player: 0 }// estado de la partida indicando que sigue en curso y el siguiente jugador es el 0 (humano  )
+        })
+    }
+    global.fetch = vi.fn()
+    // El primer call es para crear la partida, el segundo para obtener el turno, y el resto para el estado del tablero (sin límite)
+        .mockResolvedValueOnce({ ok: true, json: async () => ({ game_id: 'test-123' }) })    // crearPartida
+        .mockResolvedValueOnce({ ok: true, json: async () => ({ kind: 'Ongoing', next_player: 0 }) }) // getTurnoPartida
+        .mockResolvedValue(boardStateMock) // todas las demás llamadas de Board, sin límite
+}
+
+/**
+ * Test para Game que comprueba que:
+ * - No se crea partida si stateStart es false
+ * - Se llama a la API para crear partida cuando stateStart es true
+ * - Muestra el indicador de turno en modo 2 jugadores
+ */
+describe('Game', () => {
+    afterEach(() => {
+        vi.restoreAllMocks()
+    })
+
+    /**
+     * Comprueba que si stateStart es false, no se hace la llamada a la API para crear la partida. 
+     * Solo se debe crear la partida cuando el usuario pulse el botón de empezar partida.
+     * Si stateStart es false, el componente se renderiza pero no inicia el juego, por lo que no debe llamar a la API.
+     */
+    test('no crea partida si stateStart es false', () => {
+        userEvent.setup()
+        global.fetch = vi.fn()
+        //vi.fn crea una mock para el fetch vacío para verificar si se llama o no.
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={false} />
+        )
+        expect(global.fetch).not.toHaveBeenCalled()
+    })
+
+    /**
+     * Comprueba que si stateStart es true, se hace la llamada a la API para crear la partida.
+     * Cuando el usuario pulse el botón de empezar partida, stateStart se pone a true y el componente debe llamar a la API para crear la partida.
+     * El test espera a que se haga la llamada a la API y comprueba que se ha llamado con los parámetros correctos (URL y método POST).
+     */
+    test('llama a la API para crear partida cuando stateStart es true', async () => {
+        userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
+        )
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('/v1/games'),
+                expect.objectContaining({ method: 'POST' })
+            )
+        })
+    })
+
+    /**
+     * Comprueba que se muestra el indicador de turno en modo 2 jugadores y no se muestra en modo 1 jugador.
+     * En modo 2 jugadores, el componente debe mostrar un texto indicando de quién es el turno (por ejemplo, "Turno de sara").
+     * El test renderiza el componente en ambos modos y comprueba la presencia o ausencia del texto del turno.
+     */
+    test('muestra el indicador de turno en modo 2 jugadores', async () => {
+       userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
+        )
+        await waitFor(() => {
+            expect(screen.getByText(/turno de/i)).toBeInTheDocument()
+        })
+    })
+
+    /**
+     * Comprueba que no se muestra el indicador de turno en modo 1 jugador.
+     * En modo 1 jugador, el componente no debe mostrar ningún texto indicando el turno, ya que el jugador siempre es el mismo.
+     * El test renderiza el componente en modo 1 jugador y comprueba que no se encuentra ningún texto relacionado con el turno.
+     */
+    test('no muestra el indicador de turno en modo 1 jugador', async () => {
+        userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
+        )
+        await waitFor(() => {
+            expect(screen.queryByText(/turno de/i)).not.toBeInTheDocument()
+        })
+    })
+
+    /**
+     * Comprueba que al pulsar el botón "Terminar partida", se vuelve al menú principal y se muestra el mensaje de bienvenida con el nombre del usuario.
+     * El test simula un usuario pulsando el botón "Terminar partida" y espera a que se renderice el menú principal, comprobando que el mensaje de bienvenida contiene el nombre del usuario.
+     * Se utiliza la función mockFetch para simular las respuestas de la API sin necesidad de hacer llamadas reales.
+     */
+    test('vuelve al menú al pulsar Terminar partida', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
+        )
+        await waitFor(async () => {
+            await user.click(screen.getByRole('button', { name: /Terminar partida/i }))
+            expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
+        })
+    })
+
+    /**
+     * Comprueba que al pulsar el botón "Terminar partida", se llama a la función onGoMenu y se muestra el menú principal.
+     */
+    test('llama a onGoMenu al pulsar Terminar partida', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
+        )
+        await waitFor(async () => {
+            await user.click(screen.getByRole('button', { name: /Terminar partida/i }))
+            expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
+        })
+    })
+})
