@@ -15,3 +15,20 @@ Para ello, separamos los test por funcionalidad en clases **users-service-[funci
 * **users-service-initmatch: ** Que prueba que el inicio de una partida es correcto, o lanza error cuando debería.
 * **users-service-endmatch: ** Que prueba que el fin de una partida ganada es correcta, o lanza error cuando debería.
 * **users-service-statistics: ** Que prueba que la recuperación de estadísticas, tanto las totales como las parciales, funciona de forma correcta, o lanza error cuando debería.
+* **users-service-ranking: ** Que prueba que la correcta creación y distribución del ranking de usuarios, tanto el ranking personal como el general por partidas, dificultad y estrategia. Asegura que es capaz de ordenar por el número o por el porcentaje adecuado, y responde correctamente en caso de error.
+
+=== Test del microservicio WebApp
+
+Estos son los considerados test de frontend, y serán ejecutados después de cada actualización en la interfaz del sistema. Para este caso, se prueba la capacidad de nuestras pantallas de responder adecuadamente a las interacciones con el usuario, navegando como es esperado. No tiene en cuenta aspectos relacionados con la base de datos o el backend, sino que solo comprueba aspectos de estilos, organización, interacción, ...
+Para estas pruebas, separamos los test por funcionalidad en clases **Webapp-[Pantalla].test.tsx**, haciendo que en cada una pruebe test con casos específicos de cada tipo.
+
+* **Webapp-HomeScreen.test: ** Prueba que la pantalla inicial de bienvenida sea la adecuada y tenga el testo que esperamos, mostrando un panel para jugar contra la máquina y otro para jugar contra otro usuario. Además, se asegura que todos los botones funcionen según lo esperado, navegando, seleccionando o mostrando mensaje de error cuando sea necesario. 
+* **Webapp-GameScreen.test: ** Prueba que la pantalla del juego responda como es debido, mostrando la información de la partida, representado correctamente cuando este elije una casilla, navegando como se espera si el usuario decide terminar la partida, ...
+* **Webapp-EndScreen.test: ** Prueba que la pantalla final, la que sale cuando se gana o se pierde el juego (sin pulsar al botón terminar) aparezca con la información adecuada y correspondiente a la partida, además de que los botones de navegación funcionen correctamente.
+* **Webapp-InitialScreen.test: ** Prueba que la pantalla para iniciar sesión tenga la información adecuada, responda correctamente a los datos que introduce el usuario y navegue como se espera a la pantalla de registro o a la de inicio/bienvenida
+* **Webapp-SignUpScreen.test: ** Prueba que la pantalla registrar un nuevo usuario cuente que la información y textos esperados, responda de forma correcta a los datos que introduce el usuario y navegue como se espera que haga a otras pantallas.
+* **Webapp-StatsScreen.test: ** Prueba que las pantallas de las estadísticas representen los datos como deberían, tanto para el caso de las estadísticas normales como para las filtradas, y que la navegación entre páginas se de según lo esperado.
+* **Webapp-RankingScreen.test: ** Prueba que las pantallas de ranking muestran la información de la manera esperada en el caso de el ranking personal y de los rankings filtrados, respetando los estilos y el correcto funcionamiento de cada botón para la representación de los datos y para la navegación.
+
+
+
