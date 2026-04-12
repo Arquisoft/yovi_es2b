@@ -3,14 +3,34 @@ ifndef::imagesdir[:imagesdir: ../images]
 [[section-technical-risks]]
 == Riesgos y deuda técnica
 
+En nuestra aplicación Yovi, los riesgos técnicos están asociados principalmente a la arquitectura basada en microservicios, la comunicación entre componentes, la correcta implementación de la lógica del juego y el uso combinado de distintas tecnologías. La identificación y gestión de estos riesgos es altamente importante y nos permite anticipar posibles fallos y aplicar medidas de mitigación para reducir su impacto en el sistema.
+
 Aquí definiremos también mediante duplas de “Título-Descripción” de algunos riesgos que surgidos a lo largo del tiempo de vida del proyecto. Esta tabla estará ordenada en orden de prioridad para tener en cuenta.
 
-=== Tabla de riesgos
+=== Tabla de riesgos técnicos
 
 [options="header",cols="1,2"]
 |===
 |Título|Descripción
-|Riesgo de conocimiento|Los lenguajes, bases de datos, etc. a usar en este proyecto nos resultan nuevos en su mayoría.
+
 |Riesgo de seguridad|Según como insertemos la base de datos en el proyecto, el producto final puede tener errores en cuanto a responder a ataques de externos.
-|Riesgo de comunicación|Como estamos en un trabajo grupal, pueden surgir algunos malentendidos entre los participantes, lo que puede costar en términos de tiempo al intentar entender, modificar o arreglar apartados hechos por otro(s) participante(s).
+|Riesgo de persistencia de datos|Errores en la base de datos pueden provocar pérdida o corrupción de información de usuarios o partidas.  
+|Riesgos por microservicios|La interacción entre el frontend, el microservicio User y el microservicio GameY puede generar problemas de integración, como errores en las peticiones, inconsistencias en los datos o fallos de sincronización.  
+|Riesgo de rendimiento|El cálculo del siguiente movimiento (especialmente con estrategias avanzadas) puede ser costoso en tiempo de ejecución si no se optimiza adecuadamente.  
+|Riesgos de despliegue y configuración de contenedores| El uso de Docker introduce riesgos relacionados con la configuración incorrecta de servicios o problemas de compatibilidad entre entornos.    
+|Riesgos por gestión de la concurrencia|Varios usuarios pueden interactuar simultáneamente con el sistema, lo que puede generar conflictos en el acceso a recursos o en la actualización de datos.
+|===
+
+
+También existen otros riesgos no tan relacionados con los aspectos tecnológicos del proyecto, que definiremos del mismo modo:
+
+=== Tabla de otros riesgos
+
+[options="header",cols="1,2"]
+|===
+|Título|Descripción
+
+|Riesgo de conocimiento|Los lenguajes, bases de datos, etc. a usar en este proyecto nos resultan nuevos en su mayoría: ninguno de los miembros del equipo ha trabajado nunca con MongoDB ni con una arquitectura de microservicios.
+|Riesgo de comunicación y coordinación|Como estamos en un trabajo grupal, pueden surgir algunos malentendidos entre los participantes, lo que puede costar en términos de tiempo al intentar entender, modificar o arreglar apartados hechos por otro(s) participante(s), dando lugar a inconsistencias en el desarrollo, duplicidad de trabajo o integración tardía de componentes.
+|Riesgo de planificación del tiempo|Una estimación incorrecta del esfuerzo necesario puede provocar retrasos en el desarrollo del proyecto y en las partes hechas para cada revisión
 |===
