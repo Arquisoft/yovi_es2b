@@ -389,7 +389,6 @@ describe('Ranking', () => {
      * El test simula la carga de la sección de clasificación por dificultad dentro del ranking filtrado con un usuario "sara", y verifica que se muestre el título "Victorias por dificultad" y los botones de filtro "Fácil", "Media" y "Difícil" en la pantalla, indicando que se ha cargado correctamente la sección de clasificación por dificultad con su estructura básica y opciones de filtro.
      */
     test('muestra el título y los botones de dificultad', async () => {
-        const user = userEvent.setup()
         render(<RankingDifficulty username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         expect(screen.getByText('Victorias por dificultad')).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Fácil/i })).toBeInTheDocument()
