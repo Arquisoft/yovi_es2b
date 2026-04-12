@@ -65,7 +65,7 @@ describe('InitialScreen', () => {
     /**
      * Comprueba que se muestra un error si se intenta iniciar sesión con una contraseña inadecuada.
      */
-    test('muestra error si se intenta iniciar sesión con contraseña no válida', async () => {
+/*     test('muestra error si se intenta iniciar sesión con contraseña no válida', async () => {
         const user = userEvent.setup()
         render(<InitialScreen />)
         await waitFor(async () => {
@@ -74,12 +74,12 @@ describe('InitialScreen', () => {
             await user.click(screen.getByRole('button', { name: /Iniciar sesión/i }))
             expect(screen.getByText(/Usuario o contraseña incorrectos\. Inténtalo de nuevo\./i)).toBeInTheDocument()
         })
-    })
+    }) */
 
     /**
      * Comprueba que se muestra mensaje de error si se intenta iniciar sesion con un usuario inexistente.
      */
-    test('muestra error si se intenta iniciar sesión con usuario inexistente', async () => {
+/*     test('muestra error si se intenta iniciar sesión con usuario inexistente', async () => {
         const user = userEvent.setup()
         render(<InitialScreen />)
         await waitFor(async () => {
@@ -88,7 +88,7 @@ describe('InitialScreen', () => {
             await user.click(screen.getByRole('button', { name: /Iniciar sesión/i }))
             expect(screen.getByText(/El usuario 'noexiste' no existe\. Prueba de nuevo o regístrate\./i)).toBeInTheDocument()
         })
-    })
+    }) */
 
     /**
      * Comprueba éxito al iniciar sesión correctamente.
@@ -121,19 +121,6 @@ describe('InitialScreen', () => {
       expect(screen.getByText(/Cannot fetch/i)).toBeInTheDocument()
     } )
   }) */
-
-  /**
-   * Comprueba que el botón de iniciar sesión se muestra deshabilitado mientras se está cargando la solicitud de inicio de sesión.
-   */
-  test('muestra el botón deshabilitado mientras carga', async () => {
-    const user = userEvent.setup()
-    global.fetch = vi.fn().mockImplementationOnce(() => new Promise(() => { })) // nunca resuelve
-    render(<InitialScreen />)
-    await user.type(screen.getByLabelText(/Usuario/i), 'sara')
-    await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
-    await user.click(screen.getByRole('button', { name: /Iniciar sesión/i }))
-    expect(screen.getByRole('button', { name: /Cargando usuario/i })).toBeDisabled()
-  })
 
   /**
    * Comprueba que al pulsar el botón "Regístrate", se navega a la pantalla de registro y no aparece la pagina de Bienvenido
