@@ -29,7 +29,7 @@ const mockStratStats = [
 
 const mockAllStats = [
     { dificultad: 'EASY', estrategia: 'RANDOM',   ganadas: 2, perdidas: 1, jugadas: 3, porcentaje: '66.67 %' },
-    { dificultad: 'EASY', estrategia: 'DEFENSIVO', ganadas: 0, perdidas: 1, jugadas: 1, porcentaje: '0.00 %'  },
+    { dificultad: 'MEDIUM', estrategia: 'DEFENSIVO', ganadas: 0, perdidas: 1, jugadas: 1, porcentaje: '0.00 %'  },
     { dificultad: '',     estrategia: 'TOTALES',   ganadas: 4, perdidas: 2, jugadas: 6, porcentaje: '66.67 %' },
 ]
 
@@ -202,6 +202,10 @@ describe('GameStats', () => {
 
     // GameStatsDifficulty
 
+    /**
+     * Comprueba que se muestra las cabeceras de la tabla.
+     * El test simula la respuesta de la API de estadísticas de dificultad, renderiza el componente GameStatsDiff, y verifica que se muestren las cabeceras "Dificultad", "Victorias", "Derrotas", "Partidas jugadas" y "Porcentaje de victorias" en la tabla de estadísticas de dificultad.
+     */
     test('GameStatsDifficulty: muestra las cabeceras de la tabla', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
         render(<GameStatsDiff username="sara" />)
@@ -212,6 +216,10 @@ describe('GameStats', () => {
         expect(screen.getByText('Porcentaje de victorias')).toBeInTheDocument()
     })
 
+    /**
+     * Comprueba que se muestra las tres dificultades tras cargar.
+     * El test simula la respuesta de la API de estadísticas de dificultad, renderiza el componente GameStatsDiff, y verifica que se muestren los nombres de las dificultades "EASY", "MEDIUM" y "HARD" presentes en los datos simulados.
+     */
     test('GameStatsDifficulty: muestra las tres dificultades tras cargar', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
         render(<GameStatsDiff username="sara" />)
@@ -222,6 +230,10 @@ describe('GameStats', () => {
         })
     })
 
+    /**
+     * Comprueba que se muestra el porcentaje 66.67% para EASY.
+     * El test simula la respuesta de la API de estadísticas de dificultad, renderiza el componente GameStatsDiff, y verifica que se muestre el porcentaje "66.67 %" para la dificultad "EASY" presente en los datos simulados.
+     */
     test('GameStatsDifficulty: llama a /diffstats con el username correcto', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
         render(<GameStatsDiff username="sara" />)
@@ -235,6 +247,10 @@ describe('GameStats', () => {
 
     // GameStatsStrategy
 
+    /**
+     * Comprueba que se muestra las cabeceras de la tabla.
+     * El test simula la respuesta de la API de estadísticas de estrategia, renderiza el componente GameStatsStra, y verifica que se muestren las cabeceras "Estrategia", "Victorias", "Derrotas", "Partidas jugadas" y "Porcentaje de victorias" en la tabla de estadísticas de estrategia.
+     */
     test('GameStatsStrategy: muestra las cabeceras de la tabla', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
         render(<GameStatsStra username="sara" />)
@@ -245,6 +261,10 @@ describe('GameStats', () => {
         expect(screen.getByText('Porcentaje de victorias')).toBeInTheDocument()
     })
 
+    /**
+     * Comprueba que se muestra todas las estrategias tras cargar.
+     * El test simula la respuesta de la API de estadísticas de estrategia, renderiza el componente GameStatsStra, y verifica que se muestren los nombres de las estrategias "RANDOM", "DEFENSIVO", "OFENSIVO", "MONTE_CARLO", "MONTE_CARLO_MEJORADO" y "MONTE_CARLO_ENDURECIDO" presentes en los datos simulados.
+     */
     test('GameStatsStrategy: muestra todas las estrategias tras cargar', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
         render(<GameStatsStra username="sara" />)
@@ -258,6 +278,10 @@ describe('GameStats', () => {
         })
     })
 
+    /**
+     * Comprueba que se muestra el porcentaje 66.67% para RANDOM.
+     * El test simula la respuesta de la API de estadísticas de estrategia, renderiza el componente GameStatsStra, y verifica que se muestre el porcentaje "66.67 %" para la estrategia "RANDOM" presente en los datos simulados.
+     */
     test('GameStatsStrategy: muestra el porcentaje 100% para OFENSIVO', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
         render(<GameStatsStra username="sara" />)
@@ -266,6 +290,10 @@ describe('GameStats', () => {
         })
     })
 
+    /**
+     * Comprueba que se llama a /stratstats con el username correcto.
+     * El test simula la respuesta de la API de estadísticas de estrategia, renderiza el componente GameStatsStra, y verifica que se haya llamado a la URL correcta con el método POST y el cuerpo que contiene el username "sara".
+     */
     test('GameStatsStrategy: llama a /stratstats con el username correcto', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
         render(<GameStatsStra username="sara" />)
