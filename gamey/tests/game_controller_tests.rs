@@ -92,4 +92,42 @@ async fn test_flujo_completo() {
     assert_eq!(res.status(), StatusCode::NO_CONTENT);
 }
 
+// Test
+// Errores: partida inexistente y accion desconocida
+#[tokio::test]
+async fn test_errores() {
+    let app = make_app();
+
+    // GET /v1/games/noexiste -> 404 (cubre ok_or de get_game)
+    let res = app.clone()
+        .oneshot(Request::builder().uri("/v1/games/noexiste").body(Body::empty()).unwrap())
+        .await.unwrap();
+    assert_eq!(res.status(), StatusCode::NOT_FOUND);
+
+    // GET /v1/games/noexiste/status -> 404 (cubre ok_or de get_status)
+    let res = app.clone()
+        .oneshot(Request::builder().uri("/v1/games/noexiste/status").body(Body::empty()).unwrap())
+        .await.unwrap();
+    assert_eq!(res.status(), StatusCode::NOT_FOUND);
+
+    // POST /v1/games/noexiste/action con accion desconocida -> 400
+    let res = app.clone()
+        .oneshot(Request::builder()
+            .method("POST").uri("/v1/games/noexiste/action")
+            .header("content-type", "application/json")
+            .body(Body::from(r#"{"player":0,"action":"foobar"}"#))
+            .unwrap())
+        .await.unwrap();
+    assert_eq!(res.status(), StatusCode::BAD_REQUEST);
+
+    // DELETE /v1/games/noexiste -> 404 (cubre rama else de delete_game)
+    let res = app.clone()
+        .oneshot(Request::builder()
+            .method("DELETE").uri("/v1/games/noexiste")
+            .body(Body::empty()).unwrap())
+        .await.unwrap();
+    assert_eq!(res.status(), StatusCode::NOT_FOUND);
+}
+
+
 
