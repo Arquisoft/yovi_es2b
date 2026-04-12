@@ -73,7 +73,23 @@ async fn test_flujo_completo() {
         .await.unwrap();
     assert_eq!(res.status(), StatusCode::OK);
 
-    
+    // POST /v1/games/{id}/action resign -> 200
+    let res = app.clone()
+        .oneshot(Request::builder()
+            .method("POST").uri(format!("/v1/games/{}/action", id))
+            .header("content-type", "application/json")
+            .body(Body::from(r#"{"player":0,"action":"resign"}"#))
+            .unwrap())
+        .await.unwrap();
+    assert_eq!(res.status(), StatusCode::OK);
+
+    // DELETE /v1/games/{id} -> 204 No Content
+    let res = app.clone()
+        .oneshot(Request::builder()
+            .method("DELETE").uri(format!("/v1/games/{}", id))
+            .body(Body::empty()).unwrap())
+        .await.unwrap();
+    assert_eq!(res.status(), StatusCode::NO_CONTENT);
 }
 
 
