@@ -3,4 +3,86 @@ ifndef::imagesdir[:imagesdir: ../images]
 [[section-concepts]]
 == Conceptos transversales
 
-En este apartado se explicarán distintos aspectos de la gestión del proyecto, centrándose en los niveles de prioridad para abordar las tareas, los patrones de diseño seguidos, la testeabilidad y seguridad del proyecto y las librerías usadas. Además, mencionaremos algunos aspectos extras del desarrollo si se acaban implementando.
+En este apartado se explicarán distintos aspectos de la gestión del proyecto, centrándose en los niveles de prioridad para abordar las tareas, los patrones de diseño seguidos, la testeabilidad y seguridad del proyecto y las librerías usadas. Además, mencionaremos algunos aspectos extras del desarrollo si se acaban implementando.. 
+
+Por tanto, se recogen decisiones y criterios comunes que atraviesan todo el sistema sin describir una funcionalidad concreta, sino reglas y prácticas que se aplican en frontend, backend, servicio de usuarios y documentación para mantener el proyecto coherente y mantenible.
+
+=== Priorización de tareas
+
+Para organizar el trabajo se han usado distintos niveles de prioridad:
+
+* **Prioritaria:** tareas imprescindibles para que el sistema funcione y sea evaluable, como la solución de errores de código central o aquellas partes necesarias para el desarrollo del trabajo de otros miembros del equipo o para el funcionamiento básico de la app. Esto incluye lógica principal del juego, la comunicación entre servicios, el registro de usuarios y la navegación básica de la interfaz.
+* **Alta:** mejoras que aumentan la calidad del producto, como la validación más estricta, los errores personalizados, la incorporación de las estadísticas y el ranking, ... También estarían
+* **Media:** implementación de todos los test y documentación completa, además de extras de implementación como la opción de multijugador
+* **Baja:** ajustes de acabado, refactorizaciones, mejoras visuales y utilidades adicionales que no bloquean el desarrollo del núcleo. Además, apartados optativos como internacionalización u otros modelos visuales
+
+Esta clasificación nos permitio concentrarnos en un inicio en aquello que afecta directamente al funcionamiento del proyecto y al trabajo de nuestros compañeros, mientras que pudimos dejar para más tarde los cambios que aportan valor, pero no impiden el uso del sistema.
+
+=== Patrones y principios de diseño
+
+El código sigue una separación clara de responsabilidades. En general, la interfaz se encarga de mostrar información y recoger acciones del usuario, mientras que la lógica de negocio valida las operaciones y decide el resultado.
+
+Así, los principios más importantes son:
+
+* **Separación de responsabilidades:** cada módulo, componente o servicio tiene un propósito concreto.
+* **Bajo acoplamiento:** los distintos servicios se comunican mediante interfaces simples, lo que facilita cambiar una parte sin romper las demás.
+* **Alta cohesión:** cada bloque de código agrupa comportamiento relacionado.
+* **Código entendible:** todas las partes del código han de ser entendidas por todos los miembros del equipo, independientemente de si han participado en su programación o no.
+
+Entre los patrones más visibles en el proyecto destacan:
+
+* **Arquitectura por capas:** interfaz (webapp), lógica de aplicación (gameY) y acceso a datos quedan separadas (users).
+* **Componente reutilizable:** en el frontend, la mayor parte de la interfaz se construye a partir de componentes pequeños y combinables.
+* **Controlador/servicio:** en los servicios web, los controladores reciben peticiones y delegan el trabajo en servicios más específicos.
+
+=== Testeabilidad
+
+La testeabilidad se ha tenido en cuenta desde el diseño para facilitar pruebas unitarias, de integración y de interfaz.
+
+Para ello se han aplicado varias medidas:
+
+* La lógica principal se mantiene lo más aislada e independiente posible de la interfaz gráfica.
+* Las llamadas a red y a base de datos se concentran en funciones concretas, fáciles de reproducir en pruebas.
+* Las validaciones importantes se realizan en puntos bien definidos, por lo que pueden verificarse con casos de entrada controlados.
+* La interfaz expone elementos identificables y estados visibles, lo que facilita comprobar el comportamiento desde pruebas automáticas.
+
+Esto permite comprobar tanto el comportamiento funcional como la reacción ante errores, respuestas vacías o datos inesperados, lo que también se ve facilitado por la creación de errores personalizados.
+
+=== Seguridad
+
+La seguridad del proyecto se aborda desde la validación de entradas y desde la limitación de confianza en el cliente.
+
+Las reglas principales que hemos seguido en la elaboración del proyecto son:
+
+* El cliente no debe decidir el resultado de una partida ni alterar directamente el estado interno.
+* El servidor valida las acciones relevantes antes de aceptarlas.
+* Las entradas recibidas por red se tratan como no confiables hasta comprobar su formato y contenido.
+* Se evita exponer información sensible en respuestas, logs o mensajes de error innecesarios.
+
+En el caso de autenticación y operaciones de usuario, la aplicación debe asegurar que cada acción se asocia al usuario correcto y que no se pueden reutilizar datos de sesión de forma indebida.
+
+=== Librerías y tecnologías utilizadas
+
+El proyecto usa librerías y herramientas distintas según la parte del sistema. Las más destacadas son las siguientes: 
+
+* **React:** para construir la interfaz del webapp con componentes reutilizables.
+* **Vite:** para el arranque y empaquetado del frontend.
+* **Vitest y Testing Library:** para pruebas automáticas de componentes y pantallas.
+* **Node.js:** para el servicio de usuarios (microservicio users) y utilidades auxiliares del entorno web.
+* **Rust:** para la lógica principal del juego, priorizando rendimiento y seguridad.
+* **Docker:** para facilitar ejecución y despliegue en entornos homogéneos.
+* **OpenAPI:** para documentar los contratos de los servicios.
+
+El uso de estas herramientas busca lograr tanto simplicidad de desarrollo (teniendo en cuenta nuestra falta de experiencia en Rust, Node.js y React) como facilidad de pruebas y mantenimiento a medio plazo.
+
+=== Aspectos del desarrollo
+
+Además de lo estrictamente funcional, se han desarrollado otros aspectos que de gran importancia para el proyecto:
+
+* **Documentación:** el uso de arc42 para explicar las decisiones y trazar los escenarios.
+* **Nomenclatura consistente:** se procura mantener nombres comprensibles y homogéneos entre módulos, e incluso a la hora de subir nuestras partes a GitHub.
+* **Mantenibilidad visual:** la interfaz intenta reutilizar patrones de diseño comunes para que nuevas pantallas se integren sin esfuerzo: buscamos de nuevo la simplicidad en una interfaz intuitiva y familiar.
+* **Posibilidad para crecimiento:** la estructura del proyecto permite añadir nuevas pantallas, modos de juego o métricas sin rehacer la base, y nos permite añadir los aspectos extra del proyecto.
+* **Detectabilidad de fallos:** la separación entre servicios y la personalización de errores facilita localizar errores y analizar fallos por capas.
+
+Si en futuras ampliaciones se incorporan nuevas funcionalidades, estos criterios servirán como referencia para mantener la misma línea de calidad.
