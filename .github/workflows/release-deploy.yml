@@ -3,7 +3,7 @@ name: Release — Test, Build, Publish, Deploy
 on:
   push:
     branches:
-      - IyanIssue88+
+      - IyanIssue88*
   release:
     types: [published]
 
