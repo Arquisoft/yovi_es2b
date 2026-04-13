@@ -478,9 +478,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_diagrama_de_clases">5.4. Diagrama de clases</a></li>
 </ul>
 </li>
-<li><a href="#section-runtime-view">6. Vista en tiempo de ejecución</a></li>
-<li><a href="#section-deployment-view">7. Vista de despliegue</a></li>
-<li><a href="#section-concepts">8. Conceptos transversales</a></li>
+<li><a href="#section-runtime-view">6. Vista en tiempo de ejecución</a>
+<ul class="sectlevel2">
+<li><a href="#_registro_e_inicio_de_sesión">6.1. Registro e inicio de sesión</a></li>
+<li><a href="#_flujo_de_una_partida_completa">6.2. Flujo de una partida completa</a></li>
+<li><a href="#_consulta_de_estadísticas_y_ranking">6.3. Consulta de estadísticas y ranking</a></li>
+</ul>
+</li>
+<li><a href="#section-deployment-view">7. Vista de despliegue</a>
+<ul class="sectlevel2">
+<li><a href="#_infraestructura">7.1. Infraestructura</a></li>
+<li><a href="#_pipeline_de_publicación_y_despliegue">7.2. Pipeline de publicación y despliegue</a></li>
+</ul>
+</li>
+<li><a href="#section-concepts">8. Conceptos transversales</a>
+<ul class="sectlevel2">
+<li><a href="#_priorización_de_tareas">8.1. Priorización de tareas</a></li>
+<li><a href="#_patrones_y_principios_de_diseño">8.2. Patrones y principios de diseño</a></li>
+<li><a href="#_testeabilidad">8.3. Testeabilidad</a></li>
+<li><a href="#_seguridad">8.4. Seguridad</a></li>
+<li><a href="#_librerías_y_tecnologías_utilizadas">8.5. Librerías y tecnologías utilizadas</a></li>
+<li><a href="#_aspectos_del_desarrollo">8.6. Aspectos del desarrollo</a></li>
+</ul>
+</li>
 <li><a href="#section-design-decisions">9. Decisiones arquitectónicas</a>
 <ul class="sectlevel2">
 <li><a href="#_tabla_de_decisiones">9.1. Tabla de decisiones</a></li>
@@ -489,12 +509,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#section-quality-scenarios">10. Requisitos de calidad</a></li>
 <li><a href="#section-technical-risks">11. Riesgos y deuda técnica</a>
 <ul class="sectlevel2">
-<li><a href="#_tabla_de_riesgos">11.1. Tabla de riesgos</a></li>
+<li><a href="#_tabla_de_riesgos_técnicos">11.1. Tabla de riesgos técnicos</a></li>
+<li><a href="#_tabla_de_otros_riesgos">11.2. Tabla de otros riesgos</a></li>
 </ul>
 </li>
-<li><a href="#section-glossary">12. Tests</a>
+<li><a href="#section-testing">12. Tests</a>
 <ul class="sectlevel2">
 <li><a href="#_test_del_microservicio_users">12.1. Test del microservicio Users</a></li>
+<li><a href="#_test_del_microservicio_webapp">12.2. Test del microservicio WebApp</a></li>
 </ul>
 </li>
 <li><a href="#section-glossary">13. Glosario</a></li>
@@ -1222,38 +1244,324 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <h2 id="section-runtime-view">6. Vista en tiempo de ejecución</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Ahora podremos ver diferentes diagramas, que representarán el juego a lo largo de su tiempo de vida para casos concretos en tiempo de ejecución. Más específicamente, se verá la interacción entre usuario y el resto del sistema (interfaces, servicio, base de datos, etc.), y cómo afectará al juego en cada caso.</p>
+<p>Este apartado describe cómo interactúan los componentes del sistema durante su funcionamiento. Para cada flujo se especifican los actores implicados, las llamadas HTTP realizadas y los datos intercambiados.</p>
 </div>
 <div class="paragraph">
-<p>En un primer punto vemos el flujo de ejecución de una petición. Es decir, una sola interacción entre el usuario y el juego.
-<span class="image"><img src="./images/gamey_peticion.png" alt="gamey_peticion"></span></p>
+<p>Los componentes que participan son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Webapp</strong>: frontend React ejecutado en el navegador del usuario.</p>
+</li>
+<li>
+<p><strong>Users Service</strong>: microservicio Node.js en el puerto 3000.</p>
+</li>
+<li>
+<p><strong>GameY Service</strong>: microservicio Rust en el puerto 4000.</p>
+</li>
+<li>
+<p><strong>MongoDB</strong>: base de datos NoSQL de persistencia.</p>
+</li>
+</ul>
+</div>
+<div class="sect2">
+<h3 id="_registro_e_inicio_de_sesión">6.1. Registro e inicio de sesión</h3>
+<div class="paragraph">
+<p>El registro crea un nuevo usuario en MongoDB comprobando previamente que el nombre no esté en uso. El inicio de sesión verifica las credenciales y habilita el acceso a las funcionalidades del juego.</p>
 </div>
 <div class="paragraph">
-<p>Mediante este otro diagrama veremos los flujos de la petición, pero según su tipo. Aquí se especificarán de manera más clara los endpoint.
-<span class="image"><img src="./images/gamey_endpoint.png" alt="gamey_endpoint"></span></p>
+<p><span class="image"><img src="./images/diagramaRegistroInicioSesion.png" alt="diagramaRegistroInicioSesion"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_flujo_de_una_partida_completa">6.2. Flujo de una partida completa</h3>
+<div class="paragraph">
+<p>Al iniciar una partida, el microservicio de usuarios registra el evento en MongoDB y GameY crea la sesión de juego en memoria. Los movimientos del jugador y las respuestas del bot se resuelven íntegramente en GameY sin acceder a la base de datos. Al terminar, el resultado se persiste en MongoDB y la sesión de juego se elimina de GameY.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/diagramaFlujoPartida.png" alt="diagramaFlujoPartida"></span></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_consulta_de_estadísticas_y_ranking">6.3. Consulta de estadísticas y ranking</h3>
+<div class="paragraph">
+<p>Las estadísticas y el ranking se obtienen directamente de MongoDB a través del microservicio de usuarios. No interviene GameY en este flujo.</p>
+</div>
+<div class="paragraph">
+<p><span class="image"><img src="./images/diagramaEstadisticasRanking.png" alt="diagramaEstadisticasRanking"></span></p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="section-deployment-view">7. Vista de despliegue</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>En este caso, habrá un diagrama que represente las relaciones entre elementos que participarán en las acciones de despliegue y cómo se hará para distribuir el proyecto sobre un producto final y la infraestructura para soportarlo.</p>
+<p>Este apartado describe la infraestructura sobre la que se ejecuta el sistema y cómo se distribuyen los componentes software sobre ella.</p>
+</div>
+<div class="sect2">
+<h3 id="_infraestructura">7.1. Infraestructura</h3>
+<div class="paragraph">
+<p>El sistema se despliega en una máquina virtual en la nube accesible públicamente en <code>gameyes2b.duckdns.org</code>. Todos los componentes corren como contenedores Docker orquestados con Docker Compose y se comunican a través de una red interna bridge llamada <code>monitor-net</code>. La base de datos MongoDB no está contenerizada: se utiliza un servicio externo (MongoDB Atlas) cuya URI de conexión se inyecta como variable de entorno.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 16.6666%;">
+<col style="width: 50.0001%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Componente</th>
+<th class="tableblock halign-left valign-top">Puerto expuesto</th>
+<th class="tableblock halign-left valign-top">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">webapp (React + Nginx)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">80</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Frontend servido por Nginx. Construido con las URLs de los backends como variables de entorno en tiempo de compilación.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">users (Node.js / Express)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microservicio de gestión de usuarios y estadísticas.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">gamey (Rust / Axum)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">4000</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Motor de juego y servicio de bots.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">prometheus</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9090</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Recolección de métricas del sistema.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">grafana</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">9091</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Visualización de métricas en dashboards.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">MongoDB Atlas</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">—</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Base de datos externa. Accedida mediante <code>MONGO_URI</code> desde el servicio <code>users</code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect2">
+<h3 id="_pipeline_de_publicación_y_despliegue">7.2. Pipeline de publicación y despliegue</h3>
+<div class="paragraph">
+<p>El despliegue en producción se activa automáticamente al publicar una nueva release en GitHub. El pipeline definido en <code>.github/workflows/release-deploy.yml</code> sigue las siguientes fases:</p>
 </div>
 <div class="paragraph">
-<p>El diagrama es necesario para entender más a fondo los futuros problemas que pueden aparecer durante el desarrollo de la aplicación, así como para facilitar el mantenimiento de esta.</p>
+<p><span class="image"><img src="./images/diagramaPipelineDespliegue.png" alt="diagramaPipelineDespliegue"></span></p>
+</div>
+<div class="paragraph">
+<p>Las imágenes Docker se publican en el registro de contenedores de GitHub (<code>ghcr.io</code>). La VM de producción descarga siempre la última versión de <code>docker-compose.yml</code> directamente desde la rama <code>master</code> del repositorio y lanza los contenedores con <code>--pull always</code>, garantizando que se usen las imágenes recién publicadas.</p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="section-concepts">8. Conceptos transversales</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>En este apartado se explicarán distintos aspectos de la gestión del proyecto, centrándose en los niveles de prioridad para abordar las tareas, los patrones de diseño seguidos, la testeabilidad y seguridad del proyecto y las librerías usadas. Además, mencionaremos algunos aspectos extras del desarrollo si se acaban implementando.</p>
+<p>En este apartado se explicarán distintos aspectos de la gestión del proyecto, centrándose en los niveles de prioridad para abordar las tareas, los patrones de diseño seguidos, la testeabilidad y seguridad del proyecto y las librerías usadas. Además, mencionaremos algunos aspectos extras del desarrollo si se acaban implementando..</p>
+</div>
+<div class="paragraph">
+<p>Por tanto, se recogen decisiones y criterios comunes que atraviesan todo el sistema sin describir una funcionalidad concreta, sino reglas y prácticas que se aplican en frontend, backend, servicio de usuarios y documentación para mantener el proyecto coherente y mantenible.</p>
+</div>
+<div class="sect2">
+<h3 id="_priorización_de_tareas">8.1. Priorización de tareas</h3>
+<div class="paragraph">
+<p>Para organizar el trabajo se han usado distintos niveles de prioridad:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Prioritaria:</strong> tareas imprescindibles para que el sistema funcione y sea evaluable, como la solución de errores de código central o aquellas partes necesarias para el desarrollo del trabajo de otros miembros del equipo o para el funcionamiento básico de la app. Esto incluye lógica principal del juego, la comunicación entre servicios, el registro de usuarios y la navegación básica de la interfaz.</p>
+</li>
+<li>
+<p><strong>Alta:</strong> mejoras que aumentan la calidad del producto, como la validación más estricta, los errores personalizados, la incorporación de las estadísticas y el ranking, &#8230;&#8203; También estarían</p>
+</li>
+<li>
+<p><strong>Media:</strong> implementación de todos los test y documentación completa, además de extras de implementación como la opción de multijugador</p>
+</li>
+<li>
+<p><strong>Baja:</strong> ajustes de acabado, refactorizaciones, mejoras visuales y utilidades adicionales que no bloquean el desarrollo del núcleo. Además, apartados optativos como internacionalización u otros modelos visuales</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Esta clasificación nos permitio concentrarnos en un inicio en aquello que afecta directamente al funcionamiento del proyecto y al trabajo de nuestros compañeros, mientras que pudimos dejar para más tarde los cambios que aportan valor, pero no impiden el uso del sistema.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_patrones_y_principios_de_diseño">8.2. Patrones y principios de diseño</h3>
+<div class="paragraph">
+<p>El código sigue una separación clara de responsabilidades. En general, la interfaz se encarga de mostrar información y recoger acciones del usuario, mientras que la lógica de negocio valida las operaciones y decide el resultado.</p>
+</div>
+<div class="paragraph">
+<p>Así, los principios más importantes son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Separación de responsabilidades:</strong> cada módulo, componente o servicio tiene un propósito concreto.</p>
+</li>
+<li>
+<p><strong>Bajo acoplamiento:</strong> los distintos servicios se comunican mediante interfaces simples, lo que facilita cambiar una parte sin romper las demás.</p>
+</li>
+<li>
+<p><strong>Alta cohesión:</strong> cada bloque de código agrupa comportamiento relacionado.</p>
+</li>
+<li>
+<p><strong>Código entendible:</strong> todas las partes del código han de ser entendidas por todos los miembros del equipo, independientemente de si han participado en su programación o no.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Entre los patrones más visibles en el proyecto destacan:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Arquitectura por capas:</strong> interfaz (webapp), lógica de aplicación (gameY) y acceso a datos quedan separadas (users).</p>
+</li>
+<li>
+<p><strong>Componente reutilizable:</strong> en el frontend, la mayor parte de la interfaz se construye a partir de componentes pequeños y combinables.</p>
+</li>
+<li>
+<p><strong>Controlador/servicio:</strong> en los servicios web, los controladores reciben peticiones y delegan el trabajo en servicios más específicos.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_testeabilidad">8.3. Testeabilidad</h3>
+<div class="paragraph">
+<p>La testeabilidad se ha tenido en cuenta desde el diseño para facilitar pruebas unitarias, de integración y de interfaz.</p>
+</div>
+<div class="paragraph">
+<p>Para ello se han aplicado varias medidas:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>La lógica principal se mantiene lo más aislada e independiente posible de la interfaz gráfica.</p>
+</li>
+<li>
+<p>Las llamadas a red y a base de datos se concentran en funciones concretas, fáciles de reproducir en pruebas.</p>
+</li>
+<li>
+<p>Las validaciones importantes se realizan en puntos bien definidos, por lo que pueden verificarse con casos de entrada controlados.</p>
+</li>
+<li>
+<p>La interfaz expone elementos identificables y estados visibles, lo que facilita comprobar el comportamiento desde pruebas automáticas.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Esto permite comprobar tanto el comportamiento funcional como la reacción ante errores, respuestas vacías o datos inesperados, lo que también se ve facilitado por la creación de errores personalizados.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_seguridad">8.4. Seguridad</h3>
+<div class="paragraph">
+<p>La seguridad del proyecto se aborda desde la validación de entradas y desde la limitación de confianza en el cliente.</p>
+</div>
+<div class="paragraph">
+<p>Las reglas principales que hemos seguido en la elaboración del proyecto son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>El cliente no debe decidir el resultado de una partida ni alterar directamente el estado interno.</p>
+</li>
+<li>
+<p>El servidor valida las acciones relevantes antes de aceptarlas.</p>
+</li>
+<li>
+<p>Las entradas recibidas por red se tratan como no confiables hasta comprobar su formato y contenido.</p>
+</li>
+<li>
+<p>Se evita exponer información sensible en respuestas, logs o mensajes de error innecesarios.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>En el caso de autenticación y operaciones de usuario, la aplicación debe asegurar que cada acción se asocia al usuario correcto y que no se pueden reutilizar datos de sesión de forma indebida.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_librerías_y_tecnologías_utilizadas">8.5. Librerías y tecnologías utilizadas</h3>
+<div class="paragraph">
+<p>El proyecto usa librerías y herramientas distintas según la parte del sistema. Las más destacadas son las siguientes:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>React:</strong> para construir la interfaz del webapp con componentes reutilizables.</p>
+</li>
+<li>
+<p><strong>Vite:</strong> para el arranque y empaquetado del frontend.</p>
+</li>
+<li>
+<p><strong>Vitest y Testing Library:</strong> para pruebas automáticas de componentes y pantallas.</p>
+</li>
+<li>
+<p><strong>Node.js:</strong> para el servicio de usuarios (microservicio users) y utilidades auxiliares del entorno web.</p>
+</li>
+<li>
+<p><strong>Rust:</strong> para la lógica principal del juego, priorizando rendimiento y seguridad.</p>
+</li>
+<li>
+<p><strong>Docker:</strong> para facilitar ejecución y despliegue en entornos homogéneos.</p>
+</li>
+<li>
+<p><strong>OpenAPI:</strong> para documentar los contratos de los servicios.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>El uso de estas herramientas busca lograr tanto simplicidad de desarrollo (teniendo en cuenta nuestra falta de experiencia en Rust, Node.js y React) como facilidad de pruebas y mantenimiento a medio plazo.</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_aspectos_del_desarrollo">8.6. Aspectos del desarrollo</h3>
+<div class="paragraph">
+<p>Además de lo estrictamente funcional, se han desarrollado otros aspectos que de gran importancia para el proyecto:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Documentación:</strong> el uso de arc42 para explicar las decisiones y trazar los escenarios.</p>
+</li>
+<li>
+<p><strong>Nomenclatura consistente:</strong> se procura mantener nombres comprensibles y homogéneos entre módulos, e incluso a la hora de subir nuestras partes a GitHub.</p>
+</li>
+<li>
+<p><strong>Mantenibilidad visual:</strong> la interfaz intenta reutilizar patrones de diseño comunes para que nuevas pantallas se integren sin esfuerzo: buscamos de nuevo la simplicidad en una interfaz intuitiva y familiar.</p>
+</li>
+<li>
+<p><strong>Posibilidad para crecimiento:</strong> la estructura del proyecto permite añadir nuevas pantallas, modos de juego o métricas sin rehacer la base, y nos permite añadir los aspectos extra del proyecto.</p>
+</li>
+<li>
+<p><strong>Detectabilidad de fallos:</strong> la separación entre servicios y la personalización de errores facilita localizar errores y analizar fallos por capas.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Si en futuras ampliaciones se incorporan nuevas funcionalidades, estos criterios servirán como referencia para mantener la misma línea de calidad.</p>
 </div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1314,10 +1622,57 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <h2 id="section-technical-risks">11. Riesgos y deuda técnica</h2>
 <div class="sectionbody">
 <div class="paragraph">
+<p>En nuestra aplicación Yovi, los riesgos técnicos están asociados principalmente a la arquitectura basada en microservicios, la comunicación entre componentes, la correcta implementación de la lógica del juego y el uso combinado de distintas tecnologías. La identificación y gestión de estos riesgos es altamente importante y nos permite anticipar posibles fallos y aplicar medidas de mitigación para reducir su impacto en el sistema.</p>
+</div>
+<div class="paragraph">
 <p>Aquí definiremos también mediante duplas de “Título-Descripción” de algunos riesgos que surgidos a lo largo del tiempo de vida del proyecto. Esta tabla estará ordenada en orden de prioridad para tener en cuenta.</p>
 </div>
 <div class="sect2">
-<h3 id="_tabla_de_riesgos">11.1. Tabla de riesgos</h3>
+<h3 id="_tabla_de_riesgos_técnicos">11.1. Tabla de riesgos técnicos</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Título</th>
+<th class="tableblock halign-left valign-top">Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Riesgo de seguridad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Según como insertemos la base de datos en el proyecto, el producto final puede tener errores en cuanto a responder a ataques de externos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Riesgo de persistencia de datos</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Errores en la base de datos pueden provocar pérdida o corrupción de información de usuarios o partidas.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Riesgos por microservicios</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La interacción entre el frontend, el microservicio User y el microservicio GameY puede generar problemas de integración, como errores en las peticiones, inconsistencias en los datos o fallos de sincronización.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Riesgo de rendimiento</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El cálculo del siguiente movimiento (especialmente con estrategias avanzadas) puede ser costoso en tiempo de ejecución si no se optimiza adecuadamente.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Riesgos de despliegue y configuración de contenedores</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El uso de Docker introduce riesgos relacionados con la configuración incorrecta de servicios o problemas de compatibilidad entre entornos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Riesgos por gestión de la concurrencia</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Varios usuarios pueden interactuar simultáneamente con el sistema, lo que puede generar conflictos en el acceso a recursos o en la actualización de datos.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>También existen otros riesgos no tan relacionados con los aspectos tecnológicos del proyecto, que definiremos del mismo modo:</p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tabla_de_otros_riesgos">11.2. Tabla de otros riesgos</h3>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -1332,11 +1687,15 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <tbody>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Riesgo de conocimiento</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Los lenguajes, bases de datos, etc. a usar en este proyecto nos resultan nuevos en su mayoría.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Los lenguajes, bases de datos, etc. a usar en este proyecto nos resultan nuevos en su mayoría: ninguno de los miembros del equipo ha trabajado nunca con MongoDB ni con una arquitectura de microservicios.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Riesgo de seguridad</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Según como insertemos la base de datos en el proyecto, el producto final puede tener errores en cuanto a responder a ataques de externos.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Riesgo de comunicación y coordinación</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Como estamos en un trabajo grupal, pueden surgir algunos malentendidos entre los participantes, lo que puede costar en términos de tiempo al intentar entender, modificar o arreglar apartados hechos por otro(s) participante(s), dando lugar a inconsistencias en el desarrollo, duplicidad de trabajo o integración tardía de componentes.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Riesgo de planificación del tiempo</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Una estimación incorrecta del esfuerzo necesario puede provocar retrasos en el desarrollo del proyecto y en las partes hechas para cada revisión</p></td>
 </tr>
 </tbody>
 </table>
@@ -1345,7 +1704,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </div>
 </div>
 <div class="sect1">
-<h2 id="section-glossary">12. Tests</h2>
+<h2 id="section-testing">12. Tests</h2>
 <div class="sectionbody">
 <div class="paragraph">
 <p>Se explicarán los tests hechos para comprobar el funcionamiento del juego.</p>
@@ -1354,7 +1713,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <h3 id="_test_del_microservicio_users">12.1. Test del microservicio Users</h3>
 <div class="paragraph">
 <p>Estos son test serán ejecutados después de cada actualización al programa principal. En este caso, se probará la capacidad de la base de datos para todo lo que tenga que ver con usuarios, desde creación y registro de usuario, hasta la obtención y gestión de estadísticas. Estos test no son pruebas respecto al usuario, a la interacción con este, si no al manejo de la base de datos, de que se llama correctamente a los endpoint y lo que devuelve es correcto, sea error o no.
-Para ello, separamos los test por funcionalidad en clases **users-service-[funcionalidad].test.js, haciendo que en cada una pruebe test con casos específicos de cada tipo.</p>
+Para ello, separamos los test por funcionalidad en clases <strong>users-service-[funcionalidad].test.js</strong>, haciendo que en cada una pruebe test con casos específicos de cada tipo.</p>
 </div>
 <div class="ulist">
 <ul>
@@ -1372,6 +1731,41 @@ Para ello, separamos los test por funcionalidad en clases **users-service-[funci
 </li>
 <li>
 <p><strong>users-service-statistics: </strong> Que prueba que la recuperación de estadísticas, tanto las totales como las parciales, funciona de forma correcta, o lanza error cuando debería.</p>
+</li>
+<li>
+<p><strong>users-service-ranking: </strong> Que prueba que la correcta creación y distribución del ranking de usuarios, tanto el ranking personal como el general por partidas, dificultad y estrategia. Asegura que es capaz de ordenar por el número o por el porcentaje adecuado, y responde correctamente en caso de error.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_test_del_microservicio_webapp">12.2. Test del microservicio WebApp</h3>
+<div class="paragraph">
+<p>Estos son los considerados test de frontend, y serán ejecutados después de cada actualización en la interfaz del sistema. Para este caso, se prueba la capacidad de nuestras pantallas de responder adecuadamente a las interacciones con el usuario, navegando como es esperado. No tiene en cuenta aspectos relacionados con la base de datos o el backend, sino que solo comprueba aspectos de estilos, organización, interacción, &#8230;&#8203;
+Para estas pruebas, separamos los test por funcionalidad en clases <strong>Webapp-[Pantalla].test.tsx</strong>, haciendo que en cada una pruebe test con casos específicos de cada tipo.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>WebApp-HomeScreen.test: </strong> Prueba que la pantalla inicial de bienvenida sea la adecuada y tenga el testo que esperamos, mostrando un panel para jugar contra la máquina y otro para jugar contra otro usuario. Además, se asegura que todos los botones funcionen según lo esperado, navegando, seleccionando o mostrando mensaje de error cuando sea necesario.</p>
+</li>
+<li>
+<p><strong>WebApp-GameScreen.test: </strong> Prueba que la pantalla del juego responda como es debido, mostrando la información de la partida, representado correctamente cuando este elije una casilla, navegando como se espera si el usuario decide terminar la partida, &#8230;&#8203;</p>
+</li>
+<li>
+<p><strong>WebApp-EndGameScreen.test: </strong> Prueba que la pantalla final, la que sale cuando se gana o se pierde el juego (sin pulsar al botón terminar) aparezca con la información adecuada y correspondiente a la partida, además de que los botones de navegación funcionen correctamente.</p>
+</li>
+<li>
+<p><strong>WebApp-InitialScreen.test: </strong> Prueba que la pantalla para iniciar sesión tenga la información adecuada, responda correctamente a los datos que introduce el usuario y navegue como se espera a la pantalla de registro o a la de inicio/bienvenida</p>
+</li>
+<li>
+<p><strong>WebApp-SignUpScreen.test: </strong> Prueba que la pantalla registrar un nuevo usuario cuente que la información y textos esperados, responda de forma correcta a los datos que introduce el usuario y navegue como se espera que haga a otras pantallas.</p>
+</li>
+<li>
+<p><strong>WebApp-StatsScreen.test: </strong> Prueba que las pantallas de las estadísticas representen los datos como deberían, tanto para el caso de las estadísticas normales como para las filtradas, y que la navegación entre páginas se de según lo esperado.</p>
+</li>
+<li>
+<p><strong>WebApp-RankingScreen.test: </strong> Prueba que las pantallas de ranking muestran la información de la manera esperada en el caso de el ranking personal y de los rankings filtrados, respetando los estilos y el correcto funcionamiento de cada botón para la representación de los datos y para la navegación.</p>
 </li>
 </ul>
 </div>
@@ -1413,28 +1807,22 @@ Para ello, separamos los test por funcionalidad en clases **users-service-[funci
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>WebApp</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Aplicación ejecutada desde algún navegador.</p></td>
 </tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Test E2E</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tipo de test de extremo a extremo, que pretende abarcar todos los procesos de la aplicación, considerando todos los componentes e iteracciones. Por tanto, son las pruebas que verifican que todo el flujo de la app sea correcto</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Pruebas de carga</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pruebas no funcionales para evaluar el comportamiento de la app con una mayor cantidad de usuarios o transacciones actuando al mismo tiempo. Pretenden verificar el rendimento en condiciones normales (tiempos de respuesta, recursos, &#8230;&#8203;)</p></td>
+</tr>
 </tbody>
 </table>
-<div style="page-break-after: always;"></div>
-<div class="paragraph">
-<p><strong>About arc42</strong></p>
-</div>
-<div class="paragraph lead">
-<p>arc42, the template for documentation of software and system architecture.</p>
-</div>
-<div class="paragraph">
-<p>Template Version {revnumber}. (Arquitectura de Software - Universidad de Oviedo), March 2026</p>
-</div>
-<div class="paragraph">
-<p>Created, maintained and &#169; by Dr. Peter Hruschka, Dr. Gernot Starke and contributors.
-See <a href="https://arc42.org" class="bare">https://arc42.org</a>.</p>
-</div>
 </div>
 </div>
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-03-08 22:45:33 +0100
+Last updated 2026-04-06 12:30:21 +0200
 </div>
 </div>
 </body>
