@@ -1,4 +1,4 @@
-![Logo](docs/images/yovi_logo.png.png)
+![Logo](docs/images/yovi_logo.png)
 
 [![Release — Test, Build, Publish, Deploy](https://github.com/arquisoft/yovi_es2b/actions/workflows/release-deploy.yml/badge.svg)](https://github.com/arquisoft/yovi_es2b/actions/workflows/release-deploy.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
