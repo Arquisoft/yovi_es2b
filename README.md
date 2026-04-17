@@ -1,17 +1,13 @@
-![Logo](docs/images/yovi_logo.png)
+<p align="center">
+  <img src="docs/img/yovi_logo.png" width="400" alt="YOVI logo"/>
+</p>
 
 [![Release — Test, Build, Publish, Deploy](https://github.com/arquisoft/yovi_es2b/actions/workflows/release-deploy.yml/badge.svg)](https://github.com/arquisoft/yovi_es2b/actions/workflows/release-deploy.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
-[![Bugs](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=bugs)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
-[![Vulnerabilidades](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=vulnerabilities)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
-[![Code Smells](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=code_smells)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
-[![Node.js](https://img.shields.io/badge/Node.js-22.x-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Rust](https://img.shields.io/badge/Rust-stable-CE422B?logo=rust&logoColor=white)](https://www.rust-lang.org/)
-[![Licencia: MIT](https://img.shields.io/badge/Licencia-MIT-yellow.svg)](LICENSE)
 
 > Implementación multi-servicio del juego Y desarrollada para la asignatura de Arquitectura del Software en la Universidad de Oviedo.
 
@@ -24,7 +20,7 @@
 - [Prerrequisitos](#prerrequisitos)
 - [Variables de entorno](#variables-de-entorno)
 - [Ejecutar el proyecto](#ejecutar-el-proyecto)
-  - [Con Docker (recomendado)](#con-docker-recomendado)
+  - [Con Docker](#con-docker-recomendado)
   - [Sin Docker](#sin-docker)
 - [Scripts disponibles](#scripts-disponibles)
 - [Tests](#tests)
