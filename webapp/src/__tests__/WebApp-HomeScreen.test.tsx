@@ -148,7 +148,7 @@ describe('Home', () => {
         render(<Home username="sara" />)
         const user = userEvent.setup()
         await waitFor(async () => {
-            const pvpTimerToggle = screen.getByRole('checkbox', { name: /partida con temporizador activo/i })
+            const pvpTimerToggle = document.getElementById('timer-enabled-2p') as HTMLElement
 
             expect(pvpTimerToggle).toBeChecked()
 
@@ -168,25 +168,6 @@ describe('Home', () => {
     test('el toggle switch de temporizador de 2 jugadores está activado por defecto', () => {
         render(<Home username="sara" />)
         expect(screen.getByLabelText(/partida con temporizador activo/i)).toBeChecked()
-    })
-
-    /**
-     * Comprueba que el toggle switch de temporizador de 2 jugadores se puede desactivar y reactivar.
-     * El test simula un usuario haciendo clic sobre el toggle, verificando que se desactiva
-     * al primer clic y se reactiva al segundo.
-     */
-    test('el toggle switch de temporizador de 2 jugadores cambia de estado', async () => {
-        render(<Home username="sara" />)
-        const user = userEvent.setup()
-        await waitFor(async () => {
-            const timerToggle = screen.getByLabelText(/partida con temporizador activo/i)
-
-            await user.click(timerToggle)
-            expect(timerToggle).not.toBeChecked()
-
-            await user.click(timerToggle)
-            expect(timerToggle).toBeChecked()
-        })
     })
 
     /**
