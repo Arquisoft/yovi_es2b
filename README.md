@@ -1,158 +1,293 @@
-# Yovi_es2b - Game Y at UniOvi
+<p align="center">
+  <img src="docs/images/yovi_logo.png" width="400" alt="YOVI logo"/>
+</p>
 
 [![Release — Test, Build, Publish, Deploy](https://github.com/arquisoft/yovi_es2b/actions/workflows/release-deploy.yml/badge.svg)](https://github.com/arquisoft/yovi_es2b/actions/workflows/release-deploy.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
+[![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
 
-This project is a template with some basic functionality for the ASW labs.
+> Implementación multi-servicio del juego Y desarrollada para la asignatura de Arquitectura del Software en la Universidad de Oviedo.
 
-## Project Structure
+---
 
-The project is divided into three main components, each in its own directory:
+## Enlaces
 
-- `webapp/`: A frontend application built with React, Vite, and TypeScript.
-- `users/`: A backend service for managing users, built with Node.js and Express.
-- `gamey/`: A Rust game engine and bot service.
-- `docs/`: Architecture documentation sources following Arc42 template
+<p align="center"><a href="https://gameyes2b.duckdns.org/"><img src="https://img.shields.io/badge/%20Aplicación-gameyes2b.duckdns.org-blue?style=for-the-badge" alt="Aplicación"/></a>&emsp;&emsp;<a href="https://arquisoft.github.io/yovi_es2b/"><img src="https://img.shields.io/badge/%20Documentación-arquisoft.github.io-orange?style=for-the-badge" alt="Documentación"/></a></p>
 
-Each component has its own `package.json` file with the necessary scripts to run and test the application.
+---
 
-## Basic Features
+## Equipo
 
-- **User Registration**: The web application provides a simple form to register new users.
-- **User Service**: The user service receives the registration request, simulates some processing, and returns a welcome message.
-- **GameY**: A basic Game engine which only chooses a random piece.
+<table align="center">
+  <tr>
+    <td align="center"><img src="https://github.com/iyaniglesias.png" width="80"/></td>
+    <td align="center"><img src="https://github.com/JimenaVazquez.png" width="80"/></td>
+    <td align="center"><img src="https://github.com/saranaredo.png" width="80"/></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/iyaniglesias">Iyán Iglesias</a></td>
+    <td align="center"><a href="https://github.com/JimenaVazquez">Jimena Vázquez</a></td>
+    <td align="center"><a href="https://github.com/saranaredo">Sara Naredo</a></td>
+  </tr>
+  <tr>
+    <td align="center">UO302334</td>
+    <td align="center">UO301668</td>
+    <td align="center">UO300563</td>
+  </tr>
+</table>
 
-## Components
+---
 
-### Webapp
+## Tabla de contenidos
 
-The `webapp` is a single-page application (SPA) created with [Vite](https://vitejs.dev/) and [React](https://reactjs.org/).
+- [Visión general de la arquitectura](#visión-general-de-la-arquitectura)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [Prerrequisitos](#prerrequisitos)
+- [Variables de entorno](#variables-de-entorno)
+- [Ejecutar el proyecto](#ejecutar-el-proyecto)
+  - [Con Docker](#con-docker-recomendado)
+  - [Sin Docker](#sin-docker)
+- [Scripts disponibles](#scripts-disponibles)
+- [Tests](#tests)
+- [Documentación](#documentación)
+- [Resolución de problemas](#resolución-de-problemas)
 
-- `src/App.tsx`: The main component of the application.
-- `src/RegisterForm.tsx`: The component that renders the user registration form.
-- `package.json`: Contains scripts to run, build, and test the webapp.
-- `vite.config.ts`: Configuration file for Vite.
-- `Dockerfile`: Defines the Docker image for the webapp.
+---
 
-### Users Service
+## Visión general de la arquitectura
 
-The `users` service is a simple REST API built with [Node.js](https://nodejs.org/) and [Express](https://expressjs.com/).
+El sistema se compone de tres servicios independientes que se comunican por HTTP:
 
-- `users-service.js`: The main file for the user service. It defines an endpoint `/loginuser` to handle user login.
-- `package.json`: Contains scripts to start the service.
-- `Dockerfile`: Defines the Docker image for the user service.
+<p align="center">
+  <img src="docs/images/servicios.png" width="600" alt="Servicios"/>
+</p>
 
-### Gamey
+| Servicio | Tecnología       | Puerto | Responsabilidad                         |
+|----------|-----------------|--------|-----------------------------------------|
+| webapp   | React/Vite/TS   | 80     | SPA frontend                            |
+| users    | Node.js/Express | 3000   | Registro y autenticación de usuarios    |
+| gamey    | Rust/Axum       | 4000   | Motor de juego y servicio de bots       |
 
-The `gamey` component is a Rust-based game engine with bot support, built with [Rust](https://www.rust-lang.org/) and [Cargo](https://doc.rust-lang.org/cargo/).
+La documentación de arquitectura sigue la plantilla [Arc42](docs/).
 
-- `src/main.rs`: Entry point for the application.
-- `src/lib.rs`: Library exports for the gamey engine.
-- `src/bot/`: Bot implementation and registry.
-- `src/core/`: Core game logic including actions, coordinates, game state, and player management.
-- `src/notation/`: Game notation support (YEN, YGN).
-- `src/web/`: Web interface components.
-- `Cargo.toml`: Project manifest with dependencies and metadata.
-- `Dockerfile`: Defines the Docker image for the gamey service.
+---
 
-## Running the Project
+## Estructura del proyecto
 
-You can run this project using Docker (recommended) or locally without Docker.
-
-### With Docker
-
-This is the easiest way to get the project running. You need to have [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/) installed.
-
-1. **Build and run the containers:**
-    From the root directory of the project, run:
-
-```bash
-docker-compose up --build
+```
+yovi_es2b/
+├── webapp/         # Frontend React + Vite + TypeScript
+├── users/          # Servicio de usuarios Node.js + Express
+├── gamey/          # Motor de juego y bots en Rust
+├── docs/           # Documentación de arquitectura Arc42
+└── docker-compose.yml
 ```
 
-This command will build the Docker images for both the `webapp` and `users` services and start them.
+---
 
-2.**Access the application:**
-- Web application: [http://localhost](http://localhost)
-- User service API: [http://localhost:3000](http://localhost:3000)
-- Gamey API: [http://localhost:4000](http://localhost:4000)
+## Prerrequisitos
 
-### Without Docker
+Asegúrate de tener instalado lo siguiente antes de ejecutar el proyecto:
 
-To run the project locally without Docker, you will need to run each component in a separate terminal.
+| Herramienta     | Versión  | Necesaria para            |
+|-----------------|----------|---------------------------|
+| Docker          | 24+      | Ejecución en contenedores |
+| Docker Compose  | 2.x      | Ejecución en contenedores |
+| Node.js         | 22.x     | Desarrollo local          |
+| npm             | 10+      | Desarrollo local          |
+| Rust            | stable   | Desarrollo local de gamey |
+| Cargo           | stable   | Desarrollo local de gamey |
 
-#### Prerequisites
+---
 
-* [Node.js](https://nodejs.org/) and npm installed.
+## Variables de entorno
 
-#### 1. Running the User Service
+Cada servicio se puede configurar mediante variables de entorno. Ajústalas en un archivo `.env` en la raíz o directamente en `docker-compose.yml`.
 
-Navigate to the `users` directory:
+### Servicio users
+
+| Variable        | Valor por defecto | Descripción                           |
+|-----------------|-------------------|---------------------------------------|
+| `PORT`          | `3000`            | Puerto en el que escucha el servicio  |
+| `USERS_DB_URL`  | _(ninguno)_       | Cadena de conexión a la base de datos |
+
+### Servicio gamey
+
+| Variable    | Valor por defecto | Descripción                                     |
+|-------------|-------------------|-------------------------------------------------|
+| `PORT`      | `4000`            | Puerto en el que escucha el servicio            |
+| `RUST_LOG`  | `info`            | Nivel de log (`debug`, `info`, `warn`, `error`) |
+
+### webapp
+
+| Variable            | Valor por defecto       | Descripción                     |
+|---------------------|-------------------------|---------------------------------|
+| `VITE_API_BASE_URL` | `http://localhost:3000` | URL base del servicio users     |
+| `VITE_GAMEY_URL`    | `http://localhost:4000` | URL base del servicio gamey     |
+
+---
+
+## Ejecutar el proyecto
+
+### Con Docker
+
+Requiere Docker y Docker Compose.
+
+```bash
+# Construir e iniciar todos los servicios
+docker-compose up --build
+
+# Ejecutar en segundo plano
+docker-compose up --build -d
+
+# Detener todos los servicios
+docker-compose down
+```
+
+Una vez en marcha, los servicios están disponibles en:
+
+| Servicio        | URL                   |
+|-----------------|-----------------------|
+| Aplicación web  | http://localhost      |
+| API users       | http://localhost:3000 |
+| API gamey       | http://localhost:4000 |
+
+---
+
+### Sin Docker
+
+Ejecuta cada servicio en una terminal separada.
+
+#### 1. Servicio users
 
 ```bash
 cd users
-```
-
-Install dependencies:
-
-```bash
 npm install
-```
-
-Run the service:
-
-```bash
 npm start
+# Disponible en http://localhost:3000
 ```
 
-The user service will be available at `http://localhost:3000`.
-
-#### 2. Running the Web Application
-
-Navigate to the `webapp` directory:
+#### 2. Aplicación web
 
 ```bash
 cd webapp
-```
-
-Install dependencies:
-
-```bash
 npm install
+npm run dev
+# Disponible en http://localhost:5173
 ```
 
-Run the application:
+O arranca ambos a la vez desde el directorio webapp:
 
 ```bash
-npm run dev
+cd webapp
+npm run start:all
 ```
 
-The web application will be available at `http://localhost:5173`.
+#### 3. Servicio gamey
 
-#### 3. Running the GameY application
+```bash
+cd gamey
+cargo build
+cargo run
+# Disponible en http://localhost:4000
+```
 
-At this moment the GameY application is not needed but once it is needed you should also start it from the command line.
+---
 
-## Available Scripts
+## Scripts disponibles
 
-Each component has its own set of scripts defined in its `package.json`. Here are some of the most important ones:
+### webapp
 
-### Webapp (`webapp/package.json`)
+| Comando             | Descripción                                 |
+|---------------------|---------------------------------------------|
+| `npm run dev`       | Inicia el servidor de desarrollo            |
+| `npm run build`     | Compila para producción                     |
+| `npm test`          | Ejecuta los tests unitarios                 |
+| `npm run test:e2e`  | Ejecuta los tests end-to-end con Playwright |
+| `npm run start:all` | Inicia webapp y el servicio users a la vez  |
 
-- `npm run dev`: Starts the development server for the webapp.
-- `npm test`: Runs the unit tests.
-- `npm run test:e2e`: Runs the end-to-end tests.
-- `npm run start:all`: A convenience script to start both the `webapp` and the `users` service concurrently.
+### users
 
-### Users (`users/package.json`)
+| Comando     | Descripción                    |
+|-------------|--------------------------------|
+| `npm start` | Inicia el servicio de usuarios |
+| `npm test`  | Ejecuta los tests              |
 
-- `npm start`: Starts the user service.
-- `npm test`: Runs the tests for the service.
+### gamey
 
-### Gamey (`gamey/Cargo.toml`)
+| Comando       | Descripción                       |
+|---------------|-----------------------------------|
+| `cargo build` | Compila la aplicación             |
+| `cargo test`  | Ejecuta los tests unitarios       |
+| `cargo run`   | Ejecuta la aplicación             |
+| `cargo doc`   | Genera la documentación de la API |
 
-- `cargo build`: Builds the gamey application.
-- `cargo test`: Runs the unit tests.
-- `cargo run`: Runs the gamey application.
-- `cargo doc`: Generates documentation for the GameY engine application
+---
+
+## Tests
+
+El proyecto utiliza distintas estrategias de testing por servicio:
+
+- **webapp** — Vitest para tests unitarios, Playwright + Cucumber para tests E2E.
+- **users** — Jest para tests unitarios e integración.
+- **gamey** — Framework de testing nativo de Rust (`cargo test`).
+
+La cobertura de código se monitoriza mediante [SonarCloud](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b).
+
+Para ejecutar todos los tests en local:
+
+```bash
+# webapp
+cd webapp && npm test
+
+# users
+cd users && npm test
+
+# gamey
+cd gamey && cargo test
+```
+
+---
+
+## Documentación
+
+La documentación de arquitectura está escrita en AsciiDoc siguiendo la plantilla [Arc42](https://arc42.org/) y se encuentra en el directorio `docs/`.
+
+Para generarla y visualizarla en local (requiere [Asciidoctor](https://asciidoctor.org/)):
+
+```bash
+asciidoctor docs/index.adoc -o docs/output/index.html
+```
+
+---
+
+## Resolución de problemas
+
+**Puerto ya en uso**
+```bash
+# Encuentra y mata el proceso que usa el puerto (ej. 3000)
+lsof -i :3000
+kill -9 <PID>
+```
+
+**Errores de permisos con Docker en Linux**
+```bash
+sudo usermod -aG docker $USER
+# Cierra sesión y vuelve a entrar
+```
+
+**Gamey no compila (`cargo build` falla)**
+
+Asegúrate de tener la toolchain de Rust actualizada:
+```bash
+rustup update stable
+```
+
+**La webapp no alcanza el servicio users**
+
+Comprueba que `VITE_API_BASE_URL` apunta a la dirección real del servicio users. Dentro de Docker, los servicios se comunican por nombre de servicio, no por `localhost`.
+
+---

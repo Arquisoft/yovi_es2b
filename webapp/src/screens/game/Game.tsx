@@ -39,7 +39,7 @@ async function crearPartida(boardSize: number): Promise<string> {
 
 async function getTurnoPartida(gameId: string): Promise<number> {
    const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
-    const res = await fetch(`${GAMEY_URL}/v1/games/${gameId}/status`);
+    const res = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}/status`);
     if (!res.ok) {
       throw new Error("Error al obtener el turno");
     } 
@@ -55,7 +55,9 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
   const [winner, setWinner] = useState<string | null>(null); // ganador de la partida, null si no hay ganador aún
   const [showEndScreen, setShowEndScreen] = useState(false);
   const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal
-  const [refreshKey, setRefreshKey] = useState(0);  // incrementar fuerza recarga del tablero 
+  const [refreshKey, setRefreshKey] = useState(0);  // incrementar fuerza recarga del tablero
+  const [hintCoords, setHintCoords] = useState<{ x: number; y: number; z: number } | null>(null);
+  const [hintsUsed, setHintsUsed] = useState(0);
 
   // como es función async, llamamos useEffect
   useEffect(() => {
@@ -68,6 +70,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
     setTurno("Inicio");
     setGameState("Inicio");
     setGameId("");
+    setHintsUsed(0);
 
     async function nuevaPartida() {
       if (stateStart) {
@@ -119,13 +122,35 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
 
   }
 
+  async function handleHint() {
+    if (!/^[a-zA-Z0-9_-]+$/.test(gameId)) return;
+    const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
+    try {
+      const stateRes = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}`);
+      if (!stateRes.ok) return;
+      const stateData = await stateRes.json();
+      const hintRes = await fetch(`${GAMEY_URL}/play`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ position: stateData.state, bot_type: 'montecarlo_bot' }),
+      });
+      if (!hintRes.ok) return;
+      const hint = await hintRes.json();
+      setHintCoords(hint.coords);
+      setHintsUsed((n) => n + 1);
+    } catch (err) {
+      console.error("Error al obtener pista:", err);
+    }
+  }
+
   async function handleUndo() {
+    if (!/^[a-zA-Z0-9_-]+$/.test(gameId)) return;
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     try {
       // En partida vs bot deshacemos 2 movimientos (el del bot y el del jugador)
       const veces = twoPlayers ? 1 : 2;
       for (let i = 0; i < veces; i++) {
-        const res = await fetch(`${GAMEY_URL}/v1/games/${gameId}/undo`, { method: 'POST' });
+        const res = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}/undo`, { method: 'POST' });
         if (!res.ok) break;
       }
       setRefreshKey((k) => k + 1);
@@ -193,12 +218,19 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
             username2={username2}
             twoPlayers={twoPlayers}
             refreshKey={refreshKey}
-            changeTurno={setTurno}
+            hintCoords={hintCoords}
+            changeTurno={(t) => { setTurno(t); setHintCoords(null); }}
             onGameEnd={handleGameEnd}
           />
         </div>
 
         <div className="controls-bottom">
+          {twoPlayers ? null : (
+            <div id="hint-container">
+              <button id="hint-button" onClick={handleHint} disabled={hintCoords !== null || hintsUsed >= 3}>Pista</button>
+              <span id="hint-counter">{3 - hintsUsed} pista{3 - hintsUsed === 1 ? "" : "s"} restante{3 - hintsUsed === 1 ? "" : "s"}</span>
+            </div>
+          )}
           <ControlPanel
             onExit={handleExit}
             onUndo={handleUndo}

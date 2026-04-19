@@ -10,6 +10,15 @@ const baseSettings = {
     strategy: Strategy.RANDOM,
     difficulty: Difficulty.EASY }
 
+// Mock del estado del tablero vacío, reutilizado en múltiples funciones de mock
+const boardStateMock = {
+    ok: true,
+    json: async () => ({
+        state: { layout: '000/000/000' },// estado del tablero vacío
+        status: { kind: 'Ongoing', next_player: 0 }// estado de la partida indicando que sigue en curso y el siguiente jugador es el 0 (humano)
+    })
+}
+
 // Mock completo de todas las llamadas fetch que hace Game + Board:
 //El mock se usa para simular las respuestas de la API sin necesidad de hacer llamadas reales.
 // 1. POST /v1/games         → crearPartida
@@ -17,13 +26,6 @@ const baseSettings = {
 // 3. GET  /v1/games/:id     → peticionEstadoPartida (Board)
 // mockFetch acepta cuántas veces repetir el mock de estado (una por test que lo necesite)
 function mockFetch() {
-    const boardStateMock = {
-        ok: true,
-        json: async () => ({
-            state: { layout: '000/000/000' },// estado del tablero vacío
-            status: { kind: 'Ongoing', next_player: 0 }// estado de la partida indicando que sigue en curso y el siguiente jugador es el 0 (humano  )
-        })
-    }
     global.fetch = vi.fn()
     // El primer call es para crear la partida, el segundo para obtener el turno, y el resto para el estado del tablero (sin límite)
         .mockResolvedValueOnce({ ok: true, json: async () => ({ game_id: 'test-123' }) })    // crearPartida
@@ -137,6 +139,57 @@ describe('Game', () => {
         await waitFor(async () => {
             await user.click(screen.getByRole('button', { name: /Terminar partida/i }))
             expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
+        })
+    })
+
+    /**
+     * Comprueba que el botón Pista aparece en modo 1 jugador, llama a la API al pulsarlo
+     * y se deshabilita mientras hay una pista activa en el tablero.
+     */
+    /**
+     * Comprueba que al pulsar "Deshacer movimiento" en modo 2 jugadores se llama al endpoint /undo.
+     * Cubre handleUndo y su validación de gameId.
+     */
+    test('llama a la API al pulsar Deshacer movimiento en modo 2 jugadores', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
+        )
+        await waitFor(async () => {
+            await user.click(screen.getByRole('button', { name: /Deshacer movimiento/i }))
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('/undo'),
+                expect.objectContaining({ method: 'POST' })
+            )
+        })
+    })
+
+    /**
+     * Comprueba que el botón Pista aparece en modo 1 jugador, llama a la API al pulsarlo
+     * y se deshabilita mientras hay una pista activa en el tablero.
+     * Añade respuestas Once para que /play devuelva coordenadas reales, cubriendo así
+     * la condición hintCoords en Board y la clase hint en Casilla.
+     */
+    test('el botón Pista llama a la API y se deshabilita mientras hay pista activa', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        // Secuenciamos: carga inicial del Board, GET estado para handleHint, coords del bot
+        ;(global.fetch as ReturnType<typeof vi.fn>)
+            .mockResolvedValueOnce(boardStateMock)                                                      // peticionEstadoPartida (Board)
+            .mockResolvedValueOnce(boardStateMock)                                                      // handleHint: GET /v1/games/:id
+            .mockResolvedValueOnce({ ok: true, json: async () => ({ coords: { x: 0, y: 0, z: 0 } }) }) // handleHint: POST /play
+        render(
+            <Game settings={baseSettings} username="test1" username2="" twoPlayers={false} stateStart={true} />
+        )
+        const hintButton = await screen.findByRole('button', { name: /pista/i })
+        await user.click(hintButton)
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('/play'),
+                expect.objectContaining({ method: 'POST' })
+            )
+            expect(hintButton).toBeDisabled()
         })
     })
 })
