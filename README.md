@@ -4,10 +4,10 @@
 
 [![Release — Test, Build, Publish, Deploy](https://github.com/arquisoft/yovi_es2b/actions/workflows/release-deploy.yml/badge.svg)](https://github.com/arquisoft/yovi_es2b/actions/workflows/release-deploy.yml)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
-[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
 [![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
 [![Reliability Rating](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=reliability_rating)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Arquisoft_yovi_es2b&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Arquisoft_yovi_es2b)
 
 > Implementación multi-servicio del juego Y desarrollada para la asignatura de Arquitectura del Software en la Universidad de Oviedo.
 
@@ -33,20 +33,9 @@
 
 El sistema se compone de tres servicios independientes que se comunican por HTTP:
 
-```
-┌─────────────────────────────────────────────────────┐
-│                     Navegador                       │
-└────────────────────────┬────────────────────────────┘
-                         │ :80
-              ┌──────────▼──────────┐
-              │       webapp        │  React + Vite + TypeScript
-              └──────────┬──────────┘
-              :3000 │         │ :4000
-       ┌─────────────▼──┐  ┌──▼──────────────┐
-       │  users service │  │     gamey        │  Rust + Axum
-       │  Node + Express│  │  motor de juego  │
-       └────────────────┘  └─────────────────┘
-```
+<p align="center">
+  <img src="docs/images/servicios.png" width="600" alt="Servicios"/>
+</p>
 
 | Servicio | Tecnología       | Puerto | Responsabilidad                         |
 |----------|-----------------|--------|-----------------------------------------|
