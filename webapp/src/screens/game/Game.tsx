@@ -8,7 +8,6 @@ import { getBoardSize } from "../../components/gameOptions/Difficulty";
 import "./Game.css";
 import { End } from "./End";
 import Home from "./Home";
-import TurnTimer from "../../components/timer/Timer";
 
 // Definimos la interfaz de las props
 interface GameProps {
