@@ -17,11 +17,11 @@
 
 <p align="center">
   <a href="https://gameyes2b.duckdns.org/">
-    <img src="https://img.shields.io/badge/🌐%20Aplicación-gameyes2b.duckdns.org-blue?style=for-the-badge" alt="Aplicación"/>
+    <img src="https://img.shields.io/badge/%20Aplicación-gameyes2b.duckdns.org-blue?style=for-the-badge" alt="Aplicación"/>
   </a>
   &nbsp;&nbsp;
   <a href="https://arquisoft.github.io/yovi_es2b/">
-    <img src="https://img.shields.io/badge/📖%20Documentación-arquisoft.github.io-orange?style=for-the-badge" alt="Documentación"/>
+    <img src="https://img.shields.io/badge/%20Documentación-arquisoft.github.io-orange?style=for-the-badge" alt="Documentación"/>
   </a>
 </p>
 
