@@ -140,3 +140,16 @@
   border-color: #a3a3a3;
   cursor: not-allowed;
 }
+
+#hint-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+#hint-counter {
+  font-size: 0.75rem;
+  color: #a3a3a3;
+  text-align: center;
+}
