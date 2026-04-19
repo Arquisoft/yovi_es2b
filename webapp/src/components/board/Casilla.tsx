@@ -10,11 +10,11 @@
  * Se exporta para que pueda ser utilizada en otros archivos
  **/
 interface CasillaProps {
-    index: string;
-    valor: number;
-    bloq: boolean;
-    isHint?: boolean;
-    alHacerClick: () => void;
+    readonly index: string;
+    readonly valor: number;
+    readonly bloq: boolean;
+    readonly isHint?: boolean;
+    readonly alHacerClick: () => void;
 }
 
 /**esta funcion representa cada una de las casillas del tablero,

@@ -123,6 +123,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
   }
 
   async function handleHint() {
+    if (!/^[a-zA-Z0-9_-]+$/.test(gameId)) return;
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     try {
       const stateRes = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}`);
@@ -143,6 +144,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
   }
 
   async function handleUndo() {
+    if (!/^[a-zA-Z0-9_-]+$/.test(gameId)) return;
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     try {
       // En partida vs bot deshacemos 2 movimientos (el del bot y el del jugador)
@@ -223,7 +225,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
         </div>
 
         <div className="controls-bottom">
-          {!twoPlayers && (
+          {twoPlayers ? null : (
             <div id="hint-container">
               <button id="hint-button" onClick={handleHint} disabled={hintCoords !== null || hintsUsed >= 3}>Pista</button>
               <span id="hint-counter">{3 - hintsUsed} pista{3 - hintsUsed !== 1 ? "s" : ""} restante{3 - hintsUsed !== 1 ? "s" : ""}</span>
