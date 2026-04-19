@@ -16,6 +16,7 @@ interface GameProps {
   username2: string;
   twoPlayers: boolean;
   stateStart: boolean;
+  enableTimer?: boolean;
   onGoMenu?: () => void;
   onGameEnd?: (winner: string) => void;
   onPlayAgain?: () => void;
@@ -48,7 +49,7 @@ async function getTurnoPartida(gameId: string): Promise<number> {
     return data.kind === 'Ongoing' ? data.next_player : 0;
 }
 
-export function Game({ settings, username, username2, twoPlayers, stateStart, onGoMenu = () => {}, onGameEnd, onPlayAgain }: Readonly<GameProps>) {
+export function Game({ settings, username, username2, twoPlayers, stateStart, enableTimer = true, onGoMenu = () => {}, onGameEnd, onPlayAgain }: Readonly<GameProps>) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
@@ -192,7 +193,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
                 {turno}
               </span>
 
-                {gameState === "Iniciada" && (
+                {enableTimer && gameState === "Iniciada" && (
                 <Timer turno={turno} onExpire={handleTimerExpire} />
               )}
             </div>
