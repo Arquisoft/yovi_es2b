@@ -147,6 +147,25 @@ describe('Game', () => {
      * y se deshabilita mientras hay una pista activa en el tablero.
      */
     /**
+     * Comprueba que al pulsar "Deshacer movimiento" en modo 2 jugadores se llama al endpoint /undo.
+     * Cubre handleUndo y su validación de gameId.
+     */
+    test('llama a la API al pulsar Deshacer movimiento en modo 2 jugadores', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
+        )
+        await waitFor(async () => {
+            await user.click(screen.getByRole('button', { name: /Deshacer movimiento/i }))
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('/undo'),
+                expect.objectContaining({ method: 'POST' })
+            )
+        })
+    })
+
+    /**
      * Comprueba que el botón Pista aparece en modo 1 jugador, llama a la API al pulsarlo
      * y se deshabilita mientras hay una pista activa en el tablero.
      * Añade respuestas Once para que /play devuelva coordenadas reales, cubriendo así
