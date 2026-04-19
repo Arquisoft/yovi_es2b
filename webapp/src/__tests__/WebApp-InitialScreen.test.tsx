@@ -68,65 +68,6 @@ describe('InitialScreen', () => {
         })
     })
 
-    /**
-     * Comprueba que se muestra un error si se intenta iniciar sesión con una contraseña inadecuada.
-     */
-/*     test('muestra error si se intenta iniciar sesión con contraseña no válida', async () => {
-        const user = userEvent.setup()
-        render(<InitialScreen />)
-        await waitFor(async () => {
-            await user.type(screen.getByLabelText(/Usuario/i), 'sara')
-            await user.type(screen.getByLabelText(/Contraseña/i), 'novalida')
-            await user.click(screen.getByRole('button', { name: /Iniciar sesión/i }))
-            expect(screen.getByText(/Usuario o contraseña incorrectos\. Inténtalo de nuevo\./i)).toBeInTheDocument()
-        })
-    }) */
-
-    /**
-     * Comprueba que se muestra mensaje de error si se intenta iniciar sesion con un usuario inexistente.
-     */
-/*     test('muestra error si se intenta iniciar sesión con usuario inexistente', async () => {
-        const user = userEvent.setup()
-        render(<InitialScreen />)
-        await waitFor(async () => {
-            await user.type(screen.getByLabelText(/Usuario/i), 'noexiste')
-            await user.type(screen.getByLabelText(/Contraseña/i), 'noexistente')
-            await user.click(screen.getByRole('button', { name: /Iniciar sesión/i }))
-            expect(screen.getByText(/El usuario 'noexiste' no existe\. Prueba de nuevo o regístrate\./i)).toBeInTheDocument()
-        })
-    }) */
-
-    /**
-     * Comprueba éxito al iniciar sesión correctamente.
-     */
-/*     test('muestra mensaje de éxito al iniciar sesión correctamente', async () => {
-        const user = userEvent.setup()
-        render(<InitialScreen />)
-        await waitFor(async () => {
-            await user.type(screen.getByLabelText(/Usuario/i), 'sara')
-            await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
-            await user.click(screen.getByRole('button', { name: /Iniciar sesión/i }))
-            expect(global.fetch).toHaveBeenCalledWith(
-                expect.stringContaining('/loginuser'),
-                expect.objectContaining({ method: 'POST' })
-            )
-        })
-    }) */
-    
-  /**
-   * Comprueba que se muestra un error de red si el fetch falla al intentar iniciar sesión.
-   */
-  /* test('muestra error de red si el fetch falla', async () => {
-    const user = userEvent.setup()
-    global.fetch = vi.fn().mockRejectedValueOnce(new Error('Network error'))
-    render(<InitialScreen />)
-    await waitFor(async () => {
-      await user.type(screen.getByLabelText(/Usuario/i), 'sara')
-      await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
-      await user.click(screen.getByRole('button', { name: /Iniciar sesión/i }))
-      expect(screen.getByText(/Cannot fetch/i)).toBeInTheDocument()
-    } )
-  }) */
 
   /**
    * Comprueba que al pulsar el botón "Regístrate", se navega a la pantalla de registro y no aparece la pagina de Bienvenido

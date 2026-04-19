@@ -37,60 +37,6 @@ describe('SignUp', () => {
     })
 
     /**
-     * Comprueba que se crea el usuario correctamente y se llama a /createuser.
-     */
-    /*     test('crea usuario correctamente y llama a /createuser', async () => {
-            const user = userEvent.setup()
-            global.fetch = vi.fn().mockResolvedValueOnce({
-                ok: true,
-                json: async () => ({ message: 'Se creó el usuario sara' }),
-            } as Response)
-            render(<SignUp />)
-            await waitFor(async () => {
-                await user.type(screen.getByLabelText(/Usuario/i), 'sara')
-                await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
-                await user.click(screen.getByRole('button', { name: /Crear usuario/i }))
-                expect(global.fetch).toHaveBeenCalledWith(
-                    expect.stringContaining('/createuser'),
-                    expect.objectContaining({ method: 'POST' })
-                )
-            })
-        }) */
-
-    /**
-     * Comprueba que se muestra un error si el usuario ya existe.
-     */
-    /*     test('muestra error si el usuario ya existe', async () => {
-            const user = userEvent.setup()
-            global.fetch = vi.fn().mockResolvedValueOnce({
-                ok: false,
-                json: async () => ({ error: 'El usuario ya existe' }),
-            } as Response)
-            render(<SignUp />)
-            await waitFor(async () => {
-                await user.type(screen.getByLabelText(/Usuario/i), 'sara')
-                await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
-                await user.click(screen.getByRole('button', { name: /Crear usuario/i }))
-                expect(screen.getByText(/El usuario 'sara' ya existe. Prueba con otro nombre de usuario\./i)).toBeInTheDocument()
-            })
-        }) */
-
-    /**
-     * Comprueba que se muestra un error si el servidor devuelve un error al crear el usuario.
-     */
-    /*     test('muestra error de red si el fetch falla', async () => {
-            const user = userEvent.setup()
-            global.fetch = vi.fn().mockRejectedValueOnce(new Error('Network error'))
-            render(<SignUp />)
-            await waitFor(async () => {
-                await user.type(screen.getByLabelText(/Usuario/i), 'sara')
-                await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
-                await user.click(screen.getByRole('button', { name: /Crear usuario/i }))
-                expect(screen.getByText(/Network error/i)).toBeInTheDocument()
-            })
-        }) */
-
-    /**
      * Comprueba que se navega a la pantalla de login al pulsar el botón Atrás.
      */
     test('navega a la pantalla de login al pulsar Atrás', async () => {
