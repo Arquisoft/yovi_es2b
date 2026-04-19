@@ -5,6 +5,7 @@ import GameStatsFiltered from "./GameStatsFiltered.tsx";
 import InitialScreen from "../init/InitialScreen.tsx";
 import "./GameStats.css";
 import AppHeader from "../../components/AppHeader";
+import yoviLogo from "../../../public/yovi_logo.png";
 
 export default function GameStats( {username} : { username: string }) {
 
@@ -25,10 +26,11 @@ export default function GameStats( {username} : { username: string }) {
     return (
         <div className="stats-screen">
             <AppHeader onLogout={() => setGoLogin(true)} />
+            
+            <img src={yoviLogo} alt="YOVI Logo" className="initial-screen__logo" />
             <h1 className="stats-screen-title">Eliga que estadísticas desea ver</h1>
 
             <div className="stats-menu">
-
                 <button className="stats-btn-total" onClick={() => setGoTotal(true)}>
                     Ver todas las estadísticas
                 </button>
