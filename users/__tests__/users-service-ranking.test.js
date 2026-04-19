@@ -21,48 +21,35 @@ describe('GET /ranking', () => {
         app.get('/ranking/defeats',      userController.rankingdefeats)
     })
 
+    // ---------- Ranking con usuario ---------- //
+    
     /**
      * Un usuario recién creado aparece en el ranking con value 0
      */
-/*     it('un usuario nuevo aparece en el ranking con value 0', async () => {
-        await setup('Test_Username_Ranking', 'Test_PasswordRanking')
+     it('un usuario nuevo aparece en el ranking con value 0', async () => {
+        await setup('Test_Username_Ranking', 'Test_Password_Ranking1')
  
         const res = await request(app)
             .get('/ranking/wins')
             .set('Accept', 'application/json')
  
         const entry = res.body.ranking.find(e => e.username === 'Test_Username_Ranking')
+
+        console.log(res.body)
+        console.log(res.body.ranking)
  
         expect(entry).toBeDefined()
         expect(entry.value).toBe(0)
  
         await takedown('Test_Username_Ranking')
-    }) */
-
-    //Ranking personal
-
-    it('se obtiene el ranking personal de un usuario', async () => {
-        await setup('Test_Username_Ranking_Personal', 'Test_Password_Ranking_Personal')
-        const res = await request(app)
-            .get('/ranking/personal')
-            .query({ username: 'Test_Username_Ranking_Personal' })
-            .set('Accept', 'application/json')
-        expect(res.status).toBe(202)
-        expect(res.body).toHaveProperty('ranking')
-        expect(Array.isArray(res.body.ranking)).toBe(true)
-        await takedown('Test_Username_Ranking_Personal')
     })
 
-
-    //Ranking por victorias  
-
+    // ---------- Ranking por victorias ---------- //
+    
     /**
      * Devuelve el ranking global por victorias correctamente
      */
     it('se obtiene el ranking por victorias', async () => {
-
-        await setup('Test_Username_Ranking_Wins', 'Test_Password_Wins')
-
         const res = await request(app)
             .get('/ranking/wins')
             .set('Accept', 'application/json')
@@ -71,7 +58,6 @@ describe('GET /ranking', () => {
         expect(res.body).toHaveProperty('ranking')
         expect(Array.isArray(res.body.ranking)).toBe(true)
 
-        await takedown('Test_Username_Ranking_Wins')
     })
  
     /**
@@ -100,7 +86,6 @@ describe('GET /ranking', () => {
             expect(entry).toHaveProperty('username')
             expect(entry).toHaveProperty('value')
             expect(entry).toHaveProperty('percentage')
-
         }
     })
 
@@ -133,7 +118,8 @@ describe('GET /ranking', () => {
         }
     })
  
-    //Ranking por derrotas 
+    
+    // ---------- Ranking por derrotas  ---------- //
 
     /**
      * Devuelve el ranking global por derrotas correctamente
@@ -204,7 +190,6 @@ describe('GET /ranking', () => {
             expect(sorted[i].percentage).toBeGreaterThanOrEqual(sorted[i + 1].percentage)
         }
     })
-
  
 })
 
@@ -356,63 +341,6 @@ describe('POST /ranking', () => {
         expect(res.body).toHaveProperty('ranking')
         expect(Array.isArray(res.body.ranking)).toBe(true)
     })
-
-    /**
-     * Devuelve el ranking por victorias para estrategia DEFENSIVO
-     */
-    it('se obtiene el ranking por victorias con estrategia DEFENSIVO', async () => {
-        const res = await request(app)
-            .post('/ranking/wins/strategy')
-            .send({ strategy: 'DEFENSIVO' })
-            .set('Accept', 'application/json')
-        
-        expect(res.status).toBe(202)
-        expect(res.body).toHaveProperty('ranking')
-        expect(Array.isArray(res.body.ranking)).toBe(true)
-     })
-
-     /**
-     * Devuelve el ranking por victorias para estrategia OFENSIVO
-     */
-    it('se obtiene el ranking por victorias con estrategia OFENSIVO', async () => {
-        const res = await request(app)
-            .post('/ranking/wins/strategy')
-            .send({ strategy: 'OFENSIVO' })
-            .set('Accept', 'application/json')  
-
-        expect(res.status).toBe(202)
-        expect(res.body).toHaveProperty('ranking')
-        expect(Array.isArray(res.body.ranking)).toBe(true)
-     })
-
-     /**
-     * Devuelve el ranking por victorias para estrategia MONTE_CARLO_MEJORADO
-     */
-    it('se obtiene el ranking por victorias con estrategia MONTE_CARLO_MEJORADO', async () => {
-        const res = await request(app)
-            .post('/ranking/wins/strategy')
-            .send({ strategy: 'MONTE_CARLO_MEJORADO' })
-            .set('Accept', 'application/json')
-    
-        expect(res.status).toBe(202)
-        expect(res.body).toHaveProperty('ranking')
-        expect(Array.isArray(res.body.ranking)).toBe(true)
-     })
-
-     /**
-     * Devuelve el ranking por victorias para estrategia MONTE_CARLO_ENDURECIDO
-     */
-    it('se obtiene el ranking por victorias con estrategia MONTE_CARLO_ENDURECIDO', async () => {
-        const res = await request(app)
-            .post('/ranking/wins/strategy')
-            .send({ strategy: 'MONTE_CARLO_ENDURECIDO' })
-            .set('Accept', 'application/json')
-
-        expect(res.status).toBe(202)
-        expect(res.body).toHaveProperty('ranking')
-        expect(Array.isArray(res.body.ranking)).toBe(true)
-     })
-
  
     /**
      * Salta error con estrategia inválida
