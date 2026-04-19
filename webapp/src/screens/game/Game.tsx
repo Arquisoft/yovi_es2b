@@ -39,7 +39,7 @@ async function crearPartida(boardSize: number): Promise<string> {
 
 async function getTurnoPartida(gameId: string): Promise<number> {
    const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
-    const res = await fetch(`${GAMEY_URL}/v1/games/${gameId}/status`);
+    const res = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}/status`);
     if (!res.ok) {
       throw new Error("Error al obtener el turno");
     } 
@@ -125,7 +125,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
   async function handleHint() {
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     try {
-      const stateRes = await fetch(`${GAMEY_URL}/v1/games/${gameId}`);
+      const stateRes = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}`);
       if (!stateRes.ok) return;
       const stateData = await stateRes.json();
       const hintRes = await fetch(`${GAMEY_URL}/play`, {
@@ -148,7 +148,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
       // En partida vs bot deshacemos 2 movimientos (el del bot y el del jugador)
       const veces = twoPlayers ? 1 : 2;
       for (let i = 0; i < veces; i++) {
-        const res = await fetch(`${GAMEY_URL}/v1/games/${gameId}/undo`, { method: 'POST' });
+        const res = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}/undo`, { method: 'POST' });
         if (!res.ok) break;
       }
       setRefreshKey((k) => k + 1);

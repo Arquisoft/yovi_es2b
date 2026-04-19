@@ -139,4 +139,25 @@ describe('Game', () => {
             expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
         })
     })
+
+    /**
+     * Comprueba que el botón Pista aparece en modo 1 jugador, llama a la API al pulsarlo
+     * y se deshabilita mientras hay una pista activa en el tablero.
+     */
+    test('el botón Pista llama a la API y se deshabilita mientras hay pista activa', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="test1" username2="" twoPlayers={false} stateStart={true} />
+        )
+        const hintButton = await screen.findByRole('button', { name: /pista/i })
+        await user.click(hintButton)
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('/play'),
+                expect.objectContaining({ method: 'POST' })
+            )
+            expect(hintButton).toBeDisabled()
+        })
+    })
 })
