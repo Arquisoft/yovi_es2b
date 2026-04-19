@@ -27,7 +27,7 @@ describe('GET /ranking', () => {
      * Un usuario recién creado aparece en el ranking con value 0
      */
      it('un usuario nuevo aparece en el ranking con value 0', async () => {
-        await setup('Test_Username_Ranking', 'Test_PasswordRanking')
+        await setup('Test_Username_Ranking', 'Test_Password_Ranking1')
  
         const res = await request(app)
             .get('/ranking/wins')
@@ -38,8 +38,8 @@ describe('GET /ranking', () => {
         console.log(res.body)
         console.log(res.body.ranking)
  
-        //expect(entry).toBeDefined()
-        //expect(entry.value).toBe(0)
+        expect(entry).toBeDefined()
+        expect(entry.value).toBe(0)
  
         await takedown('Test_Username_Ranking')
     })
