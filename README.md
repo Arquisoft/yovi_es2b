@@ -13,6 +13,24 @@
 
 ---
 
+## Enlaces
+
+| | |
+|---|---|
+| 🌐 **Aplicación** | [gameyes2b.duckdns.org](https://gameyes2b.duckdns.org/) |
+| 📖 **Documentación** | [arquisoft.github.io/yovi_es2b](https://arquisoft.github.io/yovi_es2b/) |
+
+---
+
+## Equipo
+
+| <img src="https://github.com/saranaredo.png" width="80"> | <img src="https://github.com/JimenaVazquez.png" width="80"> | <img src="https://github.com/iyaniglesias.png" width="80"> |
+|:---:|:---:|:---:|
+| [Sara Naredo](https://github.com/saranaredo) | [Jimena Vázquez](https://github.com/JimenaVazquez) | [Iyán Iglesias](https://github.com/iyaniglesias) |
+| Frontend | UO301668 | UO302334 |
+
+---
+
 ## Tabla de contenidos
 
 - [Visión general de la arquitectura](#visión-general-de-la-arquitectura)
