@@ -40,8 +40,8 @@
   margin: 1.25rem 1.5rem;
   padding: 0.55rem 1.2rem;
   background: transparent;
-  color: #646cff;
-  border: 1px solid #646cff;
+  color: #023eb6;
+  border: 1px solid #023eb6;
   border-radius: 6px;
   font-size: 0.95rem;
   font-weight: 600;
@@ -50,7 +50,7 @@
 }
 
 .back-button:hover {
-  background: rgba(100, 108, 255, 0.08);
+  background: rgba(2, 62, 182, 0.08);
 }
 
 .back-button:active {

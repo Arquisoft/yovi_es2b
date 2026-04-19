@@ -42,6 +42,7 @@ impl IntoResponse for GameServiceError {
         let status = match &self {
             GameServiceError::GameNotFound(_) => StatusCode::NOT_FOUND,
             GameServiceError::GameError(_) => StatusCode::BAD_REQUEST,
+            
         };
         (status, Json(ServiceErrorBody { error: self.message() })).into_response()
     }

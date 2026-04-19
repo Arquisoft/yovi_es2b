@@ -1,16 +1,11 @@
 import { useState, useEffect } from "react";
-import type { GetMedal, ObtenerDatosRanking, SortRule } from "./RankingFiltered";
+import type { GetMedal, ObtenerDatosRanking, SortRule, RankingEntryShared } from "./RankingFiltered";
+import { sortData } from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
 type DifficultyFilter = "EASY" | "MEDIUM" | "HARD";
 
-//
-type RankingEntry = {
-    position: number;
-    username: string;
-    value: number;
-    percentage: string;
-};
+type RankingEntry = RankingEntryShared;
 
 const DIFFICULTY_LABELS: Record<DifficultyFilter, string> = {
     EASY:   "Fácil",
@@ -23,17 +18,6 @@ const DIFFICULTY_COLORS: Record<DifficultyFilter, string> = {
     MEDIUM: "ranking-info--orange",
     HARD: "ranking-info--red",
 };
-
-function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
-    return data.slice().sort((a, b) => {
-        if (sortBy === "percentage") {
-            const diff = Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
-            return diff !== 0 ? diff : b.value - a.value;
-        }
-        const diff = b.value - a.value;
-        return diff !== 0 ? diff : Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
-    });
-}
 
 export default function RankingDifficulty({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
 
@@ -81,12 +65,12 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal, so
                     </tr>
                 </thead>
                 <tbody>
-                    {sortData(data, sortBy).map((entry, idx) => (
+                    {sortData(data, sortBy).map((entry) => (
                         <tr
                             key={entry.username}
                             className={entry.username === username ? "ranking-row--me" : ""}
                         >
-                            <td>{getMedal(idx + 1)}</td>
+                            <td>{getMedal(entry.position)}</td>
                             <td>
                                 {entry.username}
                             </td>
