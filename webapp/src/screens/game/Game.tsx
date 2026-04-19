@@ -55,7 +55,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
   const [winner, setWinner] = useState<string | null>(null); // ganador de la partida, null si no hay ganador aún
   const [showEndScreen, setShowEndScreen] = useState(false);
   const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal
-  const [refreshKey, setRefreshKey] = useState(0);  // incrementar fuerza recarga del tablero 
+  const [refreshKey, setRefreshKey] = useState(0);  // incrementar fuerza recarga del tablero
 
   // como es función async, llamamos useEffect
   useEffect(() => {
@@ -199,6 +199,9 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
         </div>
 
         <div className="controls-bottom">
+          {!twoPlayers && (
+            <button id="hint-button" onClick={() => {}}>Pista</button>
+          )}
           <ControlPanel
             onExit={handleExit}
             onUndo={handleUndo}
