@@ -57,6 +57,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
   const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal
   const [refreshKey, setRefreshKey] = useState(0);  // incrementar fuerza recarga del tablero
   const [hintCoords, setHintCoords] = useState<{ x: number; y: number; z: number } | null>(null);
+  const [hintsUsed, setHintsUsed] = useState(0);
 
   // como es función async, llamamos useEffect
   useEffect(() => {
@@ -69,6 +70,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
     setTurno("Inicio");
     setGameState("Inicio");
     setGameId("");
+    setHintsUsed(0);
 
     async function nuevaPartida() {
       if (stateStart) {
@@ -134,6 +136,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
       if (!hintRes.ok) return;
       const hint = await hintRes.json();
       setHintCoords(hint.coords);
+      setHintsUsed((n) => n + 1);
     } catch (err) {
       console.error("Error al obtener pista:", err);
     }
@@ -221,7 +224,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
 
         <div className="controls-bottom">
           {!twoPlayers && (
-            <button id="hint-button" onClick={handleHint} disabled={hintCoords !== null}>Pista</button>
+            <button id="hint-button" onClick={handleHint} disabled={hintCoords !== null || hintsUsed >= 3}>Pista</button>
           )}
           <ControlPanel
             onExit={handleExit}
