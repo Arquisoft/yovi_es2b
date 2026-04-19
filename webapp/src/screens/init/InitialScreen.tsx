@@ -7,6 +7,7 @@ import yoviLogo from "../../../public/yovi_logo.png";
 const InitialScreen: React.FC = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
   const [logged, setLogged] = useState(false);
   const [toSigned, setToSigned] = useState(false);
@@ -72,10 +73,23 @@ const InitialScreen: React.FC = () => {
           <input
             type="text" id="username" value={username}
             onChange={(e) => setUsername(e.target.value)} className="form-input"/>
-            <label htmlFor="password">Contraseña</label>
-          <input
-            type="password" id="password" value={password}
-            onChange={(e) => setPassword(e.target.value)} className="form-input"/>
+          <label htmlFor="password">Contraseña</label>
+          <div className="password-field">
+            <input
+              type={showPassword ? "text" : "password"}
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="form-input password-field__input"
+            />
+            <button
+              type="button"
+              className="password-field__toggle"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+              aria-pressed={showPassword}
+            />
+          </div>
         </div>
         <button type="submit" className="submit-button" disabled={loading}>
           {loading ? 'Cargando usuario...' : 'Iniciar sesión'}
