@@ -32,7 +32,7 @@ describe('GET /ranking', () => {
             .get('/ranking/wins')
             .set('Accept', 'application/json')
  
-        const entry = res.body.ranking.find(e => e.username === 'Test_Username_Ranking')
+        const entry = await res.body.ranking.find(e => e.username === 'Test_Username_Ranking')
  
         expect(entry).toBeDefined()
         expect(entry.value).toBe(0)
