@@ -188,3 +188,11 @@
 #exit-button:hover, #restart-button:hover {
   background: rgba(255, 100, 100, 0.08);
 }
+
+.cell.hint {
+  background-color: #ca8a04;
+}
+
+.cell.hint::after {
+  background-color: #fde68a;
+}

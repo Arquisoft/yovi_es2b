@@ -118,3 +118,39 @@
   gap: 0.75rem;
   padding: 1.25rem 1.5rem 2rem 1rem;
 }
+
+#hint-button {
+  background: transparent;
+  color: #ca8a04;
+  border: 1px solid #ca8a04;
+  border-radius: 8px;
+  padding: 0.45rem 0.8rem;
+  font-weight: 600;
+  font-size: 0.88rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+#hint-button:hover {
+  background: rgba(202, 138, 4, 0.08);
+}
+
+#hint-button:disabled {
+  color: #a3a3a3;
+  border-color: #a3a3a3;
+  cursor: not-allowed;
+}
+
+#hint-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  margin-bottom: auto;
+}
+
+#hint-counter {
+  font-size: 0.75rem;
+  color: #a3a3a3;
+  text-align: center;
+}

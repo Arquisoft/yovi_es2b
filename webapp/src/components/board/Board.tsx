@@ -18,6 +18,7 @@ type BoardProps = {
   username2: string;
   twoPlayers: boolean;
   refreshKey: number;
+  hintCoords?: { x: number; y: number; z: number } | null;
   changeTurno: (turno: string) => void;
   onGameEnd: (winner: string) => void;
 };
@@ -242,12 +243,16 @@ export function Board(props: BoardProps) {
         const key = `f${x}-c${c}`;
         
         // Creamos una casilla con el índice y coordenadas y la añadimos a la fila
+        const hintKey = props.hintCoords
+          ? `f${BOARDHIGHT - 1 - props.hintCoords.x}-c${props.hintCoords.y}`
+          : null;
        casillasDeLaFila.push(
-          <Casilla 
+          <Casilla
             key={key}
-            index={key} 
+            index={key}
             valor={valores[key] ?? 0} //Al cambiar valores se cambiara el de la casilla
             bloq={bloq}
+            isHint={key === hintKey}
             alHacerClick={() => manejarClick(key)} //pasamos la función de click con el ID de la casilla
           />
         );
