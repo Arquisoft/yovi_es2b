@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import "./TurnTimer.css";
+import "./Timer.css";
 
 const TURN_SECONDS = 15;
 
