@@ -56,6 +56,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
   const [showEndScreen, setShowEndScreen] = useState(false);
   const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal
   const [refreshKey, setRefreshKey] = useState(0);  // incrementar fuerza recarga del tablero
+  const [hintCoords, setHintCoords] = useState<{ x: number; y: number; z: number } | null>(null);
 
   // como es función async, llamamos useEffect
   useEffect(() => {
@@ -117,6 +118,25 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
     setGameState("Terminada");
     onGameEnd?.(ganador); // notify parent if provided
 
+  }
+
+  async function handleHint() {
+    const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
+    try {
+      const stateRes = await fetch(`${GAMEY_URL}/v1/games/${gameId}`);
+      if (!stateRes.ok) return;
+      const stateData = await stateRes.json();
+      const hintRes = await fetch(`${GAMEY_URL}/play`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ position: stateData.state, bot_type: 'montecarlo_bot' }),
+      });
+      if (!hintRes.ok) return;
+      const hint = await hintRes.json();
+      setHintCoords(hint.coords);
+    } catch (err) {
+      console.error("Error al obtener pista:", err);
+    }
   }
 
   async function handleUndo() {
@@ -193,14 +213,15 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
             username2={username2}
             twoPlayers={twoPlayers}
             refreshKey={refreshKey}
-            changeTurno={setTurno}
+            hintCoords={hintCoords}
+            changeTurno={(t) => { setTurno(t); setHintCoords(null); }}
             onGameEnd={handleGameEnd}
           />
         </div>
 
         <div className="controls-bottom">
           {!twoPlayers && (
-            <button id="hint-button" onClick={() => {}}>Pista</button>
+            <button id="hint-button" onClick={handleHint}>Pista</button>
           )}
           <ControlPanel
             onExit={handleExit}
