@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Home from "../game/Home.tsx";
 import SignUp from "../init/SignUp.tsx";
+import PasswordToggleButton from "../../components/password/PasswordToggleButton.tsx";
 import "./InitialScreen.css";
 import yoviLogo from "../../../public/yovi_logo.png";
 
@@ -82,12 +83,9 @@ const InitialScreen: React.FC = () => {
               onChange={(e) => setPassword(e.target.value)}
               className="form-input password-field__input"
             />
-            <button
-              type="button"
-              className="password-field__toggle"
-              onClick={() => setShowPassword((prev) => !prev)}
-              //aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
-              aria-pressed={showPassword}
+            <PasswordToggleButton
+              showPassword={showPassword}
+              onToggle={() => setShowPassword((prev) => !prev)}
             />
           </div>
         </div>
