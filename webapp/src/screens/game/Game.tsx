@@ -228,7 +228,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
           {twoPlayers ? null : (
             <div id="hint-container">
               <button id="hint-button" onClick={handleHint} disabled={hintCoords !== null || hintsUsed >= 3}>Pista</button>
-              <span id="hint-counter">{3 - hintsUsed} pista{3 - hintsUsed !== 1 ? "s" : ""} restante{3 - hintsUsed !== 1 ? "s" : ""}</span>
+              <span id="hint-counter">{3 - hintsUsed} pista{3 - hintsUsed === 1 ? "" : "s"} restante{3 - hintsUsed === 1 ? "" : "s"}</span>
             </div>
           )}
           <ControlPanel
