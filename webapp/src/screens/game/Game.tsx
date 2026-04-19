@@ -2,11 +2,13 @@ import { useEffect, useState } from "react";
 import { Board } from "../../components/board/Board";
 import GameInfo from "../../components/board/GameInfo";
 import ControlPanel from "../../components/board/ControlPanel";
+import Timer from "../../components/timer/Timer";
 import type { GameSettings } from "../../components/gameOptions/GameSettings";
 import { getBoardSize } from "../../components/gameOptions/Difficulty";
 import "./Game.css";
 import { End } from "./End";
 import Home from "./Home";
+import TurnTimer from "../../components/timer/Timer";
 
 // Definimos la interfaz de las props
 interface GameProps {
@@ -116,8 +118,17 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
     setWinner(ganador);
     setGameState("Terminada");
     onGameEnd?.(ganador); // notify parent if provided
-
   }
+
+  /**
+   * Función para manejar la expiración del temporizador, cambiando el turno al otro jugador
+   * Board debe llamar a onTimerExpire() cuando el temporizador llegue a 0, aquí lo capturamos
+   * y forzamos el cambio de turno al otro jugador (o al bot) para que siga la partida sin esperar al jugador 
+   * que no ha movido a que haga algo después de quedarse sin tiempo
+   */
+  function handleTimerExpire() {
+  setTurno((t) => (t === username ? username2 : username));
+}
 
   async function handleUndo() {
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
@@ -181,6 +192,10 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
               >
                 {turno}
               </span>
+
+                {gameState === "Iniciada" && (
+                <Timer turno={turno} onExpire={handleTimerExpire} />
+              )}
             </div>
           )}
           <Board
