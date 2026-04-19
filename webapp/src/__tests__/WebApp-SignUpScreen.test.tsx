@@ -39,56 +39,56 @@ describe('SignUp', () => {
     /**
      * Comprueba que se crea el usuario correctamente y se llama a /createuser.
      */
-/*     test('crea usuario correctamente y llama a /createuser', async () => {
-        const user = userEvent.setup()
-        global.fetch = vi.fn().mockResolvedValueOnce({
-            ok: true,
-            json: async () => ({ message: 'Se creó el usuario sara' }),
-        } as Response)
-        render(<SignUp />)
-        await waitFor(async () => {
-            await user.type(screen.getByLabelText(/Usuario/i), 'sara')
-            await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
-            await user.click(screen.getByRole('button', { name: /Crear usuario/i }))
-            expect(global.fetch).toHaveBeenCalledWith(
-                expect.stringContaining('/createuser'),
-                expect.objectContaining({ method: 'POST' })
-            )
-        })
-    }) */
+    /*     test('crea usuario correctamente y llama a /createuser', async () => {
+            const user = userEvent.setup()
+            global.fetch = vi.fn().mockResolvedValueOnce({
+                ok: true,
+                json: async () => ({ message: 'Se creó el usuario sara' }),
+            } as Response)
+            render(<SignUp />)
+            await waitFor(async () => {
+                await user.type(screen.getByLabelText(/Usuario/i), 'sara')
+                await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
+                await user.click(screen.getByRole('button', { name: /Crear usuario/i }))
+                expect(global.fetch).toHaveBeenCalledWith(
+                    expect.stringContaining('/createuser'),
+                    expect.objectContaining({ method: 'POST' })
+                )
+            })
+        }) */
 
     /**
      * Comprueba que se muestra un error si el usuario ya existe.
      */
-/*     test('muestra error si el usuario ya existe', async () => {
-        const user = userEvent.setup()
-        global.fetch = vi.fn().mockResolvedValueOnce({
-            ok: false,
-            json: async () => ({ error: 'El usuario ya existe' }),
-        } as Response)
-        render(<SignUp />)
-        await waitFor(async () => {
-            await user.type(screen.getByLabelText(/Usuario/i), 'sara')
-            await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
-            await user.click(screen.getByRole('button', { name: /Crear usuario/i }))
-            expect(screen.getByText(/El usuario 'sara' ya existe. Prueba con otro nombre de usuario\./i)).toBeInTheDocument()
-        })
-    }) */
+    /*     test('muestra error si el usuario ya existe', async () => {
+            const user = userEvent.setup()
+            global.fetch = vi.fn().mockResolvedValueOnce({
+                ok: false,
+                json: async () => ({ error: 'El usuario ya existe' }),
+            } as Response)
+            render(<SignUp />)
+            await waitFor(async () => {
+                await user.type(screen.getByLabelText(/Usuario/i), 'sara')
+                await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
+                await user.click(screen.getByRole('button', { name: /Crear usuario/i }))
+                expect(screen.getByText(/El usuario 'sara' ya existe. Prueba con otro nombre de usuario\./i)).toBeInTheDocument()
+            })
+        }) */
 
     /**
      * Comprueba que se muestra un error si el servidor devuelve un error al crear el usuario.
      */
-/*     test('muestra error de red si el fetch falla', async () => {
-        const user = userEvent.setup()
-        global.fetch = vi.fn().mockRejectedValueOnce(new Error('Network error'))
-        render(<SignUp />)
-        await waitFor(async () => {
-            await user.type(screen.getByLabelText(/Usuario/i), 'sara')
-            await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
-            await user.click(screen.getByRole('button', { name: /Crear usuario/i }))
-            expect(screen.getByText(/Network error/i)).toBeInTheDocument()
-        })
-    }) */
+    /*     test('muestra error de red si el fetch falla', async () => {
+            const user = userEvent.setup()
+            global.fetch = vi.fn().mockRejectedValueOnce(new Error('Network error'))
+            render(<SignUp />)
+            await waitFor(async () => {
+                await user.type(screen.getByLabelText(/Usuario/i), 'sara')
+                await user.type(screen.getByLabelText(/Contraseña/i), 'Sara1234')
+                await user.click(screen.getByRole('button', { name: /Crear usuario/i }))
+                expect(screen.getByText(/Network error/i)).toBeInTheDocument()
+            })
+        }) */
 
     /**
      * Comprueba que se navega a la pantalla de login al pulsar el botón Atrás.
@@ -99,6 +99,62 @@ describe('SignUp', () => {
         await waitFor(async () => {
             await user.click(screen.getByRole('button', { name: /Atrás/i }))
             expect(screen.queryByText(/Bienvenido, regístrate aquí/i)).not.toBeInTheDocument()
+        })
+    })
+
+    /**
+     * Comprueba que el botón del ojo alterna la visibilidad de la contraseña.
+     * El test simula un usuario pulsando el botón del ojo para mostrar y ocultar la contraseña, 
+     * y verifica que el campo de contraseña cambia su tipo entre "password" y "text" correctamente.
+     */
+    test('el botón del ojo alterna la visibilidad de la contraseña', async () => {
+        render(<SignUp />)
+        const user = userEvent.setup()
+        await waitFor(async () => {
+            const passwordInput = screen.getByLabelText(/contraseña/i)
+            const toggleSwitch = document.querySelector('.password-field__toggle') as HTMLElement
+
+            expect(passwordInput).toHaveAttribute('type', 'password')
+
+            await user.click(toggleSwitch)
+            expect(passwordInput).toHaveAttribute('type', 'text')
+
+            await user.click(toggleSwitch)
+            expect(passwordInput).toHaveAttribute('type', 'password')
+        })
+    })
+
+    /**
+ * Comprueba que el botón de crear usuario se deshabilita y cambia su texto mientras se procesa la petición.
+ * El test simula un usuario rellenando el formulario y pulsando crear usuario, verificando que
+ * el botón muestra "Creando usuario..." y está deshabilitado durante la carga.
+ */
+    test('el botón se deshabilita y muestra texto de carga mientras se procesa el registro', async () => {
+        render(<SignUp />)
+        const user = userEvent.setup()
+        global.fetch = vi.fn().mockImplementation(() => new Promise(() => { })) // fetch que nunca resuelve
+        await waitFor(async () => {
+            await user.type(screen.getByLabelText(/usuario/i), 'sara')
+            await user.type(screen.getByLabelText(/contraseña/i), 'Sara1234')
+            await user.click(screen.getByRole('button', { name: /crear usuario/i }))
+            expect(screen.getByRole('button', { name: /creando usuario/i })).toBeDisabled()
+        })
+    })
+
+    /**
+     * Comprueba que se muestra un error de red si la petición de registro falla.
+     * El test simula un fallo de red en fetch y verifica que se muestra el mensaje de error
+     * correspondiente en la pantalla.
+     */
+    test('se muestra error de red si la petición falla', async () => {
+        render(<SignUp />)
+        const user = userEvent.setup()
+        global.fetch = vi.fn().mockRejectedValue(new Error('Network error'))
+        await waitFor(async () => {
+            await user.type(screen.getByLabelText(/usuario/i), 'sara')
+            await user.type(screen.getByLabelText(/contraseña/i), 'Sara1234')
+            await user.click(screen.getByRole('button', { name: /crear usuario/i }))
+            expect(screen.getByText(/Network error/i)).toBeInTheDocument()
         })
     })
 })

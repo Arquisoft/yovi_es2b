@@ -76,7 +76,7 @@ const SignUp: React.FC = () => {
                             type="button"
                             className="password-field__toggle"
                             onClick={() => setShowPassword((prev) => !prev)}
-                            aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                            //aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                             aria-pressed={showPassword}
                         />
                     </div>

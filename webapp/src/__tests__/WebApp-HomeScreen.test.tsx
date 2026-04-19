@@ -40,7 +40,7 @@ describe('Home', () => {
         expect(screen.getByRole('button', { name: /mis estadísticas/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /ranking/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /cerrar sesión/i })).toBeInTheDocument()
-    }) 
+    })
 
     /**
      * Comprueba que se muestra el botón de empezar partida contra bot.
@@ -68,7 +68,7 @@ describe('Home', () => {
         render(<Home username="sara" />)
         const user = userEvent.setup()
         await waitFor(async () => {
-            await user.click(screen.getByRole('button',{ name: /empezar partida 2 jugadores/i }))
+            await user.click(screen.getByRole('button', { name: /empezar partida 2 jugadores/i }))
             expect(screen.getByText(/El nombre del jugador 2 no puede estar vacío/i)).toBeInTheDocument()
         })
     })
@@ -137,4 +137,76 @@ describe('Home', () => {
         await userEvent.selectOptions(select, 'RANDOM')
         expect((select as HTMLSelectElement).value).toBe('RANDOM')
     })
+
+
+    /**
+     * Comprueba que el toggle de temporizador del panel de 2 jugadores se puede activar y desactivar.
+     * El test simula un usuario haciendo clic sobre el toggle de temporizador del modo 2 jugadores,
+     * verificando que está activo por defecto, se desactiva al primer clic y se reactiva al segundo.
+     */
+    test('el toggle de temporizador de 2 jugadores cambia de estado', async () => {
+        render(<Home username="sara" />)
+        const user = userEvent.setup()
+        await waitFor(async () => {
+            const pvpTimerToggle = screen.getByRole('checkbox', { name: /partida con temporizador activo/i })
+
+            expect(pvpTimerToggle).toBeChecked()
+
+            await user.click(pvpTimerToggle)
+            expect(pvpTimerToggle).not.toBeChecked()
+
+            await user.click(pvpTimerToggle)
+            expect(pvpTimerToggle).toBeChecked()
+        })
+    })
+
+    /**
+ * Comprueba que el toggle switch de temporizador de 2 jugadores está activado por defecto.
+ * El componente inicializa el temporizador como activo, por lo que el toggle debe
+ * aparecer marcado sin necesidad de interacción del usuario.
+ */
+    test('el toggle switch de temporizador de 2 jugadores está activado por defecto', () => {
+        render(<Home username="sara" />)
+        expect(screen.getByLabelText(/partida con temporizador activo/i)).toBeChecked()
+    })
+
+    /**
+     * Comprueba que el toggle switch de temporizador de 2 jugadores se puede desactivar y reactivar.
+     * El test simula un usuario haciendo clic sobre el toggle, verificando que se desactiva
+     * al primer clic y se reactiva al segundo.
+     */
+    test('el toggle switch de temporizador de 2 jugadores cambia de estado', async () => {
+        render(<Home username="sara" />)
+        const user = userEvent.setup()
+        await waitFor(async () => {
+            const timerToggle = screen.getByLabelText(/partida con temporizador activo/i)
+
+            await user.click(timerToggle)
+            expect(timerToggle).not.toBeChecked()
+
+            await user.click(timerToggle)
+            expect(timerToggle).toBeChecked()
+        })
+    })
+
+    /**
+     * Comprueba que al iniciar partida 2 jugadores con el temporizador desactivado, la partida
+     * arranca correctamente sin temporizador activo.
+     * El test desactiva el toggle, rellena el nombre del jugador 2 e inicia la partida,
+     * verificando que el menú principal desaparece.
+     */
+    test('inicia partida 2 jugadores con el temporizador desactivado', async () => {
+        render(<Home username="sara" />)
+        const user = userEvent.setup()
+        global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ message: 'ok' }) })
+        await waitFor(async () => {
+            await user.click(screen.getByLabelText(/partida con temporizador activo/i))
+            expect(screen.getByLabelText(/partida con temporizador activo/i)).not.toBeChecked()
+
+            await user.type(screen.getByLabelText(/nombre del jugador 2/i), 'iyan')
+            await user.click(screen.getByRole('button', { name: /empezar partida 2 jugadores/i }))
+            expect(screen.queryByText(/Bienvenido a tu menú principal/i)).not.toBeInTheDocument()
+        })
+    })
+
 })
