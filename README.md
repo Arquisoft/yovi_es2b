@@ -15,10 +15,15 @@
 
 ## Enlaces
 
-| | |
-|---|---|
-| 🌐 **Aplicación** | [gameyes2b.duckdns.org](https://gameyes2b.duckdns.org/) |
-| 📖 **Documentación** | [arquisoft.github.io/yovi_es2b](https://arquisoft.github.io/yovi_es2b/) |
+<p align="center">
+  <a href="https://gameyes2b.duckdns.org/">
+    <img src="https://img.shields.io/badge/🌐%20Aplicación-gameyes2b.duckdns.org-blue?style=for-the-badge" alt="Aplicación"/>
+  </a>
+  &nbsp;&nbsp;
+  <a href="https://arquisoft.github.io/yovi_es2b/">
+    <img src="https://img.shields.io/badge/📖%20Documentación-arquisoft.github.io-orange?style=for-the-badge" alt="Documentación"/>
+  </a>
+</p>
 
 ---
 
@@ -27,7 +32,7 @@
 | <img src="https://github.com/saranaredo.png" width="80"> | <img src="https://github.com/JimenaVazquez.png" width="80"> | <img src="https://github.com/iyaniglesias.png" width="80"> |
 |:---:|:---:|:---:|
 | [Sara Naredo](https://github.com/saranaredo) | [Jimena Vázquez](https://github.com/JimenaVazquez) | [Iyán Iglesias](https://github.com/iyaniglesias) |
-| Frontend | UO301668 | UO302334 |
+| UO300563 | UO301668 | UO302334 |
 
 ---
 
