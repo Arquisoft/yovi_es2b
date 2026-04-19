@@ -15,28 +15,29 @@
 
 ## Enlaces
 
-<p align="center">
-  <a href="https://gameyes2b.duckdns.org/">
-    <img src="https://img.shields.io/badge/%20Aplicación-gameyes2b.duckdns.org-blue?style=for-the-badge" alt="Aplicación"/>
-  </a>
-  <span>&nbsp;&nbsp;&nbsp;</span>
-  <a href="https://arquisoft.github.io/yovi_es2b/">
-    <img src="https://img.shields.io/badge/%20Documentación-arquisoft.github.io-orange?style=for-the-badge" alt="Documentación"/>
-  </a>
-</p>
+<p align="center"><a href="https://gameyes2b.duckdns.org/"><img src="https://img.shields.io/badge/%20Aplicación-gameyes2b.duckdns.org-blue?style=for-the-badge" alt="Aplicación"/></a>&emsp;&emsp;<a href="https://arquisoft.github.io/yovi_es2b/"><img src="https://img.shields.io/badge/%20Documentación-arquisoft.github.io-orange?style=for-the-badge" alt="Documentación"/></a></p>
 
 ---
 
 ## Equipo
 
-<p align="center">
-
-| <img src="https://github.com/iyaniglesias.png" width="80"> | <img src="https://github.com/JimenaVazquez.png" width="80"> | <img src="https://github.com/saranaredo.png" width="80"> |
-|:---:|:---:|:---:|
-| [Iyán Iglesias](https://github.com/iyaniglesias) | [Jimena Vázquez](https://github.com/JimenaVazquez) | [Sara Naredo](https://github.com/saranaredo) |
-| UO302334 | UO301668 | UO300563 |
-
-</p>
+<table align="center">
+  <tr>
+    <td align="center"><img src="https://github.com/iyaniglesias.png" width="80"/></td>
+    <td align="center"><img src="https://github.com/JimenaVazquez.png" width="80"/></td>
+    <td align="center"><img src="https://github.com/saranaredo.png" width="80"/></td>
+  </tr>
+  <tr>
+    <td align="center"><a href="https://github.com/iyaniglesias">Iyán Iglesias</a></td>
+    <td align="center"><a href="https://github.com/JimenaVazquez">Jimena Vázquez</a></td>
+    <td align="center"><a href="https://github.com/saranaredo">Sara Naredo</a></td>
+  </tr>
+  <tr>
+    <td align="center">UO302334</td>
+    <td align="center">UO301668</td>
+    <td align="center">UO300563</td>
+  </tr>
+</table>
 
 ---
 
