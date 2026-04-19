@@ -22,6 +22,7 @@ describe('GET /ranking', () => {
     })
 
     // ---------- Ranking con usuario ---------- //
+    
     /**
      * Un usuario recién creado aparece en el ranking con value 0
      */
@@ -32,7 +33,7 @@ describe('GET /ranking', () => {
             .get('/ranking/wins')
             .set('Accept', 'application/json')
  
-        const entry = await res.body.ranking.find(e => e.username === 'Test_Username_Ranking')
+        const entry = res.body.ranking.find(e => e.username === 'Test_Username_Ranking')
 
         console.log(res.body)
         console.log(res.body.ranking)

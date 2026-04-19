@@ -86,7 +86,7 @@ async function startServer() {
  * Esta funcion conecta a la base de datos y arranca el servidor en el puerto definido
  */
 if (require.main === module) {
-  connectDB().then(() => {
+  startServer().then(() => {
     app.listen(port, () => {
       console.log(`User Service listening at http://localhost:${port}`);
     });
@@ -94,7 +94,7 @@ if (require.main === module) {
 }
 startServer();
 
-module.exports = app;
+module.exports = { app, startServer };
 
 
 
