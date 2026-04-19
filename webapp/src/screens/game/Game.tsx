@@ -221,7 +221,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
 
         <div className="controls-bottom">
           {!twoPlayers && (
-            <button id="hint-button" onClick={handleHint}>Pista</button>
+            <button id="hint-button" onClick={handleHint} disabled={hintCoords !== null}>Pista</button>
           )}
           <ControlPanel
             onExit={handleExit}

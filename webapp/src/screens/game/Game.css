@@ -134,3 +134,9 @@
 #hint-button:hover {
   background: rgba(202, 138, 4, 0.08);
 }
+
+#hint-button:disabled {
+  color: #a3a3a3;
+  border-color: #a3a3a3;
+  cursor: not-allowed;
+}
