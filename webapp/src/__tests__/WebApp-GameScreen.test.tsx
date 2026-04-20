@@ -301,6 +301,31 @@ describe('Game', () => {
     })
 
     /**
+     * Comprueba que se pueden dar un máximo de 3 pistas por partida, y que después de usar 3 pistas el botón de pista se deshabilita permanentemente.
+     * El test simula un usuario pulsando el botón de pista 3 veces, verificando que se hacen las llamadas a la API para obtener la pista, y comprueba que después de la tercera pista el botón de pista se deshabilita permanentemente.
+     */
+    test('limita el uso de pistas a 3 por partida', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
+        )
+        const hintButton = await screen.findByRole('button', { name: /pista/i })
+        for (let i = 0; i < 3; i++) {
+            await user.click(hintButton)
+            await waitFor(() => {
+                expect(global.fetch).toHaveBeenCalledWith(
+                    expect.stringContaining('/play'),
+                    expect.objectContaining({ method: 'POST' })
+                )
+            })
+        }
+        await waitFor(() => {
+            expect(hintButton).toBeDisabled()
+        })  
+    })
+
+    /**
      * Comprueba que en el modo 2 jugadores, al dar a deshacer movimiento, se llama al endpoint /undo y se actualiza el estado del tablero.
      * El test simula un usuario pulsando el botón de deshacer movimiento, verifica que se hace la llamada a la API para deshacer el movimiento, y comprueba que el estado del tablero se actualiza correctamente tras la respuesta de la API.
      */
