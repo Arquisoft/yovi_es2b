@@ -301,6 +301,49 @@ describe('Game', () => {
         })
     })
 
+    /**
+     * Comprueba que al pulsar el botón "Terminar partida", se muestra el mensaje de bienvenida con el nombre del usuario en el menú principal.
+     * El test simula un usuario pulsando el botón "Terminar partida" y espera a que se renderice el menú principal, comprobando que el mensaje de bienvenida contiene el nombre del usuario.
+     * Se utiliza la función mockFetch para simular las respuestas de la API sin necesidad de hacer llamadas reales.
+     */
+    test('muestra el mensaje de bienvenida con el nombre del usuario al terminar la partida', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
+        )
+        await waitFor(async () => {
+            await user.click(screen.getByRole('button', { name: /Terminar partida/i }))
+            expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
+        })
+    })
 
+    /**
+     * Comprueba que al ganar la partida, se muestra el mensaje de victoria con el nombre del ganador.
+     * El test simula el fin de la partida notificando al componente que el jugador "sara" ha ganado,
+     *  y verifica que se muestra un mensaje de victoria que incluye el nombre del ganador.
+     * Tiene que esperar 3 segundos para que el mensaje de victoria se muestre, ya que el componente espera ese tiempo antes de mostrarlo tras recibir la notificación de fin de partida.
+     */
+    test('muestra el mensaje de victoria con el nombre del ganador al ganar la partida', async () => {
+        const onGameEnd = vi.fn()
+        userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} onGameEnd={onGameEnd} />
+        )
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalled()
+        })
+        // Simulamos el fin de la partida notificando que "sara" ha ganado
+        await waitFor(() => {
+            onGameEnd({ winner: 'sara' })
+        })
+        // Esperamos a que se muestre el mensaje de victoria tras el fin de la partida
+        await waitFor(() => {
+            expect(screen.getByText(/¡sara ha ganado!/i)).toBeInTheDocument()
+        }, { timeout: 4000 }) // Aumentamos el timeout para esperar el mensaje de victoria
+    })
+
+    
 })
 
