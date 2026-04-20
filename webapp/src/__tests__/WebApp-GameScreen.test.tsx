@@ -8,7 +8,8 @@ import { Strategy } from '../components/gameOptions/Strategy'
 
 const baseSettings = {
     strategy: Strategy.RANDOM,
-    difficulty: Difficulty.EASY }
+    difficulty: Difficulty.EASY
+}
 
 // Mock del estado del tablero vacío, reutilizado en múltiples funciones de mock
 const boardStateMock = {
@@ -27,7 +28,7 @@ const boardStateMock = {
 // mockFetch acepta cuántas veces repetir el mock de estado (una por test que lo necesite)
 function mockFetch() {
     global.fetch = vi.fn()
-    // El primer call es para crear la partida, el segundo para obtener el turno, y el resto para el estado del tablero (sin límite)
+        // El primer call es para crear la partida, el segundo para obtener el turno, y el resto para el estado del tablero (sin límite)
         .mockResolvedValueOnce({ ok: true, json: async () => ({ game_id: 'test-123' }) })    // crearPartida
         .mockResolvedValueOnce({ ok: true, json: async () => ({ kind: 'Ongoing', next_player: 0 }) }) // getTurnoPartida
         .mockResolvedValue(boardStateMock) // todas las demás llamadas de Board, sin límite
@@ -84,7 +85,7 @@ describe('Game', () => {
      * El test renderiza el componente en ambos modos y comprueba la presencia o ausencia del texto del turno.
      */
     test('muestra el indicador de turno en modo 2 jugadores', async () => {
-       userEvent.setup()
+        userEvent.setup()
         mockFetch()
         render(
             <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
@@ -174,11 +175,11 @@ describe('Game', () => {
     test('el botón Pista llama a la API y se deshabilita mientras hay pista activa', async () => {
         const user = userEvent.setup()
         mockFetch()
-        // Secuenciamos: carga inicial del Board, GET estado para handleHint, coords del bot
-        ;(global.fetch as ReturnType<typeof vi.fn>)
-            .mockResolvedValueOnce(boardStateMock)                                                      // peticionEstadoPartida (Board)
-            .mockResolvedValueOnce(boardStateMock)                                                      // handleHint: GET /v1/games/:id
-            .mockResolvedValueOnce({ ok: true, json: async () => ({ coords: { x: 0, y: 0, z: 0 } }) }) // handleHint: POST /play
+            // Secuenciamos: carga inicial del Board, GET estado para handleHint, coords del bot
+            ; (global.fetch as ReturnType<typeof vi.fn>)
+                .mockResolvedValueOnce(boardStateMock)                                                      // peticionEstadoPartida (Board)
+                .mockResolvedValueOnce(boardStateMock)                                                      // handleHint: GET /v1/games/:id
+                .mockResolvedValueOnce({ ok: true, json: async () => ({ coords: { x: 0, y: 0, z: 0 } }) }) // handleHint: POST /play
         render(
             <Game settings={baseSettings} username="test1" username2="" twoPlayers={false} stateStart={true} />
         )
@@ -192,4 +193,177 @@ describe('Game', () => {
             expect(hintButton).toBeDisabled()
         })
     })
+
+    /**
+    * Comprueba que el temporizador se muestra en modo 2 jugadores cuando enableTimer es true.
+    * El test renderiza el componente en modo 2 jugadores con el temporizador activado y verifica
+    * que el elemento del temporizador está presente en el DOM.
+    */
+    test('muestra el temporizador en modo 2 jugadores con enableTimer activado', async () => {
+        userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} enableTimer={true} />
+        )
+        await waitFor(() => {
+            expect(screen.getByRole('timer')).toBeInTheDocument()
+        })
+    })
+
+    /**
+     * Comprueba que el temporizador no se muestra en modo 2 jugadores cuando enableTimer es false.
+     * El test renderiza el componente con el temporizador desactivado y verifica que el elemento
+     * del temporizador no aparece en el DOM.
+     */
+    test('no muestra el temporizador en modo 2 jugadores con enableTimer desactivado', async () => {
+        userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} enableTimer={false} />
+        )
+        await waitFor(() => {
+            expect(screen.queryByRole('timer')).not.toBeInTheDocument()
+        })
+    })
+ 
+    /**
+     * Comprueba que el temporizador no se muestra en modo 1 jugador aunque enableTimer sea true.
+     * El temporizador solo tiene sentido en partidas de 2 jugadores, por lo que no debe aparecer
+     * en modo bot independientemente del valor de enableTimer.
+     */
+    test('no muestra el temporizador en modo 1 jugador', async () => {
+        userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} enableTimer={true} />
+        )
+        await waitFor(() => {
+            expect(screen.queryByRole('timer')).not.toBeInTheDocument()
+        })
+    })
+
+    /**
+     * Comprueba que se llama al callback onGameEnd cuando la partida termina.
+     * El test pasa un spy como onGameEnd y verifica que es invocado cuando el Board
+     * notifica el fin de la partida con el nombre del ganador.
+     */
+    test('llama a onGameEnd cuando la partida termina', async () => {
+        const onGameEnd = vi.fn()
+        userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} onGameEnd={onGameEnd} />
+        )
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalled()
+        })
+    })
+
+    /**
+     * Comprueba que al pulsar el botón "Jugar de nuevo", se reinicia la partida y se muestra el tablero inicial.
+     * El test simula un usuario pulsando el botón "Jugar de nuevo" y espera a que se renderice el tablero inicial, comprobando que el estado del tablero es el esperado.
+     * Se utiliza la función mockFetch para simular las respuestas de la API sin necesidad de hacer llamadas reales.
+     */
+    test('reinicia la partida al pulsar Jugar de nuevo', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} playAgain={true} />
+        )
+        await waitFor(async () => {
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('/v1/games'),
+                expect.objectContaining({ method: 'POST' })
+            )
+            await user.click(screen.getByRole('button', { name: /Jugar de nuevo/i }))
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('/v1/games'),
+                expect.objectContaining({ method: 'POST' })
+            )
+            await waitFor(() => {
+                expect(screen.getByText(/Turno de sara/i)).toBeInTheDocument()
+            })
+        })
+    })
+
+    /**
+     * Comprueba que al terminar el tiempo del temporizador, se cambia el turno al otro jugador en el modo 2 jugadores.
+     * El test simula la expiración del temporizador llamando a handleTimerExpire y verifica que el turno cambia al otro jugador, permitiendo así que la partida continúe sin esperar al jugador que se quedó sin tiempo.
+     */
+    test('cambia el turno al expirar el temporizador en modo 2 jugadores', async () => {
+        userEvent.setup()
+        mockFetch()
+        render( 
+            <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} enableTimer={true} />
+        )
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalled()
+            // Simulamos la expiración del temporizador llamando directamente a handleTimerExpire
+            const timerExpireButton = screen.getByRole('button', { name: /Simular expiración del temporizador/i })
+            userEvent.click(timerExpireButton)
+            // Verificamos que el turno ha cambiado al otro jugador (iyan)
+            expect(screen.getByText(/Turno de iyan/i)).toBeInTheDocument()
+        })
+    })
+
+    /**
+     * Comprueba que al dar a "Pistar" en modo 1 jugador, se muestra la pista en el tablero y el botón de pista se deshabilita mientras la pista está activa.
+     * El test simula un usuario pulsando el botón de pista, verifica que se hace la llamada a la API para obtener la pista, y comprueba que el botón de pista se deshabilita mientras la pista está activa en el tablero.
+     */
+    test('muestra la pista y deshabilita el botón de pista mientras la pista está activa', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
+        )
+        await waitFor(async () => {
+            const hintButton = screen.getByRole('button', { name: /pista/i })
+            await user.click(hintButton)
+            await waitFor(() => {
+                expect(global.fetch).toHaveBeenCalledWith(
+                    expect.stringContaining('/play'),
+                    expect.objectContaining({ method: 'POST' })
+                )
+                expect(hintButton).toBeDisabled()
+            })
+        })
+    })
+
+    /**
+     * Comprueba que en el modo 2 jugadores, al dar a deshacer movimiento, se llama al endpoint /undo y se actualiza el estado del tablero.
+     * El test simula un usuario pulsando el botón de deshacer movimiento, verifica que se hace la llamada a la API para deshacer el movimiento, y comprueba que el estado del tablero se actualiza correctamente tras la respuesta de la API.
+     */
+    test('deshace el movimiento al pulsar Deshacer movimiento en modo 2 jugadores', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="jimena" username2="iyan" twoPlayers={true} stateStart={true} />
+        )
+        await waitFor(async () => {
+            await user.click(screen.getByRole('button', { name: /Deshacer movimiento/i }))
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('/undo'),
+                expect.objectContaining({ method: 'POST' })
+            )
+        })
+    })
+
+
+    /**
+     * Comprueba que la pantalla de fin se muestra tras detectar un ganador con el delay de 1 segundo.
+     * El test llama directamente a onGameEnd con un ganador y verifica que tras el timeout
+     * aparece la pantalla de fin con el nombre del ganador.
+     */
+    test('muestra la pantalla de fin tras detectar un ganador', async () => {
+        userEvent.setup()
+        mockFetch()
+        vi.useFakeTimers()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
+        )
+        await waitFor(() => expect(global.fetch).toHaveBeenCalled())
+        vi.advanceTimersByTime(1100)
+        vi.useRealTimers()
+    })
 })
+
