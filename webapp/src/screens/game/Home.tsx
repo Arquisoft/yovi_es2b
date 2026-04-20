@@ -44,6 +44,7 @@ export default function HomePage( {username} : { username: string }) {
     const [username2, setUsername2] = useState("");
     const [username2Error, setUsername2Error] = useState<string | null>(null);
     const [difficulty2, setDifficulty2] = useState<DifficultyType>(Difficulty.MEDIUM);
+    const [timerEnabled2, setTimerEnabled2] = useState(true);
     const [screen, setScreen] = useState("home");
 
     // como es función async, llamamos useEffect
@@ -55,7 +56,7 @@ export default function HomePage( {username} : { username: string }) {
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (twoPlayersStarted) {
-        return <Game settings={{ ...settings, difficulty: difficulty2 }} username={username} username2={username2} twoPlayers={true} stateStart={true} onGoMenu={() => setTwoPlayersStarted(false)}/>;
+        return <Game settings={{ ...settings, difficulty: difficulty2 }} username={username} username2={username2} twoPlayers={true} stateStart={true} enableTimer={timerEnabled2} onGoMenu={() => setTwoPlayersStarted(false)}/>;
     }
 
     if (screen==="game") {
@@ -184,6 +185,21 @@ export default function HomePage( {username} : { username: string }) {
                                 Grande
                             </button>
                         </div>
+
+                        <span className="home-config__label">Temporizador</span>
+                        <label className="home-toggle" htmlFor="timer-enabled-2p">
+                            <span className="home-toggle__text">Partida con temporizador activo</span>
+                            <span className="home-toggle__control">
+                                <input
+                                    id="timer-enabled-2p"
+                                    className="home-toggle__input"
+                                    type="checkbox"
+                                    checked={timerEnabled2}
+                                    onChange={(e) => setTimerEnabled2(e.target.checked)}
+                                />
+                                <span className="home-toggle__slider" aria-hidden="true" />
+                            </span>
+                        </label>
 
                         <div className="home-config__spacer" />
 
