@@ -28,7 +28,7 @@ describe('InitialScreen', () => {
         render(<InitialScreen />)
         expect(screen.getByText(/Bienvenido de nuevo, inicia sesión aquí/i)).toBeInTheDocument()
         expect(screen.getByLabelText(/Usuario/i)).toBeInTheDocument()
-        expect(screen.getByLabelText(/Contraseña/i)).toBeInTheDocument()
+        expect(screen.getByLabelText(/^Contraseña$/i)).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Iniciar sesión/i })).toBeInTheDocument()
     })
 
@@ -90,7 +90,7 @@ test('el botón del ojo alterna la visibilidad de la contraseña', async () => {
     render(<InitialScreen />)
     const user = userEvent.setup()
     await waitFor(async () => {
-        const passwordInput = screen.getByLabelText(/contraseña/i)
+        const passwordInput = screen.getByLabelText(/^contraseña$/i)
         const toggleButton = document.querySelector('.password-field__toggle') as HTMLElement
 
         expect(passwordInput).toHaveAttribute('type', 'password')

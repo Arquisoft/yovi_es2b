@@ -23,7 +23,7 @@ describe('SignUp', () => {
         expect(screen.getByText(/Bienvenido, regístrate aquí/i)).toBeInTheDocument()
         expect(screen.getByText(/Crea tu usuario y contraseña para registrarte en Yovi\./i)).toBeInTheDocument()
         expect(screen.getByLabelText(/Usuario/i)).toBeInTheDocument()
-        expect(screen.getByLabelText(/Contraseña/i)).toBeInTheDocument()
+        expect(screen.getByLabelText(/^Contraseña$/i)).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Crear usuario/i })).toBeInTheDocument()
     })
 
@@ -57,7 +57,7 @@ describe('SignUp', () => {
         render(<SignUp />)
         const user = userEvent.setup()
         await waitFor(async () => {
-            const passwordInput = screen.getByLabelText(/contraseña/i)
+            const passwordInput = screen.getByLabelText(/^contraseña$/i)
             const toggleSwitch = document.querySelector('.password-field__toggle') as HTMLElement
 
             expect(passwordInput).toHaveAttribute('type', 'password')
@@ -81,7 +81,7 @@ describe('SignUp', () => {
         global.fetch = vi.fn().mockImplementation(() => new Promise(() => { })) // fetch que nunca resuelve
         await waitFor(async () => {
             await user.type(screen.getByLabelText(/usuario/i), 'sara')
-            await user.type(screen.getByLabelText(/contraseña/i), 'Sara1234')
+            await user.type(screen.getByLabelText(/^contraseña$/i), 'Sara1234')
             await user.click(screen.getByRole('button', { name: /crear usuario/i }))
             expect(screen.getByRole('button', { name: /creando usuario/i })).toBeDisabled()
         })
@@ -98,7 +98,7 @@ describe('SignUp', () => {
         global.fetch = vi.fn().mockRejectedValue(new Error('Network error'))
         await waitFor(async () => {
             await user.type(screen.getByLabelText(/usuario/i), 'sara')
-            await user.type(screen.getByLabelText(/contraseña/i), 'Sara1234')
+            await user.type(screen.getByLabelText(/^contraseña$/i), 'Sara1234')
             await user.click(screen.getByRole('button', { name: /crear usuario/i }))
             expect(screen.getByText(/Network error/i)).toBeInTheDocument()
         })
