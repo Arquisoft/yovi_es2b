@@ -386,5 +386,37 @@ describe('Game', () => {
             expect(onGameEnd).toHaveBeenCalledWith({ winner: 'sara' })
         })
     })
+
+    /**
+     * Comprueba que el tamaño del tablero cambia según la dificultad seleccionada en modo 1 jugador.
+     * El test renderiza el componente en modo 1 jugador con diferentes configuraciones de dificultad (fácil, medio, difícil) y verifica que el tamaño del tablero se ajusta correctamente a cada dificultad.
+     * Para facil el tamaño es 8, para medio es 10 y para difícil es 12.
+     */
+    test('ajusta el tamaño del tablero según la dificultad en modo 1 jugador', async () => {    
+        userEvent.setup()
+        // Para cada dificultad, renderizamos el componente y verificamos que se hace la llamada a la API para crear la partida con el tamaño de tablero correcto.
+        const difficulties = [
+            { difficulty: Difficulty.EASY, expectedSize: 8 },
+            { difficulty: Difficulty.MEDIUM, expectedSize: 10 },
+            { difficulty: Difficulty.HARD, expectedSize: 12 }
+        ]
+        // Recorremos cada dificultad, renderizamos el componente y verificamos la llamada a la API con el tamaño correcto.
+        for (const { difficulty, expectedSize } of difficulties) {
+            mockFetch()
+            render(
+                <Game settings={{ ...baseSettings, difficulty }} username="sara" username2="" twoPlayers={false} stateStart={true} />
+            )
+            await waitFor(() => {
+                expect(global.fetch).toHaveBeenCalledWith(
+                    expect.stringContaining('/v1/games'),
+                    expect.objectContaining({
+                        method: 'POST',
+                        body: expect.stringContaining(`"board_size":${expectedSize}`)
+                    })
+                )
+            })
+            vi.restoreAllMocks()
+        }   
+        })
 })
 
