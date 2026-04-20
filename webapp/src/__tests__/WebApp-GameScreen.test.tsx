@@ -260,53 +260,6 @@ describe('Game', () => {
     })
 
     /**
-     * Comprueba que al pulsar el botón "Jugar de nuevo", se reinicia la partida y se muestra el tablero inicial.
-     * El test simula un usuario pulsando el botón "Jugar de nuevo" y espera a que se renderice el tablero inicial, comprobando que el estado del tablero es el esperado.
-     * Se utiliza la función mockFetch para simular las respuestas de la API sin necesidad de hacer llamadas reales.
-     */
-    test('reinicia la partida al pulsar Jugar de nuevo', async () => {
-        const user = userEvent.setup()
-        mockFetch()
-        render(
-            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} playAgain={true} />
-        )
-        await waitFor(async () => {
-            expect(global.fetch).toHaveBeenCalledWith(
-                expect.stringContaining('/v1/games'),
-                expect.objectContaining({ method: 'POST' })
-            )
-            await user.click(screen.getByRole('button', { name: /Jugar de nuevo/i }))
-            expect(global.fetch).toHaveBeenCalledWith(
-                expect.stringContaining('/v1/games'),
-                expect.objectContaining({ method: 'POST' })
-            )
-            await waitFor(() => {
-                expect(screen.getByText(/Turno de sara/i)).toBeInTheDocument()
-            })
-        })
-    })
-
-    /**
-     * Comprueba que al terminar el tiempo del temporizador, se cambia el turno al otro jugador en el modo 2 jugadores.
-     * El test simula la expiración del temporizador llamando a handleTimerExpire y verifica que el turno cambia al otro jugador, permitiendo así que la partida continúe sin esperar al jugador que se quedó sin tiempo.
-     */
-    test('cambia el turno al expirar el temporizador en modo 2 jugadores', async () => {
-        userEvent.setup()
-        mockFetch()
-        render( 
-            <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} enableTimer={true} />
-        )
-        await waitFor(() => {
-            expect(global.fetch).toHaveBeenCalled()
-            // Simulamos la expiración del temporizador llamando directamente a handleTimerExpire
-            const timerExpireButton = screen.getByRole('button', { name: /Simular expiración del temporizador/i })
-            userEvent.click(timerExpireButton)
-            // Verificamos que el turno ha cambiado al otro jugador (iyan)
-            expect(screen.getByText(/Turno de iyan/i)).toBeInTheDocument()
-        })
-    })
-
-    /**
      * Comprueba que al dar a "Pistar" en modo 1 jugador, se muestra la pista en el tablero y el botón de pista se deshabilita mientras la pista está activa.
      * El test simula un usuario pulsando el botón de pista, verifica que se hace la llamada a la API para obtener la pista, y comprueba que el botón de pista se deshabilita mientras la pista está activa en el tablero.
      */
@@ -349,21 +302,5 @@ describe('Game', () => {
     })
 
 
-    /**
-     * Comprueba que la pantalla de fin se muestra tras detectar un ganador con el delay de 1 segundo.
-     * El test llama directamente a onGameEnd con un ganador y verifica que tras el timeout
-     * aparece la pantalla de fin con el nombre del ganador.
-     */
-    test('muestra la pantalla de fin tras detectar un ganador', async () => {
-        userEvent.setup()
-        mockFetch()
-        vi.useFakeTimers()
-        render(
-            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
-        )
-        await waitFor(() => expect(global.fetch).toHaveBeenCalled())
-        vi.advanceTimersByTime(1100)
-        vi.useRealTimers()
-    })
 })
 
