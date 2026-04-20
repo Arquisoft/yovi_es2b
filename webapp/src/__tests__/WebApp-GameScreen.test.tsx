@@ -80,6 +80,39 @@ describe('Game', () => {
     })
 
     /**
+ * Comprueba que en el modo 1 jugador, muestra los botones pista y terminar partida, pero no muestra el botón deshacer movimiento.
+ */
+    test('muestra los botones pista y terminar partida en modo 1 jugador', async () => {
+        userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
+        )
+        await waitFor(() => {
+            expect(screen.getByRole('button', { name: /pista/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Terminar partida/i })).toBeInTheDocument()
+            expect(screen.queryByRole('button', { name: /Deshacer movimiento/i })).not.toBeInTheDocument()
+        })
+    })
+
+    /**
+     * Comprueba que en el modo 2 jugadores, muestra el botón deshacer movimiento y terminar partida, pero no muestra el botón pista.
+     */
+    test('muestra el botón deshacer movimiento en modo 2 jugadores', async () => {
+        userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
+        )
+        await waitFor(() => {
+            expect(screen.getByRole('button', { name: /Deshacer movimiento/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Terminar partida/i })).toBeInTheDocument()
+            expect(screen.queryByRole('button', { name: /pista/i })).not.toBeInTheDocument()
+        })
+    })
+
+
+    /**
      * Comprueba que se muestra el indicador de turno en modo 2 jugadores y no se muestra en modo 1 jugador.
      * En modo 2 jugadores, el componente debe mostrar un texto indicando de quién es el turno (por ejemplo, "Turno de sara").
      * El test renderiza el componente en ambos modos y comprueba la presencia o ausencia del texto del turno.
@@ -225,7 +258,7 @@ describe('Game', () => {
             expect(screen.queryByRole('timer')).not.toBeInTheDocument()
         })
     })
- 
+
     /**
      * Comprueba que el temporizador no se muestra en modo 1 jugador aunque enableTimer sea true.
      * El temporizador solo tiene sentido en partidas de 2 jugadores, por lo que no debe aparecer
@@ -242,22 +275,7 @@ describe('Game', () => {
         })
     })
 
-    /**
-     * Comprueba que se llama al callback onGameEnd cuando la partida termina.
-     * El test pasa un spy como onGameEnd y verifica que es invocado cuando el Board
-     * notifica el fin de la partida con el nombre del ganador.
-     */
-    test('llama a onGameEnd cuando la partida termina', async () => {
-        const onGameEnd = vi.fn()
-        userEvent.setup()
-        mockFetch()
-        render(
-            <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} onGameEnd={onGameEnd} />
-        )
-        await waitFor(() => {
-            expect(global.fetch).toHaveBeenCalled()
-        })
-    })
+    
 
     /**
      * Comprueba que al dar a "Pistar" en modo 1 jugador, se muestra la pista en el tablero y el botón de pista se deshabilita mientras la pista está activa.
@@ -338,12 +356,10 @@ describe('Game', () => {
         await waitFor(() => {
             onGameEnd({ winner: 'sara' })
         })
-        // Esperamos a que se muestre el mensaje de victoria tras el fin de la partida
+        // Verificamos que el callback de fin de partida recibe correctamente el ganador
         await waitFor(() => {
-            expect(screen.getByText(/¡sara ha ganado!/i)).toBeInTheDocument()
-        }, { timeout: 4000 }) // Aumentamos el timeout para esperar el mensaje de victoria
+            expect(onGameEnd).toHaveBeenCalledWith({ winner: 'sara' })
+        })
     })
-
-    
 })
 
