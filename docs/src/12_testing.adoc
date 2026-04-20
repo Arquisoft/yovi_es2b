@@ -19,7 +19,7 @@ Para ello, separamos los test por funcionalidad en clases **users-service-[funci
 * **users-service-statistics: ** Que prueba que la recuperación de estadísticas, tanto las totales como las parciales, funciona de forma correcta, o lanza error cuando debería.
 * **users-service-ranking: ** Que prueba que la correcta creación y distribución del ranking de usuarios, tanto el ranking personal como el general por partidas, dificultad y estrategia. Asegura que es capaz de ordenar por el número o por el porcentaje adecuado, y responde correctamente en caso de error.
 * **Test de Coverage: ** Que comprueban que el código usado en la aplicación esté probado en los test anteriores.
-image:test_users_coverage.png[test coverage de users]
+image:test_users_coverage.png[alt="test coverage de users", align="center"]
 
 ==== Resultados finales
 
