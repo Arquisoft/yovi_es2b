@@ -29,8 +29,12 @@ export default function TurnTimer({ turno, onExpire }: Readonly<TurnTimerProps>)
     if (timeLeft === 0) onExpire();
   }, [timeLeft]);
 
-
-  const modifier = timeLeft <= 3 ? "turn-timer--critical" : timeLeft <= 5 ? "turn-timer--warning" : "";
+  let modifier = "";
+  if (timeLeft <= 3) {
+    modifier = "turn-timer--critical";
+  } else if (timeLeft <= 5) {
+    modifier = "turn-timer--warning";
+  }
 
   return (
     <div className={`turn-timer ${modifier}`} role="timer" aria-label={`${timeLeft} segundos restantes`}>
