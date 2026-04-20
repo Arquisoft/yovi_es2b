@@ -25,6 +25,6 @@ El sistema se despliega en una máquina virtual en la nube accesible públicamen
 
 El despliegue en producción se activa automáticamente al publicar una nueva release en GitHub. El pipeline definido en `.github/workflows/release-deploy.yml` sigue las siguientes fases:
 
-image:diagramaPipelineDespliegue.png[diagramaPipelineDespliegue]
+image::diagramaPipelineDespliegue.png[diagramaPipelineDespliegue]
 
 Las imágenes Docker se publican en el registro de contenedores de GitHub (`ghcr.io`). La VM de producción descarga siempre la última versión de `docker-compose.yml` directamente desde la rama `master` del repositorio y lanza los contenedores con `--pull always`, garantizando que se usen las imágenes recién publicadas.
