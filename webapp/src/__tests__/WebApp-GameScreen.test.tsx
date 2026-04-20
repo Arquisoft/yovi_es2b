@@ -176,10 +176,7 @@ describe('Game', () => {
         })
     })
 
-    /**
-     * Comprueba que el botón Pista aparece en modo 1 jugador, llama a la API al pulsarlo
-     * y se deshabilita mientras hay una pista activa en el tablero.
-     */
+
     /**
      * Comprueba que al pulsar "Deshacer movimiento" en modo 2 jugadores se llama al endpoint /undo.
      * Cubre handleUndo y su validación de gameId.
@@ -198,6 +195,27 @@ describe('Game', () => {
             )
         })
     })
+
+    /**
+     * Comprueba que al pulsar "Deshacer movimiento"", el timer se reinicia (si está activo).
+     * Para que el timer se reinicie, el componente Timer debe recibir un nuevo prop "turno" diferente al actual.
+     * El test simula un usuario pulsando el botón de deshacer movimiento, y verifica que el prop "turno" del Timer cambia, lo que indica que el timer se ha reiniciado.
+     */
+    test('reinicia el timer al pulsar Deshacer movimiento en modo 2 jugadores', async () => {
+        const user = userEvent.setup()
+        mockFetch()
+        render(
+            <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} enableTimer={true} />
+        )
+        const timer = await screen.findByRole('timer')
+        const initialTurno = timer.getAttribute('aria-label') // obtenemos el turno inicial del timer
+        await user.click(screen.getByRole('button', { name: /Deshacer movimiento/i })) // simulamos el click en deshacer movimiento
+        await waitFor(() => {
+            const newTurno = timer.getAttribute('aria-label') // obtenemos el nuevo turno del timer después de pulsar deshacer
+            expect(newTurno).not.toBe(initialTurno) // verificamos que el turno ha cambiado, lo que indica que el timer se ha reiniciado
+        })
+    })
+
 
     /**
      * Comprueba que el botón Pista aparece en modo 1 jugador, llama a la API al pulsarlo
@@ -275,7 +293,7 @@ describe('Game', () => {
         })
     })
 
-    
+
 
     /**
      * Comprueba que al dar a "Pistar" en modo 1 jugador, se muestra la pista en el tablero y el botón de pista se deshabilita mientras la pista está activa.
@@ -322,27 +340,9 @@ describe('Game', () => {
         }
         await waitFor(() => {
             expect(hintButton).toBeDisabled()
-        })  
-    })
-
-    /**
-     * Comprueba que en el modo 2 jugadores, al dar a deshacer movimiento, se llama al endpoint /undo y se actualiza el estado del tablero.
-     * El test simula un usuario pulsando el botón de deshacer movimiento, verifica que se hace la llamada a la API para deshacer el movimiento, y comprueba que el estado del tablero se actualiza correctamente tras la respuesta de la API.
-     */
-    test('deshace el movimiento al pulsar Deshacer movimiento en modo 2 jugadores', async () => {
-        const user = userEvent.setup()
-        mockFetch()
-        render(
-            <Game settings={baseSettings} username="jimena" username2="iyan" twoPlayers={true} stateStart={true} />
-        )
-        await waitFor(async () => {
-            await user.click(screen.getByRole('button', { name: /Deshacer movimiento/i }))
-            expect(global.fetch).toHaveBeenCalledWith(
-                expect.stringContaining('/undo'),
-                expect.objectContaining({ method: 'POST' })
-            )
         })
     })
+
 
     /**
      * Comprueba que al pulsar el botón "Terminar partida", se muestra el mensaje de bienvenida con el nombre del usuario en el menú principal.
@@ -392,7 +392,7 @@ describe('Game', () => {
      * El test renderiza el componente en modo 1 jugador con diferentes configuraciones de dificultad (fácil, medio, difícil) y verifica que el tamaño del tablero se ajusta correctamente a cada dificultad.
      * Para facil el tamaño es 8, para medio es 10 y para difícil es 12.
      */
-    test('ajusta el tamaño del tablero según la dificultad en modo 1 jugador', async () => {    
+    test('ajusta el tamaño del tablero según la dificultad en modo 1 jugador', async () => {
         userEvent.setup()
         // Para cada dificultad, renderizamos el componente y verificamos que se hace la llamada a la API para crear la partida con el tamaño de tablero correcto.
         const difficulties = [
@@ -416,7 +416,7 @@ describe('Game', () => {
                 )
             })
             vi.restoreAllMocks()
-        }   
-        })
-})
+        }
+    })
 
+})
