@@ -34,9 +34,6 @@ describe('GET /ranking', () => {
             .set('Accept', 'application/json')
  
         const entry = res.body.ranking.find(e => e.username === 'Test_Username_Ranking')
-
-        console.log(res.body)
-        console.log(res.body.ranking)
  
         expect(entry).toBeDefined()
         expect(entry.value).toBe(0)
