@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./AppHeader.css";
+import { useTheme } from "../../Theme";
 
 const yoviLogo = "/yovi_icon.svg";
 
@@ -8,7 +9,7 @@ interface AppHeaderProps {
 }
 
 export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
-    //const { theme, toggleTheme } = useTheme(); // Hook personalizado para cambiar el tema
+    const { theme, toggleTheme } = useTheme(); // Hook personalizado para cambiar el tema
     const [open, setOpen] = useState(false); // Estado para controlar el menú desplegable
 
     return (
@@ -41,9 +42,9 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
                         <button
                             className="app-header_dropdown-item"
                             role="menuitem"
-                            //onClick={() => { toggleTheme(); setOpen(false); }}
+                            onClick={() => { toggleTheme(); setOpen(false); }}
                         >
-                            {/*theme === "dark" ? "☀️ Modo claro" : "🌙 Modo oscuro"*/}
+                            {theme === "dark" ? "☀️ Modo claro" : "🌙 Modo oscuro"}
                         </button>
 
                         <button
@@ -72,8 +73,3 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
         </header>
     );
 }
-
-
-{/* <button className="home-menu-out__btn home-header__logout" onClick={onLogout}>
-                Cerrar sesión
-            </button> */}
