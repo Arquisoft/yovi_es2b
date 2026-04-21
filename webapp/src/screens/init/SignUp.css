@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;  /* Centra los elementos */
   justify-content: center;  /* Centra los elementos */
-  background: var(--bg-page);
+  background: var(--surface-soft);
   padding: 2rem;
   box-sizing: border-box;
   overflow-y: auto;
@@ -36,10 +36,10 @@
   width: 100%;
   max-width: 360px;
   padding: 2rem 2.5rem;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background: transparent;
+  border: none;
   border-radius: 12px;
-  box-shadow: 0 4px 16px var(--card-shadow);
+  box-shadow: none;
 }
 
 .signup-form h1 {
