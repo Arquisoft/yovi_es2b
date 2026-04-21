@@ -1,16 +1,5 @@
-:root {
-  --end-accent: #023eb6;
-  --end-win-color: #2da44e;
-  --end-lose-color: #cf222e;
-  --end-text: #24292f;
-  --end-muted: #57606a;
-  --end-border: #d0d7de;
-  --end-bg-from: #f6f8fa;
-  --end-bg-to: #eaeef2;
-  --end-card-bg: #ffffff;
-  --end-radius: 16px;
-  --end-shadow: 0 8px 48px rgba(36, 41, 47, 0.14);
-}
+:root,
+
 
 /* Screen */
 .end-screen {

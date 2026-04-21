@@ -130,7 +130,20 @@ body,
     --ranking-sort-btn-active-bg:  #1d4ed8;
     --ranking-sort-btn-active-border:#2053df;
     --ranking-sort-btn-active-color:#ffffff;
-    
+
+    /* End Screen */
+    --end-accent: #023eb6;
+  --end-win-color: #2da44e;
+  --end-lose-color: #cf222e;
+  --end-text: #24292f;
+  --end-muted: #57606a;
+  --end-border: #d0d7de;
+  --end-bg-from: #f6f8fa;
+  --end-bg-to: #eaeef2;
+  --end-card-bg: #ffffff;
+  --end-radius: 16px;
+  --end-shadow: 0 8px 48px rgba(36, 41, 47, 0.14);
+ 
 }
 
 [data-theme="dark"] {
@@ -143,12 +156,12 @@ body,
     --card-shadow:      rgba(0, 0, 0, 0.3);
     --surface-soft:     #243244;
     --surface-soft-hover:#304257;
-
+ 
     /* Texto */
     --text-primary:     #f1f5f9;
     --text-secondary:   #94a3b8;
     --text-disabled:    #475569;
-
+ 
     /* Inputs */
     --input-bg:             #0f172a;
     --input-border:         #334155;
@@ -156,63 +169,63 @@ body,
     --input-text:           #f1f5f9;
     --input-placeholder:    #475569;
     --focus-ring:           rgba(129, 140, 248, 0.3);
-
+ 
     /* Botones primarios */
     --btn-primary-bg:       #a5c3ff;
     --btn-primary-text:     #0f172a;
     --btn-primary-hover:    #c0d6ff;
-
+ 
     /* Botones secundarios (header) */
     --btn-secondary-bg:     #1e293b;
     --btn-secondary-border: #334155;
     --btn-secondary-hover:  #334155;
-
+ 
     /* Dropdown */
     --dropdown-bg:          #1e293b;
     --dropdown-border:      #334155;
     --dropdown-shadow:      rgba(0, 0, 0, 0.4);
     --dropdown-item-hover:  #334155;
-
+ 
     /* Badge */
     --badge-bg:     #312e81;
     --badge-color:  #a5b4fc;
-
+ 
     /* Danger */
     --danger-color:     #f87171;
     --danger-hover-bg:  #450a0a;
-
+ 
     /* Divider / border */
     --divider-color:    #334155;
     --border-color:     #334155;
-
+ 
     /* Dificultad — fácil */
     --diff-easy-bg:          #052e16;
     --diff-easy-color:       #4ade80;
     --diff-easy-active-bg:   #16a34a;
     --diff-easy-active-text: #ffffff;
-
+ 
     /* Dificultad — media */
     --diff-medium-bg:          #2d1a00;
     --diff-medium-color:       #fbbf24;
     --diff-medium-active-bg:   #d97706;
     --diff-medium-active-text: #ffffff;
-
+ 
     /* Dificultad — difícil */
     --diff-hard-bg:          #2d0000;
     --diff-hard-color:       #f87171;
     --diff-hard-active-bg:   #dc2626;
     --diff-hard-active-text: #ffffff;
-
+ 
     /* Menú inferior */
     --menu-btn-bg:    #1e293b;
     --menu-btn-color: #e2e8f0;
     --menu-btn-hover: #334155;
-
+ 
     /* Toggle */
     --toggle-track-off: #334155;
     --toggle-track-on:  #6366f1;
     --toggle-thumb:     #f1f5f9;
-
+ 
     /* Stats */
     --stats-screen-bg:           #0f172a;
     --stats-title-color:         #f1f5f9;
@@ -223,18 +236,16 @@ body,
     --stats-panel-shadow:        rgba(0, 0, 0, 0.35);
     --stats-table-bg:            #1e293b;
     --stats-table-border:        #334155;
-    --stats-table-head-bg:       #1d4ed8;
+    --stats-table-head-bg:       #002ca9;
     --stats-table-head-text:     #f8fafc;
     --stats-table-cell-border:   #334155;
-
     --stats-row-easy-bg:         #9ed1ff;
     --stats-row-medium-bg:       #6bb2ff;
     --stats-row-hard-bg:         #1786ff;
-
-    --stats-row-strategy-low-bg: #00ff5af2;
+    --stats-row-strategy-low-bg: #5de386f2;
     --stats-row-strategy-mid-bg: #ffe10ede;
     --stats-row-strategy-high-bg: #ff5169c4;
-
+ 
     /* Ranking */
     --ranking-screen-bg:           #0f172a;
     --ranking-title-color:         #f1f5f9;
@@ -255,53 +266,119 @@ body,
     --ranking-sort-btn-active-bg:  #2563eb;
     --ranking-sort-btn-active-border:#3b82f6;
     --ranking-sort-btn-active-color:#ffffff;
-}
+    --ranking-table-head-bg:       #0356a1;
+    --ranking-table-head-text:     #ffffff;
+    --ranking-table-row-normal:    #1a4a7a;
+    --ranking-table-row-user:      #2a5a9a;
 
-/* ── Ajustes específicos para modo oscuro ── */
-/* Se ponen aparte porque son reglas de componentes concretos, no variables generales */
-[data-theme="dark"] .home-menu__btn,
-[data-theme="dark"] .stats-btn-total,
-[data-theme="dark"] .stats-btn-filt,
-[data-theme="dark"] .ranking-btn-filtered,
-[data-theme="dark"] .ranking-toggle-btn,
-[data-theme="dark"] .ranking-btn-back-ranking,
-[data-theme="dark"] .ranking-chip,
-[data-theme="dark"] .ranking-info,
-[data-theme="dark"] .back-button {
-    color: var(--btn-primary-bg);
-    border-color: var(--btn-primary-bg);
-}
-
-[data-theme="dark"] .home-menu__btn:hover,
-[data-theme="dark"] .stats-btn-total:hover,
-[data-theme="dark"] .stats-btn-filt:hover,
-[data-theme="dark"] .ranking-btn-filtered:hover,
-[data-theme="dark"] .ranking-toggle-btn:hover,
-[data-theme="dark"] .ranking-btn-back-ranking:hover,
-[data-theme="dark"] .ranking-chip:hover,
-[data-theme="dark"] .ranking-info:hover,
-[data-theme="dark"] .back-button:hover {
-    background: rgba(165, 195, 255, 0.14);
-}
-
-[data-theme="dark"] .ranking-toggle-btn--active,
-[data-theme="dark"] .ranking-chip--active,
-[data-theme="dark"] .ranking-info--active {
-    background: var(--btn-primary-bg);
-    border-color: var(--btn-primary-bg);
-    color: var(--btn-primary-text);
-}
-
-[data-theme="dark"] .ranking-toggle-btn--active:hover,
-[data-theme="dark"] .ranking-chip--active:hover,
-[data-theme="dark"] .ranking-info--active:hover {
-    background: var(--btn-primary-hover);
-}
-
-/* ── Stats: nombres de estrategia/dificultad en dark mode ── */
-[data-theme="dark"] .stats-total-table tbody td:first-child,
-[data-theme="dark"] .stats-total-table tbody td:nth-child(2),
-[data-theme="dark"] .stats-strat-table tbody td:first-child,
-[data-theme="dark"] .stats-diff-table tbody td:first-child {
-    color: var(--stats-types-color);
+    /* End Screen */
+    --end-accent:       #a5c3ff;
+    --end-win-color:    #4ade80;
+    --end-lose-color:   #f87171;
+    --end-text:         #f1f5f9;
+    --end-muted:        #94a3b8;
+    --end-border:       #334155;
+    --end-bg-from:      #1e293b;
+    --end-bg-to:        #0f172a;
+    --end-card-bg:      #1e293b;
+    --end-radius: 16px;
+    --end-shadow: 0 8px 48px rgba(0, 0, 0, 0.4);
+ 
+    /* ── Ajustes específicos para modo oscuro ── */
+    /* Se ponen aparte porque son reglas de componentes concretos, no variables generales */
+    /* ── Home ── */
+    .home-menu__btn {
+        color: var(--btn-primary-bg);
+        border-color: var(--btn-primary-bg);
+    }
+    .home-menu__btn:hover {
+        background: rgba(165, 195, 255, 0.14);
+    }
+ 
+    /* ── Stats ── */
+    .stats-btn-total,
+    .stats-btn-filt {
+        color: var(--btn-primary-bg);
+        border-color: var(--btn-primary-bg);
+    }
+    .stats-btn-total:hover,
+    .stats-btn-filt:hover {
+        background: rgba(165, 195, 255, 0.14);
+    }
+    .stats-total-table tbody td:first-child,
+    .stats-total-table tbody td:nth-child(2),
+    .stats-strat-table tbody td:first-child,
+    .stats-diff-table tbody td:first-child {
+        color: var(--stats-types-color);
+    }
+ 
+    /* ── Ranking ── */
+    .ranking-btn-filtered,
+    .ranking-toggle-btn,
+    .ranking-btn-back-ranking,
+    .ranking-chip,
+    .ranking-info {
+        color: var(--btn-primary-bg);
+        border-color: var(--btn-primary-bg);
+    }
+    .ranking-btn-filtered:hover,
+    .ranking-toggle-btn:hover,
+    .ranking-btn-back-ranking:hover,
+    .ranking-chip:hover,
+    .ranking-info:hover {
+        background: rgba(165, 195, 255, 0.14);
+    }
+    .ranking-toggle-btn--active,
+    .ranking-chip--active,
+    .ranking-info--active {
+        background: var(--btn-primary-bg);
+        border-color: var(--btn-primary-bg);
+        color: var(--btn-primary-text);
+    }
+    .ranking-toggle-btn--active:hover,
+    .ranking-chip--active:hover,
+    .ranking-info--active:hover {
+        background: var(--btn-primary-hover);
+    }
+    .ranking-info--green {
+        background: #1b5e3f;
+        color: #4ade80;
+        border: 1.5px solid #4ade80;
+    }
+    .ranking-info--green:hover       { background: #245a47; }
+    .ranking-info--green--active     { background: #16a34a; border: 1.5px solid #4ade80; color: #ffffff; }
+    .ranking-info--green--active:hover { background: #1d9f42; }
+ 
+    .ranking-info--orange {
+        background: #5a3900;
+        color: #fbbf24;
+        border: 1.5px solid #fbbf24;
+    }
+    .ranking-info--orange:hover       { background: #6d4700; }
+    .ranking-info--orange--active     { background: #d97706; border: 1.5px solid #fbbf24; color: #ffffff; }
+    .ranking-info--orange--active:hover { background: #d97706; }
+ 
+    .ranking-info--red {
+        background: #5a1f1f;
+        color: #f87171;
+        border: 1.5px solid #f87171;
+    }
+    .ranking-info--red:hover       { background: #6d2626; }
+    .ranking-info--red--active     { background: #dc2626; border: 1.5px solid #f87171; color: #ffffff; }
+    .ranking-info--red--active:hover { background: #dc2626; }
+ 
+    .ranking-table                          { background: var(--stats-table-bg); }
+    .ranking-table thead                    { background: var(--ranking-table-head-bg); }
+    .ranking-table thead td                 { color: var(--ranking-table-head-text); }
+    .ranking-table tbody td                 { background: var(--ranking-table-row-normal); }
+    .ranking-table tbody tr.ranking-row--me td { background: var(--ranking-table-row-user); }
+ 
+    /* ── Compartido ── */
+    .back-button {
+        color: var(--btn-primary-bg);
+        border-color: var(--btn-primary-bg);
+    }
+    .back-button:hover {
+        background: rgba(165, 195, 255, 0.14);
+    }
 }
