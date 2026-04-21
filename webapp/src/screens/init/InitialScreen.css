@@ -1,23 +1,23 @@
 /* ── Aplicar modo claro a todo ─────────────────────────────────────────────── */
 :root, input, textarea, select {
-  color-scheme: light;
+  color-scheme: light dark;
 }
 
 html, body {
-  background-color: #ffffff;
-  color: #24292f;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
 }
 
 input:-webkit-autofill { /* para autocompletados */
-  -webkit-box-shadow: 0 0 0 1000px #f6f8fa inset !important;
-  -webkit-text-fill-color: #24292f !important;
-  border: 1px solid #d0d7de;
+  -webkit-box-shadow: 0 0 0 1000px var(--input-bg) inset !important;
+  -webkit-text-fill-color: var(--input-text) !important;
+  border: 1px solid var(--input-border);
   transition: background-color 5000s ease-in-out 0s;
 }
 
 input:-webkit-autofill:focus { /* para autocompletados */
-  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
-  -webkit-text-fill-color: #24292f !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--card-bg) inset !important;
+  -webkit-text-fill-color: var(--input-text) !important;
 }
 
 /* ── Layout principal ─────────────────────────────────────────────────────── */
@@ -28,7 +28,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
   flex-direction: column;
   align-items: center;  /* Centra los elementos */
   justify-content: center;  /* Centra los elementos */
-  background: #ffffff;  /* Fondo blanco */
+  background: var(--bg-page);
   padding: 2rem;
   box-sizing: border-box;
   overflow-y: auto;
@@ -38,7 +38,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
   margin: 0 0 0.5rem;
   font-size: 1.75rem;
   font-weight: 750;
-  color: #191a1c;
+  color: var(--text-primary);
   text-align: center;
   line-height: 1.5;
 }
@@ -58,17 +58,17 @@ input:-webkit-autofill:focus { /* para autocompletados */
   width: 100%;
   max-width: 360px;
   padding: 2rem 2.5rem;
-  background: #ffffff;
-  border: 1px solid #d0d7de;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px var(--card-shadow);
 }
 
 .register-form h1 {
   margin: 0 0 0.5rem;
   font-size: 1.25rem;
   font-weight: 400;
-  color: #57606a;
+  color: var(--text-secondary);
   text-align: center;
   line-height: 1.5;
 }
@@ -83,7 +83,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
 .form-group label { /* etiquetas */
   font-size: 0.900rem;
   font-weight: 600;
-  color: #24292f;
+  color: var(--text-primary);
   text-align: left;
 }
 
@@ -103,10 +103,10 @@ input:-webkit-autofill:focus { /* para autocompletados */
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #f6f8fa;
-  border: 1px solid #d0d7de;
+  background: var(--surface-soft);
+  border: 1px solid var(--input-border);
   border-radius: 6px;
-  color: #24292f;
+  color: var(--text-primary);
   cursor: pointer;
   font-size: 0;
   transition: background 0.2s, border-color 0.2s, transform 0.1s;
@@ -127,7 +127,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
 }
 
 .password-field__toggle:hover {
-  background: #eef2f6;
+  background: var(--surface-soft-hover);
 }
 
 .password-field__toggle:active {
@@ -136,33 +136,33 @@ input:-webkit-autofill:focus { /* para autocompletados */
 
 .password-field__toggle:focus-visible {
   outline: none;
-  border-color: #023eb6;
-  box-shadow: 0 0 0 3px rgba(2, 62, 182, 0.18);
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 .form-input { /* intputs */
   padding: 0.65rem 0.9rem;
-  background: #f6f8fa;
-  border: 1px solid #d0d7de;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: 6px;
-  color: #24292f;
+  color: var(--input-text);
   font-size: 1rem;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .form-input:focus { /* si input enfocado */
   outline: none;
-  border-color: #023eb6;
-  box-shadow: 0 0 0 3px rgba(2, 62, 182, 0.18);
-  background: #ffffff;
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+  background: var(--card-bg);
 }
 
 /* ── Botón Inicio Sesión ──────────────────────────────────────────────────── */
 .submit-button {
   margin-top: 0.5rem;
   padding: 0.7rem 1.2rem;
-  background: #023eb6;
-  color: #fff;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
   font-size: 1rem;
   font-weight: 600;
   border: none;
@@ -172,7 +172,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
 }
 
 .submit-button:hover:not(:disabled) {
-  background: #01247a;
+  background: var(--btn-primary-hover);
 }
 
 .submit-button:active:not(:disabled) {
@@ -214,7 +214,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
   margin: 0 0 0.5rem;
   font-size: 0.950rem;
   font-weight: 100;
-  color: #57606a;
+  color: var(--text-secondary);
   text-align: center;
   line-height: 1.5;
 }
@@ -222,8 +222,8 @@ input:-webkit-autofill:focus { /* para autocompletados */
 .signup button {
   padding: 0.5rem 1.4rem;
   background: transparent;
-  color: #023eb6;
-  border: 1px solid #023eb6;
+  color: var(--btn-primary-bg);
+  border: 1px solid var(--btn-primary-bg);
   border-radius: 6px;
   font-size: 0.9rem;
   font-weight: 500;
@@ -232,5 +232,5 @@ input:-webkit-autofill:focus { /* para autocompletados */
 }
 
 .signup button:hover {
-  background: rgba(2, 62, 182, 0.08);
+  background: var(--btn-secondary-hover);
 }

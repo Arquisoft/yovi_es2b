@@ -1,6 +1,6 @@
 import { useState } from "react";
 import "./AppHeader.css";
-import { useTheme } from "../../Theme";
+import { useTheme } from "../../screens/Theme";
 
 const yoviLogo = "/yovi_icon.svg";
 

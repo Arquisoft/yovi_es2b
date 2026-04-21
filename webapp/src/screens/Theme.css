@@ -12,6 +12,8 @@
     --card-bg:          #ffffff;
     --card-border:      #d0d7de;
     --card-shadow:      rgba(0, 0, 0, 0.08);
+    --surface-soft:     #f6f8fa;
+    --surface-soft-hover:#eef2f6;
 
     /* Texto */
     --text-primary:     #24292f;
@@ -24,6 +26,7 @@
     --input-border-focus:   #023eb6;
     --input-text:           #24292f;
     --input-placeholder:    #8c959f;
+    --focus-ring:           rgba(2, 62, 182, 0.18);
 
     /* Botones primarios */
     --btn-primary-bg:       #023eb6;
@@ -126,11 +129,13 @@
 [data-theme="dark"] {
     /* Fondos */
     --bg-page:          #0f172a;
-    --header-bg:        rgba(15, 23, 42, 0.85);
+    --header-bg:        #0f172a;
     --header-border:    #1e293b;
     --card-bg:          #1e293b;
     --card-border:      #334155;
     --card-shadow:      rgba(0, 0, 0, 0.3);
+    --surface-soft:     #243244;
+    --surface-soft-hover:#304257;
 
     /* Texto */
     --text-primary:     #f1f5f9;
@@ -143,6 +148,7 @@
     --input-border-focus:   #818cf8;
     --input-text:           #f1f5f9;
     --input-placeholder:    #475569;
+    --focus-ring:           rgba(129, 140, 248, 0.3);
 
     /* Botones primarios */
     --btn-primary-bg:       #6366f1;
