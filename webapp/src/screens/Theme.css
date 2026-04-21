@@ -158,9 +158,9 @@ body,
     --focus-ring:           rgba(129, 140, 248, 0.3);
 
     /* Botones primarios */
-    --btn-primary-bg:       #6366f1;
-    --btn-primary-text:     #ffffff;
-    --btn-primary-hover:    #818cf8;
+    --btn-primary-bg:       #a5c3ff;
+    --btn-primary-text:     #0f172a;
+    --btn-primary-hover:    #c0d6ff;
 
     /* Botones secundarios (header) */
     --btn-secondary-bg:     #1e293b;
@@ -252,4 +252,45 @@ body,
     --ranking-sort-btn-active-bg:  #2563eb;
     --ranking-sort-btn-active-border:#3b82f6;
     --ranking-sort-btn-active-color:#ffffff;
+}
+
+/* ── Ajustes específicos para modo oscuro ── */
+/* Se ponen aparte porque son reglas de componentes concretos, no variables generales */
+[data-theme="dark"] .home-menu__btn,
+[data-theme="dark"] .stats-btn-total,
+[data-theme="dark"] .stats-btn-filt,
+[data-theme="dark"] .ranking-btn-filtered,
+[data-theme="dark"] .ranking-toggle-btn,
+[data-theme="dark"] .ranking-btn-back-ranking,
+[data-theme="dark"] .ranking-chip,
+[data-theme="dark"] .ranking-info,
+[data-theme="dark"] .back-button {
+    color: var(--btn-primary-bg);
+    border-color: var(--btn-primary-bg);
+}
+
+[data-theme="dark"] .home-menu__btn:hover,
+[data-theme="dark"] .stats-btn-total:hover,
+[data-theme="dark"] .stats-btn-filt:hover,
+[data-theme="dark"] .ranking-btn-filtered:hover,
+[data-theme="dark"] .ranking-toggle-btn:hover,
+[data-theme="dark"] .ranking-btn-back-ranking:hover,
+[data-theme="dark"] .ranking-chip:hover,
+[data-theme="dark"] .ranking-info:hover,
+[data-theme="dark"] .back-button:hover {
+    background: rgba(165, 195, 255, 0.14);
+}
+
+[data-theme="dark"] .ranking-toggle-btn--active,
+[data-theme="dark"] .ranking-chip--active,
+[data-theme="dark"] .ranking-info--active {
+    background: var(--btn-primary-bg);
+    border-color: var(--btn-primary-bg);
+    color: var(--btn-primary-text);
+}
+
+[data-theme="dark"] .ranking-toggle-btn--active:hover,
+[data-theme="dark"] .ranking-chip--active:hover,
+[data-theme="dark"] .ranking-info--active:hover {
+    background: var(--btn-primary-hover);
 }
