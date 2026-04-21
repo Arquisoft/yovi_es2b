@@ -30,7 +30,7 @@ pub use choose::MoveResponse;
 pub use error::ErrorResponse;
 pub use version::*;
 
-use crate::{DefensiveBot, GameYError, MonteCarloBot, MonteCarloEndurecidoBot, MonteCarloMejoradoBot, OffensiveBot, RandomBot, YBotRegistry, state::AppState};
+use crate::{DefensiveBot, GameYError, MonteCarloBot, MonteCarloEndurecidoBot, MonteCarloEndurecidoConcursoBot, MonteCarloMejoradoBot, OffensiveBot, RandomBot, YBotRegistry, state::AppState};
 use tower_http::cors::{Any, CorsLayer};
 
 /// Creates the Axum router with the given state.
@@ -61,7 +61,8 @@ pub fn create_default_state() -> AppState {
         .with_bot(Arc::new(OffensiveBot))
         .with_bot(Arc::new(MonteCarloBot))
         .with_bot(Arc::new(MonteCarloMejoradoBot))
-        .with_bot(Arc::new(MonteCarloEndurecidoBot));
+        .with_bot(Arc::new(MonteCarloEndurecidoBot))
+        .with_bot(Arc::new(MonteCarloEndurecidoConcursoBot));
     AppState::new(bots)
 }
 
