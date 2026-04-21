@@ -14,11 +14,46 @@ pub struct PlayRequest {
     pub bot_id: Option<String>,
 }
 
-/// Response returned by the play endpoint on success.
+/// Response returned by the play endpoint — either a move or a special action.
 #[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq)]
-pub struct MoveResponse {
-    /// The coordinates where the bot chooses to place its piece.
-    pub coords: Coordinates,
+#[serde(untagged)]
+pub enum PlayResponse {
+    Move { coords: Coordinates },
+    Action { action: String },
+}
+
+// Keep MoveResponse as a type alias for backwards compatibility in tests.
+pub type MoveResponse = PlayResponse;
+
+/// Returns true if the bot should swap on this position.
+///
+/// Swap (pie rule) is offered when it is the second player's very first move
+/// and the first player's stone occupies a strong central position.
+/// A position is considered strong when min(x, y, z) >= (size - 1) / 3,
+/// meaning the stone is close to the centre of the board.
+fn should_swap(yen: &YEN) -> bool {
+    if yen.turn() != 1 {
+        return false;
+    }
+    let layout = yen.layout();
+    let stone_count = layout.chars().filter(|&c| c != '.' && c != '/').count();
+    if stone_count != 1 {
+        return false;
+    }
+    // Find the single stone's barycentric coordinates by walking the layout rows.
+    let size = yen.size();
+    for (r, row) in layout.split('/').enumerate() {
+        for (c, ch) in row.chars().enumerate() {
+            if ch != '.' {
+                let x = size - 1 - r as u32;
+                let y = c as u32;
+                let z = (size - 1) - x - y;
+                let min_coord = x.min(y).min(z);
+                return min_coord >= (size - 1) / 3;
+            }
+        }
+    }
+    false
 }
 
 /// Handler for the bot move selection endpoint.
@@ -31,13 +66,12 @@ pub struct MoveResponse {
 /// - `bot_id`: the bot identifier to use (optional, defaults to "montecarlo_endurecido_bot")
 ///
 /// # Response
-/// On success, returns `{"coords":{"x":...,"y":...,"z":...}}`.
-/// On failure, returns an `ErrorResponse` with details about what went wrong.
+/// `{"coords":{"x":...,"y":...,"z":...}}` for a normal move, or `{"action":"swap"}` for the pie rule.
 #[axum::debug_handler]
 pub async fn choose(
     State(state): State<AppState>,
     Query(params): Query<PlayRequest>,
-) -> Result<Json<MoveResponse>, ErrorResponse> {
+) -> Result<Json<PlayResponse>, ErrorResponse> {
     let bot_id = params.bot_id.unwrap_or_else(|| "montecarlo_endurecido_bot".to_string());
     let yen: YEN = match serde_json::from_str(&params.position) {
         Ok(yen) => yen,
@@ -49,6 +83,11 @@ pub async fn choose(
             ));
         }
     };
+
+    if should_swap(&yen) {
+        return Ok(Json(PlayResponse::Action { action: "swap".to_string() }));
+    }
+
     let game_y = match GameY::try_from(yen) {
         Ok(game) => game,
         Err(err) => {
@@ -83,7 +122,7 @@ pub async fn choose(
             ));
         }
     };
-    Ok(Json(MoveResponse { coords }))
+    Ok(Json(PlayResponse::Move { coords }))
 }
 
 #[cfg(test)]
@@ -92,44 +131,69 @@ mod tests {
 
     #[test]
     fn test_move_response_creation() {
-        let response = MoveResponse {
-            coords: Coordinates::new(1, 2, 3),
-        };
-        assert_eq!(response.coords, Coordinates::new(1, 2, 3));
+        let response = PlayResponse::Move { coords: Coordinates::new(1, 2, 3) };
+        assert_eq!(response, PlayResponse::Move { coords: Coordinates::new(1, 2, 3) });
     }
 
     #[test]
     fn test_move_response_serialize() {
-        let response = MoveResponse {
-            coords: Coordinates::new(1, 2, 3),
-        };
+        let response = PlayResponse::Move { coords: Coordinates::new(1, 2, 3) };
         let json = serde_json::to_string(&response).unwrap();
         assert!(json.contains("\"coords\""));
         assert!(!json.contains("\"bot_id\""));
+        assert!(!json.contains("\"action\""));
+    }
+
+    #[test]
+    fn test_action_response_serialize() {
+        let response = PlayResponse::Action { action: "swap".to_string() };
+        let json = serde_json::to_string(&response).unwrap();
+        assert_eq!(json, r#"{"action":"swap"}"#);
     }
 
     #[test]
     fn test_move_response_deserialize() {
         let json = r#"{"coords":{"x":0,"y":1,"z":2}}"#;
-        let response: MoveResponse = serde_json::from_str(json).unwrap();
-        assert_eq!(response.coords, Coordinates::new(0, 1, 2));
+        let response: PlayResponse = serde_json::from_str(json).unwrap();
+        assert_eq!(response, PlayResponse::Move { coords: Coordinates::new(0, 1, 2) });
+    }
+
+    #[test]
+    fn test_action_response_deserialize() {
+        let json = r#"{"action":"swap"}"#;
+        let response: PlayResponse = serde_json::from_str(json).unwrap();
+        assert_eq!(response, PlayResponse::Action { action: "swap".to_string() });
     }
 
     #[test]
     fn test_move_response_clone() {
-        let response = MoveResponse {
-            coords: Coordinates::new(0, 0, 0),
-        };
-        let cloned = response.clone();
-        assert_eq!(response, cloned);
+        let response = PlayResponse::Move { coords: Coordinates::new(0, 0, 0) };
+        assert_eq!(response.clone(), response);
     }
 
     #[test]
-    fn test_move_response_equality() {
-        let r1 = MoveResponse { coords: Coordinates::new(1, 1, 1) };
-        let r2 = MoveResponse { coords: Coordinates::new(1, 1, 1) };
-        let r3 = MoveResponse { coords: Coordinates::new(2, 1, 0) };
-        assert_eq!(r1, r2);
-        assert_ne!(r1, r3);
+    fn test_should_swap_center_move() {
+        // Size 5, turn 1, single stone at center (x=1,y=1,z=2 => min=1 >= (5-1)/3=1)
+        let yen = YEN::new(5, 1, vec!['B', 'R'], "..../.../.B./..".to_string());
+        assert!(should_swap(&yen));
+    }
+
+    #[test]
+    fn test_should_not_swap_edge_move() {
+        // Size 5, turn 1, single stone on edge (row 0, any corner)
+        let yen = YEN::new(5, 1, vec!['B', 'R'], "B.../.../.../..".to_string());
+        assert!(!should_swap(&yen));
+    }
+
+    #[test]
+    fn test_should_not_swap_wrong_turn() {
+        let yen = YEN::new(5, 0, vec!['B', 'R'], "..../.../.B./..".to_string());
+        assert!(!should_swap(&yen));
+    }
+
+    #[test]
+    fn test_should_not_swap_multiple_stones() {
+        let yen = YEN::new(5, 1, vec!['B', 'R'], "B.../B../.B./..".to_string());
+        assert!(!should_swap(&yen));
     }
 }

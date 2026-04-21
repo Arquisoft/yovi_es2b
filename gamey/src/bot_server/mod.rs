@@ -25,6 +25,7 @@ pub mod state;
 pub mod version;
 use axum::response::IntoResponse;
 use std::sync::Arc;
+pub use choose::PlayResponse;
 pub use choose::MoveResponse;
 pub use error::ErrorResponse;
 pub use version::*;
