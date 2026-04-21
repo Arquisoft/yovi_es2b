@@ -128,20 +128,30 @@ export function Board(props: BoardProps) {
       MONTE_CARLO: "montecarlo_bot",
       MONTE_CARLO_MEJORADO: "montecarlo_mejorado_bot",
       MONTE_CARLO_ENDURECIDO: "montecarlo_endurecido_bot",
+      MONTE_CARLO_ENDURECIDO_CONCURSO: "montecarlo_endurecido_concurso_bot",
     };
     return map[strategy];
   }
 
-  // Llama al servidor enviandole el movimiento (Solo Bot)
-   // Promise<any> -> Devuelve un valor cualquiera de forma async -> json con el estado de tablero actualizado
+  // Llama al servidor para obtener el movimiento del bot (GET /play con query params)
   async function peticionMovimientoBot(state: unknown): Promise<any> {
-    const botId = strategyToBotId(selectedStrategy);
-    const res = await fetch(`${GAMEY_URL}/play`, {
+    const params = new URLSearchParams({
+      position: JSON.stringify(state),
+      bot_id: strategyToBotId(selectedStrategy),
+    });
+    const res = await fetch(`${GAMEY_URL}/play?${params}`);
+    if (!res.ok) throw new Error("Error al obtener movimiento del bot");
+    return res.json();
+  }
+
+  // Ejecuta una acción especial del bot (swap, resign) contra el servidor de partidas
+  async function peticionAccionBot(player: number, action: string): Promise<any> {
+    const res = await fetch(`${GAMEY_URL}/v1/games/${props.gameId}/action`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ position: state, bot_type: botId }),
+      body: JSON.stringify({ player, action }),
     });
-    if (!res.ok) throw new Error("Error al obtener movimiento del bot");
+    if (!res.ok) throw new Error(`Error al ejecutar acción del bot: ${action}`);
     return res.json();
   }
 
@@ -184,7 +194,21 @@ export function Board(props: BoardProps) {
 
       if (!props.twoPlayers && nextPlayer !== 0) {
         const botMove = await peticionMovimientoBot(data.state);
-        await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, nextPlayer);
+        if (botMove.action) {
+          const actionData = await peticionAccionBot(nextPlayer, botMove.action);
+          actualizarTablero(actionData.state.layout);
+          if (actionData.status.kind === 'Finished') {
+            const winnerName = getPlayerName(actionData.status.winner);
+            setGameOver(true);
+            props.changeTurno(winnerName);
+            props.onGameEnd(winnerName);
+          } else {
+            props.changeTurno(getPlayerName(actionData.status.next_player));
+          }
+          desbloquearTablero();
+        } else {
+          await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, nextPlayer);
+        }
       } else {
         desbloquearTablero();
       }
@@ -208,8 +232,16 @@ export function Board(props: BoardProps) {
       }
 
       if (!props.twoPlayers && data.status.kind === 'Ongoing' && data.status.next_player !== 0) {
-        const botMove = await peticionMovimientoBot(data.state);  //Si le toca al bot, Pide peticion de movimiento
-        await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, data.status.next_player);  //Realiza el movimiento que acaba de obtener
+        const botMove = await peticionMovimientoBot(data.state);
+        if (botMove.action) {
+          const actionData = await peticionAccionBot(data.status.next_player, botMove.action);
+          actualizarTablero(actionData.state.layout);
+          if (actionData.status.kind === 'Ongoing') {
+            props.changeTurno(getPlayerName(actionData.status.next_player));
+          }
+        } else {
+          await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, data.status.next_player);
+        }
       }
     }
 

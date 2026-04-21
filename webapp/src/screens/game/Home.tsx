@@ -116,6 +116,7 @@ export default function HomePage( {username} : { username: string }) {
                             <option value={Strategy.MONTE_CARLO}>Monte Carlo</option>
                             <option value={Strategy.MONTE_CARLO_MEJORADO}>Monte Carlo Mejorado</option>
                             <option value={Strategy.MONTE_CARLO_ENDURECIDO}>Monte Carlo Endurecido</option>
+                            <option value={Strategy.MONTE_CARLO_ENDURECIDO_CONCURSO}>Monte Carlo Endurecido Concurso</option>
                         </select>
 
                         <span className="home-config__label">Dificultad</span>
