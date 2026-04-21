@@ -217,6 +217,7 @@ body,
     --stats-screen-bg:           #0f172a;
     --stats-title-color:         #f1f5f9;
     --stats-username-color:      #60a5fa;
+    --stats-types-color:         #0b366b;
     --stats-panel-bg:            #1e293b;
     --stats-panel-border:        #334155;
     --stats-panel-shadow:        rgba(0, 0, 0, 0.35);
@@ -225,12 +226,14 @@ body,
     --stats-table-head-bg:       #1d4ed8;
     --stats-table-head-text:     #f8fafc;
     --stats-table-cell-border:   #334155;
-    --stats-row-easy-bg:         #1f2937;
-    --stats-row-medium-bg:       #1e3a5f;
-    --stats-row-hard-bg:         #1d3557;
-    --stats-row-strategy-low-bg: #163423;
-    --stats-row-strategy-mid-bg: #3b2f13;
-    --stats-row-strategy-high-bg:#3f1f24;
+
+    --stats-row-easy-bg:         #9ed1ff;
+    --stats-row-medium-bg:       #6bb2ff;
+    --stats-row-hard-bg:         #1786ff;
+
+    --stats-row-strategy-low-bg: #00ff5af2;
+    --stats-row-strategy-mid-bg: #ffe10ede;
+    --stats-row-strategy-high-bg: #ff5169c4;
 
     /* Ranking */
     --ranking-screen-bg:           #0f172a;
@@ -293,4 +296,12 @@ body,
 [data-theme="dark"] .ranking-chip--active:hover,
 [data-theme="dark"] .ranking-info--active:hover {
     background: var(--btn-primary-hover);
+}
+
+/* ── Stats: nombres de estrategia/dificultad en dark mode ── */
+[data-theme="dark"] .stats-total-table tbody td:first-child,
+[data-theme="dark"] .stats-total-table tbody td:nth-child(2),
+[data-theme="dark"] .stats-strat-table tbody td:first-child,
+[data-theme="dark"] .stats-diff-table tbody td:first-child {
+    color: var(--stats-types-color);
 }
