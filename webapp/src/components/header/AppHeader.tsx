@@ -1,4 +1,3 @@
-import "../../screens/game/Home.css";
 import { useState } from "react";
 import "./AppHeader.css";
 
@@ -14,8 +13,8 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
 
     return (
         <header className="app-header">
-            <div className="home-header">
-                <img src={yoviLogo} alt="YOVI Logo" className="home-header_logo" />
+            <div className="app-header_logo-area">
+                <img src={yoviLogo} alt="YOVI Logo" className="app-header_icon" />
                 <span className="app-header_brand">YOVI</span>
             </div>
 
@@ -53,7 +52,7 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
                             disabled
                             title="Idioma"
                         >
-                            🌐 Idioma <span className="app-header__badge">Próximamente</span>
+                            🌐 Idioma <span className="app-header_badge">Próximamente</span>
                         </button>
 
                         <hr className="app-header_divider" />
@@ -63,7 +62,7 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
                             role="menuitem" // onClick para cerrar sesión, llamando a la función onLogout pasada como prop y cerrando el menú después de hacer clic
                             onClick={() => { onLogout(); setOpen(false); }}
                         >
-                            🚪 Cerrar sesión
+                            Cerrar sesión
                         </button>
 
                     </div>
