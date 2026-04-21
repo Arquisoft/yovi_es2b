@@ -1,14 +1,22 @@
+:root {
+    --app-header-height: 62px;
+}
+
 .app-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 0 1.5rem;
-    min-height: 62px;
+    min-height: var(--app-header-height);
     background: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
-    position: sticky;
+    position: fixed;
     top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
     z-index: 100;
+    box-sizing: border-box;
 }
 
 .app-header_logo-area {

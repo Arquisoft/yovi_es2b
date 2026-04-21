@@ -15,7 +15,7 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
         <header className="app-header">
             <div className="app-header_logo-area">
                 <img src={yoviLogo} alt="YOVI Logo" className="app-header_icon" />
-                <span className="app-header_brand">OVI</span>
+                <span className="app-header_brand">YOVI</span>
             </div>
 
             <div className="app-header_menu-wrapper">
