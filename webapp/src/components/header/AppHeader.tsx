@@ -1,7 +1,7 @@
 import { useState } from "react";
 import "./AppHeader.css";
 
-const yoviLogo = "/yovi_logo.png";
+const yoviLogo = "/yovi_icon.svg";
 
 interface AppHeaderProps {
     onLogout: () => void;
@@ -15,7 +15,7 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
         <header className="app-header">
             <div className="app-header_logo-area">
                 <img src={yoviLogo} alt="YOVI Logo" className="app-header_icon" />
-                <span className="app-header_brand">YOVI</span>
+                <span className="app-header_brand">OVI</span>
             </div>
 
             <div className="app-header_menu-wrapper">
@@ -32,7 +32,7 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
                     aria-expanded={open} // Indica si el menú está actualmente abierto o cerrado para mejorar la accesibilidad
                     aria-label="Menú de opciones" //Para describir la función del botón a los usuarios de lectores de pantalla
                 >
-                    👤 <span className={`app-header_chevron ${open ? "open" : ""}`}>▾</span>
+                    👤⚙️ <span className={`app-header_chevron ${open ? "open" : ""}`}>▾</span>
                 </button>
 
                 {open && (

@@ -1,9 +1,9 @@
 .app-header {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     padding: 0 1.5rem;
-    height: 56px;
+    min-height: 72px;
     background: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
     position: sticky;
@@ -16,18 +16,21 @@
     align-items: center;
     gap: 0.65rem;
     line-height: 0;
+    margin-top: -18px;
 }
 
 .app-header_icon {
     display: block;
-    height: 28px;
-    width: 28px;
+    height: 58px;
+    width: auto;
+    max-width: 140px;
     object-fit: contain;
+    transform: translateY(-10px);
 }
 
 .app-header_brand {
     font-weight: 700;
-    font-size: 1.25rem;
+    font-size: 1.65rem;
     color: var(--text-primary);
     letter-spacing: 0.05em;
 }
@@ -47,13 +50,13 @@
     display: flex;
     align-items: center;
     gap: 0.45rem;
-    padding: 0.5rem 0.9rem;
+    padding: 0.7rem 1.15rem;
     background: var(--btn-secondary-bg);
     border: 1px solid var(--btn-secondary-border);
     border-radius: 999px;
     color: var(--text-primary);
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.12rem;
     transition: background 0.15s;
 }
 
@@ -118,11 +121,14 @@
 }
 
 .app-header_dropdown-item--danger {
-    color: var(--danger-color);
+    color: #c41818;
+    border: 1px solid transparent;
 }
 
 .app-header_dropdown-item--danger:hover {
-    background: var(--danger-hover-bg) !important;
+    background: #c41818 !important;
+    color: #ffffff !important;
+    border-color: #c41818;
 }
 
 .app-header_badge {
