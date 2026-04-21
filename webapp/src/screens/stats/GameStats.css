@@ -6,7 +6,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
+  background: var(--stats-screen-bg);
   padding: 2rem;
   padding-top: calc(var(--app-header-height) + 2rem);
   box-sizing: border-box;
@@ -21,7 +21,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
+  background: var(--stats-screen-bg);
   padding: 1rem;
   padding-top: calc(var(--app-header-height) + 1rem);
   box-sizing: border-box;
@@ -36,7 +36,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #ffffff;
+  background: var(--stats-screen-bg);
   padding: 1rem;
   padding-top: calc(var(--app-header-height) + 1rem);
   box-sizing: border-box;
@@ -49,35 +49,35 @@
   margin-bottom: 2rem;
   font-size: 1.75rem;
   font-weight: 750;
-  color: #191a1c;
+  color: var(--stats-title-color);
   text-align: center;
 }
 
 .stats-total-screen-title {
   font-size: 1.75rem;
   font-weight: 750;
-  color: #191a1c;
+  color: var(--stats-title-color);
   text-align: center;
 }
 
 .stats-total-screen-username {
   font-size: 2rem;
   font-weight: 750;
-  color: #023eb6;
+  color: var(--stats-username-color);
   text-align: center;
 }
 
 .stats-screen-filter-title {
   font-size: 1.75rem;
   font-weight: 750;
-  color: #191a1c;
+  color: var(--stats-title-color);
   text-align: center;
 }
 
 .stats-filter-screen-username {
   font-size: 2rem;
   font-weight: 750;
-  color: #023eb6;
+  color: var(--stats-username-color);
   text-align: center;
 }
 
@@ -92,10 +92,10 @@
   max-width: 380px;
 
   padding: 2rem;
-  background: #ffffff;
-  border: 1px solid #d0d7de;
+  background: var(--stats-panel-bg);
+  border: 1px solid var(--stats-panel-border);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px var(--stats-panel-shadow);
 }
 
 .stats-total-menu {

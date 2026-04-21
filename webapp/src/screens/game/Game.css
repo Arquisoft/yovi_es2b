@@ -7,7 +7,7 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(180deg, #f8fafc 0%, #eef2f7 100%);
+  background: var(--bg-page);
   box-sizing: border-box;
   overflow: hidden;
   padding: 1.25rem;
@@ -26,11 +26,11 @@
   width: 100%;
   margin: 0 auto;
   padding: 0.5rem;
-  border: 1px solid #d8dee8;
+  border: 1px solid var(--card-border);
   border-radius: 14px;
-  background: #ffffff;
-  box-shadow: 0 12px 36px rgba(15, 23, 42, 0.08);
-  color: #24292f;
+  background: var(--card-bg);
+  box-shadow: 0 12px 36px var(--card-shadow);
+  color: var(--text-primary);
 }
 
 /* Barra superior con el botón Volver  */
@@ -91,7 +91,7 @@
 .turn-indicator__label {
   font-size: 2rem;
   font-weight: 400;
-  color: #64748b;
+  color: var(--text-secondary);
 }
 
 .turn-indicator__player {

@@ -3,6 +3,13 @@
    Importa este archivo en App.tsx o App.css
    ============================================= */
 
+html,
+body,
+#root {
+    background: var(--bg-page);
+    color: var(--text-primary);
+}
+
 :root,
 [data-theme="light"] {
     /* Fondos */

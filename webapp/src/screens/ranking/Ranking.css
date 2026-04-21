@@ -9,6 +9,7 @@
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
+    background: var(--ranking-screen-bg);
 }
 
 .ranking-logo {
@@ -21,30 +22,30 @@
     font-size: 2rem;
     font-weight: 750;
     margin-bottom: 38px;
-    color: #191a1c;
+    color: var(--ranking-title-color);
 }
 
 .ranking-position-card {
     width: min(560px, 92vw);
     margin: 0 auto 50px;
     padding: 24px 28px;
-    border: 1px solid #dbeafe;
+    border: 1px solid var(--ranking-card-border);
     border-radius: 14px;
-    background: linear-gradient(145deg, #eff6ff 0%, #f8fafc 100%);
-    box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
+    background: linear-gradient(145deg, var(--ranking-card-bg-from) 0%, var(--ranking-card-bg-to) 100%);
+    box-shadow: 0 10px 26px var(--ranking-card-shadow);
     animation: ranking-card-in 500ms ease-out;
 }
 
 .ranking-position-label {
     margin: 0;
-    color: #1e3a8a;
+    color: var(--ranking-position-label);
     font-size: clamp(1.2rem, 2.2vw, 1.55rem);
     font-weight: 600;
 }
 
 .ranking-position-value {
     margin: 14px 0 0;
-    color: #1a56db;
+    color: var(--ranking-position-value);
     font-size: clamp(2.4rem, 8vw, 4rem);
     line-height: 1;
     font-weight: 800;
