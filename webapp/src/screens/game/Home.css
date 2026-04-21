@@ -10,7 +10,7 @@
   background: #ffffff;
   box-sizing: border-box;
   overflow-y: auto;
-  padding-top: 64px;
+  padding-top: 0;
 }
 
 /* ── Logo ─────────────────────────────────────────────────────────────────── */
@@ -374,10 +374,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 2rem;
+  padding: 1.5rem 2rem 2rem;
   gap: 1.5rem;
   width: 100%;
   box-sizing: border-box;
+  transform: translateY(clamp(-24px, -3vh, -10px));
 }
 
 /* ── Dos paneles en columnas ──────────────────────────────────────────────── */
@@ -418,4 +419,5 @@
 @media (max-width: 680px) {
   .home-panels { grid-template-columns: 1fr; }
   .home-header  { padding: 0 1rem; }
+  .home-body { transform: translateY(clamp(-16px, -2vh, -6px)); }
 }

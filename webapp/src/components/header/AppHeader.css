@@ -1,9 +1,9 @@
 .app-header {
     display: flex;
-    align-items: flex-start;
+    align-items: center;
     justify-content: space-between;
     padding: 0 1.5rem;
-    min-height: 72px;
+    min-height: 62px;
     background: var(--header-bg);
     border-bottom: 1px solid var(--header-border);
     position: sticky;
@@ -16,16 +16,16 @@
     align-items: center;
     gap: 0.65rem;
     line-height: 0;
-    margin-top: -18px;
+    margin-top: 0;
 }
 
 .app-header_icon {
     display: block;
-    height: 58px;
+    height: 46px;
     width: auto;
     max-width: 140px;
     object-fit: contain;
-    transform: translateY(-10px);
+    transform: none;
 }
 
 .app-header_brand {
