@@ -1,7 +1,7 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './index.css'
-import './screens/Theme.css'
+import './screens/modo_tema/Theme.css'
 import { Theme } from './screens/modo_tema/Theme.tsx'
 
 import InitialScreen from "./screens/init/InitialScreen.tsx";
