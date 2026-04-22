@@ -16,6 +16,8 @@ Para ello, separamos los test por funcionalidad en clases **users-service-[funci
 * **users-service-endmatch: ** Que prueba que el fin de una partida ganada es correcta, o lanza error cuando debería.
 * **users-service-statistics: ** Que prueba que la recuperación de estadísticas, tanto las totales como las parciales, funciona de forma correcta, o lanza error cuando debería.
 * **users-service-ranking: ** Que prueba que la correcta creación y distribución del ranking de usuarios, tanto el ranking personal como el general por partidas, dificultad y estrategia. Asegura que es capaz de ordenar por el número o por el porcentaje adecuado, y responde correctamente en caso de error.
+* **users-service-model: ** Que prueba el modelo de usuario, verificando que se construye correctamente con `username`, `password` y `createdAt`, y que la fecha se asigna por defecto cuando no se proporciona.
+* **users-service-controller: ** Que prueba  el controlador de usuarios con mocks del servicio, validando respuestas HTTP de éxito y de error en operaciones clave como inicio de sesión, creación y obtención de usuario.
 
 === Test del microservicio WebApp
 
