@@ -33,7 +33,7 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
                     aria-expanded={open} // Indica si el menú está actualmente abierto o cerrado para mejorar la accesibilidad
                     aria-label="Menú de opciones" //Para describir la función del botón a los usuarios de lectores de pantalla
                 >
-                    👤⚙️ <span className={`app-header_chevron ${open ? "open" : ""}`}>▾</span>
+                    👤 MENU <span className={`app-header_chevron ${open ? "open" : ""}`}>▾</span>
                 </button>
 
                 {open && (
