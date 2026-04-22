@@ -5,6 +5,7 @@
 //!
 //! # Endpoints
 //! - `GET /status` - Health check endpoint
+//! - `GET /metrics` - Prometheus metrics endpoint
 //! - `POST /play` - Request a move from a bot
 //!
 //! # Example
@@ -24,6 +25,7 @@ pub mod error;
 pub mod state;
 pub mod version;
 use axum::response::IntoResponse;
+use axum_prometheus::PrometheusMetricLayer;
 use std::sync::Arc;
 pub use choose::MoveResponse;
 pub use error::ErrorResponse;
@@ -35,17 +37,21 @@ use tower_http::cors::{Any, CorsLayer};
 /// Creates the Axum router with the given state.
 /// This is useful for testing the API without binding to a network port.
 pub fn create_router(state: AppState) -> axum::Router {
-    let game_routes = crate::service::game_router();  //Obtiene el router de service/mod.rs
+    let game_routes = crate::service::game_router();
 
     let cors = CorsLayer::new()
         .allow_origin(Any)
         .allow_methods(Any)
         .allow_headers(Any);
 
+    let (prometheus_layer, metric_handle) = PrometheusMetricLayer::pair();
+
     axum::Router::new()
         .route("/status", axum::routing::get(status))
+        .route("/metrics", axum::routing::get(move || async move { metric_handle.render() }))
         .route("/play", axum::routing::post(choose::choose))
-        .merge(game_routes)  // Junta a los end points de los 2 routers
+        .merge(game_routes)
+        .layer(prometheus_layer)
         .layer(cors)
         .with_state(state)
 }
