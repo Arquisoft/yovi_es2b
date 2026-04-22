@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import AppHeader from '../components/header/AppHeader'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
-import { Theme } from '../screens/Theme'
+import { Theme } from '../screens/modo_tema/Theme'
 
 // Wrapper que proporciona el contexto de tema necesario para AppHeader
 function renderWithTheme(onLogout: () => void) {
