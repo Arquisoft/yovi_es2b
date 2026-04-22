@@ -28,7 +28,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
   flex-direction: column;
   align-items: center;  /* Centra los elementos */
   justify-content: center;  /* Centra los elementos */
-  background: var(--surface-soft);
+  background: linear-gradient(135deg, var(--end-bg-from) 0%, var(--end-bg-to) 100%);
   padding: 2rem;
   box-sizing: border-box;
   overflow-y: auto;
