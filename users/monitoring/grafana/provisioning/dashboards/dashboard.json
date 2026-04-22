@@ -103,7 +103,7 @@
           "refId": "B"
         },
         {
-          "expr": "rate(http_request_duration_seconds_sum{job=\"users-service\"}[5m]) / rate(http_request_duration_seconds_count{job=\"users-service\"}[5m])",
+          "expr": "sum(rate(http_request_duration_seconds_sum{job=\"users-service\"}[5m])) / sum(rate(http_request_duration_seconds_count{job=\"users-service\"}[5m]))",
           "legendFormat": "Media",
           "refId": "C"
         }
@@ -306,9 +306,10 @@
       "gridPos": { "h": 10, "w": 8, "x": 16, "y": 11 },
       "hiddenSeries": false,
       "id": 15,
-      "legend": { "show": true },
-      "lines": true,
-      "linewidth": 2,
+      "legend": { "show": true, "sort": "current", "sortDesc": true },
+      "lines": false,
+      "linewidth": 1,
+      "bars": true,
       "nullPointMode": "null",
       "options": { "dataLinks": [] },
       "percentage": false,
@@ -317,7 +318,7 @@
       "renderer": "flot",
       "seriesOverrides": [],
       "spaceLength": 10,
-      "stack": false,
+      "stack": true,
       "steppedLine": false,
       "targets": [
         {
@@ -437,7 +438,7 @@
           "refId": "B"
         },
         {
-          "expr": "rate(axum_http_requests_duration_seconds_sum{job=\"gamey-service\"}[5m]) / rate(axum_http_requests_duration_seconds_count{job=\"gamey-service\"}[5m])",
+          "expr": "sum(rate(axum_http_requests_duration_seconds_sum{job=\"gamey-service\"}[5m])) / sum(rate(axum_http_requests_duration_seconds_count{job=\"gamey-service\"}[5m]))",
           "legendFormat": "Media",
           "refId": "C"
         }
