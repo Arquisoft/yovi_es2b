@@ -18,7 +18,11 @@ const port = 3000; //definimos el puerto en el que se ejecutará el servicio de 
 // Estas métricas son útiles para entender el rendimiento del servicio y detectar posibles problemas.
 // El middleware de métricas se configura para incluir el método HTTP en las métricas recopiladas
 // Esto que permite analizar el rendimiento de cada tipo de solicitud (GET, POST, etc.).
-const metricsMiddleware = promBundle({includeMethod: true});
+const metricsMiddleware = promBundle({
+  includeMethod: true,
+  includePath: true,
+  promClient: { collectDefaultMetrics: {} }
+});
 app.use(metricsMiddleware);
 
 try {
@@ -33,7 +37,7 @@ try {
 
 //Se configura el middleware para manejar CORS (Cross-Origin Resource Sharing)
 // Permite que el servicio de usuarios pueda ser accedido desde diferentes dominios.
-app.use((req, res, next) => 
+app.use((req, res, next) =>
 {
   // Configura los encabezados de CORS para permitir solicitudes desde cualquier origen, con métodos GET, POST y OPTIONS, y con el encabezado Content-Type.
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -41,7 +45,7 @@ app.use((req, res, next) =>
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   //Si la web intenta hacer un POST o GET a JSON a otro servidor, se envía un mensaje de "preflight" (OPTIONS) para verificar si el servidor permite esa solicitud.
   // Si es así, se responde con un estado 204 (No Content) para indicar que la solicitud es válida y se puede proceder con el POST o GET real.
-  if (req.method === 'OPTIONS') return res.sendStatus(204); 
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
   next();
 });
 
@@ -95,6 +99,4 @@ if (require.main === module) {
 startServer();
 
 module.exports = app;
-
-
 
