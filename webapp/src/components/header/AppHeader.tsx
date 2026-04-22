@@ -22,8 +22,13 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
             <div className="app-header_menu-wrapper">
                 {open && (
                     //Cada para cerrar el menú al hacer clic fuera de él
-                    <div className="app-header_overlay" onClick={() => setOpen(false)} />
-                )}
+                    //<div className="app-header_overlay" onClick={() => setOpen(false)} />
+
+                    <button
+                        className="app-header_overlay"
+                        onClick={() => setOpen(false)}
+                        aria-label="Cerrar menú"
+                    />)}
 
                 <button
                     className="app-header_menu-btn"
@@ -49,7 +54,7 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
 
                         <button
                             className="app-header_dropdown-item app-header_dropdown-item--disabled"
-                            role="menuitem" 
+                            role="menuitem"
                             disabled
                             title="Idioma"
                         >
