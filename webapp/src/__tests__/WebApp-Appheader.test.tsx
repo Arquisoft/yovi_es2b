@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import AppHeader from '../components/header/AppHeader'
-import { afterEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { Theme } from '../screens/Theme'
 
@@ -12,6 +12,24 @@ function renderWithTheme(onLogout: () => void) {
             <AppHeader onLogout={onLogout} />
         </Theme>
     )
+}
+
+//Crea matchMedia mock, que se encarga de simular la función window.matchMedia en el entorno de pruebas.
+//  window.MatchMedia es una función que se utiliza para detectar características de pantalla, como el modo oscuro o claro, 
+// El mock devuelve un objeto con la propiedad matches establecida en false (indicando que no se cumple la condición de media query) y métodos addEventListener y removeEventListener vacíos para evitar errores al intentar agregar o eliminar listeners en el entorno de pruebas.
+beforeEach(() => {
+    Object.defineProperty(window, 'matchMedia', {
+        writable: true,
+        value: vi.fn().mockReturnValue({
+            matches: false,
+            addEventListener: vi.fn(),
+            removeEventListener: vi.fn(),
+        }),
+    })
+})
+
+function getMenuButton() {
+    return screen.getByRole('button', { name: /men[uú] de opciones/i })
 }
 
 /**
@@ -35,9 +53,10 @@ describe('AppHeader', () => {
      * y el botón de menú debe estar disponible para interactuar.
      */
     test('renderiza el logo y el botón de menú', () => {
+        renderWithTheme(vi.fn())
         expect(screen.getByAltText(/yovi logo/i)).toBeInTheDocument()
         expect(screen.getByText(/YOVI/i)).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /👤 MENU/i })).toBeInTheDocument()
+        expect(getMenuButton()).toBeInTheDocument()
     })
 
     /**
@@ -46,6 +65,7 @@ describe('AppHeader', () => {
      * idioma y cerrar sesión no deben estar visibles en el DOM.
      */
     test('el menú está cerrado por defecto', () => {
+        renderWithTheme(vi.fn())
         expect(screen.queryByText(/modo oscuro|modo claro/i)).not.toBeInTheDocument()
         expect(screen.queryByText(/idioma/i)).not.toBeInTheDocument()
         expect(screen.queryByText(/cerrar sesión/i)).not.toBeInTheDocument()
@@ -57,8 +77,9 @@ describe('AppHeader', () => {
      */
     test('abre el menú desplegable al hacer clic en el botón', async () => {
         const user = userEvent.setup()
+        renderWithTheme(vi.fn())
         
-        await user.click(screen.getByRole('button', { name: /👤 MENU/i }))
+        await user.click(getMenuButton())
 
         expect(screen.getByText(/modo oscuro|modo claro/i)).toBeInTheDocument()
         expect(screen.getByText(/idioma/i)).toBeInTheDocument()
@@ -73,12 +94,12 @@ describe('AppHeader', () => {
         const user = userEvent.setup()
         renderWithTheme(vi.fn())
 
-        await user.click(screen.getByRole('button', { name: /👤 MENU/i }))
+        await user.click(getMenuButton())
         expect(screen.getByText(/modo oscuro|modo claro/i)).toBeInTheDocument()
         expect(screen.getByText(/idioma/i)).toBeInTheDocument()
         expect(screen.getByText(/cerrar sesión/i)).toBeInTheDocument()
 
-        await user.click(screen.getByRole('button', { name: /👤 MENU/i }))
+        await user.click(getMenuButton())
         expect(screen.queryByText(/modo oscuro|modo claro/i)).not.toBeInTheDocument()
         expect(screen.queryByText(/idioma/i)).not.toBeInTheDocument()
         expect(screen.queryByText(/cerrar sesión/i)).not.toBeInTheDocument()
@@ -90,8 +111,9 @@ describe('AppHeader', () => {
      */
     test('cierra el menú al hacer clic fuera de él (overlay)', async () => {
         const user = userEvent.setup()
+        renderWithTheme(vi.fn())
 
-        await user.click(screen.getByRole('button', { name: /menú de opciones/i }))
+        await user.click(getMenuButton())
         expect(screen.getByRole('menu')).toBeInTheDocument()
 
         // El overlay cubre la pantalla y cierra el menú al hacer clic en él
@@ -113,11 +135,11 @@ describe('AppHeader', () => {
         const onLogout = vi.fn() // Mock de la función onLogout para verificar que se llama correctamente
         renderWithTheme(onLogout)
 
-        await user.click(screen.getByRole('button', { name: /👤 MENU/i }))
+        await user.click(getMenuButton())
         await user.click(screen.getByRole('menuitem', { name: /cerrar sesión/i }))
 
         expect(onLogout).toHaveBeenCalledTimes(1)
-        expect(screen.queryByRole('button', { name: /👤 MENU/i })).not.toBeInTheDocument()
+        expect(screen.queryByRole('button', { name: /men[uú] de opciones/i })).not.toBeInTheDocument()
          expect(screen.getByText(/YOVI/i)).not.toBeInTheDocument()
         expect(screen.getByAltText(/yovi logo/i)).not.toBeInTheDocument()
     })
@@ -130,7 +152,7 @@ describe('AppHeader', () => {
         const user = userEvent.setup()
         renderWithTheme(vi.fn())
 
-        await user.click(screen.getByRole('button', { name: /👤 MENU/i }))
+        await user.click(getMenuButton())
         await user.click(screen.getByRole('menuitem', { name: /modo oscuro|modo claro/i }))
 
         expect(screen.queryByRole('menu')).not.toBeInTheDocument()
@@ -145,7 +167,7 @@ describe('AppHeader', () => {
         const onLogout = vi.fn()
         renderWithTheme(onLogout)
 
-        await user.click(screen.getByRole('button', { name: /👤 MENU/i }))
+        await user.click(getMenuButton())
         await user.click(screen.getByRole('menuitem', { name: /modo oscuro|modo claro/i }))
 
         expect(onLogout).not.toHaveBeenCalled()
@@ -160,7 +182,7 @@ describe('AppHeader', () => {
     test('cambia el tema y actualiza el texto del botón', async () => {
         const user = userEvent.setup()
         renderWithTheme(vi.fn())
-        await user.click(screen.getByRole('button', { name: /👤 MENU/i }))
+        await user.click(getMenuButton())
 
         const themeButton = screen.getByRole('menuitem', { name: /modo oscuro|modo claro/i })
         const initialText = themeButton.textContent
@@ -173,7 +195,63 @@ describe('AppHeader', () => {
     })
 
     /**
-     * Comprueba que el appheader no aparezca en la pantalla de login, pero sí en el resto de pantallas.
+     * Comprueba que el appheader no aparezca en la pantalla de registro ni login
      */
+        test('el appheader no aparece en la pantalla de registro ni login', () => {
+            // Simulamos que estamos en la pantalla de registro
+            window.history.pushState({}, 'Register', '/register') //Ir a la pantalla de registro
+            renderWithTheme(vi.fn())
+            expect(screen.queryByRole('button', { name: /men[uú] de opciones/i })).not.toBeInTheDocument()
+            expect(screen.queryByText(/YOVI/i)).not.toBeInTheDocument()
+            expect(screen.queryByAltText(/yovi logo/i)).not.toBeInTheDocument()
+        })
+
+    // /**
+    //  * Comprueba que el appheader aparezca en la pantalla de home, stats y ranking, y en las subpantallas de stats y ranking
+    //  **/
+    //     test('el appheader aparece en la pantalla de home, stats y ranking', () => {
+    //         // Simulamos que estamos en la pantalla de home
+    //         window.history.pushState({}, 'Home', '/home') //Ir a la pantalla de home
+    //         renderWithTheme(vi.fn())
+    //         expect(screen.getByRole('button', { name: /👤 MENU/i })).toBeInTheDocument()
+    //         expect(screen.getByText(/YOVI/i)).toBeInTheDocument()
+    //         expect(screen.getByAltText(/yovi logo/i)).toBeInTheDocument()
+
+    //         // Simulamos que estamos en la pantalla de stats
+    //         window.history.pushState({}, 'Stats', '/stats') //Ir a la pantalla de stats
+    //         renderWithTheme(vi.fn())
+    //         expect(screen.getByRole('button', { name: /👤 MENU/i })).toBeInTheDocument()
+    //         expect(screen.getByText(/YOVI/i)).toBeInTheDocument()
+    //         expect(screen.getByAltText(/yovi logo/i)).toBeInTheDocument()
+
+    //         // Simulamos que estamos en la pantalla de ranking
+    //         window.history.pushState({}, 'Ranking', '/ranking') //Ir a la pantalla de ranking
+    //         renderWithTheme(vi.fn())
+    //         expect(screen.getByRole('button', { name: /👤 MENU/i })).toBeInTheDocument()
+    //         expect(screen.getByText(/YOVI/i)).toBeInTheDocument()
+    //         expect(screen.getByAltText(/yovi logo/i)).toBeInTheDocument()
+
+    //         // Simulamos que estamos en la subpantalla de stats general
+    //         window.history.pushState({}, 'Stats Detail', '/stats/general') //Ir a la subpantalla de stats
+    //         renderWithTheme(vi.fn())
+    //         expect(screen.getByRole('button', { name: /👤 MENU/i })).toBeInTheDocument()
+    //         expect(screen.getByText(/YOVI/i)).toBeInTheDocument()
+    //         expect(screen.getByAltText(/yovi logo/i)).toBeInTheDocument()
+
+    //         // Simulamos que estamos en la subpantalla de stats por categoría
+    //         window.history.pushState({}, 'Stats Filtrado', '/stats/filtarado') //Ir a la subpantalla de stats
+    //         renderWithTheme(vi.fn())
+    //         expect(screen.getByRole('button', { name: /👤 MENU/i })).toBeInTheDocument()
+    //         expect(screen.getByText(/YOVI/i)).toBeInTheDocument()
+    //         expect(screen.getByAltText(/yovi logo/i)).toBeInTheDocument()
+
+
+    //         // Simulamos que estamos en las dos subpantallas de ranking general
+    //         window.history.pushState({}, 'Ranking Detail', '/ranking/detail') //Ir a la subpantalla de ranking general
+    //         renderWithTheme(vi.fn())
+    //         expect(screen.getByRole('button', { name: /👤 MENU/i })).toBeInTheDocument()
+    //         expect(screen.getByText(/YOVI/i)).toBeInTheDocument()
+    //         expect(screen.getByAltText(/yovi logo/i)).toBeInTheDocument()
+    //      }
     
 })
