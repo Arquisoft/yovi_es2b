@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Board } from "../../components/board/Board";
 import GameInfo from "../../components/board/GameInfo";
 import ControlPanel from "../../components/board/ControlPanel";
@@ -8,6 +8,7 @@ import { getBoardSize } from "../../components/gameOptions/Difficulty";
 import "./Game.css";
 import { End } from "./End";
 import Home from "./Home";
+import { getSocket, disconnectSocket } from "../../socket";
 
 // Definimos la interfaz de las props
 interface GameProps {
@@ -27,10 +28,13 @@ interface GameProps {
   initialGameId?: string;
 }
 
-/**
- * Declaración primera de esto, para que funcione el guardar datos de la partida
- * Recibe el tamaño del tablero para crear el juego y retorna el id que tendra.
- */
+// Tipo para actualizaciones de tablero que vienen del socket
+export type BoardUpdate = {
+  layout: string;
+  status: { kind: string; next_player?: number; winner?: number };
+  seq: number;
+};
+
 async function crearPartida(boardSize: number): Promise<string> {
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     const res = await fetch(`${GAMEY_URL}/v1/games`, {
@@ -40,105 +44,127 @@ async function crearPartida(boardSize: number): Promise<string> {
     });
     if (!res.ok) throw new Error("Error al crear la partida");
     const data = await res.json();
-      //Return gameID
-      return data.game_id;
+    return data.game_id;
 }
 
 async function getTurnoPartida(gameId: string): Promise<number> {
    const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     const res = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}/status`);
-    if (!res.ok) {
-      throw new Error("Error al obtener el turno");
-    } 
+    if (!res.ok) throw new Error("Error al obtener el turno");
     const data = await res.json();
     return data.kind === 'Ongoing' ? data.next_player : 0;
 }
 
-export function Game({ settings, username, username2, twoPlayers, stateStart, enableTimer = true, onGoMenu = () => {}, onGameEnd, onPlayAgain, onlineMode = false, roomCode, localPlayerIndex, initialGameId }: Readonly<GameProps>) {
-  // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
+export function Game({
+  settings, username, username2, twoPlayers, stateStart,
+  enableTimer = true, onGoMenu = () => {}, onGameEnd, onPlayAgain,
+  onlineMode = false, roomCode, localPlayerIndex = 0, initialGameId,
+}: Readonly<GameProps>) {
+
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
   const [gameId, setGameId] = useState("");
-  const [winner, setWinner] = useState<string | null>(null); // ganador de la partida, null si no hay ganador aún
+  const [winner, setWinner] = useState<string | null>(null);
   const [showEndScreen, setShowEndScreen] = useState(false);
-  const [playAgain, setPlayAgain] = useState(false); // toggle para reiniciar la partida sin volver al menú principal
-  const [refreshKey, setRefreshKey] = useState(0);  // incrementar fuerza recarga del tablero
+  const [playAgain, setPlayAgain] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
   const [hintCoords, setHintCoords] = useState<{ x: number; y: number; z: number } | null>(null);
   const [hintsUsed, setHintsUsed] = useState(0);
+  const [externalBoardUpdate, setExternalBoardUpdate] = useState<BoardUpdate | null>(null);
+  const [disconnectedMsg, setDisconnectedMsg] = useState<string | null>(null);
+  const boardUpdateSeq = useRef(0);
 
-  // como es función async, llamamos useEffect
+  // Inicializar partida
   useEffect(() => {
-    // Reinicia todo el estado cuando el padre cambie stateStart o el usuario pulse "Jugar de nuevo"
-    if (!stateStart){
-      return;
-    } 
+    if (!stateStart) return;
     setWinner(null);
     setShowEndScreen(false);
     setTurno("Inicio");
     setGameState("Inicio");
     setGameId("");
     setHintsUsed(0);
+    setExternalBoardUpdate(null);
+    setDisconnectedMsg(null);
+
+    if (onlineMode && initialGameId) {
+      // La partida ya fue creada por el servicio de salas
+      setGameId(initialGameId);
+      // El jugador 0 siempre empieza; mapeamos al nombre local
+      const firstTurno = localPlayerIndex === 0 ? username : username2;
+      setTurno(firstTurno);
+      setGameState("Iniciada");
+      return;
+    }
 
     async function nuevaPartida() {
-      if (stateStart) {
-        const boardSize = getBoardSize(settings.difficulty); // Consigue el tamaño del tablero
-        const idG = await crearPartida(boardSize);           // Crea la partida y asigna el idGame
-        setGameId(idG);
-
-        // para cada atributo
-        const nextPlayer = await getTurnoPartida(idG);
-        let firstTurno: string;
-        if (nextPlayer === 0) {
-          firstTurno = username;
-        } else {
-          firstTurno = twoPlayers ? username2 : "BOT";
-        }
-        setTurno(firstTurno);
-        setGameState("Iniciada");
-      }
+      const boardSize = getBoardSize(settings.difficulty);
+      const idG = await crearPartida(boardSize);
+      setGameId(idG);
+      const nextPlayer = await getTurnoPartida(idG);
+      const firstTurno = nextPlayer === 0 ? username : (twoPlayers ? username2 : "BOT");
+      setTurno(firstTurno);
+      setGameState("Iniciada");
     }
     nuevaPartida();
   }, [stateStart, playAgain]);
 
-  // Efecto para mostrar la pantalla de fin 3 segundos después de detectar un ganador
+  // Listeners de socket para modo online
   useEffect(() => {
-    // Si el ganador vuelve a ser null (ej. nueva partida), ocultamos la pantalla de fin inmediatamente
-    if (winner === null) {
-      setShowEndScreen(false);
-      return;
-    }
-    // Si hay un ganador, programamos mostrar la pantalla de fin después de 1 segundos
-    const timerId = window.setTimeout(() => {
-      setShowEndScreen(true);
-    }, 1000);
-    // Limpiamos el timeout si el componente se desmonta o si se inicia una nueva partida
+    if (!onlineMode || !roomCode) return;
+
+    const socket = getSocket();
+
+    socket.on('move-made', (data: { state: { layout: string }; status: { kind: string; next_player?: number; winner?: number } }) => {
+      boardUpdateSeq.current += 1;
+      setExternalBoardUpdate({
+        layout: data.state.layout,
+        status: data.status,
+        seq: boardUpdateSeq.current,
+      });
+    });
+
+    socket.on('player-disconnected', ({ username: who }: { username: string }) => {
+      setDisconnectedMsg(`${who} se ha desconectado. Partida terminada.`);
+    });
+
     return () => {
-      window.clearTimeout(timerId);
+      socket.off('move-made');
+      socket.off('player-disconnected');
     };
+  }, [onlineMode, roomCode]);
+
+  // Limpiar socket al desmontar en modo online
+  useEffect(() => {
+    return () => {
+      if (onlineMode) disconnectSocket();
+    };
+  }, [onlineMode]);
+
+  // Mostrar pantalla de fin tras detectar ganador
+  useEffect(() => {
+    if (winner === null) { setShowEndScreen(false); return; }
+    const timerId = window.setTimeout(() => setShowEndScreen(true), 1000);
+    return () => window.clearTimeout(timerId);
   }, [winner]);
 
-  /**
-   * Funcion para manejar el fin de la partida, llamando a la pantalla de fin y guardando el resultado
-   * Board debe llamar a changeGameState("Terminada") y a un nuevo prop onGameEnd(winner)
-   * cuando detecte que la partida acabó. Aquí lo capturamos
-   */  
   function handleGameEnd(ganador: string) {
     setWinner(ganador);
     setGameState("Terminada");
-    onGameEnd?.(ganador); // notify parent if provided
+    onGameEnd?.(ganador);
   }
 
-  /**
-   * Función para manejar la expiración del temporizador, cambiando el turno al otro jugador
-   * Board debe llamar a onTimerExpire() cuando el temporizador llegue a 0, aquí lo capturamos
-   * y forzamos el cambio de turno al otro jugador (o al bot) para que siga la partida sin esperar al jugador 
-   * que no ha movido a que haga algo después de quedarse sin tiempo
-   */
   function handleTimerExpire() {
-  setTurno((t) => (t === username ? username2 : username));
-}
+    setTurno((t) => (t === username ? username2 : username));
+  }
+
+  // Movimiento online: emite al servicio de salas en lugar de llamar a GameY
+  function handleOnlineMove(x: number, y: number, z: number, player: number) {
+    if (!roomCode) return;
+    getSocket().emit('make-move', { code: roomCode, x, y, z, player });
+  }
 
   async function handleHint() {
+    if (onlineMode) return; // sin pistas en modo online
     if (!/^[a-zA-Z0-9_-]+$/.test(gameId)) return;
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     try {
@@ -160,10 +186,14 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, en
   }
 
   async function handleUndo() {
+    if (onlineMode && roomCode) {
+      // En online el servicio deshace dos movimientos y hace broadcast
+      getSocket().emit('undo-move', { code: roomCode });
+      return;
+    }
     if (!/^[a-zA-Z0-9_-]+$/.test(gameId)) return;
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     try {
-      // En partida vs bot deshacemos 2 movimientos (el del bot y el del jugador)
       const veces = twoPlayers ? 1 : 2;
       for (let i = 0; i < veces; i++) {
         const res = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}/undo`, { method: 'POST' });
@@ -176,15 +206,31 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, en
   }
 
   async function handleExit() {
+    if (onlineMode && roomCode) {
+      getSocket().emit('abandon-game', { code: roomCode });
+    }
+    onGoMenu();
     setGameState("fin");
   }
 
-  // Si el usuario pulsa "Terminar partida" en el panel de control, volvemos al menú principal
-  if(gameState==="fin") {
+  // Mensaje de desconexión del rival
+  if (disconnectedMsg) {
+    return (
+      <div className="game-screen">
+        <div className="game-panel" style={{ alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
+          <p style={{ fontSize: '1.1rem', fontWeight: 600, textAlign: 'center' }}>{disconnectedMsg}</p>
+          <button className="game-exit-btn" onClick={() => { onGoMenu(); }}>
+            Volver al menú
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  if (gameState === "fin") {
     return <Home username={username}/>;
   }
 
-  // Mostrar pantalla de fin 3 segundos después de detectar ganador
   if (winner !== null && showEndScreen) {
     return (
       <End
@@ -194,7 +240,14 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, en
         twoPlayers={twoPlayers}
         settings={settings}
         onGoHome={onGoMenu}
-        onPlayAgain={() => { setPlayAgain((prev) => !prev); onPlayAgain?.(); }} // toggle dispara el useEffect
+        onPlayAgain={() => {
+          if (!onlineMode) {
+            setPlayAgain((prev) => !prev);
+            onPlayAgain?.();
+          } else {
+            onGoMenu();
+          }
+        }}
       />
     );
   }
@@ -222,8 +275,7 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, en
               >
                 {turno}
               </span>
-
-                {enableTimer && gameState === "Iniciada" && (
+              {!onlineMode && enableTimer && gameState === "Iniciada" && (
                 <Timer turno={turno} onExpire={handleTimerExpire} />
               )}
             </div>
@@ -241,11 +293,15 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, en
             hintCoords={hintCoords}
             changeTurno={(t) => { setTurno(t); setHintCoords(null); }}
             onGameEnd={handleGameEnd}
+            onlineMode={onlineMode}
+            localPlayerIndex={localPlayerIndex}
+            onOnlineMove={handleOnlineMove}
+            externalBoardUpdate={externalBoardUpdate}
           />
         </div>
 
         <div className="controls-bottom">
-          {twoPlayers ? null : (
+          {!twoPlayers && (
             <div id="hint-container">
               <button id="hint-button" onClick={handleHint} disabled={hintCoords !== null || hintsUsed >= 3}>Pista</button>
               <span id="hint-counter">{3 - hintsUsed} pista{3 - hintsUsed === 1 ? "" : "s"} restante{3 - hintsUsed === 1 ? "" : "s"}</span>
