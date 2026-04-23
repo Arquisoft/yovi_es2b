@@ -101,8 +101,7 @@ export function Game({
     const socket = getSocket();
 
     socket.on('move-made', (data: { state?: { layout: string }; status?: { kind: string; next_player?: number; winner?: number } }) => {
-      console.log('[move-made]', JSON.stringify(data));
-      if (data.status?.kind === 'Finished') {
+if (data.status?.kind === 'Finished') {
         const winnerIndex = data.status.winner!;
         handleGameEnd(winnerIndex === localPlayerIndex ? username : username2);
       } else if (data.status?.next_player !== undefined) {

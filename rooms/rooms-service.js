@@ -105,9 +105,7 @@ io.on('connection', (socket) => {
       return;
     }
 
-    console.log('[make-move] gameId:', room.gameId, 'player:', player, 'x:', x, 'y:', y, 'z:', z);
     const data = await relayMove(room.gameId, player, x, y, z);
-    console.log('[relayMove] response:', JSON.stringify(data));
     if (!data) {
       socket.emit('move-error', { message: 'Movimiento inválido' });
       return;
@@ -153,6 +151,4 @@ io.on('connection', (socket) => {
 });
 
 const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
-  console.log(`Rooms service listening on port ${PORT}`);
-});
+server.listen(PORT);
