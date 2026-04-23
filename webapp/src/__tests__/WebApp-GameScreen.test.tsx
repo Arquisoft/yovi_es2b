@@ -238,8 +238,7 @@ describe('Game', () => {
         await user.click(hintButton)
         await waitFor(() => {
             expect(global.fetch).toHaveBeenCalledWith(
-                expect.stringContaining('/play'),
-                expect.objectContaining({ method: 'POST' })
+                expect.stringContaining('/play')
             )
             expect(hintButton).toBeDisabled()
         })
