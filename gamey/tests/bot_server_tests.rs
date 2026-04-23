@@ -2,19 +2,19 @@ use axum::{
     body::Body,
     http::{Request, StatusCode},
 };
-use gamey::{YBotRegistry, YEN, create_default_state, create_router, state::AppState, RandomBot, MoveResponse, ErrorResponse};
+use gamey::{YBotRegistry, YEN, create_default_state, create_test_router, state::AppState, RandomBot, MoveResponse, ErrorResponse};
 use http_body_util::BodyExt;
 use std::sync::Arc;
 use tower::ServiceExt;
 
 /// Helper to create a test app with the default state
 fn test_app() -> axum::Router {
-    create_router(create_default_state())
+    create_test_router(create_default_state())
 }
 
 /// Helper to create a test app with a custom state
 fn test_app_with_state(state: AppState) -> axum::Router {
-    create_router(state)
+    create_test_router(state)
 }
 
 /// Percent-encodes a string for use as a URL query parameter value.

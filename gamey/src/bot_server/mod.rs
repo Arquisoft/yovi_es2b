@@ -33,6 +33,27 @@ pub use version::*;
 use crate::{DefensiveBot, GameYError, MonteCarloBot, MonteCarloEndurecidoBot, MonteCarloEndurecidoConcursoBot, MonteCarloMejoradoBot, OffensiveBot, RandomBot, YBotRegistry, state::AppState};
 use tower_http::cors::{Any, CorsLayer};
 
+/// Creates the Axum router without Prometheus metrics, for use in tests.
+///
+/// Prometheus registers a global recorder and binds to a port, which causes
+/// "Address already in use" panics when tests run in parallel. Use this
+/// function in integration tests instead of `create_router`.
+pub fn create_test_router(state: AppState) -> axum::Router {
+    let game_routes = crate::service::game_router();
+
+    let cors = CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods(Any)
+        .allow_headers(Any);
+
+    axum::Router::new()
+        .route("/status", axum::routing::get(status))
+        .route("/play", axum::routing::get(choose::choose))
+        .merge(game_routes)
+        .layer(cors)
+        .with_state(state)
+}
+
 /// Creates the Axum router with the given state.
 /// This is useful for testing the API without binding to a network port.
 pub fn create_router(state: AppState) -> axum::Router {
