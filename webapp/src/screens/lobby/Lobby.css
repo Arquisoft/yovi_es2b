@@ -1,0 +1,164 @@
+.lobby-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.lobby-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 400px;
+  border: 1px solid #e2e5ea;
+  border-radius: 12px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+}
+
+.lobby-card__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.6rem;
+  font-weight: 750;
+  color: #191a1c;
+}
+
+.lobby-card__label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #444;
+  align-self: flex-start;
+}
+
+.lobby-input {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  border: 1.5px solid #cbd2da;
+  border-radius: 6px;
+  outline: none;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.lobby-input:focus {
+  border-color: #023eb6;
+}
+
+.lobby-difficulty {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.lobby-diff-btn {
+  flex: 1;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1.5px solid #cbd2da;
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.lobby-diff-btn:hover {
+  background: rgba(2, 62, 182, 0.06);
+}
+
+.lobby-diff-btn--active {
+  background: #023eb6;
+  border-color: #023eb6;
+  color: #fff;
+}
+
+/* Código generado */
+.lobby-waiting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.lobby-code-box {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  border: 2px dashed #023eb6;
+  border-radius: 8px;
+}
+
+.lobby-code {
+  font-size: 2.2rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: #023eb6;
+}
+
+.lobby-waiting__text {
+  font-size: 0.95rem;
+  color: #555;
+  text-align: center;
+  margin: 0;
+}
+
+/* Botones */
+.lobby-btn {
+  width: 100%;
+  padding: 0.75rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+}
+
+.lobby-btn--primary {
+  background: #023eb6;
+  color: #fff;
+}
+
+.lobby-btn--primary:hover {
+  background: #0231a0;
+}
+
+.lobby-btn--copy {
+  background: transparent;
+  border: 1px solid #cbd2da;
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  width: auto;
+}
+
+.lobby-btn--back {
+  background: transparent;
+  color: #023eb6;
+  border: 1px solid #023eb6;
+}
+
+.lobby-btn--back:hover {
+  background: rgba(2, 62, 182, 0.08);
+}
+
+.lobby-error {
+  color: #b91c1c;
+  font-size: 0.85rem;
+  margin: 0;
+  align-self: flex-start;
+}
