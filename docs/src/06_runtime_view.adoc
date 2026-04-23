@@ -16,17 +16,17 @@ Los componentes que participan son:
 
 El registro crea un nuevo usuario en MongoDB comprobando previamente que el nombre no esté en uso. El inicio de sesión verifica las credenciales y habilita el acceso a las funcionalidades del juego.
 
-image:diagramaRegistroInicioSesion.png[diagramaRegistroInicioSesion]
+image::diagramaRegistroInicioSesion.png[diagramaRegistroInicioSesion]
 
 === Flujo de una partida completa
 
 Al iniciar una partida, el microservicio de usuarios registra el evento en MongoDB y GameY crea la sesión de juego en memoria. Los movimientos del jugador y las respuestas del bot se resuelven íntegramente en GameY sin acceder a la base de datos. Al terminar, el resultado se persiste en MongoDB y la sesión de juego se elimina de GameY.
 
-image:diagramaFlujoPartida.png[diagramaFlujoPartida]
+image::diagramaFlujoPartida.png[diagramaFlujoPartida]
 
 === Consulta de estadísticas y ranking
 
 Las estadísticas y el ranking se obtienen directamente de MongoDB a través del microservicio de usuarios. No interviene GameY en este flujo.
 
 
-image:diagramaEstadisticasRanking.png[diagramaEstadisticasRanking]
+image::diagramaEstadisticasRanking.png[diagramaEstadisticasRanking]

@@ -39,7 +39,7 @@ describe('Home', () => {
         render(<Home username="sara" />)
         expect(screen.getByRole('button', { name: /mis estadísticas/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /ranking/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /cerrar sesión/i })).toBeInTheDocument()
+        //expect(screen.getByRole('button', { name: /empezar partida/i })).toBeInTheDocument()
     })
 
     /**

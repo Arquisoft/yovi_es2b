@@ -4,8 +4,8 @@
   border-collapse: collapse;
   margin-top: 1rem;
   font-size: 0.9rem;
-  background: #ffffff;
-  border: 1px solid #d0d7de;
+  background: var(--stats-table-bg);
+  border: 1px solid var(--stats-table-border);
   border-radius: 10px;
   overflow: hidden;
   table-layout: fixed;
@@ -13,23 +13,32 @@
 }
 
 /* ── Contenedores de tablas ───────────────────────────────────── */
-.stats-total-menu, .stats-menu-filter, .stats-diff-screen, .stats-strat-screen {
+.stats-total-menu, .stats-menu-filter {
   width: 90%;
   max-width: 1500px;
   margin: 0 auto;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
+}
+
+.stats-diff-screen, .stats-strat-screen {
+  width: 90%;
+  max-width: 1500px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* ── Cabecera ─────────────────────────────────────────────────── */
 .stats-total-table thead, .stats-strat-table thead, .stats-diff-table thead {
-  background: #023eb6;
+  background: var(--stats-table-head-bg);
 }
 
 .stats-total-table thead td, .stats-strat-table thead td, .stats-diff-table thead td {
   padding: 0.6rem 0.5rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--stats-table-head-text);
   text-align: center;
   font-size: 0.9rem;
   border-right: 1px solid rgba(255, 255, 255, 0.2);
@@ -44,7 +53,8 @@
 .stats-total-table td, .stats-strat-table td, .stats-diff-table td {
   padding: 0.5rem 0.4rem;
   text-align: center;
-  border-bottom: 1px solid #e6edf3;
+  border-bottom: 1px solid var(--stats-table-cell-border);
+  color: var(--text-primary);
   word-break: break-word;
   white-space: normal;
 }
@@ -54,31 +64,31 @@
 .stats-total-table tbody tr:nth-child(1),  .stats-total-table tbody tr:nth-child(2),  .stats-total-table tbody tr:nth-child(3),
 .stats-total-table tbody tr:nth-child(4),  .stats-total-table tbody tr:nth-child(5),  .stats-total-table tbody tr:nth-child(6),
 .stats-diff-table tbody tr:nth-child(1),   .stats-total-table tbody tr:nth-child(19) {
-  background: #f6f8fa;
+  background: var(--stats-row-easy-bg);
 }
 /* MEDIO */
 .stats-total-table tbody tr:nth-child(7),  .stats-total-table tbody tr:nth-child(8),  .stats-total-table tbody tr:nth-child(9),
 .stats-total-table tbody tr:nth-child(10), .stats-total-table tbody tr:nth-child(11), .stats-total-table tbody tr:nth-child(12),
 .stats-diff-table tbody tr:nth-child(2) {
-  background: #dbe8f5;
+  background: var(--stats-row-medium-bg);
 }
 /* DIFICIL */
 .stats-total-table tbody tr:nth-child(13),  .stats-total-table tbody tr:nth-child(14),  .stats-total-table tbody tr:nth-child(15),
 .stats-total-table tbody tr:nth-child(16),  .stats-total-table tbody tr:nth-child(17),  .stats-total-table tbody tr:nth-child(18),
 .stats-diff-table tbody tr:nth-child(3) {
-  background: #a2cbf4;
+  background: var(--stats-row-hard-bg);
 }
 /* RANDOM, OFENSIVA, DEFENSIVA */
 .stats-strat-table tbody tr:nth-child(1),  .stats-strat-table tbody tr:nth-child(2),  .stats-strat-table tbody tr:nth-child(3) {
-  background: #dcf7d6;
+  background: var(--stats-row-strategy-low-bg);
 }
 /* MONTECARLO, MONTECARLO_V2 */
 .stats-strat-table tbody tr:nth-child(4),  .stats-strat-table tbody tr:nth-child(5) {
-  background: #fdf5d0;
+  background: var(--stats-row-strategy-mid-bg);
 }
 /* MONTECARLO_PRO */
 .stats-strat-table tbody tr:nth-child(6) {
-  background: #fdd0d0;
+  background: var(--stats-row-strategy-high-bg);
 }
 
 /* ── Última fila sin borde ───────────────────────────────────── */
@@ -90,6 +100,6 @@
 .stats-total-table tbody td:first-child, .stats-total-table tbody td:nth-child(2),
 .stats-strat-table tbody td:first-child, .stats-diff-table tbody td:first-child{
   font-weight: 600;
-  color: #023eb6;
+  color: var(--stats-username-color);
 }
 

@@ -4,7 +4,7 @@ import GameStats from "./GameStats.tsx";
 import InitialScreen from "../init/InitialScreen.tsx";
 import "./GameStats.css";
 import "./GameStatsTable.css"
-import AppHeader from "../../components/AppHeader";
+import AppHeader from "../../components/header/AppHeader.tsx";
 
 // TIPO ESTADISTICA PARA USO EN LA TABLA
 type AllStat = {
