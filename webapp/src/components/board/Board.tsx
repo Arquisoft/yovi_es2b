@@ -123,11 +123,11 @@ export function Board(props: BoardProps) {
   }
 
   async function peticionMovimientoBot(state: unknown): Promise<any> {
-    const params = new URLSearchParams({
-      position: JSON.stringify(state),
-      bot_id: strategyToBotId(selectedStrategy),
+    const res = await fetch(`${GAMEY_URL}/play`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ position: JSON.stringify(state), bot_id: strategyToBotId(selectedStrategy) }),
     });
-    const res = await fetch(`${GAMEY_URL}/play?${params}`);
     if (!res.ok) throw new Error("Error al obtener movimiento del bot");
     return res.json();
   }

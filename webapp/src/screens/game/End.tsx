@@ -22,7 +22,7 @@ function getTitle(twoPlayers: boolean, onlineMode: boolean, winner: string, play
 function getSubtitle(twoPlayers: boolean, onlineMode: boolean, winner: string, username: string, playerWon: boolean): string {
   if (twoPlayers && !onlineMode) return `¡Enhorabuena, ${winner}, ganaste la partida!`;
   if (playerWon)  return `¡Enhorabuena, ${username}, ganaste la partida!`;
-  return "Has perdido. ¡Inténtalo de nuevo!";
+  return "Has perdido. ¡Intentalo de nuevo!";
 }
 
 export function End({ winner, username, username2 = "", twoPlayers = false, onlineMode = false, showPlayAgain = true, settings, onGoHome, onPlayAgain }: Readonly<EndProps>) {

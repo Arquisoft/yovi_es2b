@@ -155,11 +155,11 @@ if (data.status?.kind === 'Finished') {
       const stateRes = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}`);
       if (!stateRes.ok) return;
       const stateData = await stateRes.json();
-      const hintParams = new URLSearchParams({
-        position: JSON.stringify(stateData.state),
-        bot_id: 'montecarlo_bot',
+      const hintRes = await fetch(`${GAMEY_URL}/play`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ position: JSON.stringify(stateData.state), bot_id: 'montecarlo_bot' }),
       });
-      const hintRes = await fetch(`${GAMEY_URL}/play?${hintParams}`);
       if (!hintRes.ok) return;
       const hint = await hintRes.json();
       setHintCoords(hint.coords);
