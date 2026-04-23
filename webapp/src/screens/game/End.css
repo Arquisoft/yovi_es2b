@@ -8,7 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, var(--end-bg-from) 0%, var(--end-bg-to) 100%);
+  background: var(--end-bg-to);
   overflow: hidden;
   font-family: 'Segoe UI', system-ui, sans-serif;
 }

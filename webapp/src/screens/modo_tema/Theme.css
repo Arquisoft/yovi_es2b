@@ -154,7 +154,7 @@ body,
     --card-bg:          #1e293b;
     --card-border:      #334155;
     --card-shadow:      rgba(0, 0, 0, 0.3);
-    --surface-soft:     #243244;
+    --surface-soft:     #a7ceff;
     --surface-soft-hover:#304257;
  
     /* Texto */
@@ -277,7 +277,7 @@ body,
     --end-lose-color:   #f87171;
     --end-text:         #f1f5f9;
     --end-muted:        #94a3b8;
-    --end-border:       #334155;
+    --end-border:       #1e293b;
     --end-bg-from:      #1e293b;
     --end-bg-to:        #0f172a;
     --end-card-bg:      #1e293b;

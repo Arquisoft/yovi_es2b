@@ -4,7 +4,7 @@
 }
 
 html, body {
-  background-color: var(--surface-soft);
+  background-color: var(--bg-page);
   color: var(--text-primary);
 }
 
@@ -28,7 +28,7 @@ input:-webkit-autofill:focus { /* para autocompletados */
   flex-direction: column;
   align-items: center;  /* Centra los elementos */
   justify-content: center;  /* Centra los elementos */
-  background: linear-gradient(135deg, var(--end-bg-from) 0%, var(--end-bg-to) 100%);
+  background: var(--bg-page);
   padding: 2rem;
   box-sizing: border-box;
   overflow-y: auto;
