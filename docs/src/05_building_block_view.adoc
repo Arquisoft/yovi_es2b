@@ -18,7 +18,7 @@ A alto nivel, el sistema está compuesto por cuatro bloques principales, uno de 
 
 Estos componentes interactúan entre sí mediante API REST (modelo, servicio y controlers) y mensajes en formato JSON.
 
-image:app_static.png[aplicacion estatica sencilla]
+image::app_static.png[aplicacion estatica sencilla]
 
 ==== Frontend Web: WEBAPP
 
@@ -34,7 +34,7 @@ Sus responsabilidades principales son:
 
 El frontend no contiene lógica del juego. Toda la validación de movimientos y cálculo del estado del tablero se delega al backend para garantizar la integridad de las partidas.
 
-image:app_static_webapp.png[aplicacion estatica sencilla, parte webapp]
+image::app_static_webapp.png[aplicacion estatica sencilla, parte webapp]
 
 ==== Microservicio User
 
@@ -75,7 +75,7 @@ El resto de microservicios se comunican con el microservicio de NodeJs, que mane
 
 ==== Esquema del sistema
 Este es el esquema del juego completo:
-image:yovi-estructura.png[componentes-yovi]
+image::yovi-estructura.png[componentes-yovi]
 
 === Nivel 2 – Descomposición interna de los bloques
 
@@ -138,7 +138,7 @@ Las peticiones se realizan mediante HTTP y utilizan mensajes en formato JSON par
 * GET /users/{id} – obtener información de un usuario.
 * POST /createuser – crea un nuevo usuario, validando que no exista
 
-image:yovi-interfazusers.png[interfaz-users-yovi]
+image::yovi-interfazusers.png[interfaz-users-yovi]
 
 
 ==== Interfaz Frontend – Microservicio GameY
@@ -154,4 +154,4 @@ El acceso a la base de datos se realiza a través de los métodos de acceso a da
 
 === Diagrama de clases
 Vemos en la siguiente imagen el diagrama de clases de este proyecto.
-image:gamey_uml.png[gamey_uml]
+image::gamey_uml.png[gamey_uml]
