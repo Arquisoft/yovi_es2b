@@ -4,3 +4,59 @@ ifndef::imagesdir[:imagesdir: ../images]
 == Requisitos de calidad
 
 Se definirán los requisitos de calidad necesarios para que el proyecto esté realmente correcto y finalizado.
+Nos basaremos en los objetivos de calidad descritos brevemente en el apartado 1.2, y los explicaremos de una forma un poco más desarrollada.
+También veremos algunos requisitos de menor importancia a destacar, necesarios para considerar en este proyecto.
+Estos requisitos han influenciado en nuestro trabajo, haciendo que este se ajuste en lo máximo posible a ellos.
+
+=== Descripción general de requisitos
+
+* **Funcionalidad** (obligatoria):
+El sistema realiza las funciones obligatorias de creación de usuario e inicio de sesión con otro ya creado.
+También es posible jugar contra varios bot, que pueden tener diferentes estrategias y se puede ajustar la dificultad, que corresponde con el tamaño del tablero sobre el que se va a jugar.
+Existe la posibilidad de visualizar estadísticas personales de partidas contra bot: en general, por dificultad o por estrategia.
+Escenarios Funcionalidad del 1 al 3.
+* **Mantenibilidad**:
+Para modificaciones de funcionalidades voluntarias, necesitamos que nuestro programa pueda adaptarse sin tener que tocar el resto de código.
+Así, al poder crear implementaciones extra, no tendremos que sacrificar el rendimiento del programa o tiempo empleado en hacerlo, entre otras cosas.
+* **Usabilidad**:
+Debe poder ser usada para el público objetivo, que en nuestro caso, será apto para todos los públicos.
+Tendrá que tener una interfaz intuitiva y fácil de usar, con un rendimiento de la aplicación (creación de usuario, jugar un  turno, etc.) que sea lo más rápido y correcto posible.
+* **Escalabilidad**:
+Este programa será capaz de funcionar en varios dispositivos al mismo tiempo.
+De esta forma, en un futuro, podría tener la capacidad de ser usado con mayor carga, pero sin perder rendimiento o calidad.
+* **Funcionalidad** (extra):
+Existe la capacidad de jugar un jugador contra otro, tanto de forma local, en el mismo ordenador, como de forma remota, con diferentes cuentas.
+También está la capacidad de poder ver un ranking global, con todos los usuarios registrados.
+Se ha implementado la capacidad de obtener pistas al jugar un usuario contra un bot, teniendo un límite de 3 pistas por patida.
+También se proporciona un temporizador en las partidas jugador vs jugador, si no se responde en ese tiempo, se cambiará el turno.
+Otra implementación es poder aplicar el modo oscuro, pudiendo elegir si usar la aplicación con modo claro (que en principio se había forzado) o en modo oscuro, este apartado está muy relacionado también con la usabilidad.
+Respecto a la usabilidad, de nuevo, se ha implementado la internacionalización, centrado en idiomas con letras latinas (español, inglés, ...).
+Escenarios Funcionalidad del 4 al 7.
+* **Rendimiento**:
+Este programa deberá responder a las peticiones de forma rápida y clara.
+La rapidez se corresponde con un sistema productivo, y la claridad con el como responde la aplicación y se muestra en el interfaz de usuario.
+* **Testeabilidad**:
+Corresponde con la capacidad de que cada parte de la aplicación tenga funcionalidades que pueden ser probadas.
+Estas pruebas se hacen mediante diferentes tipos de test: los unitarios, que hay uno por microservicio, sobre juego (gamey), sobre el interfaz (webapp) o sobre la base de datos (users);
+otros test son los test e2e, que prueban el flujo de una aplicación de principio a fin (e2e), que simulan la experiencia real de un usuario, probando que todos los componentes (frontend, backend, base de datos) funcionen conjuntamente;
+también tenemos las pruebas de carga, que muestran la capacidad del sistema para probar el acceso a la aplicación a la vez para simular una carga de trabajo más similar a la realidad;
+por último, tenemos las pruebas de usabilidad, que se hacen respecto a usuarios reales para ver su interacción con el juego.
+
+=== Escenarios de calidad
+
+[options="header",cols="1,2,2"]
+|===
+|Escenario|Estímulo|Respuesta
+|Funcionalidad 1|El usuario crea un usuario, y juega una partida contra un bot.|El programa responde rápidamente, creando el usuario y entrando en la página, puede elegir un tamaño de tablero y estrategia y peude jugar.
+|Funcionalidad 2|El usuario juega una partida contra un bot.|Al jugar y hacer un movimiento, ofrece una respuesta casi inmediata con el movimiento de otro bot, o con respuesta de fin de partida.
+|Funcionalidad 3|El usuario puede ver sus estadísticas personales.|Se pueden ver las estadísticas personales de un usuario propio, con capacidad de ver las estadísticas generales, o separadas por dificultad y estrategia.
+|Mantenibilidad|En un futuro queremos añadir más funcionalidad.|Añadimos otras funcionalidades y no tenemos que modificar o quitar código creado, añadir o mover código sí serían opciones viables en estos casos.
+|Usabilidad|Estímulos analizados más adelante en el apartado de Test > Usabilidad.|Respuestas respectivas vistas más adelante en el apartado de Test > Usabilidad.
+|Escalabilidad|Estímulos analizados más adelante en el apartado de Test > Test de carga.|Respuestas respectivas vistas más adelante en el apartado de Test > Test de carga.
+|Funcionalidad 4|Un usuario quiere jugar un jugador contra otro de forma local.|Desde el mismo ordenador, dos personas pueden jugar entre ellos.
+|Funcionalidad 5|Un usuario quiere jugar un jugador contra otro de forma global.|Desde diferentes despositivos, dos personas pueden jugar entre ellos.
+|Funcionalidad 6|Un usuario quiere cambiar de modo claro a oscuro en la aplicación.|Todo el programa se adapta a lo que necesite el usuario.
+|Funcionalidad 7|Un usuario quiere cambiar el idioma de la aplicación.|Todo el programa se adapta a lo que necesite el usuario.
+|Rendimiento|Estímulos analizados más adelante en el apartado de Test > Test de carga.|Respuestas respectivas vistas más adelante en el apartado de Test > Test de carga.
+|Testeabilidad|Gran cantidad de estímulos analizados más adelante en el apartado de Test.|Respuestas respectivas vistas más adelante en el apartado de Test.
+|===
