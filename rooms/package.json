@@ -1,0 +1,13 @@
+{
+  "name": "rooms",
+  "version": "1.0.0",
+  "description": "Servicio de salas multijugador con Socket.io",
+  "main": "rooms-service.js",
+  "scripts": {
+    "start": "node rooms-service.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  }
+}
