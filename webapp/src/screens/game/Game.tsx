@@ -89,7 +89,13 @@ export function Game({
       const idG = await crearPartida(boardSize);
       setGameId(idG);
       const nextPlayer = await getTurnoPartida(idG);
-      setTurno(nextPlayer === 0 ? username : (twoPlayers ? username2 : "BOT"));
+      let turnoInicial: string;
+      if (nextPlayer === 0) {
+        turnoInicial = username;
+      } else {
+        turnoInicial = twoPlayers ? username2 : "BOT";
+      }
+      setTurno(turnoInicial);
       setGameState("Iniciada");
     }
     nuevaPartida();
@@ -129,8 +135,8 @@ if (data.status?.kind === 'Finished') {
   // Mostrar pantalla de fin tras detectar ganador
   useEffect(() => {
     if (winner === null) { setShowEndScreen(false); return; }
-    const timerId = window.setTimeout(() => setShowEndScreen(true), 1000);
-    return () => window.clearTimeout(timerId);
+    const timerId = globalThis.setTimeout(() => setShowEndScreen(true), 1000);
+    return () => globalThis.clearTimeout(timerId);
   }, [winner]);
 
   function handleGameEnd(ganador: string) {
@@ -255,9 +261,12 @@ if (data.status?.kind === 'Finished') {
           {twoPlayers && (
             <div className="turn-indicator">
               {(() => {
-                const idx = onlineMode
-                  ? (turno === username ? localPlayerIndex : 1 - localPlayerIndex)
-                  : (turno === username ? 0 : 1);
+                let idx: number;
+                if (onlineMode) {
+                  idx = turno === username ? localPlayerIndex : 1 - localPlayerIndex;
+                } else {
+                  idx = turno === username ? 0 : 1;
+                }
                 const color = idx === 0 ? "#0c55c0" : "#b91c1c";
                 const isMyTurn = onlineMode && turno === username;
                 return isMyTurn ? (

@@ -11,7 +11,7 @@ interface CreateRoomProps {
   onBack: () => void;
 }
 
-export default function CreateRoom({ username, onGameReady, onBack }: CreateRoomProps) {
+export default function CreateRoom({ username, onGameReady, onBack }: Readonly<CreateRoomProps>) {
   const [difficulty, setDifficulty] = useState<DifficultyType>(Difficulty.MEDIUM);
   const [code, setCode] = useState<string | null>(null);
   const [waiting, setWaiting] = useState(false);

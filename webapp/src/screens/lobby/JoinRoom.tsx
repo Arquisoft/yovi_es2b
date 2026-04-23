@@ -9,7 +9,7 @@ interface JoinRoomProps {
   onBack: () => void;
 }
 
-export default function JoinRoom({ username, onGameReady, onBack }: JoinRoomProps) {
+export default function JoinRoom({ username, onGameReady, onBack }: Readonly<JoinRoomProps>) {
   const [inputCode, setInputCode] = useState("");
   const [joined, setJoined] = useState(false);
   const [error, setError] = useState<string | null>(null);

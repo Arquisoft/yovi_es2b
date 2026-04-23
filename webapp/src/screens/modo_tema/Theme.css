@@ -409,7 +409,4 @@ body,
         color: var(--btn-primary-bg);
         border-color: var(--btn-primary-bg);
     }
-    .back-button:hover {
-        background: rgba(165, 195, 255, 0.14);
-    }
 }

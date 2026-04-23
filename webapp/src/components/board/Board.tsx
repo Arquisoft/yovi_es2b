@@ -28,7 +28,7 @@ type BoardProps = {
 };
 
 function keyToCoords(key: string, boardSize: number): { x: number; y: number; z: number } {
-  const match = key.match(/f(\d+)-c(\d+)/);
+  const match = /f(\d+)-c(\d+)/.exec(key);
   if (!match) throw new Error(`Clave de casilla inválida: ${key}`);
   const fila = parseInt(match[1]);
   const col  = parseInt(match[2]);
