@@ -11,6 +11,9 @@ import InitialScreen from "../init/InitialScreen";
 import GameStats from "../stats/GameStats";
 import Ranking from "../ranking/Ranking";
 import AppHeader from "../../components/AppHeader";
+import CreateRoom from "../lobby/CreateRoom";
+import JoinRoom from "../lobby/JoinRoom";
+import type { OnlineGameInfo } from "../lobby/OnlineGameInfo";
 
 /**
  * Declaración primera de esto, para que funcione el guardar datos de la partida
@@ -46,6 +49,7 @@ export default function HomePage( {username} : { username: string }) {
     const [difficulty2, setDifficulty2] = useState<DifficultyType>(Difficulty.MEDIUM);
     const [timerEnabled2, setTimerEnabled2] = useState(true);
     const [screen, setScreen] = useState("home");
+    const [onlineGameInfo, setOnlineGameInfo] = useState<OnlineGameInfo | null>(null);
 
     // como es función async, llamamos useEffect
     useEffect(() => {
@@ -53,6 +57,47 @@ export default function HomePage( {username} : { username: string }) {
             iniciarPartida(username, settings.strategy, settings.difficulty);
         }
     }, [screen]);
+
+    // Partida online lista: ambos jugadores conectados
+    if (onlineGameInfo) {
+        const { gameId, code, playerIndex, opponentUsername, difficulty } = onlineGameInfo;
+        return (
+            <Game
+                settings={{ strategy: Strategy.MONTE_CARLO_ENDURECIDO, difficulty: difficulty as DifficultyType }}
+                username={username}
+                username2={opponentUsername}
+                twoPlayers={true}
+                stateStart={true}
+                enableTimer={false}
+                onlineMode={true}
+                roomCode={code}
+                localPlayerIndex={playerIndex}
+                initialGameId={gameId}
+                onGoMenu={() => setOnlineGameInfo(null)}
+            />
+        );
+    }
+
+    // Pantallas de lobby online
+    if (screen === "online-create") {
+        return (
+            <CreateRoom
+                username={username}
+                onGameReady={(info) => { setScreen("home"); setOnlineGameInfo(info); }}
+                onBack={() => setScreen("home")}
+            />
+        );
+    }
+
+    if (screen === "online-join") {
+        return (
+            <JoinRoom
+                username={username}
+                onGameReady={(info) => { setScreen("home"); setOnlineGameInfo(info); }}
+                onBack={() => setScreen("home")}
+            />
+        );
+    }
 
     // Si el juego ha empezado, renderizamos Game y le pasamos las settings y ahora el username
     if (twoPlayersStarted) {
@@ -154,7 +199,7 @@ export default function HomePage( {username} : { username: string }) {
                         </div>
                     </div>
 
-                    {/* Panel 2 Jugadores */}
+                    {/* Panel 2 Jugadores Local */}
                     <div className="home-config home-config--pvp">
                         <span className="home-config__label home-config__label--section">Partida de 2 Jugadores</span>
 
@@ -222,8 +267,33 @@ export default function HomePage( {username} : { username: string }) {
                             Empezar partida 2 jugadores
                         </button>
                     </div>
+
+                    {/* Panel Online */}
+                    <div className="home-config home-config--online">
+                        <span className="home-config__label home-config__label--section">Jugar Online</span>
+                        <p className="home-config__online-desc">
+                            Juega contra otro jugador desde distintos dispositivos en tiempo real.
+                        </p>
+
+                        <div className="home-config__spacer" />
+
+                        <button
+                            className="home-config__start"
+                            onClick={() => setScreen("online-create")}
+                        >
+                            Crear sala
+                        </button>
+
+                        <button
+                            className="home-config__start home-config__start--secondary"
+                            onClick={() => setScreen("online-join")}
+                        >
+                            Unirse a sala
+                        </button>
+                    </div>
+
+                </div>
             </div>
         </div>
-    </div>
     );
 }
