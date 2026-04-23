@@ -14,6 +14,27 @@ include::src/config.adoc[]
 ifdef::backend-html5[]
 ++++
 <style>
+body {
+    text-align: justify;
+}
+
+h1, h2, h3, h4 {
+    text-align: left;
+}
+
+.imageblock {
+    text-align: center;
+}
+
+#toc {
+    text-align: left;
+}
+
+.tableblock td,
+.tableblock th {
+    text-align: justify;
+}
+
 .arc42help {font-size:small; width: 14px; height: 16px; overflow: hidden; position: absolute; right: 0; padding: 2px 0 3px 2px;}
 .arc42help::before {content: "?";}
 .arc42help:hover {width:auto; height: auto; z-index: 100; padding: 10px;}
