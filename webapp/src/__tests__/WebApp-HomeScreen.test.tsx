@@ -4,6 +4,10 @@ import Home from '../screens/game/Home'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 
+vi.mock('../socket', () => ({
+    getSocket: vi.fn(() => ({ on: vi.fn(), off: vi.fn(), emit: vi.fn() })),
+}))
+
 /**
  * Tests para Home que comprueban que:
  * - Se muestra el mensaje de bienvenida con el nombre de usuario
@@ -176,6 +180,18 @@ describe('Home', () => {
      * El test desactiva el toggle, rellena el nombre del jugador 2 e inicia la partida,
      * verificando que el menú principal desaparece.
      */
+    test('navega a la pantalla de crear sala online al pulsar Crear sala', async () => {
+        render(<Home username="sara" />)
+        await userEvent.click(screen.getByRole('button', { name: /Crear sala/i }))
+        expect(screen.getByText(/Crear sala online/i)).toBeInTheDocument()
+    })
+
+    test('navega a la pantalla de unirse a sala online al pulsar Unirse a sala', async () => {
+        render(<Home username="sara" />)
+        await userEvent.click(screen.getByRole('button', { name: /Unirse a sala/i }))
+        expect(screen.getByText(/Unirse a sala online/i)).toBeInTheDocument()
+    })
+
     test('inicia partida 2 jugadores con el temporizador desactivado', async () => {
         render(<Home username="sara" />)
         const user = userEvent.setup()
