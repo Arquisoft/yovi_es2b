@@ -12,14 +12,32 @@ Para ello, separamos los test por funcionalidad en clases **users-service-[funci
 
 ==== Tests individuales
 
-Estos test se ejecutaron de forma local desde la carpeta /users/__test__ con el comando **> npx vitest run --reporter=tree**, y de ahí se han tomado las capturas, excepto en el test de coverage.
+Estos test se ejecutaron en la terminal de forma local desde la carpeta /users/__test__ con el comando **> npx vitest run --reporter=tree**, y de ahí se han tomado las capturas, excepto en el test de coverage.
 
 * **users-service-login: ** Que prueba que un usuario ya creado se registre bien, además de contener los casos donde faltan datos al llamar el endpoint o que el inicio de sesión falló por contraseña incorrecta.
+
+image::test_users_login.png[test de login de users]
+
 * **users-service-signup: ** Que prueba que un usuario se puede iniciar sesión, si los datos son correctos, y que lanza en error en su defecto.
+
+image::test_users_signup.png[test de signup de users]
+
 * **users-service-initmatch: ** Que prueba que el inicio de una partida es correcto, o lanza error cuando debería.
+
+image::test_users_initmatch.png[test de initmatch de users]
+
 * **users-service-endmatch: ** Que prueba que el fin de una partida ganada es correcta, o lanza error cuando debería.
+
+image::test_users_endmatch.png[test de endmatch de users]
+
 * **users-service-statistics: ** Que prueba que la recuperación de estadísticas, tanto las totales como las parciales, funciona de forma correcta, o lanza error cuando debería.
+
+image::test_users_statistics.png[test de statistics de users]
+
 * **users-service-ranking: ** Que prueba que la correcta creación y distribución del ranking de usuarios, tanto el ranking personal como el general por partidas, dificultad y estrategia. Asegura que es capaz de ordenar por el número o por el porcentaje adecuado, y responde correctamente en caso de error.
+
+image::test_users_ranking.png[test de ranking de users]
+
 * **Test de Coverage: ** Que comprueban que el código usado en la aplicación esté probado en los test anteriores.
 En este caso, la captura está sacada de las Actions de GitHub, más especificamente en el **Build -> Merge pull request #109 from Arquisoft/JimenaIssue29 #213**.
 
