@@ -223,11 +223,12 @@ if (data.status?.kind === 'Finished') {
         username={username}
         username2={username2}
         twoPlayers={twoPlayers}
+        onlineMode={onlineMode}
+        showPlayAgain={!onlineMode}
         settings={settings}
         onGoHome={onGoMenu}
         onPlayAgain={() => {
           if (!onlineMode) { setPlayAgain(prev => !prev); onPlayAgain?.(); }
-          else { onGoMenu(); }
         }}
       />
     );
@@ -298,6 +299,7 @@ if (data.status?.kind === 'Finished') {
             onExit={handleExit}
             onUndo={handleUndo}
             twoPlayers={twoPlayers}
+            onlineMode={onlineMode}
           />
         </div>
       </div>
