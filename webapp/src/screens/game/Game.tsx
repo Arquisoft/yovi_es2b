@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Board } from "../../components/board/Board";
 import GameInfo from "../../components/board/GameInfo";
 import ControlPanel from "../../components/board/ControlPanel";
+import Timer from "../../components/timer/Timer";
 import type { GameSettings } from "../../components/gameOptions/GameSettings";
 import { getBoardSize } from "../../components/gameOptions/Difficulty";
 import "./Game.css";
@@ -15,6 +16,7 @@ interface GameProps {
   username2: string;
   twoPlayers: boolean;
   stateStart: boolean;
+  enableTimer?: boolean;
   onGoMenu?: () => void;
   onGameEnd?: (winner: string) => void;
   onPlayAgain?: () => void;
@@ -47,7 +49,7 @@ async function getTurnoPartida(gameId: string): Promise<number> {
     return data.kind === 'Ongoing' ? data.next_player : 0;
 }
 
-export function Game({ settings, username, username2, twoPlayers, stateStart, onGoMenu = () => {}, onGameEnd, onPlayAgain }: Readonly<GameProps>) {
+export function Game({ settings, username, username2, twoPlayers, stateStart, enableTimer = true, onGoMenu = () => {}, onGameEnd, onPlayAgain }: Readonly<GameProps>) {
   // en caso de necesitar mas atributos, crear cosas aquí y async functions que ayuden a esto
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
@@ -119,8 +121,17 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
     setWinner(ganador);
     setGameState("Terminada");
     onGameEnd?.(ganador); // notify parent if provided
-
   }
+
+  /**
+   * Función para manejar la expiración del temporizador, cambiando el turno al otro jugador
+   * Board debe llamar a onTimerExpire() cuando el temporizador llegue a 0, aquí lo capturamos
+   * y forzamos el cambio de turno al otro jugador (o al bot) para que siga la partida sin esperar al jugador 
+   * que no ha movido a que haga algo después de quedarse sin tiempo
+   */
+  function handleTimerExpire() {
+  setTurno((t) => (t === username ? username2 : username));
+}
 
   async function handleHint() {
     if (!/^[a-zA-Z0-9_-]+$/.test(gameId)) return;
@@ -206,6 +217,10 @@ export function Game({ settings, username, username2, twoPlayers, stateStart, on
               >
                 {turno}
               </span>
+
+                {enableTimer && gameState === "Iniciada" && (
+                <Timer turno={turno} onExpire={handleTimerExpire} />
+              )}
             </div>
           )}
           <Board

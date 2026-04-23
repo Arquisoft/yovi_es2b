@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Home from "../game/Home.tsx";
 import InitialScreen from './InitialScreen';
+import PasswordToggleButton from "../../components/password/PasswordToggleButton.tsx";
 import "./SignUp.css";
 import yoviLogo from "../../../public/yovi_logo.png";
 
@@ -8,6 +9,7 @@ const SignUp: React.FC = () => {
 
       const [username, setUsername] = useState('');
       const [password, setPassword] = useState('');
+      const [showPassword, setShowPassword] = useState(false);
       const [responseMessage, setResponseMessage] = useState<string | null>(null);
       const [signed, setSigned] = useState(false);
       const [toLog, setToLog] = useState(false);
@@ -63,7 +65,19 @@ const SignUp: React.FC = () => {
                     <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} className="form-input"/>
                     
                     <label htmlFor="password">Contraseña</label>
-                    <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-input"/>
+                    <div className="password-field">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            id="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="form-input password-field__input"
+                        />
+                        <PasswordToggleButton
+                            showPassword={showPassword}
+                            onToggle={() => setShowPassword((prev) => !prev)}
+                        />
+                    </div>
                 </div>
                 <button type="submit" className="submit-button" disabled={loading}>
                     {loading ? 'Creando usuario...' : 'Crear usuario'}
