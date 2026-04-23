@@ -201,9 +201,9 @@ if (data.status?.kind === 'Finished') {
     return (
       <div className="game-screen">
         <div className="game-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
-          <p style={{ fontSize: '1.1rem', fontWeight: 600, textAlign: 'center', color: '#24292f' }}>{disconnectedMsg}</p>
+          <p style={{ fontSize: '1.1rem', fontWeight: 600, textAlign: 'center', color: 'var(--text-primary)' }}>{disconnectedMsg}</p>
           <button
-            style={{ padding: '0.7rem 2rem', background: '#023eb6', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}
+            style={{ padding: '0.7rem 2rem', background: 'var(--btn-primary-bg)', color: 'var(--btn-primary-text)', border: 'none', borderRadius: '6px', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}
             onClick={onGoMenu}
           >
             Volver al menú
@@ -245,26 +245,32 @@ if (data.status?.kind === 'Finished') {
             currentPlayer={turno}
             gameStatus={gameState}
             twoPlayers={twoPlayers}
+            onlineMode={onlineMode}
+            localUsername={username}
+            localPlayerIndex={localPlayerIndex}
           />
         </div>
 
         <div className="board-main">
           {twoPlayers && (
             <div className="turn-indicator">
-              <span className="turn-indicator__label">Turno de</span>
-              <span
-                className="turn-indicator__player"
-                style={{
-                  color: (() => {
-                    const idx = onlineMode
-                      ? (turno === username ? localPlayerIndex : 1 - localPlayerIndex)
-                      : (turno === username ? 0 : 1);
-                    return idx === 0 ? "#0c55c0" : "#b91c1c";
-                  })()
-                }}
-              >
-                {turno}
-              </span>
+              {(() => {
+                const idx = onlineMode
+                  ? (turno === username ? localPlayerIndex : 1 - localPlayerIndex)
+                  : (turno === username ? 0 : 1);
+                const color = idx === 0 ? "#0c55c0" : "#b91c1c";
+                const isMyTurn = onlineMode && turno === username;
+                return isMyTurn ? (
+                  <span className="turn-indicator__player" style={{ color }}>
+                    ¡Tu turno!
+                  </span>
+                ) : (
+                  <>
+                    <span className="turn-indicator__label">Turno de</span>
+                    <span className="turn-indicator__player" style={{ color }}>{turno}</span>
+                  </>
+                );
+              })()}
               {!onlineMode && enableTimer && gameState === "Iniciada" && (
                 <Timer turno={turno} onExpire={handleTimerExpire} />
               )}
