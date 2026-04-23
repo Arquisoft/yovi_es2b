@@ -152,6 +152,36 @@ async fn test_choose_endpoint_without_bot_id_uses_default() {
 }
 
 // ============================================================================
+// Swap action test
+// ============================================================================
+
+#[tokio::test]
+async fn test_choose_endpoint_triggers_swap_action() {
+    let app = test_app();
+
+    // Turno 1, una sola piedra en posición central de tamaño 5 → debe responder con swap
+    let yen = YEN::new(5, 1, vec!['B', 'R'], "..../.../.B./..".to_string());
+
+    let response = app
+        .oneshot(
+            Request::builder()
+                .method("GET")
+                .uri(play_uri(&yen, Some("random_bot")))
+                .body(Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let body = response.into_body().collect().await.unwrap().to_bytes();
+    let move_response: MoveResponse = serde_json::from_slice(&body).unwrap();
+
+    assert_eq!(move_response, MoveResponse::Action { action: "swap".to_string() });
+}
+
+// ============================================================================
 // Play endpoint tests - Error cases
 // ============================================================================
 

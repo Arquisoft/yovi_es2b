@@ -116,6 +116,23 @@ describe('CreateRoom', () => {
     expect(screen.getByRole('button', { name: /Crear sala/i })).toBeInTheDocument()
   })
 
+  test('game-start no llama a onGameReady si no hay oponente en la lista de jugadores', () => {
+    render(<CreateRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    // Primero simulamos room-created para que codeRef.current tenga valor
+    act(() => {
+      eventHandlers['room-created']({ code: 'ABC123', gameId: 'game-1', playerIndex: 0 })
+    })
+    // game-start con solo el jugador local (sin playerIndex === 1) → debe ignorarse
+    act(() => {
+      eventHandlers['game-start']({
+        gameId: 'game-1',
+        difficulty: 'MEDIUM',
+        players: [{ username: 'sara', playerIndex: 0 }],
+      })
+    })
+    expect(onGameReady).not.toHaveBeenCalled()
+  })
+
   test('los listeners del socket se limpian al desmontar', () => {
     const { unmount } = render(<CreateRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     unmount()
