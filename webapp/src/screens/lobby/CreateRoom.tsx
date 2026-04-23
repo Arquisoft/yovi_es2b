@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getSocket } from "../../socket";
 import { Difficulty } from "../../components/gameOptions/Difficulty";
 import type { DifficultyType } from "../../components/gameOptions/Difficulty";
@@ -16,11 +16,14 @@ export default function CreateRoom({ username, onGameReady, onBack }: CreateRoom
   const [code, setCode] = useState<string | null>(null);
   const [waiting, setWaiting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Ref para tener siempre el código actualizado dentro de los handlers del socket
+  const codeRef = useRef<string | null>(null);
 
   useEffect(() => {
     const socket = getSocket();
 
     socket.on('room-created', ({ code: roomCode }: { code: string; gameId: string; playerIndex: number }) => {
+      codeRef.current = roomCode;
       setCode(roomCode);
       setWaiting(true);
     });
@@ -31,10 +34,10 @@ export default function CreateRoom({ username, onGameReady, onBack }: CreateRoom
       players: { username: string; playerIndex: number }[];
     }) => {
       const opponent = players.find(p => p.playerIndex === 1);
-      if (!opponent || !code) return;
+      if (!opponent || !codeRef.current) return;
       onGameReady({
         gameId,
-        code: code,
+        code: codeRef.current,
         playerIndex: 0,
         opponentUsername: opponent.username,
         difficulty: diff,
@@ -51,20 +54,17 @@ export default function CreateRoom({ username, onGameReady, onBack }: CreateRoom
       socket.off('game-start');
       socket.off('room-error');
     };
-  }, [code, onGameReady]);
+  }, [onGameReady]);
 
   function handleCreate() {
     setError(null);
     getSocket().emit('create-room', { username, difficulty });
   }
 
-  function handleCopy() {
-    if (code) navigator.clipboard.writeText(code);
-  }
-
   return (
     <div className="lobby-screen">
       <div className="lobby-card">
+        <img src="/yovi_logo.png" alt="YOVI Logo" className="lobby-logo" />
         <h2 className="lobby-card__title">Crear sala online</h2>
 
         {!code && (
@@ -93,12 +93,7 @@ export default function CreateRoom({ username, onGameReady, onBack }: CreateRoom
         {code && (
           <div className="lobby-waiting">
             <p className="lobby-card__label">Comparte este código con tu rival:</p>
-            <div className="lobby-code-box">
-              <span className="lobby-code">{code}</span>
-              <button className="lobby-btn lobby-btn--copy" onClick={handleCopy} title="Copiar">
-                📋
-              </button>
-            </div>
+            <span className="lobby-code">{code}</span>
             {waiting && (
               <p className="lobby-waiting__text">Esperando a que tu rival se conecte…</p>
             )}

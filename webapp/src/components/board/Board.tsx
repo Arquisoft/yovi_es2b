@@ -5,7 +5,6 @@ import { getBoardSize } from "../gameOptions/Difficulty";
 import type { DifficultyType } from "../gameOptions/Difficulty";
 import "./Board.css";
 import type { StrategyType } from "../gameOptions/Strategy";
-import type { BoardUpdate } from "../../screens/game/Game";
 
 const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
 
@@ -26,24 +25,16 @@ type BoardProps = {
   onlineMode?: boolean;
   localPlayerIndex?: number;
   onOnlineMove?: (x: number, y: number, z: number, player: number) => void;
-  externalBoardUpdate?: BoardUpdate | null;
 };
 
-
-// Convierte la clave "f{fila}-c{col}" del tablero a coordenadas (x, y, z) con las que trabaja GAME Y
 function keyToCoords(key: string, boardSize: number): { x: number; y: number; z: number } {
   const match = key.match(/f(\d+)-c(\d+)/);
   if (!match) throw new Error(`Clave de casilla inválida: ${key}`);
   const fila = parseInt(match[1]);
   const col  = parseInt(match[2]);
-  return {
-    x: boardSize - 1 - fila,
-    y: col,
-    z: fila - col,
-  };
+  return { x: boardSize - 1 - fila, y: col, z: fila - col };
 }
 
-// Recorre el layout YEN ("B/BR/.R.") a un mapa { key -> valor } para facilitar pintar el tablero
 function layoutToValores(layout: string): Record<string, number> {
   const valores: Record<string, number> = {};
   layout.split('/').forEach((fila, filaIdx) => {
@@ -61,16 +52,11 @@ async function partidaGanada(username: string, strategy: string, difficulty: str
   try {
     const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
     const res = await fetch(`${API_URL}/endmatch`, {
-      method: 'POST', headers: {
-        'Content-Type': 'application/json'
-      },
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username, strategy, difficulty })
     });
-
     const data = await res.json();
-    if (!res.ok) {
-      throw new Error(data.error || 'Server error');
-    }
+    if (!res.ok) throw new Error(data.error || 'Server error');
   } catch (err) {
     throw new Error(err instanceof Error ? err.message : 'Network error', { cause: err });
   }
@@ -83,18 +69,16 @@ export function Board(props: BoardProps) {
   const [valores, setValores] = useState<Record<string, number>>({});
   const [gameOver, setGameOver] = useState(false);
 
-  const bloquearTablero = () => {setBloq(true);}
-  const desbloquearTablero = () => {setBloq(false);}
+  const bloquearTablero   = () => setBloq(true);
+  const desbloquearTablero = () => setBloq(false);
 
-  let selectedDifficulty: DifficultyType = props.difficulty;
-  let selectedStrategy: StrategyType = props.strategy;
+  const selectedDifficulty: DifficultyType = props.difficulty;
+  const selectedStrategy: StrategyType    = props.strategy;
 
   const BOARDHIGHT = getBoardSize(selectedDifficulty);
   const boardClass = `board board-${BOARDHIGHT}`;
 
-  const actualizarTablero = (layout: string) => {
-    setValores(layoutToValores(layout));
-  };
+  const actualizarTablero = (layout: string) => setValores(layoutToValores(layout));
 
   /**
    * Resuelve el nombre del jugador a partir de su índice en GameY (0 o 1).
@@ -165,12 +149,11 @@ export function Board(props: BoardProps) {
       actualizarTablero(data.state.layout);
 
       if (data.status.kind === 'Finished') {
-        const winnerName: string = getPlayerName(data.status.winner);
+        const winnerName = getPlayerName(data.status.winner);
         setGameOver(true);
         props.changeTurno(winnerName);
         props.onGameEnd(winnerName);
         desbloquearTablero();
-
         if (data.status.winner === 0 && !props.twoPlayers) {
           partidaGanada(props.username, props.strategy, props.difficulty);
         }
@@ -200,54 +183,47 @@ export function Board(props: BoardProps) {
       } else {
         desbloquearTablero();
       }
-
     } catch (err) {
       console.error("Error en realizarMovimiento:", err);
       desbloquearTablero();
     }
   }
 
-  // Aplica la actualización de tablero recibida por socket (movimiento del rival o confirmación del propio)
-  useEffect(() => {
-    if (!props.externalBoardUpdate) return;
-
-    const { layout, status } = props.externalBoardUpdate;
-    actualizarTablero(layout);
-
-    if (status.kind === 'Finished') {
-      const winnerName = getPlayerName(status.winner!);
-      setGameOver(true);
-      props.changeTurno(winnerName);
-      props.onGameEnd(winnerName);
-    } else {
-      props.changeTurno(getPlayerName(status.next_player!));
-      desbloquearTablero();
-    }
-  }, [props.externalBoardUpdate?.seq]);
-
-  // Carga el estado inicial del tablero (y arranca el bot si toca)
+  // Carga el estado del tablero desde GameY.
+  // En modo online se llama también cuando refreshKey cambia (move-made recibido).
   useEffect(() => {
     if (!props.gameId) return;
 
     async function cargarEstadoInicial() {
-      const data = await peticionEstadoPartida();
-      actualizarTablero(data.state.layout);
+      try {
+        const data = await peticionEstadoPartida();
+        actualizarTablero(data.state.layout);
 
-      if (data.status.kind === 'Ongoing') {
-        props.changeTurno(getPlayerName(data.status.next_player));
-      }
-
-      if (!props.twoPlayers && data.status.kind === 'Ongoing' && data.status.next_player !== 0) {
-        const botMove = await peticionMovimientoBot(data.state);
-        if (botMove.action) {
-          const actionData = await peticionAccionBot(data.status.next_player, botMove.action);
-          actualizarTablero(actionData.state.layout);
-          if (actionData.status.kind === 'Ongoing') {
-            props.changeTurno(getPlayerName(actionData.status.next_player));
-          }
-        } else {
-          await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, data.status.next_player);
+        if (data.status.kind === 'Ongoing') {
+          props.changeTurno(getPlayerName(data.status.next_player));
         }
+
+        // En modo online el tablero se bloqueó al emitir el movimiento; desbloquear aquí
+        if (props.onlineMode) {
+          desbloquearTablero();
+          return;
+        }
+
+        if (!props.twoPlayers && data.status.kind === 'Ongoing' && data.status.next_player !== 0) {
+          const botMove = await peticionMovimientoBot(data.state);
+          if (botMove.action) {
+            const actionData = await peticionAccionBot(data.status.next_player, botMove.action);
+            actualizarTablero(actionData.state.layout);
+            if (actionData.status.kind === 'Ongoing') {
+              props.changeTurno(getPlayerName(actionData.status.next_player));
+            }
+          } else {
+            await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, data.status.next_player);
+          }
+        }
+      } catch (err) {
+        console.error("Error cargando estado:", err);
+        if (props.onlineMode) desbloquearTablero();
       }
     }
 
@@ -260,9 +236,9 @@ export function Board(props: BoardProps) {
     const { x, y, z } = keyToCoords(id, BOARDHIGHT);
 
     if (props.onlineMode) {
-      // En modo online solo puede mover cuando es el turno del jugador local
+      // Solo puede mover el jugador local cuando es su turno
       if (props.turno !== props.username) return;
-      bloquearTablero(); // se desbloquea al recibir move-made del socket
+      bloquearTablero();
       props.onOnlineMove?.(x, y, z, props.localPlayerIndex!);
       return;
     }
@@ -273,13 +249,10 @@ export function Board(props: BoardProps) {
 
   const crearTablero = () => {
     const TABLERO = [];
-
     for (let x = 0; x < BOARDHIGHT; x++) {
       const casillasDeLaFila = [];
-
       for (let c = 0; c <= x; c++) {
         const key = `f${x}-c${c}`;
-
         const hintKey = props.hintCoords
           ? `f${BOARDHIGHT - 1 - props.hintCoords.x}-c${props.hintCoords.y}`
           : null;
@@ -294,14 +267,12 @@ export function Board(props: BoardProps) {
           />
         );
       }
-
       TABLERO.push(
         <div key={`fila-${x}`} className="row-container">
           {casillasDeLaFila}
         </div>
       );
     }
-
     return TABLERO;
   };
 

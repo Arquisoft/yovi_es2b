@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { getSocket } from "../../socket";
 import type { OnlineGameInfo } from "./OnlineGameInfo";
 import "./Lobby.css";
@@ -13,7 +13,9 @@ export default function JoinRoom({ username, onGameReady, onBack }: JoinRoomProp
   const [inputCode, setInputCode] = useState("");
   const [joined, setJoined] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [gameInfo, setGameInfo] = useState<Partial<OnlineGameInfo> | null>(null);
+  // Refs para tener valores actualizados dentro de los handlers del socket
+  const inputCodeRef = useRef("");
+  const joinedInfoRef = useRef<Partial<OnlineGameInfo> | null>(null);
 
   useEffect(() => {
     const socket = getSocket();
@@ -25,8 +27,8 @@ export default function JoinRoom({ username, onGameReady, onBack }: JoinRoomProp
       difficulty: string;
       opponentUsername: string;
     }) => {
+      joinedInfoRef.current = { code, gameId, playerIndex: 1, difficulty, opponentUsername };
       setJoined(true);
-      setGameInfo({ code, gameId, playerIndex: 1, difficulty, opponentUsername });
     });
 
     socket.on('game-start', ({ gameId, difficulty, players }: {
@@ -35,11 +37,10 @@ export default function JoinRoom({ username, onGameReady, onBack }: JoinRoomProp
       players: { username: string; playerIndex: number }[];
     }) => {
       const opponent = players.find(p => p.playerIndex === 0);
-      const info = gameInfo;
-      const resolvedCode = info?.code ?? inputCode.toUpperCase();
+      const info = joinedInfoRef.current;
       onGameReady({
         gameId,
-        code: resolvedCode,
+        code: info?.code ?? inputCodeRef.current,
         playerIndex: 1,
         opponentUsername: opponent?.username ?? info?.opponentUsername ?? '',
         difficulty,
@@ -56,7 +57,7 @@ export default function JoinRoom({ username, onGameReady, onBack }: JoinRoomProp
       socket.off('game-start');
       socket.off('room-error');
     };
-  }, [gameInfo, inputCode, onGameReady]);
+  }, [onGameReady]);
 
   function handleJoin() {
     if (!inputCode.trim()) {
@@ -64,12 +65,14 @@ export default function JoinRoom({ username, onGameReady, onBack }: JoinRoomProp
       return;
     }
     setError(null);
+    inputCodeRef.current = inputCode.toUpperCase();
     getSocket().emit('join-room', { code: inputCode.toUpperCase(), username });
   }
 
   return (
     <div className="lobby-screen">
       <div className="lobby-card">
+        <img src="/yovi_logo.png" alt="YOVI Logo" className="lobby-logo" />
         <h2 className="lobby-card__title">Unirse a sala online</h2>
 
         {!joined && (

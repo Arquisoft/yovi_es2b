@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Board } from "../../components/board/Board";
 import GameInfo from "../../components/board/GameInfo";
 import ControlPanel from "../../components/board/ControlPanel";
@@ -8,9 +8,8 @@ import { getBoardSize } from "../../components/gameOptions/Difficulty";
 import "./Game.css";
 import { End } from "./End";
 import Home from "./Home";
-import { getSocket, disconnectSocket } from "../../socket";
+import { getSocket } from "../../socket";
 
-// Definimos la interfaz de las props
 interface GameProps {
   settings: GameSettings;
   username: string;
@@ -27,13 +26,6 @@ interface GameProps {
   localPlayerIndex?: number;
   initialGameId?: string;
 }
-
-// Tipo para actualizaciones de tablero que vienen del socket
-export type BoardUpdate = {
-  layout: string;
-  status: { kind: string; next_player?: number; winner?: number };
-  seq: number;
-};
 
 async function crearPartida(boardSize: number): Promise<string> {
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
@@ -70,9 +62,7 @@ export function Game({
   const [refreshKey, setRefreshKey] = useState(0);
   const [hintCoords, setHintCoords] = useState<{ x: number; y: number; z: number } | null>(null);
   const [hintsUsed, setHintsUsed] = useState(0);
-  const [externalBoardUpdate, setExternalBoardUpdate] = useState<BoardUpdate | null>(null);
   const [disconnectedMsg, setDisconnectedMsg] = useState<string | null>(null);
-  const boardUpdateSeq = useRef(0);
 
   // Inicializar partida
   useEffect(() => {
@@ -82,16 +72,13 @@ export function Game({
     setTurno("Inicio");
     setGameState("Inicio");
     setGameId("");
-    setHintsUsed(0);
-    setExternalBoardUpdate(null);
     setDisconnectedMsg(null);
+    setHintsUsed(0);
 
     if (onlineMode && initialGameId) {
-      // La partida ya fue creada por el servicio de salas
       setGameId(initialGameId);
-      // El jugador 0 siempre empieza; mapeamos al nombre local
-      const firstTurno = localPlayerIndex === 0 ? username : username2;
-      setTurno(firstTurno);
+      // Jugador 0 siempre empieza; mapeamos al nombre local
+      setTurno(localPlayerIndex === 0 ? username : username2);
       setGameState("Iniciada");
       return;
     }
@@ -101,8 +88,7 @@ export function Game({
       const idG = await crearPartida(boardSize);
       setGameId(idG);
       const nextPlayer = await getTurnoPartida(idG);
-      const firstTurno = nextPlayer === 0 ? username : (twoPlayers ? username2 : "BOT");
-      setTurno(firstTurno);
+      setTurno(nextPlayer === 0 ? username : (twoPlayers ? username2 : "BOT"));
       setGameState("Iniciada");
     }
     nuevaPartida();
@@ -114,13 +100,17 @@ export function Game({
 
     const socket = getSocket();
 
-    socket.on('move-made', (data: { state: { layout: string }; status: { kind: string; next_player?: number; winner?: number } }) => {
-      boardUpdateSeq.current += 1;
-      setExternalBoardUpdate({
-        layout: data.state.layout,
-        status: data.status,
-        seq: boardUpdateSeq.current,
-      });
+    socket.on('move-made', (data: { state: any; status: { kind: string; next_player?: number; winner?: number } }) => {
+      if (data.status.kind === 'Finished') {
+        const winnerIndex = data.status.winner!;
+        const winnerName = winnerIndex === localPlayerIndex ? username : username2;
+        handleGameEnd(winnerName);
+      } else {
+        const nextIndex = data.status.next_player!;
+        setTurno(nextIndex === localPlayerIndex ? username : username2);
+      }
+      // Recargar el tablero desde GameY (fuente de verdad)
+      setRefreshKey(k => k + 1);
     });
 
     socket.on('player-disconnected', ({ username: who }: { username: string }) => {
@@ -132,13 +122,6 @@ export function Game({
       socket.off('player-disconnected');
     };
   }, [onlineMode, roomCode]);
-
-  // Limpiar socket al desmontar en modo online
-  useEffect(() => {
-    return () => {
-      if (onlineMode) disconnectSocket();
-    };
-  }, [onlineMode]);
 
   // Mostrar pantalla de fin tras detectar ganador
   useEffect(() => {
@@ -157,14 +140,13 @@ export function Game({
     setTurno((t) => (t === username ? username2 : username));
   }
 
-  // Movimiento online: emite al servicio de salas en lugar de llamar a GameY
   function handleOnlineMove(x: number, y: number, z: number, player: number) {
     if (!roomCode) return;
     getSocket().emit('make-move', { code: roomCode, x, y, z, player });
   }
 
   async function handleHint() {
-    if (onlineMode) return; // sin pistas en modo online
+    if (onlineMode) return;
     if (!/^[a-zA-Z0-9_-]+$/.test(gameId)) return;
     const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
     try {
@@ -187,7 +169,6 @@ export function Game({
 
   async function handleUndo() {
     if (onlineMode && roomCode) {
-      // En online el servicio deshace dos movimientos y hace broadcast
       getSocket().emit('undo-move', { code: roomCode });
       return;
     }
@@ -213,15 +194,12 @@ export function Game({
     setGameState("fin");
   }
 
-  // Mensaje de desconexión del rival
   if (disconnectedMsg) {
     return (
       <div className="game-screen">
         <div className="game-panel" style={{ alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
           <p style={{ fontSize: '1.1rem', fontWeight: 600, textAlign: 'center' }}>{disconnectedMsg}</p>
-          <button className="game-exit-btn" onClick={() => { onGoMenu(); }}>
-            Volver al menú
-          </button>
+          <button className="game-exit-btn" onClick={onGoMenu}>Volver al menú</button>
         </div>
       </div>
     );
@@ -241,12 +219,8 @@ export function Game({
         settings={settings}
         onGoHome={onGoMenu}
         onPlayAgain={() => {
-          if (!onlineMode) {
-            setPlayAgain((prev) => !prev);
-            onPlayAgain?.();
-          } else {
-            onGoMenu();
-          }
+          if (!onlineMode) { setPlayAgain(prev => !prev); onPlayAgain?.(); }
+          else { onGoMenu(); }
         }}
       />
     );
@@ -296,7 +270,6 @@ export function Game({
             onlineMode={onlineMode}
             localPlayerIndex={localPlayerIndex}
             onOnlineMove={handleOnlineMove}
-            externalBoardUpdate={externalBoardUpdate}
           />
         </div>
 
