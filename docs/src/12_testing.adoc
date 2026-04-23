@@ -68,5 +68,16 @@ Para estas pruebas, separamos los test por funcionalidad en clases **Webapp-[Pan
 * **WebApp-Timer.test: ** Prueba el componente de temporizador, comprobando la representación del tiempo y su actualización en función del estado de la partida y del paso del tiempo.
 * **WebApp-Theme.test: ** Prueba el contexto de tema (claro/oscuro), su alternancia y la persistencia de preferencias para asegurar un comportamiento consistente en toda la interfaz.
 
+=== Test de carga
+Diseño de test
+    escenarios
+    parametros de carga (nº usuarios)
+    valores limite
+Herramienta
+Resultados
+Conclusiones
+    a partir de 200 usuarios...valores lim
+    creo issue
+
 
 
