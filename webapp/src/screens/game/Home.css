@@ -426,7 +426,7 @@
 
 .home-config__online-desc {
   font-size: 0.9rem;
-  color: #555;
+  color: var(--text-secondary);
   margin: 0;
   line-height: 1.5;
 }

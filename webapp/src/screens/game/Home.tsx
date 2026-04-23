@@ -286,7 +286,7 @@ export default function HomePage( {username} : { username: string }) {
                         </button>
 
                         <button
-                            className="home-config__start home-config__start--secondary"
+                            className="home-menu__btn"
                             onClick={() => setScreen("online-join")}
                         >
                             Unirse a sala
