@@ -40,8 +40,9 @@ async function crearPartida(boardSize: number): Promise<string> {
 }
 
 async function getTurnoPartida(gameId: string): Promise<number> {
-   const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
-    const res = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}/status`);
+    if (!/^[a-zA-Z0-9_-]+$/.test(gameId)) throw new Error("gameId inválido");
+    const GAMEY_URL = import.meta.env.VITE_API_URL_GY ?? 'http://localhost:4000';
+    const res = await fetch(`${GAMEY_URL}/v1/games/${gameId}/status`);
     if (!res.ok) throw new Error("Error al obtener el turno");
     const data = await res.json();
     return data.kind === 'Ongoing' ? data.next_player : 0;

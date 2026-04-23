@@ -85,7 +85,7 @@ async function startServer() {
  * Si este archivo se ejecuta directamente (node users.js), entonces se llama a la función startServer para iniciar el servidor.
  * Esta funcion conecta a la base de datos y arranca el servidor en el puerto definido
  */
-if (require.main === module) {
+if (require.main == module) {
   connectDB().then(() => {
     app.listen(port);
   });
