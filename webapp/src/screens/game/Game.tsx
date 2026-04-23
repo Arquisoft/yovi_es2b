@@ -100,16 +100,18 @@ export function Game({
 
     const socket = getSocket();
 
-    socket.on('move-made', (data: { state: any; status: { kind: string; next_player?: number; winner?: number } }) => {
-      if (data.status.kind === 'Finished') {
+    socket.on('move-made', (data: { state?: { layout: string }; status?: { kind: string; next_player?: number; winner?: number } }) => {
+      console.log('[move-made]', JSON.stringify(data));
+      if (data.status?.kind === 'Finished') {
         const winnerIndex = data.status.winner!;
-        const winnerName = winnerIndex === localPlayerIndex ? username : username2;
-        handleGameEnd(winnerName);
-      } else {
-        const nextIndex = data.status.next_player!;
-        setTurno(nextIndex === localPlayerIndex ? username : username2);
+        handleGameEnd(winnerIndex === localPlayerIndex ? username : username2);
+      } else if (data.status?.next_player !== undefined) {
+        setTurno(data.status.next_player === localPlayerIndex ? username : username2);
       }
-      // Recargar el tablero desde GameY (fuente de verdad)
+      setRefreshKey(k => k + 1);
+    });
+
+    socket.on('move-error', () => {
       setRefreshKey(k => k + 1);
     });
 
@@ -119,6 +121,7 @@ export function Game({
 
     return () => {
       socket.off('move-made');
+      socket.off('move-error');
       socket.off('player-disconnected');
     };
   }, [onlineMode, roomCode]);
@@ -197,9 +200,14 @@ export function Game({
   if (disconnectedMsg) {
     return (
       <div className="game-screen">
-        <div className="game-panel" style={{ alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
-          <p style={{ fontSize: '1.1rem', fontWeight: 600, textAlign: 'center' }}>{disconnectedMsg}</p>
-          <button className="game-exit-btn" onClick={onGoMenu}>Volver al menú</button>
+        <div className="game-panel" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1.5rem' }}>
+          <p style={{ fontSize: '1.1rem', fontWeight: 600, textAlign: 'center', color: '#24292f' }}>{disconnectedMsg}</p>
+          <button
+            style={{ padding: '0.7rem 2rem', background: '#023eb6', color: '#fff', border: 'none', borderRadius: '6px', fontWeight: 700, fontSize: '1rem', cursor: 'pointer' }}
+            onClick={onGoMenu}
+          >
+            Volver al menú
+          </button>
         </div>
       </div>
     );
@@ -245,7 +253,14 @@ export function Game({
               <span className="turn-indicator__label">Turno de</span>
               <span
                 className="turn-indicator__player"
-                style={{ color: turno === username ? "#0c55c0" : "#b91c1c" }}
+                style={{
+                  color: (() => {
+                    const idx = onlineMode
+                      ? (turno === username ? localPlayerIndex : 1 - localPlayerIndex)
+                      : (turno === username ? 0 : 1);
+                    return idx === 0 ? "#0c55c0" : "#b91c1c";
+                  })()
+                }}
               >
                 {turno}
               </span>

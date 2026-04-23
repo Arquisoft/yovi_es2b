@@ -16,8 +16,8 @@ const GAMEY_URL = process.env.GAMEY_URL || 'http://localhost:4000';
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
 
 function difficultyToSize(difficulty) {
-  const map = { EASY: 4, MEDIUM: 5, HARD: 6 };
-  return map[difficulty] || 5;
+  const map = { EASY: 8, MEDIUM: 10, HARD: 12 };
+  return map[difficulty] || 10;
 }
 
 async function createGameOnGameY(boardSize) {
@@ -105,7 +105,9 @@ io.on('connection', (socket) => {
       return;
     }
 
+    console.log('[make-move] gameId:', room.gameId, 'player:', player, 'x:', x, 'y:', y, 'z:', z);
     const data = await relayMove(room.gameId, player, x, y, z);
+    console.log('[relayMove] response:', JSON.stringify(data));
     if (!data) {
       socket.emit('move-error', { message: 'Movimiento inválido' });
       return;

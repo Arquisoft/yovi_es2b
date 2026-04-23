@@ -197,6 +197,7 @@ export function Board(props: BoardProps) {
     async function cargarEstadoInicial() {
       try {
         const data = await peticionEstadoPartida();
+        console.log('[cargarEstado] gameId:', props.gameId, 'layout:', data.state?.layout);
         actualizarTablero(data.state.layout);
 
         if (data.status.kind === 'Ongoing') {
