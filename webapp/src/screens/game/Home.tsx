@@ -10,14 +10,11 @@ import "./Home.css";
 import InitialScreen from "../init/InitialScreen";
 import GameStats from "../stats/GameStats";
 import Ranking from "../ranking/Ranking";
-<<<<<<< HEAD
-import AppHeader from "../../components/AppHeader";
 import CreateRoom from "../lobby/CreateRoom";
 import JoinRoom from "../lobby/JoinRoom";
 import type { OnlineGameInfo } from "../lobby/OnlineGameInfo";
-=======
 import AppHeader from "../../components/header/AppHeader";
->>>>>>> master
+
 
 /**
  * Declaración primera de esto, para que funcione el guardar datos de la partida
