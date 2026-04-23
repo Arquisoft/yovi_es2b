@@ -33,7 +33,7 @@
   width: 67px;
   height: 67px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  background-color: #b8c0cc; /* color del borde gris */
+  background-color: var(--cell-border-color);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -48,7 +48,7 @@
   position: absolute;
   inset: 3px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
-  background-color: #e8edf2;
+  background-color: var(--cell-empty-bg);
   z-index: 0;
   transition: background-color 0.2s ease;
 }
@@ -66,7 +66,7 @@
 }
 
 .cell:hover::after {
-  background-color: #d0d8e4;
+  background-color: var(--cell-hover-bg);
 }
 
 .cell.player-1::after {
@@ -143,7 +143,7 @@
 
 .game-info .info-section p:hover {
   transform: scale(1.03);
-  color: #0534dd;
+  color: var(--btn-primary-bg);
 }
 
 .controls {
@@ -171,14 +171,14 @@
 
 #exit-button {
   background: transparent;
-  color: #ff5a5a;
-  border: 1px solid #ff5a5a;
+  color: var(--danger-color);
+  border: 1px solid var(--danger-color);
 }
 
 #undo-button {
   background: transparent;
-  color: #2563eb;
-  border: 1px solid #2563eb;
+  color: var(--btn-primary-bg);
+  border: 1px solid var(--btn-primary-bg);
 }
 
 #undo-button:hover {

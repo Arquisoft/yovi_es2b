@@ -41,8 +41,8 @@
   margin: 1.25rem 1.5rem;
   padding: 0.55rem 1.2rem;
   background: transparent;
-  color: #023eb6;
-  border: 1px solid #023eb6;
+  color: var(--btn-primary-bg);
+  border: 1px solid var(--btn-primary-bg);
   border-radius: 6px;
   font-size: 0.95rem;
   font-weight: 600;
@@ -137,8 +137,8 @@
 }
 
 #hint-button:disabled {
-  color: #a3a3a3;
-  border-color: #a3a3a3;
+  color: var(--text-disabled);
+  border-color: var(--text-disabled);
   cursor: not-allowed;
 }
 
@@ -152,6 +152,6 @@
 
 #hint-counter {
   font-size: 0.75rem;
-  color: #a3a3a3;
+  color: var(--text-disabled);
   text-align: center;
 }
