@@ -39,7 +39,7 @@ image::test_users_statistics.png[test de statistics de users]
 image::test_users_ranking.png[test de ranking de users]
 
 * **Test de Coverage: ** Que comprueban que el código usado en la aplicación esté probado en los test anteriores.
-En este caso, la captura está sacada de las Actions de GitHub, más especificamente en el **Build -> Merge pull request #109 from Arquisoft/JimenaIssue29 #213**.
+En este caso, la captura está sacada de las Actions de GitHub, más específicamente en el **Build -> Merge pull request #109 from Arquisoft/JimenaIssue29 #213**.
 
 image::test_users_coverage.png[test coverage de users]
 
