@@ -416,4 +416,31 @@ describe('Game', () => {
         }
     })
 
+    test('en modo online con initialGameId no llama a crear partida', async () => {
+        global.fetch = vi.fn().mockResolvedValue(boardStateMock)
+        render(
+            <Game settings={baseSettings} username="sara" username2="rival" twoPlayers={true}
+                stateStart={true} onlineMode={true} initialGameId="game-online-1" />
+        )
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/v1/games/game-online-1'))
+        })
+        expect(global.fetch).not.toHaveBeenCalledWith(
+            expect.stringContaining('/v1/games'),
+            expect.objectContaining({ method: 'POST' })
+        )
+    })
+
+    test('en modo online con twoPlayers no muestra el botón Deshacer movimiento', async () => {
+        global.fetch = vi.fn().mockResolvedValue(boardStateMock)
+        render(
+            <Game settings={baseSettings} username="sara" username2="rival" twoPlayers={true}
+                stateStart={true} onlineMode={true} initialGameId="game-online-1" />
+        )
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalled()
+        })
+        expect(screen.queryByRole('button', { name: /Deshacer movimiento/i })).not.toBeInTheDocument()
+    })
+
 })

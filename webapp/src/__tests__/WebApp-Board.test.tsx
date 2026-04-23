@@ -359,4 +359,102 @@ describe('Board', () => {
             expect(global.fetch).toHaveBeenCalledTimes(2)
         })
     })
+
+    test('en modo online llama a onOnlineMove cuando es el turno del jugador local', async () => {
+        const onOnlineMove = vi.fn()
+        mockFetch()
+        const user = userEvent.setup()
+        render(
+            <Board
+                strategy={Strategy.RANDOM}
+                difficulty={Difficulty.EASY}
+                gameId="test-123"
+                turno="sara"
+                gameState="Iniciada"
+                username="sara"
+                username2="rival"
+                twoPlayers={true}
+                refreshKey={0}
+                hintCoords={null}
+                changeTurno={changeTurno}
+                onGameEnd={onGameEnd}
+                onlineMode={true}
+                localPlayerIndex={0}
+                onOnlineMove={onOnlineMove}
+            />
+        )
+        await esperarCargaTablero()
+        await user.click(document.querySelectorAll('.cell')[0] as HTMLElement)
+        expect(onOnlineMove).toHaveBeenCalled()
+        expect(global.fetch).not.toHaveBeenCalledWith(expect.stringContaining('/move'), expect.anything())
+    })
+
+    test('en modo online no emite movimiento cuando no es el turno del jugador local', async () => {
+        const onOnlineMove = vi.fn()
+        mockFetch()
+        const user = userEvent.setup()
+        render(
+            <Board
+                strategy={Strategy.RANDOM}
+                difficulty={Difficulty.EASY}
+                gameId="test-123"
+                turno="rival"
+                gameState="Iniciada"
+                username="sara"
+                username2="rival"
+                twoPlayers={true}
+                refreshKey={0}
+                hintCoords={null}
+                changeTurno={changeTurno}
+                onGameEnd={onGameEnd}
+                onlineMode={true}
+                localPlayerIndex={0}
+                onOnlineMove={onOnlineMove}
+            />
+        )
+        await esperarCargaTablero()
+        await user.click(document.querySelectorAll('.cell')[0] as HTMLElement)
+        expect(onOnlineMove).not.toHaveBeenCalled()
+    })
+
+    test('ejecuta acción del bot cuando /play devuelve una acción en lugar de coordenadas', async () => {
+        const botTurnMock = {
+            ok: true,
+            json: async () => ({ state: { layout: 'B/00/000' }, status: { kind: 'Ongoing', next_player: 1 } }),
+        }
+        const botSwapMock = {
+            ok: true,
+            json: async () => ({ action: 'swap' }),
+        }
+        const swapResultMock = {
+            ok: true,
+            json: async () => ({ state: { layout: 'R/00/000' }, status: { kind: 'Ongoing', next_player: 0 } }),
+        }
+        mockFetch(botTurnMock, botSwapMock, swapResultMock)
+        const user = userEvent.setup()
+        render(
+            <Board
+                strategy={Strategy.RANDOM}
+                difficulty={Difficulty.EASY}
+                gameId="test-123"
+                turno="sara"
+                gameState="Iniciada"
+                username="sara"
+                username2=""
+                twoPlayers={false}
+                refreshKey={0}
+                hintCoords={null}
+                changeTurno={changeTurno}
+                onGameEnd={onGameEnd}
+            />
+        )
+        await esperarCargaTablero()
+        await user.click(document.querySelectorAll('.cell')[0] as HTMLElement)
+        await waitFor(() => {
+            expect(global.fetch).toHaveBeenCalledWith(
+                expect.stringContaining('/action'),
+                expect.objectContaining({ method: 'POST', body: expect.stringContaining('"action":"swap"') })
+            )
+        })
+    })
 })
