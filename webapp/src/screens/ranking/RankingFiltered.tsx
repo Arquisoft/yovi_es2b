@@ -6,7 +6,7 @@ import RankingGeneral from "./RankingGeneral.tsx";
 import RankingDifficulty from "./RankingDifficulty.tsx";
 import RankingStrategy from "./RankingStrategy.tsx";
 import "./RankingFiltered.css";
-import AppHeader from "../../components/AppHeader";
+import AppHeader from "../../components/header/AppHeader.tsx";
 
 type FilterRule = "general" | "dificultad" | "estrategia";
 export type SortRule = "value" | "percentage";

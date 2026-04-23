@@ -10,7 +10,7 @@ import "./Home.css";
 import InitialScreen from "../init/InitialScreen";
 import GameStats from "../stats/GameStats";
 import Ranking from "../ranking/Ranking";
-import AppHeader from "../../components/AppHeader";
+import AppHeader from "../../components/header/AppHeader";
 
 /**
  * Declaración primera de esto, para que funcione el guardar datos de la partida

@@ -4,7 +4,7 @@ import GameStatsTotal from "./GameStatsTotal.tsx";
 import GameStatsFiltered from "./GameStatsFiltered.tsx";
 import InitialScreen from "../init/InitialScreen.tsx";
 import "./GameStats.css";
-import AppHeader from "../../components/AppHeader";
+import AppHeader from "../../components/header/AppHeader.tsx";
 import yoviLogo from "../../../public/yovi_logo.png";
 
 export default function GameStats( {username} : { username: string }) {

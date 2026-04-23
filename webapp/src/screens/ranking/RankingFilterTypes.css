@@ -31,8 +31,8 @@
   font-size: 0.85rem;
   font-weight: 600;
   background: transparent;
-  color: #023eb6;
-  border: 1.5px solid #023eb6;
+  color: var(--btn-primary-bg);
+  border: 1.5px solid var(--btn-primary-bg);
   border-radius: 6px;
   cursor: pointer;
   transition: background 0.2s, box-shadow 0.2s, transform 0.1s;
@@ -50,20 +50,20 @@
 }
 .ranking-chip--active,
 .ranking-info--active {
-  background: #023eb6;
-  border-color: #023eb6;
-  color: #fff;
+  background: var(--btn-primary-bg);
+  border-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
   box-shadow: 0 0 0 3px rgba(2, 62, 182, 0.25);
 }
 .ranking-chip--active:hover,
 .ranking-info--active:hover {
-  background: #01247a;
+  background: var(--btn-primary-hover);
 }
 
 /* ── Fácil — verde ── */
 .ranking-info--green {
-  background: #dcfce7;
-  color: #15803d;
+  background: var(--diff-easy-bg);
+  color: var(--diff-easy-color);
   border: 1.5px solid #86efac;
 }
 .ranking-info--green:hover {
@@ -71,19 +71,19 @@
   border: 1.5px solid #86efac;
 }
 .ranking-info--green--active {
-  background: #22c55e;
+  background: var(--diff-easy-active-bg);
   border: 1.5px solid #15803d;
-  color: #fff;
+  color: var(--diff-easy-active-text);
 }
 .ranking-info--green--active:hover {
-  background: #16a34a;
+  background: var(--diff-easy-active-bg);
   border: 1.5px solid #15803d;
 }
 
 /* ── Media — amarillo ── */
 .ranking-info--orange {
-  background: #fef9c3;
-  color: #a16207;
+  background: var(--diff-medium-bg);
+  color: var(--diff-medium-color);
   border: 1.5px solid #fde047;
 }
 .ranking-info--orange:hover {
@@ -91,19 +91,19 @@
   border: 1.5px solid #fde047;
 }
 .ranking-info--orange--active {
-  background: #eab308;
+  background: var(--diff-medium-active-bg);
   border: 1.5px solid #a16207;
-  color: #fff;
+  color: var(--diff-medium-active-text);
 }
 .ranking-info--orange--active:hover {
-  background: #d4a017;
+  background: var(--diff-medium-active-bg);
   border: 1.5px solid #a16207;
 }
 
 /* ── Difícil — rojo ── */
 .ranking-info--red {
-  background: #fee2e2;
-  color: #b91c1c;
+  background: var(--diff-hard-bg);
+  color: var(--diff-hard-color);
   border: 1.5px solid #fca5a5;
 }
 .ranking-info--red:hover {
@@ -111,12 +111,12 @@
   border: 1.5px solid #fca5a5;
 }
 .ranking-info--red--active {
-  background: #991b1b;
+  background: var(--diff-hard-active-bg);
   border: 1.5px solid #7f1d1d;
-  color: #fff;
+  color: var(--diff-hard-active-text);
 }
 .ranking-info--red--active:hover {
-  background: #7f1d1d;
+  background: var(--diff-hard-active-bg);
   border: 1.5px solid #7f1d1d;
 }
 
@@ -127,8 +127,8 @@
   border-collapse: collapse;
   margin-top: 1rem;
   font-size: 0.9rem;
-  background: #ffffff;
-  border: 1px solid #d0d7de;
+  background: var(--stats-table-bg);
+  border: 1px solid var(--stats-table-border);
   border-radius: 10px;
   overflow: hidden;
   table-layout: fixed;
@@ -136,13 +136,13 @@
 }
 
 .ranking-table thead {
-  background: #023eb6;
+  background: var(--stats-table-head-bg);
 }
 
 .ranking-table thead td {
   padding: 0.6rem 0.5rem;
   font-weight: 750;
-  color: #ffffff;
+  color: var(--stats-table-head-text);
   text-align: center;
   font-size: 1rem;
   border-right: 1px solid rgba(255, 255, 255, 0.2);
@@ -156,11 +156,12 @@
 .ranking-table tbody td {
   font-weight: 600;
   font-size: 1rem;
-  background: #f6f8fa;
-  border-bottom: 1px solid #e6edf3;
+  background: var(--stats-row-easy-bg);
+  border-bottom: 1px solid var(--stats-table-cell-border);
+  color: var(--text-primary);
 }
 
 /* highlight del usuario actual */
 .ranking-table tbody tr.ranking-row--me td {
-  background: #dbe8f5;
+  background: var(--stats-row-medium-bg);
 }

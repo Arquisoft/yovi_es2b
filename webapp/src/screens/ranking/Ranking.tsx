@@ -3,7 +3,7 @@ import Home from "../game/Home";
 import "./Ranking.css";
 import RankingFiltered from "./RankingFiltered";
 import InitialScreen from "../init/InitialScreen";
-import AppHeader from "../../components/AppHeader";
+import AppHeader from "../../components/header/AppHeader";
 
 type RankingApiEntry = {
     username: string;
