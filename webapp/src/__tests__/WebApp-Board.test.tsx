@@ -308,8 +308,7 @@ describe('Board', () => {
         await user.click(document.querySelectorAll('.cell')[0] as HTMLElement)
         await waitFor(() => {
             expect(global.fetch).toHaveBeenCalledWith(
-                expect.stringContaining('/play'),
-                expect.objectContaining({ method: 'POST' })
+                expect.stringContaining('/play')
             )
         })
     })

@@ -230,7 +230,7 @@ describe('Game', () => {
             ; (global.fetch as ReturnType<typeof vi.fn>)
                 .mockResolvedValueOnce(boardStateMock)                                                      // peticionEstadoPartida (Board)
                 .mockResolvedValueOnce(boardStateMock)                                                      // handleHint: GET /v1/games/:id
-                .mockResolvedValueOnce({ ok: true, json: async () => ({ coords: { x: 0, y: 0, z: 0 } }) }) // handleHint: POST /play
+                .mockResolvedValueOnce({ ok: true, json: async () => ({ coords: { x: 0, y: 0, z: 0 } }) }) // handleHint: GET /play
         render(
             <Game settings={baseSettings} username="test1" username2="" twoPlayers={false} stateStart={true} />
         )
@@ -310,8 +310,7 @@ describe('Game', () => {
             await user.click(hintButton)
             await waitFor(() => {
                 expect(global.fetch).toHaveBeenCalledWith(
-                    expect.stringContaining('/play'),
-                    expect.objectContaining({ method: 'POST' })
+                    expect.stringContaining('/play')
                 )
                 expect(hintButton).toBeDisabled()
             })
@@ -333,8 +332,7 @@ describe('Game', () => {
             await user.click(hintButton)
             await waitFor(() => {
                 expect(global.fetch).toHaveBeenCalledWith(
-                    expect.stringContaining('/play'),
-                    expect.objectContaining({ method: 'POST' })
+                    expect.stringContaining('/play')
                 )
             })
         }

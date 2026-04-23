@@ -72,7 +72,7 @@ pub async fn choose(
     State(state): State<AppState>,
     Query(params): Query<PlayRequest>,
 ) -> Result<Json<PlayResponse>, ErrorResponse> {
-    let bot_id = params.bot_id.unwrap_or_else(|| "montecarlo_endurecido_concurso_bot".to_string());
+    let bot_id = params.bot_id.unwrap_or_else(|| "montecarlo_endurecido_bot".to_string());
     let yen: YEN = match serde_json::from_str(&params.position) {
         Ok(yen) => yen,
         Err(err) => {
