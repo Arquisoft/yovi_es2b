@@ -35,10 +35,11 @@ image::test_users_endmatch.png[test de endmatch de users]
 image::test_users_statistics.png[test de statistics de users]
 
 * **users-service-ranking: ** Que prueba que la correcta creación y distribución del ranking de usuarios, tanto el ranking personal como el general por partidas, dificultad y estrategia. Asegura que es capaz de ordenar por el número o por el porcentaje adecuado, y responde correctamente en caso de error.
-* **users-service-model: ** Que prueba el modelo de usuario, verificando que se construye correctamente con `username`, `password` y `createdAt`, y que la fecha se asigna por defecto cuando no se proporciona.
-* **users-service-controller: ** Que prueba  el controlador de usuarios con mocks del servicio, validando respuestas HTTP de éxito y de error en operaciones clave como inicio de sesión, creación y obtención de usuario.
 
 image::test_users_ranking.png[test de ranking de users]
+
+* **users-service-model: ** Que prueba el modelo de usuario, verificando que se construye correctamente con `username`, `password` y `createdAt`, y que la fecha se asigna por defecto cuando no se proporciona.
+* **users-service-controller: ** Que prueba  el controlador de usuarios con mocks del servicio, validando respuestas HTTP de éxito y de error en operaciones clave como inicio de sesión, creación y obtención de usuario.
 
 * **Test de Coverage: ** Que comprueban que el código usado en la aplicación esté probado en los test anteriores.
 En este caso, la captura está sacada de las Actions de GitHub, más especificamente en el **Build -> Merge pull request #109 from Arquisoft/JimenaIssue29 #213**.
