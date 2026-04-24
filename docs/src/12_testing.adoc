@@ -84,16 +84,26 @@ El siguiente apartado se corresponde con como fueron diseñados los test de carg
 .2+|**Escenarios**|Creación de usuario|Ejemplo1
 |Ciclo de ejecución (sin jugar)|Ejemplo2
 
-.2+|**Parámetros de carga**|Nº de usuarios|Ejemplo1
-|Ejecución|Ejemplo2
+.2+|**Parámetros de carga**|Nº de usuarios|Ejemplo3
+|Ejecución|Ejemplo4
 
-.3+|**Valores límite**|Intervalos de tiempos de análisis|Ejemplo1
-|Tiempos de respuesta|Ejemplo2
-|Fallos/KOs|Ejemplo2
+.3+|**Valores límite**|Intervalos de tiempos de análisis|Ejemplo5
+|Tiempos de respuesta|Ejemplo6
+|Fallos/KOs|Ejemplo7
+
+|Eliminación de usuario|Ejemplo8
 
 |===
 
 ==== Herramienta
+
+La herramienta que hemos usado para este análisis de carga es **Gatling**, framework ofrecido por la asignatura para realizar estas pruebas de rendimiento.
+Para estos test se creó un proyecto a parte, indirectamente enlazado con este proyecto de forma local.
+Esto significa que se ha creado como un programa no incluido en las carpetas de este, pero mediante el uso de Docker, que despliega la aplicación de forma local,
+y la terminal del sistema usado, que en este caso fue Windows, se ejecutarán los test de carga.
+Los resultados de estos se ofrecen en una carpeta en este nuevo proyecto en carpetas, que también fueron incluidas, por si se quisiera realizar un análisis más exhausto, en la carpeta /gatling.
+Para visualizarlos de forma clara y accesible, podemos acceder a interfaces mediante .html, que se podrán abrir con un navegador.
+Estos interfaces se separan en "index.html", que realiza un análisis general del test, y "req_*.html", que muestra de forma más exhausta, el estudio de cada petición individualmente.
 
 ==== Resultados
 
