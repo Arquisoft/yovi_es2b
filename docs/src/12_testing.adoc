@@ -100,10 +100,19 @@ También, tenemos la ejecución global, que nos dice que la ejecución en cada f
 Por último, respecto a los escenarios, se realizarán de forma que cada escenario se ejecutará por separado. Como lo ejecutamos en la terminal, primero debemos ejecutar la de creación de usuarios, más que nada para optimizar nuestro tiempo, y luego ejecutar el escenario del ciclo de vida.
 Ambos escenarios serán independientes a la hora de medir su rendimiento, pero el ciclo de vida depende de la creación de usuarios para usarlos desde la base de datos.
 
-.3+|**Valores límite**|Intervalos de tiempos de análisis|Ejemplo5
-|Tiempos de respuesta|Ejemplo6
-|Fallos/KOs|Ejemplo7
-|Eliminación de usuario|Ejemplo8
+.3+|**Valores del análisis**
+|Intervalos de tiempos de análisis|Para tener un espacio controlado, situaremos unos tiempos límites para ajustar los resultados obtenidos.
+Como límite inferior, tomamos el intervalo de 0ms a 800ms, este límite indica las peticiones que se responden de forma rápida, nuestro objetivo es tener la mayor cantidad de peticiones en este intervalo.
+El límite superior es cuando supera los 1200ms, si una petición supera este límite, debería tenerse en cuenta, ya que puede producir fallos graves de rendimiento a largo plazo.
+El intervalo intermedio, entre los 800ms y 1200ms, es donde podríamos considerar reducir el rendimiento, pero en principio no tenedría que considerarse prioridad principal a arreglar.
+|Tiempos de respuesta|Los tiempos de respuesta indican el tiempo en responder de cada petición, y son los que se analizarán para medir el rendimiento general de la aplicación.
+|Fallos/KOs|Indican las peticiones que no se han realizado de forma correcta, no se ejecutaron de manera correcta o devuelven un error al realizarse.
+En caso de la existencia de alguno, aunque sea de uno solo, sería prioridad máxima el modificar el programa para su arreglo inmediato.
+
+|**Otros**
+|Eliminación de usuario|Como la creación de usuarios se realiza mediante unos test, y todos ellos acceden directamente a la base de datos, estos usuarios se deben eliminar para que la base de datos no se llene de usuarios de prueba.
+Este borrado se hace con un comando especial, aplicado también desde la terminal y es súper importante de hacer después de probar ambos escenarios.
+Como la opción de borrado no está disponible para los usuarios, si no que es exclusiva de los test, no se prueba en un escenario, por eso se ejecutará a parte.
 
 |===
 
