@@ -90,8 +90,15 @@ Para el análisis de este apartado se debe simular de forma lo más parecido a l
 En este caso, se prueba el siguiente ciclo de peticiones: **login > inicio de partida > fin de partida** (que se ejecuta cuando se gana una partida) **> ver estadísticas personales > ver el ranking global**.
 Estas opciones son las que acceden a la base de datos, ya que son las funciones que todas acceden al mismo sitio, y son las que pueden hacer que el rendimiento baje en ejecuciones simultáneas.
 
-.2+|**Parámetros de carga**|Nº de usuarios|Ejemplo3
-|Ejecución|Ejemplo4
+.2+|**Parámetros de carga**
+|Nº de usuarios|Como hemos hecho varios análisis, con diferentes escenarios, se ha probado con diferente cantidad de usuarios que "realizan" el ciclo de ejecución.
+Se ha probado con 50, 100 y 200 usuarios, pero el resto de los escenarios, creación o ciclo, serán constantes respectivamente.
+|Ejecución|La ejecución en todos los escenarios, en los tres casos de usuarios permanecerá constante.
+Cada ejecución individual, cada usuario, realizará de forma secuencial, para una simulación aproximada a la realidad.
+Es decir, todos los usuarios seguirán el ciclo de vida que se ha indicado, con los mismos pasos.
+También, tenemos la ejecución global, que nos dice que la ejecución en cada flujo será concurrente, lo que significa que todos los usuarios intentarán acceder más o menos al mismo tiempo a la misma base de datos con peticiones similares.
+Por último, respecto a los escenarios, se realizarán de forma que cada escenario se ejecutará por separado. Como lo ejecutamos en la terminal, primero debemos ejecutar la de creación de usuarios, más que nada para optimizar nuestro tiempo, y luego ejecutar el escenario del ciclo de vida.
+Ambos escenarios serán independientes a la hora de medir su rendimiento, pero el ciclo de vida depende de la creación de usuarios para usarlos desde la base de datos.
 
 .3+|**Valores límite**|Intervalos de tiempos de análisis|Ejemplo5
 |Tiempos de respuesta|Ejemplo6
