@@ -53,12 +53,27 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
       setWaiting(false);
     });
 
+    function handleBeforeUnload() {
+      if (codeRef.current) {
+        getSocket().emit('abandon-game', { code: codeRef.current });
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       socket.off('room-created');
       socket.off('game-start');
       socket.off('room-error');
     };
   }, [onGameReady]);
+
+  function handleBack() {
+    if (codeRef.current) {
+      getSocket().emit('abandon-game', { code: codeRef.current });
+    }
+    onBack();
+  }
 
   function handleCreate() {
     setError(null);
@@ -120,7 +135,7 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
           </div>
         )}
 
-        <button className="lobby-btn lobby-btn--back" onClick={onBack}>
+        <button className="lobby-btn lobby-btn--back" onClick={handleBack}>
           Volver
         </button>
       </div>

@@ -54,12 +54,29 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
       setJoined(false);
     });
 
+    function handleBeforeUnload() {
+      const info = joinedInfoRef.current;
+      if (info?.code) {
+        getSocket().emit('abandon-game', { code: info.code });
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       socket.off('room-joined');
       socket.off('game-start');
       socket.off('room-error');
     };
   }, [onGameReady]);
+
+  function handleBack() {
+    const info = joinedInfoRef.current;
+    if (info?.code) {
+      getSocket().emit('abandon-game', { code: info.code });
+    }
+    onBack();
+  }
 
   function handleJoin() {
     if (!inputCode.trim()) {
@@ -102,7 +119,7 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
           <p className="lobby-waiting__text">Conectado. Iniciando partida…</p>
         )}
 
-        <button className="lobby-btn lobby-btn--back" onClick={onBack}>
+        <button className="lobby-btn lobby-btn--back" onClick={handleBack}>
           Volver
         </button>
       </div>

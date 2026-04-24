@@ -107,6 +107,11 @@ export function Game({
 
     const socket = getSocket();
 
+    function handleBeforeUnload() {
+      socket.emit('abandon-game', { code: roomCode });
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
     socket.on('move-made', (data: { state?: { layout: string }; status?: { kind: string; next_player?: number; winner?: number } }) => {
 if (data.status?.kind === 'Finished') {
         const winnerIndex = data.status.winner!;
@@ -130,6 +135,7 @@ if (data.status?.kind === 'Finished') {
     });
 
     return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
       socket.off('move-made');
       socket.off('move-error');
       socket.off('player-disconnected');
