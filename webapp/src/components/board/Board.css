@@ -5,7 +5,7 @@
   justify-content: center;
   background: transparent !important; /* IMPORTANTE: Transparente para unificarse */
   box-shadow: none !important;        /* Sin sombra propia */
-  padding: 20px;
+  padding: 10px;
   width: fit-content;
   margin: auto;
 }
@@ -13,14 +13,14 @@
 .board {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 4px;
 }
 
 .row-container {
   display: flex;
   justify-content: center;
   gap: 2px;
-  margin-top: -12px;
+  margin-top: -10px;
 }
 
 .row-container:first-child {
@@ -30,8 +30,8 @@
 /* Casilla con forma de hexágono */
 .cell {
   position: relative;
-  width: 67px;
-  height: 67px;
+  width: 50px;
+  height: 50px;
   clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
   background-color: var(--cell-border-color);
   cursor: pointer;
