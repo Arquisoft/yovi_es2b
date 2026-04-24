@@ -69,13 +69,35 @@ Para estas pruebas, separamos los test por funcionalidad en clases **Webapp-[Pan
 * **WebApp-Theme.test: ** Prueba el contexto de tema (claro/oscuro), su alternancia y la persistencia de preferencias para asegurar un comportamiento consistente en toda la interfaz.
 
 === Test de carga
-Diseño de test
-    escenarios
-    parametros de carga (nº usuarios)
-    valores limite
-Herramienta
-Resultados
-Conclusiones
+
+Estos test analizan el rendimiento de la aplicación y su comportamiento respecto a la ejecución.
+Simularán ciclos de ejecución, y se verá como responde la aplicación dados cierto parámetros en relación a ciertos límites.
+Todo ello, la herramienta, las simulaciones o escenarios, el análisis de resultados y conclusiones se describirán más adelante.
+
+
+==== Diseño de test
+
+El siguiente apartado se corresponde con como fueron diseñados los test de carga.
+
+[cols="1,2,3"]
+|===
+.2+|**Escenarios**|Creación de usuario|Ejemplo1
+|Ciclo de ejecución (sin jugar)|Ejemplo2
+
+.2+|**Parámetros de carga**|Nº de usuarios|Ejemplo1
+|Ejecución|Ejemplo2
+
+.3+|**Valores límite**|Intervalos de tiempos de análisis|Ejemplo1
+|Tiempos de respuesta|Ejemplo2
+|Fallos/KOs|Ejemplo2
+
+|===
+
+==== Herramienta
+
+==== Resultados
+
+==== Conclusiones
     a partir de 200 usuarios...valores lim
     creo issue
 
