@@ -138,7 +138,12 @@ body,
   --end-card-bg: #ffffff;
   --end-radius: 16px;
   --end-shadow: 0 8px 48px rgba(36, 41, 47, 0.14);
- 
+
+    /* Board */
+    --cell-border-color: #b8c0cc;
+    --cell-empty-bg:     #e8edf2;
+    --cell-hover-bg:     #d0d8e4;
+
 }
 
 [data-theme="dark"] {
@@ -278,7 +283,12 @@ body,
     --end-card-bg:      #1e293b;
     --end-radius: 16px;
     --end-shadow: 0 8px 48px rgba(0, 0, 0, 0.4);
- 
+
+    /* Board */
+    --cell-border-color: #475569;
+    --cell-empty-bg:     #0f172a;
+    --cell-hover-bg:     #263348;
+
     /* ── Ajustes específicos para modo oscuro ── */
     /* Se ponen aparte porque son reglas de componentes concretos, no variables generales */
     /* ── Home ── */
@@ -368,12 +378,35 @@ body,
     .ranking-table tbody td                 { background: var(--ranking-table-row-normal); }
     .ranking-table tbody tr.ranking-row--me td { background: var(--ranking-table-row-user); }
  
+    /* ── Game ── */
+    .back-button:hover {
+        background: rgba(165, 195, 255, 0.14);
+    }
+    #hint-button {
+        color: #fbbf24;
+        border-color: #fbbf24;
+    }
+    #hint-button:hover {
+        background: rgba(251, 191, 36, 0.1);
+    }
+    #undo-button:hover {
+        background: rgba(165, 195, 255, 0.14);
+    }
+    #exit-button:hover, #restart-button:hover {
+        background: rgba(248, 113, 113, 0.1);
+    }
+    .controls button:hover {
+        background: rgba(165, 195, 255, 0.06);
+    }
+
+    /* ── Lobby ── */
+    .lobby-btn--back:hover {
+        background: rgba(165, 195, 255, 0.14);
+    }
+
     /* ── Compartido ── */
     .back-button {
         color: var(--btn-primary-bg);
         border-color: var(--btn-primary-bg);
-    }
-    .back-button:hover {
-        background: rgba(165, 195, 255, 0.14);
     }
 }

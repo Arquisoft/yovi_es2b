@@ -65,7 +65,7 @@
     padding: 0.7rem 1.15rem;
     background: var(--btn-secondary-bg);
     border: 1px solid var(--btn-secondary-border);
-    border-radius: 999px;
+    border-radius: 8px;
     color: var(--text-primary);
     cursor: pointer;
     font-size: 1.12rem;

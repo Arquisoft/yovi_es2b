@@ -25,6 +25,7 @@
   flex: 1;
   min-height: 0;
   width: 100%;
+  box-sizing: border-box;
   margin: 0 auto;
   padding: 0.5rem;
   border: 1px solid var(--card-border);
@@ -41,8 +42,8 @@
   margin: 1.25rem 1.5rem;
   padding: 0.55rem 1.2rem;
   background: transparent;
-  color: #023eb6;
-  border: 1px solid #023eb6;
+  color: var(--btn-primary-bg);
+  border: 1px solid var(--btn-primary-bg);
   border-radius: 6px;
   font-size: 0.95rem;
   font-weight: 600;
@@ -72,31 +73,31 @@
   grid-area: board;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   min-height: 0;
   overflow-x: auto;
   overflow-y: auto;
+  padding-top: 0.75rem;
 }
 
 .turn-indicator {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.15rem;
   text-align: center;
-  margin-top: 3rem;
 }
 
 .turn-indicator__label {
-  font-size: 2rem;
+  font-size: 1.2rem;
   font-weight: 400;
   color: var(--text-secondary);
 }
 
 .turn-indicator__player {
-  font-size: 2rem;
+  font-size: 1.4rem;
   font-weight: 700;
   line-height: 1.1;
 }
@@ -120,6 +121,7 @@
   padding: 1.25rem 1.5rem 2rem 1rem;
 }
 
+
 #hint-button {
   background: transparent;
   color: #ca8a04;
@@ -137,8 +139,8 @@
 }
 
 #hint-button:disabled {
-  color: #a3a3a3;
-  border-color: #a3a3a3;
+  color: var(--text-disabled);
+  border-color: var(--text-disabled);
   cursor: not-allowed;
 }
 
@@ -152,6 +154,6 @@
 
 #hint-counter {
   font-size: 0.75rem;
-  color: #a3a3a3;
+  color: var(--text-disabled);
   text-align: center;
 }

@@ -1,11 +1,11 @@
 use axum::{body::Body, http::{Request, StatusCode}};
-use gamey::{create_default_state, create_router};
+use gamey::{create_default_state, create_test_router};
 use http_body_util::BodyExt;
 use tower::ServiceExt;
 
 // Helper para no repetir la creacion del app
 fn make_app() -> axum::Router {
-    create_router(create_default_state())
+    create_test_router(create_default_state())
 }
 
 // Test

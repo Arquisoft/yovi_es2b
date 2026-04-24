@@ -7,33 +7,36 @@ interface EndProps {
   username: string;      // id del jugador humano (jugador 1)
   username2?: string;    // id del jugador 2 (solo en modo 2 jugadores)
   twoPlayers?: boolean;  // true si es partida de 2 jugadores
+  onlineMode?: boolean;  // true en partida online: muestra victoria/derrota desde la perspectiva del jugador local
+  showPlayAgain?: boolean; // false oculta el botón "Jugar de nuevo" (ej. modo online)
   settings: GameSettings;
   onGoHome: () => void; // función para volver al menú principal
   onPlayAgain: () => void; // función para iniciar una nueva partida con las mismas configuraciones
 }
 
-function getTitle(twoPlayers: boolean, winner: string, playerWon: boolean): string {
-  if (twoPlayers) return `¡Ganó ${winner}!`;
+function getTitle(twoPlayers: boolean, onlineMode: boolean, winner: string, playerWon: boolean): string {
+  if (twoPlayers && !onlineMode) return `¡Ganó ${winner}!`;
   return playerWon ? "¡Victoria!" : "¡Derrota!";
 }
 
-function getSubtitle(twoPlayers: boolean, winner: string, username: string, playerWon: boolean): string {
-  if (twoPlayers) return `¡Enhorabuena, ${winner}, ganaste la partida!`;
+function getSubtitle(twoPlayers: boolean, onlineMode: boolean, winner: string, username: string, playerWon: boolean): string {
+  if (twoPlayers && !onlineMode) return `¡Enhorabuena, ${winner}, ganaste la partida!`;
   if (playerWon)  return `¡Enhorabuena, ${username}, ganaste la partida!`;
   return "Has perdido. ¡Intentalo de nuevo!";
 }
 
-export function End({ winner, username, username2 = "", twoPlayers = false, settings, onGoHome, onPlayAgain }: Readonly<EndProps>) {
+export function End({ winner, username, username2 = "", twoPlayers = false, onlineMode = false, showPlayAgain = true, settings, onGoHome, onPlayAgain }: Readonly<EndProps>) {
   const playerWon = winner === username;
-  const title    = getTitle(twoPlayers, winner, playerWon);
-  const icon     = (twoPlayers || playerWon) ? "🏆" : "💀";
-  const subtitle = getSubtitle(twoPlayers, winner, username, playerWon);
+  const title    = getTitle(twoPlayers, onlineMode, winner, playerWon);
+  const showWin  = (twoPlayers && !onlineMode) || playerWon;
+  const icon     = showWin ? "🏆" : "💀";
+  const subtitle = getSubtitle(twoPlayers, onlineMode, winner, username, playerWon);
 
   return (
     <div className="end-screen">
 
       {/* Tarjeta de resultado. Es dinámica, depende de si el jugador ganó o perdió */}
-      <div className={`end-card ${(twoPlayers || playerWon) ? "end-card-win" : "end-card-lose"}`}>
+      <div className={`end-card ${showWin ? "end-card-win" : "end-card-lose"}`}>
 
         {/* Icono grande */}
         <div className="end-icon">
@@ -83,10 +86,12 @@ export function End({ winner, username, username2 = "", twoPlayers = false, sett
 
         {/* Botones de acción */}
         <div className="end-actions">
-          <button className="end-btn end-btn-primary" onClick={onPlayAgain}>
-            <span className="end-btn-icon">↺</span>
-            Jugar de nuevo
-          </button>
+          {showPlayAgain && (
+            <button className="end-btn end-btn-primary" onClick={onPlayAgain}>
+              <span className="end-btn-icon">↺</span>
+              Jugar de nuevo
+            </button>
+          )}
           <button className="end-btn end-btn-secondary" onClick={onGoHome}>
             <span className="end-btn-icon">⌂</span>
             Volver al menú
