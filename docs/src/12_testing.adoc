@@ -79,10 +79,16 @@ Todo ello, la herramienta, las simulaciones o escenarios, el análisis de result
 
 El siguiente apartado se corresponde con como fueron diseñados los test de carga.
 
-[cols="1,2,3"]
+[cols="1,2,4"]
 |===
-.2+|**Escenarios**|Creación de usuario|Ejemplo1
-|Ciclo de ejecución (sin jugar)|Ejemplo2
+.2+|**Escenarios**
+|Creación de usuario|Este escanario se refiere a la capacidad del programa para crear usuarios, y su acceso a base datos para guardar el usuario.
+Para esto, debemos tener un .csv, que creará la cantidad de usuarios pedidos de forma automática.
+En esta simulación también se meten los usuarios en la base datos, pero se eliminarán al final de la ejecución de los test para evitar problemas de rendimiento en el despliegue general de la aplicación.
+Para el análisis de este apartado se debe simular de forma lo más parecido a la realidad un flujo normal de creación de usuario, por eso el acceso a la base no se mockea.
+|Ciclo de ejecución (sin jugar)|Siguiendo con el escenario anterior, el rendimiento analizado en este caso es probar un ciclo de ejecución, cercano a una ejecución real.
+En este caso, se prueba el siguiente ciclo de peticiones: **login > inicio de partida > fin de partida** (que se ejecuta cuando se gana una partida) **> ver estadísticas personales > ver el ranking global**.
+Estas opciones son las que acceden a la base de datos, ya que son las funciones que todas acceden al mismo sitio, y son las que pueden hacer que el rendimiento baje en ejecuciones simultáneas.
 
 .2+|**Parámetros de carga**|Nº de usuarios|Ejemplo3
 |Ejecución|Ejemplo4
@@ -90,7 +96,6 @@ El siguiente apartado se corresponde con como fueron diseñados los test de carg
 .3+|**Valores límite**|Intervalos de tiempos de análisis|Ejemplo5
 |Tiempos de respuesta|Ejemplo6
 |Fallos/KOs|Ejemplo7
-
 |Eliminación de usuario|Ejemplo8
 
 |===
