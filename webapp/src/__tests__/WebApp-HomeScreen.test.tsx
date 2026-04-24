@@ -1,11 +1,19 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Home from '../screens/game/Home'
-import { afterEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 
+const socketEventHandlers: Record<string, (...args: any[]) => void> = {}
+const mockSocket = {
+    on: vi.fn((event: string, handler: (...args: any[]) => void) => {
+        socketEventHandlers[event] = handler
+    }),
+    off: vi.fn(),
+    emit: vi.fn(),
+}
 vi.mock('../socket', () => ({
-    getSocket: vi.fn(() => ({ on: vi.fn(), off: vi.fn(), emit: vi.fn() })),
+    getSocket: vi.fn(() => mockSocket),
 }))
 
 /**
@@ -22,6 +30,11 @@ vi.mock('../socket', () => ({
  * - Se actualiza la selección de estrategia al seleccionar una opción
  */
 describe('Home', () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+        Object.keys(socketEventHandlers).forEach(k => delete socketEventHandlers[k])
+    })
+
     afterEach(() => {
         vi.restoreAllMocks()
     })
@@ -190,6 +203,23 @@ describe('Home', () => {
         render(<Home username="sara" />)
         await userEvent.click(screen.getByRole('button', { name: /Unirse a sala/i }))
         expect(screen.getByText(/Unirse a sala online/i)).toBeInTheDocument()
+    })
+
+    test('inicia partida online con timerEnabled y muestra el temporizador', async () => {
+        global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ state: { layout: '0/00/000' }, status: { kind: 'Ongoing', next_player: 0 } }) })
+        render(<Home username="sara" />)
+        await userEvent.click(screen.getByRole('button', { name: /Crear sala/i }))
+        act(() => socketEventHandlers['room-created']?.({ code: 'XYZ999', gameId: 'g1', playerIndex: 0 }))
+        act(() => socketEventHandlers['game-start']?.({
+            gameId: 'g1',
+            difficulty: 'MEDIUM',
+            timerEnabled: true,
+            players: [
+                { username: 'sara', playerIndex: 0 },
+                { username: 'rival', playerIndex: 1 },
+            ],
+        }))
+        await waitFor(() => expect(screen.getByRole('timer')).toBeInTheDocument())
     })
 
     test('inicia partida 2 jugadores con el temporizador desactivado', async () => {

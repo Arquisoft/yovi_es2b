@@ -1,10 +1,22 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Game } from '../screens/game/Game'
-import { afterEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { Difficulty } from '../components/gameOptions/Difficulty'
 import { Strategy } from '../components/gameOptions/Strategy'
+
+const socketEventHandlers: Record<string, (...args: any[]) => void> = {}
+const mockSocket = {
+    on: vi.fn((event: string, handler: (...args: any[]) => void) => {
+        socketEventHandlers[event] = handler
+    }),
+    off: vi.fn(),
+    emit: vi.fn(),
+}
+vi.mock('../socket', () => ({
+    getSocket: vi.fn(() => mockSocket),
+}))
 
 const baseSettings = {
     strategy: Strategy.RANDOM,
@@ -41,6 +53,11 @@ function mockFetch() {
  * - Muestra el indicador de turno en modo 2 jugadores
  */
 describe('Game', () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+        Object.keys(socketEventHandlers).forEach(k => delete socketEventHandlers[k])
+    })
+
     afterEach(() => {
         vi.restoreAllMocks()
     })
@@ -441,6 +458,45 @@ describe('Game', () => {
             expect(global.fetch).toHaveBeenCalled()
         })
         expect(screen.queryByRole('button', { name: /Deshacer movimiento/i })).not.toBeInTheDocument()
+    })
+
+    test('muestra el temporizador en modo online cuando enableTimer está activado', async () => {
+        global.fetch = vi.fn().mockResolvedValue(boardStateMock)
+        render(
+            <Game settings={baseSettings} username="sara" username2="rival" twoPlayers={true}
+                stateStart={true} onlineMode={true} roomCode="ABC123" initialGameId="game-1"
+                localPlayerIndex={0} enableTimer={true} />
+        )
+        await waitFor(() => {
+            expect(screen.getByRole('timer')).toBeInTheDocument()
+        })
+    })
+
+    test('en modo online recibe turn-skipped y actualiza el turno al rival', async () => {
+        global.fetch = vi.fn().mockResolvedValue(boardStateMock)
+        render(
+            <Game settings={baseSettings} username="sara" username2="rival" twoPlayers={true}
+                stateStart={true} onlineMode={true} roomCode="ABC123" initialGameId="game-1"
+                localPlayerIndex={0} />
+        )
+        await waitFor(() => expect(global.fetch).toHaveBeenCalled())
+        act(() => socketEventHandlers['turn-skipped']?.({ next_player: 1 }))
+        await waitFor(() => expect(screen.getByText('rival')).toBeInTheDocument())
+    })
+
+    test('handleTimerExpire emite timer-expired en modo online cuando es el turno local', async () => {
+        vi.useFakeTimers()
+        global.fetch = vi.fn().mockResolvedValue(boardStateMock)
+        await act(async () => {
+            render(
+                <Game settings={baseSettings} username="sara" username2="rival" twoPlayers={true}
+                    stateStart={true} onlineMode={true} roomCode="ABC123" initialGameId="game-1"
+                    localPlayerIndex={0} enableTimer={true} />
+            )
+        })
+        act(() => vi.advanceTimersByTime(15000))
+        expect(mockSocket.emit).toHaveBeenCalledWith('timer-expired', { code: 'ABC123' })
+        vi.useRealTimers()
     })
 
 })

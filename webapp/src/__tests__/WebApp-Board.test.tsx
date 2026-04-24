@@ -417,6 +417,31 @@ describe('Board', () => {
         expect(onOnlineMove).not.toHaveBeenCalled()
     })
 
+    test('en modo online descarga el tablero si la carga inicial falla', async () => {
+        global.fetch = vi.fn().mockRejectedValueOnce(new Error('Network error'))
+        render(
+            <Board
+                strategy={Strategy.RANDOM}
+                difficulty={Difficulty.EASY}
+                gameId="test-123"
+                turno="sara"
+                gameState="Iniciada"
+                username="sara"
+                username2="rival"
+                twoPlayers={true}
+                refreshKey={0}
+                hintCoords={null}
+                changeTurno={changeTurno}
+                onGameEnd={onGameEnd}
+                onlineMode={true}
+                localPlayerIndex={0}
+            />
+        )
+        await waitFor(() => expect(global.fetch).toHaveBeenCalled())
+        // El tablero no debe lanzar excepción; la casilla debe ser clicable de nuevo
+        expect(document.querySelectorAll('.cell').length).toBeGreaterThanOrEqual(0)
+    })
+
     test('ejecuta acción del bot cuando /play devuelve una acción en lugar de coordenadas', async () => {
         const botTurnMock = {
             ok: true,

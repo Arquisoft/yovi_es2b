@@ -104,6 +104,7 @@ describe('JoinRoom', () => {
       eventHandlers['game-start']({
         gameId: 'game-1',
         difficulty: 'MEDIUM',
+        timerEnabled: true,
         players: [
           { username: 'rival', playerIndex: 0 },
           { username: 'sara', playerIndex: 1 },
@@ -116,6 +117,7 @@ describe('JoinRoom', () => {
       playerIndex: 1,
       opponentUsername: 'rival',
       difficulty: 'MEDIUM',
+      timerEnabled: true,
     })
   })
 
