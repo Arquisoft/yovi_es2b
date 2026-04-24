@@ -4,4 +4,5 @@ export interface OnlineGameInfo {
   playerIndex: number;
   opponentUsername: string;
   difficulty: string;
+  timerEnabled: boolean;
 }

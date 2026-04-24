@@ -165,3 +165,69 @@
   margin: 0;
   align-self: flex-start;
 }
+
+/* ── Switch temporizador (idéntico al de Home) ───────────────────────────── */
+.home-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.home-toggle__text {
+  text-align: left;
+}
+
+.home-toggle__control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.home-toggle__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.home-toggle__slider {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  background: var(--toggle-track-off);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.home-toggle__slider::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease;
+}
+
+.home-toggle__input:checked + .home-toggle__slider {
+  background: var(--toggle-track-on);
+}
+
+.home-toggle__input:checked + .home-toggle__slider::after {
+  transform: translateX(22px);
+}
+
+.home-toggle__input:focus-visible + .home-toggle__slider {
+  outline: 3px solid rgba(2, 62, 182, 0.28);
+  outline-offset: 2px;
+}

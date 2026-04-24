@@ -61,7 +61,7 @@ export default function HomePage( {username} : { username: string }) {
 
     // Partida online lista: ambos jugadores conectados
     if (onlineGameInfo) {
-        const { gameId, code, playerIndex, opponentUsername, difficulty } = onlineGameInfo;
+        const { gameId, code, playerIndex, opponentUsername, difficulty, timerEnabled } = onlineGameInfo;
         return (
             <Game
                 settings={{ strategy: Strategy.MONTE_CARLO_ENDURECIDO, difficulty: difficulty as DifficultyType }}
@@ -69,7 +69,7 @@ export default function HomePage( {username} : { username: string }) {
                 username2={opponentUsername}
                 twoPlayers={true}
                 stateStart={true}
-                enableTimer={false}
+                enableTimer={timerEnabled}
                 onlineMode={true}
                 roomCode={code}
                 localPlayerIndex={playerIndex}

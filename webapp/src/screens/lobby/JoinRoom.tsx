@@ -31,9 +31,10 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
       setJoined(true);
     });
 
-    socket.on('game-start', ({ gameId, difficulty, players }: {
+    socket.on('game-start', ({ gameId, difficulty, players, timerEnabled }: {
       gameId: string;
       difficulty: string;
+      timerEnabled: boolean;
       players: { username: string; playerIndex: number }[];
     }) => {
       const opponent = players.find(p => p.playerIndex === 0);
@@ -44,6 +45,7 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
         playerIndex: 1,
         opponentUsername: opponent?.username ?? info?.opponentUsername ?? '',
         difficulty,
+        timerEnabled,
       });
     });
 

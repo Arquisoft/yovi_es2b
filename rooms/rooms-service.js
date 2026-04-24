@@ -51,11 +51,11 @@ async function relayUndo(gameId) {
 
 io.on('connection', (socket) => {
   // Jugador 1 crea una sala
-  socket.on('create-room', async ({ username, difficulty }) => {
+  socket.on('create-room', async ({ username, difficulty, timerEnabled = false }) => {
     try {
       const boardSize = difficultyToSize(difficulty);
       const gameId = await createGameOnGameY(boardSize);
-      const room = roomManager.createRoom(socket.id, username, difficulty);
+      const room = roomManager.createRoom(socket.id, username, difficulty, timerEnabled);
       room.gameId = gameId;
       socket.join(room.code);
       socket.emit('room-created', {
@@ -90,6 +90,7 @@ io.on('connection', (socket) => {
     io.to(room.code).emit('game-start', {
       gameId: room.gameId,
       difficulty: room.difficulty,
+      timerEnabled: room.timerEnabled,
       players: room.players.map(p => ({ username: p.username, playerIndex: p.playerIndex })),
     });
   });
@@ -127,6 +128,16 @@ io.on('connection', (socket) => {
     if (data) {
       io.to(room.code).emit('move-made', { state: data.state, status: data.status });
     }
+  });
+
+  // El timer del jugador activo expiró: pasa el turno al otro
+  socket.on('timer-expired', ({ code }) => {
+    const room = roomManager.getRoom(code);
+    if (!room) return;
+    const playerObj = room.players.find(p => p.socketId === socket.id);
+    if (!playerObj) return;
+    const nextPlayer = 1 - playerObj.playerIndex;
+    io.to(room.code).emit('turn-skipped', { next_player: nextPlayer });
   });
 
   // Un jugador abandona

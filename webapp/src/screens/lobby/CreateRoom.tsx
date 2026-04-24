@@ -13,11 +13,13 @@ interface CreateRoomProps {
 
 export default function CreateRoom({ username, onGameReady, onBack }: Readonly<CreateRoomProps>) {
   const [difficulty, setDifficulty] = useState<DifficultyType>(Difficulty.MEDIUM);
+  const [timerEnabled, setTimerEnabled] = useState(true);
   const [code, setCode] = useState<string | null>(null);
   const [waiting, setWaiting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   // Ref para tener siempre el código actualizado dentro de los handlers del socket
   const codeRef = useRef<string | null>(null);
+  const timerEnabledRef = useRef(true);
 
   useEffect(() => {
     const socket = getSocket();
@@ -28,9 +30,10 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
       setWaiting(true);
     });
 
-    socket.on('game-start', ({ gameId, difficulty: diff, players }: {
+    socket.on('game-start', ({ gameId, difficulty: diff, players, timerEnabled: te }: {
       gameId: string;
       difficulty: string;
+      timerEnabled: boolean;
       players: { username: string; playerIndex: number }[];
     }) => {
       const opponent = players.find(p => p.playerIndex === 1);
@@ -41,6 +44,7 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
         playerIndex: 0,
         opponentUsername: opponent.username,
         difficulty: diff,
+        timerEnabled: te,
       });
     });
 
@@ -58,7 +62,8 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
 
   function handleCreate() {
     setError(null);
-    getSocket().emit('create-room', { username, difficulty });
+    timerEnabledRef.current = timerEnabled;
+    getSocket().emit('create-room', { username, difficulty, timerEnabled });
   }
 
   return (
@@ -81,6 +86,21 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
                 className={`lobby-diff-btn${difficulty === Difficulty.HARD ? " lobby-diff-btn--active" : ""}`}
                 onClick={() => setDifficulty(Difficulty.HARD)}>Grande</button>
             </div>
+
+            <span className="lobby-card__label">Temporizador</span>
+            <label className="home-toggle" htmlFor="timer-enabled-online">
+              <span className="home-toggle__text">Partida con temporizador activo</span>
+              <span className="home-toggle__control">
+                <input
+                  id="timer-enabled-online"
+                  className="home-toggle__input"
+                  type="checkbox"
+                  checked={timerEnabled}
+                  onChange={(e) => setTimerEnabled(e.target.checked)}
+                />
+                <span className="home-toggle__slider" aria-hidden="true" />
+              </span>
+            </label>
 
             {error && <p className="lobby-error">{error}</p>}
 

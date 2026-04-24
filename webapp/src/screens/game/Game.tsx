@@ -125,10 +125,15 @@ if (data.status?.kind === 'Finished') {
       setDisconnectedMsg(`${who} se ha desconectado. Partida terminada.`);
     });
 
+    socket.on('turn-skipped', ({ next_player }: { next_player: number }) => {
+      setTurno(next_player === localPlayerIndex ? username : username2);
+    });
+
     return () => {
       socket.off('move-made');
       socket.off('move-error');
       socket.off('player-disconnected');
+      socket.off('turn-skipped');
     };
   }, [onlineMode, roomCode]);
 
@@ -146,6 +151,12 @@ if (data.status?.kind === 'Finished') {
   }
 
   function handleTimerExpire() {
+    if (onlineMode) {
+      if (turno === username) {
+        getSocket().emit('timer-expired', { code: roomCode });
+      }
+      return;
+    }
     setTurno((t) => (t === username ? username2 : username));
   }
 
@@ -280,7 +291,7 @@ if (data.status?.kind === 'Finished') {
                   </>
                 );
               })()}
-              {!onlineMode && enableTimer && gameState === "Iniciada" && (
+              {enableTimer && gameState === "Iniciada" && (
                 <Timer turno={turno} onExpire={handleTimerExpire} />
               )}
             </div>

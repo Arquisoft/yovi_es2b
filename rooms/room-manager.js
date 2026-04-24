@@ -14,13 +14,14 @@ class RoomManager {
     this.rooms = new Map();
   }
 
-  createRoom(socketId, username, difficulty) {
+  createRoom(socketId, username, difficulty, timerEnabled = false) {
     const code = generateCode();
     const room = {
       code,
       players: [{ socketId, username, playerIndex: 0 }],
       gameId: null,
       difficulty,
+      timerEnabled,
     };
     this.rooms.set(code, room);
     return room;
