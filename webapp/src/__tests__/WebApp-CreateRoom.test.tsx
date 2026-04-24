@@ -47,7 +47,7 @@ describe('CreateRoom', () => {
     const user = userEvent.setup()
     render(<CreateRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     await user.click(screen.getByRole('button', { name: /Crear sala/i }))
-    expect(mockSocket.emit).toHaveBeenCalledWith('create-room', { username: 'sara', difficulty: 'MEDIUM' })
+    expect(mockSocket.emit).toHaveBeenCalledWith('create-room', { username: 'sara', difficulty: 'MEDIUM', timerEnabled: true })
   })
 
   test('seleccionar Pequeño cambia la dificultad a EASY', async () => {
@@ -55,7 +55,7 @@ describe('CreateRoom', () => {
     render(<CreateRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     await user.click(screen.getByRole('button', { name: /Pequeño/i }))
     await user.click(screen.getByRole('button', { name: /Crear sala/i }))
-    expect(mockSocket.emit).toHaveBeenCalledWith('create-room', { username: 'sara', difficulty: 'EASY' })
+    expect(mockSocket.emit).toHaveBeenCalledWith('create-room', { username: 'sara', difficulty: 'EASY', timerEnabled: true })
   })
 
   test('seleccionar Grande cambia la dificultad a HARD', async () => {
@@ -63,7 +63,7 @@ describe('CreateRoom', () => {
     render(<CreateRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     await user.click(screen.getByRole('button', { name: /Grande/i }))
     await user.click(screen.getByRole('button', { name: /Crear sala/i }))
-    expect(mockSocket.emit).toHaveBeenCalledWith('create-room', { username: 'sara', difficulty: 'HARD' })
+    expect(mockSocket.emit).toHaveBeenCalledWith('create-room', { username: 'sara', difficulty: 'HARD', timerEnabled: true })
   })
 
   test('room-created muestra el código y el mensaje de espera', () => {
@@ -92,6 +92,7 @@ describe('CreateRoom', () => {
       eventHandlers['game-start']({
         gameId: 'game-1',
         difficulty: 'MEDIUM',
+        timerEnabled: true,
         players: [
           { username: 'sara', playerIndex: 0 },
           { username: 'rival', playerIndex: 1 },
@@ -104,6 +105,7 @@ describe('CreateRoom', () => {
       playerIndex: 0,
       opponentUsername: 'rival',
       difficulty: 'MEDIUM',
+      timerEnabled: true,
     })
   })
 
