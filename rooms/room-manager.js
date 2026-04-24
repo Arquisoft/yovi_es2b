@@ -31,6 +31,7 @@ class RoomManager {
     const room = this.rooms.get(code.toUpperCase());
     if (!room) return { error: 'Sala no encontrada' };
     if (room.players.length >= 2) return { error: 'La sala está llena' };
+    if (room.players[0].username === username) return { error: 'No puedes unirte con el mismo nombre que el creador de la sala' };
     room.players.push({ socketId, username, playerIndex: 1 });
     return { room };
   }
