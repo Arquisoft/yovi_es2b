@@ -129,8 +129,15 @@ Estos interfaces se separan en "index.html", que realiza un análisis general de
 ==== Resultados
 
 ==== Conclusiones
-    a partir de 200 usuarios...valores lim
-    creo issue
 
+Dados los resultados anteriores, podemos obtener varias conclusiones importantes.
 
+* No existen errores que causen que una petición pare. Esto implica que, aunque en ciertos casos pueda tardar más o menos en acceder a la base de datos y responder, en ninguna circunstancia se sufre un error con resultado catastrófico al punto de parar el flujo de la aplicación. Toda petición fue respondida.
+* Podemos ver que con 50 usuarios, la aplicación, en ambos escenarios, propones unos datos muy favorables, teniendo la mayoría de peticiones en el primer intervalo, por lo que el rendimiento no es un gran problema a resolver.
+* Con 100 usuarios también vemos que la creación de usuarios puede ser bastante más costosa en términos de rendimiento, incluso superando el escenario con 200 usuarios. Además, también es notable su aumento de ejecución en el flujo del ciclo de vida.
+* Por último con 200 usuarios vemos una gran cantidad de peticiones en el último intervalo. En este caso, sí que deberíamos mirar de forma más exhaustiva el rendimiento con los 200 usuarios concurrentemente, en especial si queremos lanzarlo como aplicación más profesional.
+* Viendo las ejecuciones individuales de cada tipo de petición observamos que las peticiones más costosas en términos de tiempo son las que modifican la base de datos, creación de usuario, inicio y fin de partida, lo que puede ser razonable, ya que no sabemos a ciencia cierta como va la base de datos por debajo. Pero, en cuanto al resto, login, estadísticas y ranking vemos un coste demasiado alto para la obtención de datos.
 
+Como conclusión final, si quisiéramos una escalabilidad más profesional, deberíamos intentar mejorar el rendimiento. Para ello, crearemos una nueva issue (Issue 118) para la mejora del rendimiento. En esta issue especialmente nos centraremos en los endpoint que no modifican la base de datos, como la visualización de estadísticas o ranking global.
+
+image::test_carga_issue.png[issue para mejora rendimiento]
