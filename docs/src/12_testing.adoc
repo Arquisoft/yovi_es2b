@@ -128,6 +128,54 @@ Estos interfaces se separan en "index.html", que realiza un análisis general de
 
 ==== Resultados
 
+* **Creación de 50 usuarios**
+
+image::test_carga_create_050.png[rendimiento crear 50 usuarios]
+
+* **Ciclo de vida de 50 usuarios**
+
+** Login
+
+** Inicio de partida
+
+** Fin de partida (partida ganada)
+
+** Visualizar estadísticas
+
+** Visualizar ranking
+
+* **Creación de 100 usuarios**
+
+image::test_carga_create_100.png[rendimiento crear 100 usuarios]
+
+* **Ciclo de vida de 100 usuarios**
+
+** Login
+
+** Inicio de partida
+
+** Fin de partida (partida ganada)
+
+** Visualizar estadísticas
+
+** Visualizar ranking
+
+* **Creación de 200 usuarios**
+
+image::test_carga_create_200.png[rendimiento crear 200 usuarios]
+
+* **Ciclo de vida de 200 usuarios**
+
+** Login
+
+** Inicio de partida
+
+** Fin de partida (partida ganada)
+
+** Visualizar estadísticas
+
+** Visualizar ranking
+
 ==== Conclusiones
 
 Dados los resultados anteriores, podemos obtener varias conclusiones importantes.
