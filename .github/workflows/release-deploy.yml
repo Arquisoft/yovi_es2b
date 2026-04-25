@@ -148,10 +148,30 @@ jobs:
           workdir: gamey
           buildargs: VITE_API_URL_GY=http://${{ secrets.DEPLOY_HOST }}:4000
 
+  docker-push-rooms:
+    name: Publish rooms image
+    runs-on: ubuntu-latest
+    needs: e2e
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Publish to Registry (rooms)
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: ${{ github.repository_owner }}/${{ github.event.repository.name }}-rooms
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+          registry: ghcr.io
+          workdir: rooms
+
   deploy:
     name: Deploy over SSH
     runs-on: ubuntu-latest
-    needs: [docker-push-users, docker-push-webapp, docker-push-gamey]
+    needs: [docker-push-users, docker-push-webapp, docker-push-gamey, docker-push-rooms]
     steps:
       - name: Deploy over SSH
         uses: fifsky/ssh-action@master
