@@ -146,7 +146,7 @@ Las peticiones se realizan mediante HTTP y utilizan mensajes en formato JSON par
 * GET /ranking/defeats - recuperación del ranking por partidas perdidas (vs bot propio)
 * POST /ranking/wins/difficulty - recuperación del ranking por partidas ganadas por dificultad (vs bot propio)
 * POST /ranking/wins/strategy - recuperación del ranking por partidas ganadas por estrategia (vs bot propio)
-* Existen también métodos que no se podrán acceder por usuarios normals, y existen solo para realización de pruebas y tests de la aplicación
+* Existen también métodos que no se podrán acceder por usuarios normales, y existen solo para realización de pruebas y tests de la aplicación
 
 image::yovi-interfazusers.png[interfaz-users-yovi]
 
