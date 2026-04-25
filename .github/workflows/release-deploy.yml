@@ -3,9 +3,6 @@ name: Release — Test, Build, Publish, Deploy
 on:
   release:
     types: [published]
-  push:
-    branches:
-      - ArreglosDesplieg1
 
 permissions:
   contents: read
