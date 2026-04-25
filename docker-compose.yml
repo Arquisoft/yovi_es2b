@@ -10,17 +10,32 @@ services:
     networks:
       - monitor-net
 
+  rooms:
+    build: ./rooms
+    container_name: rooms
+    image: ghcr.io/arquisoft/yovi_es2b-rooms:latest
+    ports:
+      - "3001:3001"
+    environment:
+      - GAMEY_URL=http://gamey:4000
+    depends_on:
+      - gamey
+    networks:
+      - monitor-net
+
   webapp:
     build:
       context: ./webapp
       args:
         - VITE_API_URL_WA=http://localhost:3000
+        - VITE_API_URL_ROOMS=http://localhost:3001
     container_name: webapp
     image: ghcr.io/arquisoft/yovi_es2b-webapp:latest
     ports:
       - "80:80"
     depends_on:
       - users
+      - rooms
     networks:
       - monitor-net
 

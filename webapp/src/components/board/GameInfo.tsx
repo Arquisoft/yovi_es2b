@@ -3,18 +3,26 @@ import "./Board.css";
 
 interface Props {
   settings: GameSettings;
-  currentPlayer: string; //cambaiar al nombre del jugador cuando este hecho el inicio de sesion
+  currentPlayer: string;
   gameStatus: string;
   twoPlayers?: boolean;
+  onlineMode?: boolean;
+  localUsername?: string;
+  localPlayerIndex?: number;
 }
 
 export default function GameInfo(props: Props) {
+  const playerColor = props.localPlayerIndex === 0 ? '#0c55c0' : '#b91c1c';
+
   return (
     <div className="game-info">
       <h2>Información de partida</h2>
       <div className="info-section">
         {!props.twoPlayers && <p><strong>Jugador: </strong> {props.currentPlayer}</p>}
         {!props.twoPlayers && <p><strong>Oponente: </strong> BOT</p>}
+        {props.onlineMode && props.localUsername !== undefined && (
+          <p><strong>Jugador: </strong><span style={{ color: playerColor }}>{props.localUsername}</span></p>
+        )}
       </div>
       <div className="info-section">
         {!props.twoPlayers && <p><strong>Estrategia: </strong> {props.settings.strategy}</p>}

@@ -1,6 +1,7 @@
 use gamey::{
     Coordinates, DefensiveBot, GameY, MonteCarloBot, MonteCarloEndurecidoBot,
-    MonteCarloMejoradoBot, Movement, OffensiveBot, PlayerId, RandomBot, YBot,
+    MonteCarloEndurecidoConcursoBot, MonteCarloMejoradoBot, Movement, OffensiveBot, PlayerId,
+    RandomBot, YBot,
 };
 
 // ============================================================================
@@ -76,4 +77,9 @@ fn test_montecarlo_mejorado_bot() {
 #[test]
 fn test_montecarlo_endurecido_bot() {
     comprueba_bot(&MonteCarloEndurecidoBot, "montecarlo_endurecido_bot");
+}
+
+#[test]
+fn test_montecarlo_endurecido_concurso_bot() {
+    comprueba_bot(&MonteCarloEndurecidoConcursoBot, "montecarlo_endurecido_concurso_bot");
 }

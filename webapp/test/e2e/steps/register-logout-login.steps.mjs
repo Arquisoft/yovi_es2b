@@ -30,6 +30,7 @@ Then('debería ver la pantalla principal', async function () {
 When('hago clic en cerrar sesión', async function () {
   const page = this.page
   if (!page) throw new Error('La página no está inicializada')
+  await page.click('[aria-label="Menú de opciones"]')
   await page.click('button:has-text("Cerrar sesión")')
 })
 

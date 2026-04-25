@@ -1,8 +1,20 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { render, screen, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Home from '../screens/game/Home'
-import { afterEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
+
+const socketEventHandlers: Record<string, (...args: any[]) => void> = {}
+const mockSocket = {
+    on: vi.fn((event: string, handler: (...args: any[]) => void) => {
+        socketEventHandlers[event] = handler
+    }),
+    off: vi.fn(),
+    emit: vi.fn(),
+}
+vi.mock('../socket', () => ({
+    getSocket: vi.fn(() => mockSocket),
+}))
 
 /**
  * Tests para Home que comprueban que:
@@ -18,6 +30,11 @@ import '@testing-library/jest-dom'
  * - Se actualiza la selección de estrategia al seleccionar una opción
  */
 describe('Home', () => {
+    beforeEach(() => {
+        vi.clearAllMocks()
+        Object.keys(socketEventHandlers).forEach(k => delete socketEventHandlers[k])
+    })
+
     afterEach(() => {
         vi.restoreAllMocks()
     })
@@ -176,6 +193,35 @@ describe('Home', () => {
      * El test desactiva el toggle, rellena el nombre del jugador 2 e inicia la partida,
      * verificando que el menú principal desaparece.
      */
+    test('navega a la pantalla de crear sala online al pulsar Crear sala', async () => {
+        render(<Home username="sara" />)
+        await userEvent.click(screen.getByRole('button', { name: /Crear sala/i }))
+        expect(screen.getByText(/Crear sala online/i)).toBeInTheDocument()
+    })
+
+    test('navega a la pantalla de unirse a sala online al pulsar Unirse a sala', async () => {
+        render(<Home username="sara" />)
+        await userEvent.click(screen.getByRole('button', { name: /Unirse a sala/i }))
+        expect(screen.getByText(/Unirse a sala online/i)).toBeInTheDocument()
+    })
+
+    test('inicia partida online con timerEnabled y muestra el temporizador', async () => {
+        global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ state: { layout: '0/00/000' }, status: { kind: 'Ongoing', next_player: 0 } }) })
+        render(<Home username="sara" />)
+        await userEvent.click(screen.getByRole('button', { name: /Crear sala/i }))
+        act(() => socketEventHandlers['room-created']?.({ code: 'XYZ999', gameId: 'g1', playerIndex: 0 }))
+        act(() => socketEventHandlers['game-start']?.({
+            gameId: 'g1',
+            difficulty: 'MEDIUM',
+            timerEnabled: true,
+            players: [
+                { username: 'sara', playerIndex: 0 },
+                { username: 'rival', playerIndex: 1 },
+            ],
+        }))
+        await waitFor(() => expect(screen.getByRole('timer')).toBeInTheDocument())
+    })
+
     test('inicia partida 2 jugadores con el temporizador desactivado', async () => {
         render(<Home username="sara" />)
         const user = userEvent.setup()

@@ -383,13 +383,13 @@
   transform: none;
 }
 
-/* ── Dos paneles en columnas ──────────────────────────────────────────────── */
+/* ── Tres paneles en columnas ─────────────────────────────────────────────── */
 .home-panels {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 1.5rem;
   width: 100%;
-  max-width: 860px;
+  max-width: 1200px;
   align-items: stretch;
 }
 
@@ -416,6 +416,33 @@
   margin-bottom: 0;
   max-width: none;
   width: 100%;
+}
+
+/* ── Panel Online ─────────────────────────────────────────────────────────── */
+.home-config--online {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-config__online-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.home-config__start--secondary {
+  background: transparent;
+  color: #023eb6;
+  border: 1.5px solid #023eb6;
+}
+
+.home-config__start--secondary:hover {
+  background: rgba(2, 62, 182, 0.08);
+}
+
+@media (max-width: 960px) {
+  .home-panels { grid-template-columns: 1fr 1fr; }
 }
 
 @media (max-width: 680px) {
