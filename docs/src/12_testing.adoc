@@ -130,51 +130,113 @@ Estos interfaces se separan en "index.html", que realiza un análisis general de
 
 * **Creación de 50 usuarios**
 
++
 image::test_carga_create_050.png[rendimiento crear 50 usuarios]
++
 
 * **Ciclo de vida de 50 usuarios**
 
-** Login
++
+image::test_carga_general_050.png[rendimiento general 50 usuarios]
++
 
-** Inicio de partida
+** Login (50 usuarios)
 
-** Fin de partida (partida ganada)
++
+image::test_carga_login_050.png[rendimiento login 50 usuarios]
 
-** Visualizar estadísticas
+** Inicio de partida (50 usuarios)
 
-** Visualizar ranking
++
+image::test_carga_init_050.png[rendimiento init match 50 usuarios]
+
+** Fin de partida (50 usuarios)
+
++
+image::test_carga_end_050.png[rendimiento end match 50 usuarios]
+
+** Visualizar estadísticas (50 usuarios)
+
++
+image::test_carga_stats_050.png[rendimiento stats 50 usuarios]
+
+** Visualizar ranking (50 usuarios)
+
++
+image::test_carga_rank_050.png[rendimiento ranking 50 usuarios]
 
 * **Creación de 100 usuarios**
-
++
 image::test_carga_create_100.png[rendimiento crear 100 usuarios]
++
 
 * **Ciclo de vida de 100 usuarios**
 
-** Login
++
+image::test_carga_general_100.png[rendimiento general 100 usuarios]
++
 
-** Inicio de partida
+** Login (100 usuarios)
 
-** Fin de partida (partida ganada)
++
+image::test_carga_login_100.png[rendimiento login 100 usuarios]
 
-** Visualizar estadísticas
+** Inicio de partida (100 usuarios)
 
-** Visualizar ranking
++
+image::test_carga_init_100.png[rendimiento init match 100 usuarios]
+
+** Fin de partida (100 usuarios)
+
++
+image::test_carga_end_100.png[rendimiento end match 100 usuarios]
+
+** Visualizar estadísticas (100 usuarios)
+
++
+image::test_carga_stats_100.png[rendimiento stats 100 usuarios]
+
+** Visualizar ranking (100 usuarios)
+
++
+image::test_carga_rank_100.png[rendimiento ranking 100 usuarios]
 
 * **Creación de 200 usuarios**
 
++
 image::test_carga_create_200.png[rendimiento crear 200 usuarios]
++
 
 * **Ciclo de vida de 200 usuarios**
 
-** Login
++
+image::test_carga_general_200.png[rendimiento general 200 usuarios]
++
 
-** Inicio de partida
+** Login (200 usuarios)
 
-** Fin de partida (partida ganada)
++
+image::test_carga_login_200.png[rendimiento login 200 usuarios]
 
-** Visualizar estadísticas
+** Inicio de partida (200 usuarios)
 
-** Visualizar ranking
++
+image::test_carga_init_200.png[rendimiento init match 200 usuarios]
+
+** Fin de partida (200 usuarios)
+
++
+image::test_carga_end_200.png[rendimiento end match 200 usuarios]
+
+** Visualizar estadísticas (200 usuarios)
+
++
+image::test_carga_stats_200.png[rendimiento stats 200 usuarios]
+
+** Visualizar ranking (200 usuarios)
+
++
+image::test_carga_rank_200.png[rendimiento ranking 200 usuarios]
 
 ==== Conclusiones
 
@@ -184,8 +246,8 @@ Dados los resultados anteriores, podemos obtener varias conclusiones importantes
 * Podemos ver que con 50 usuarios, la aplicación, en ambos escenarios, propones unos datos muy favorables, teniendo la mayoría de peticiones en el primer intervalo, por lo que el rendimiento no es un gran problema a resolver.
 * Con 100 usuarios también vemos que la creación de usuarios puede ser bastante más costosa en términos de rendimiento, incluso superando el escenario con 200 usuarios. Además, también es notable su aumento de ejecución en el flujo del ciclo de vida.
 * Por último con 200 usuarios vemos una gran cantidad de peticiones en el último intervalo. En este caso, sí que deberíamos mirar de forma más exhaustiva el rendimiento con los 200 usuarios concurrentemente, en especial si queremos lanzarlo como aplicación más profesional.
-* Viendo las ejecuciones individuales de cada tipo de petición observamos que las peticiones más costosas en términos de tiempo son las que modifican la base de datos, creación de usuario, inicio y fin de partida, lo que puede ser razonable, ya que no sabemos a ciencia cierta como va la base de datos por debajo. Pero, en cuanto al resto, login, estadísticas y ranking vemos un coste demasiado alto para la obtención de datos.
+* Viendo las ejecuciones individuales de cada tipo de petición observamos que las peticiones más costosas en términos de tiempo son las que modifican la base de datos, creación de usuario, inicio y fin de partida, lo que puede ser razonable, ya que no sabemos a ciencia cierta como va la base de datos por debajo. Pero, en cuanto al resto, login, estadísticas y ranking vemos un coste relativamente alto para la obtención de datos.
 
-Como conclusión final, si quisiéramos una escalabilidad más profesional, deberíamos intentar mejorar el rendimiento. Para ello, crearemos una nueva issue (Issue 118) para la mejora del rendimiento. En esta issue especialmente nos centraremos en los endpoint que no modifican la base de datos, como la visualización de estadísticas o ranking global.
+Como conclusión final, si quisiéramos una escalabilidad más profesional, deberíamos intentar mejorar el rendimiento. Para ello, crearemos una nueva issue (Issue 118) para la mejora del rendimiento. En esta issue especialmente nos centraremos en los endpoint que no modifican la base de datos, como el login o ranking global.
 
 image::test_carga_issue.png[issue para mejora rendimiento]
