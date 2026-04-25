@@ -3,6 +3,28 @@ ifndef::imagesdir[:imagesdir: ../images]
 [[section-deployment-view]]
 == Vista de despliegue
 
-En este caso, habrá un diagrama que represente las relaciones entre elementos que participarán en las acciones de despliegue y cómo se hará para distribuir el proyecto sobre un producto final y la infraestructura para soportarlo.
+Este apartado describe la infraestructura sobre la que se ejecuta el sistema y cómo se distribuyen los componentes software sobre ella.
 
-El diagrama es necesario para entender más a fondo los futuros problemas que pueden aparecer durante el desarrollo de la aplicación, así como para facilitar el mantenimiento de esta.
+=== Infraestructura
+
+El sistema se despliega en una máquina virtual en la nube accesible públicamente en `gameyes2b.duckdns.org`. Todos los componentes corren como contenedores Docker orquestados con Docker Compose y se comunican a través de una red interna bridge llamada `monitor-net`. La base de datos MongoDB no está contenerizada: se utiliza un servicio externo (MongoDB Atlas) cuya URI de conexión se inyecta como variable de entorno.
+
+[options="header",cols="2,1,3"]
+|===
+|Componente|Puerto expuesto|Descripción
+|webapp (React + Nginx)|80|Frontend servido por Nginx. Construido con las URLs de los backends como variables de entorno en tiempo de compilación.
+|users (Node.js / Express)|3000|Microservicio de gestión de usuarios y estadísticas.
+|gamey (Rust / Axum)|4000|Motor de juego y servicio de bots.
+|prometheus|9090|Recolección de métricas del sistema.
+|grafana|9091|Visualización de métricas en dashboards.
+|MongoDB Atlas|—|Base de datos externa. Accedida mediante `MONGO_URI` desde el servicio `users`.
+|===
+
+
+=== Pipeline de publicación y despliegue
+
+El despliegue en producción se activa automáticamente al publicar una nueva release en GitHub. El pipeline definido en `.github/workflows/release-deploy.yml` sigue las siguientes fases:
+
+image::diagramaPipelineDespliegue.png[diagramaPipelineDespliegue]
+
+Las imágenes Docker se publican en el registro de contenedores de GitHub (`ghcr.io`). La VM de producción descarga siempre la última versión de `docker-compose.yml` directamente desde la rama `master` del repositorio y lanza los contenedores con `--pull always`, garantizando que se usen las imágenes recién publicadas.

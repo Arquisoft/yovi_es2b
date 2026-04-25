@@ -21,35 +21,32 @@ describe('GET /ranking', () => {
         app.get('/ranking/defeats',      userController.rankingdefeats)
     })
 
-    // /**
-    //  * Un usuario recién creado aparece en el ranking con value 0
-    //  */
-    // it('un usuario nuevo aparece en el ranking con value 0', async () => {
-    //     await setup('Test_Username_Ranking', 'Test_PasswordRanking')
+    // ---------- Ranking con usuario ---------- //
+    
+    /**
+     * Un usuario recién creado aparece en el ranking con value 0
+     */
+     it('un usuario nuevo aparece en el ranking con value 0', async () => {
+        await setup('Test_Username_Ranking', 'Test_Password_Ranking1')
  
-    //     const res = await request(app)
-    //         .get('/ranking/wins')
-    //         .send({
-    //         username: 'Test_Username_Ranking'
-    //          })            
-    //         .set('Accept', 'application/json')
+        const res = await request(app)
+            .get('/ranking/wins')
+            .set('Accept', 'application/json')
  
+        const entry = res.body.ranking.find(e => e.username === 'Test_Username_Ranking')
  
-    //     expect(entry).toBeDefined()
-    //     expect(entry.value).toBe(0)
+        expect(entry).toBeDefined()
+        expect(entry.value).toBe(0)
  
-    //     await takedown('Test_Username_Ranking')
-    // })
+        await takedown('Test_Username_Ranking')
+    })
 
-    //Ranking por victorias 
-
+    // ---------- Ranking por victorias ---------- //
+    
     /**
      * Devuelve el ranking global por victorias correctamente
      */
     it('se obtiene el ranking por victorias', async () => {
-
-        await setup('Test_Username_Ranking_WIns', 'Test_Password_Wins')
-
         const res = await request(app)
             .get('/ranking/wins')
             .set('Accept', 'application/json')
@@ -57,6 +54,7 @@ describe('GET /ranking', () => {
         expect(res.status).toBe(202)
         expect(res.body).toHaveProperty('ranking')
         expect(Array.isArray(res.body.ranking)).toBe(true)
+
     })
  
     /**
@@ -74,9 +72,9 @@ describe('GET /ranking', () => {
     })
  
     /**
-     * Cada entrada del ranking por victorias tiene username y value
+     * Cada entrada del ranking por victorias tiene username, value y percentage
      */
-    it('cada entrada del ranking por victorias tiene username y value', async () => {
+    it('cada entrada del ranking por victorias tiene username, value y percentage', async () => {
         const res = await request(app)
             .get('/ranking/wins')
             .set('Accept', 'application/json')
@@ -84,10 +82,41 @@ describe('GET /ranking', () => {
         for (const entry of res.body.ranking) {
             expect(entry).toHaveProperty('username')
             expect(entry).toHaveProperty('value')
+            expect(entry).toHaveProperty('percentage')
+        }
+    })
+
+
+    /**
+     * El percentage del ranking por victorias está entre 0 y 100
+     */
+    it('el percentage del ranking por victorias está entre 0 y 100', async () => {
+        const res = await request(app)
+            .get('/ranking/wins')
+            .set('Accept', 'application/json')
+ 
+        for (const entry of res.body.ranking) {
+            expect(entry.percentage).toBeGreaterThanOrEqual(0)
+            expect(entry.percentage).toBeLessThanOrEqual(100)
+        }
+    })
+
+    /**
+     * El ranking por victorias ordenado por percentage es el adecuado (de mayor a menor)
+     */
+    it('el ranking por victorias ordenado por percentage es el adecuado (de mayor a menor)', async () => {
+        const res = await request(app)
+            .get('/ranking/wins')
+            .set('Accept', 'application/json')
+ 
+        const sorted = res.body.ranking.slice().sort((a, b) => b.percentage - a.percentage)
+        for (let i = 0; i < sorted.length - 1; i++) {
+            expect(sorted[i].percentage).toBeGreaterThanOrEqual(sorted[i + 1].percentage)
         }
     })
  
-    //Ranking por derrotas 
+    
+    // ---------- Ranking por derrotas  ---------- //
 
     /**
      * Devuelve el ranking global por derrotas correctamente
@@ -115,8 +144,52 @@ describe('GET /ranking', () => {
             expect(ranking[i].value).toBeGreaterThanOrEqual(ranking[i + 1].value)
         }
     })
+
+    /**
+     * Cada entrada del ranking por derrotas tiene username, value y percentage
+     */
+    it('cada entrada del ranking por derrotas tiene username, value y percentage', async () => {
+        const res = await request(app)
+            .get('/ranking/defeats')
+            .set('Accept', 'application/json')
+ 
+        for (const entry of res.body.ranking) {
+            expect(entry).toHaveProperty('username')
+            expect(entry).toHaveProperty('value')
+            expect(entry).toHaveProperty('percentage')
+        }
+    })
+
+    /**
+     * El percentage del ranking por derrotas está entre 0 y 100
+     */
+    it('el percentage del ranking por derrotas está entre 0 y 100', async () => {
+        const res = await request(app)
+            .get('/ranking/defeats')
+            .set('Accept', 'application/json')
+ 
+        for (const entry of res.body.ranking) {
+            expect(entry.percentage).toBeGreaterThanOrEqual(0)
+            expect(entry.percentage).toBeLessThanOrEqual(100)
+        }
+    })
+ 
+    /**
+     * El ranking por derrotas ordenado por percentage es coherente (de mayor a menor)
+     */
+    it('el ranking por derrotas ordenado por percentage es coherente', async () => {
+        const res = await request(app)
+            .get('/ranking/defeats')
+            .set('Accept', 'application/json')
+ 
+        const sorted = res.body.ranking.slice().sort((a, b) => b.percentage - a.percentage)
+        for (let i = 0; i < sorted.length - 1; i++) {
+            expect(sorted[i].percentage).toBeGreaterThanOrEqual(sorted[i + 1].percentage)
+        }
+    })
  
 })
+
  
 /**
  * COMPRUEBA LA FUNCIONALIDAD DE LA BASE DE DATOS
@@ -204,6 +277,37 @@ describe('POST /ranking', () => {
             expect(ranking[i].value).toBeGreaterThanOrEqual(ranking[i + 1].value)
         }
     })
+
+    /**
+     * El percentage del ranking por dificultad está entre 0 y 100
+     */
+    it('el percentage del ranking por dificultad MEDIUM está entre 0 y 100', async () => {
+        const res = await request(app)
+            .post('/ranking/wins/difficulty')
+            .send({ difficulty: 'MEDIUM' })
+            .set('Accept', 'application/json')
+ 
+        for (const entry of res.body.ranking) {
+            expect(entry.percentage).toBeGreaterThanOrEqual(0)
+            expect(entry.percentage).toBeLessThanOrEqual(100)
+        }
+    })
+ 
+    /**
+     * El ranking por dificultad HARD ordenado por percentage es coherente (de mayor a menor)
+     */
+    it('el ranking por dificultad HARD ordenado por percentage es coherente', async () => {
+        const res = await request(app)
+            .post('/ranking/wins/difficulty')
+            .send({ difficulty: 'HARD' })
+            .set('Accept', 'application/json')
+ 
+        const sorted = res.body.ranking.slice().sort((a, b) => b.percentage - a.percentage)
+        for (let i = 0; i < sorted.length - 1; i++) {
+            expect(sorted[i].percentage).toBeGreaterThanOrEqual(sorted[i + 1].percentage)
+        }
+    })
+ 
  
     // Ranking por estrategia 
  
@@ -260,6 +364,36 @@ describe('POST /ranking', () => {
         const ranking = res.body.ranking
         for (let i = 0; i < ranking.length - 1; i++) {
             expect(ranking[i].value).toBeGreaterThanOrEqual(ranking[i + 1].value)
+        }
+    })
+
+    /**
+     * El percentage del ranking por estrategia está entre 0 y 100
+     */
+    it('el percentage del ranking por estrategia MONTE_CARLO está entre 0 y 100', async () => {
+        const res = await request(app)
+            .post('/ranking/wins/strategy')
+            .send({ strategy: 'MONTE_CARLO' })
+            .set('Accept', 'application/json')
+ 
+        for (const entry of res.body.ranking) {
+            expect(entry.percentage).toBeGreaterThanOrEqual(0)
+            expect(entry.percentage).toBeLessThanOrEqual(100)
+        }
+    })
+ 
+    /**
+     * El ranking por estrategia ordenado por percentage es coherente (de mayor a menor)
+     */
+    it('el ranking por estrategia MONTE_CARLO ordenado por percentage es coherente', async () => {
+        const res = await request(app)
+            .post('/ranking/wins/strategy')
+            .send({ strategy: 'MONTE_CARLO' })
+            .set('Accept', 'application/json')
+ 
+        const sorted = res.body.ranking.slice().sort((a, b) => b.percentage - a.percentage)
+        for (let i = 0; i < sorted.length - 1; i++) {
+            expect(sorted[i].percentage).toBeGreaterThanOrEqual(sorted[i + 1].percentage)
         }
     })
 })

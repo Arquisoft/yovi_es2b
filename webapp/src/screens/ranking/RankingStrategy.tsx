@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import type { GetMedal, ObtenerDatosRanking, SortRule } from "./RankingFiltered";
+import type { GetMedal, ObtenerDatosRanking, SortRule, RankingEntryShared } from "./RankingFiltered";
+import { sortData } from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
 type StrategyFilter =
@@ -10,12 +11,7 @@ type StrategyFilter =
     | "MONTE_CARLO_MEJORADO"
     | "MONTE_CARLO_ENDURECIDO";
 
-type RankingEntry = {
-    position: number;
-    username: string;
-    value: number;
-    percentage: string;
-};
+type RankingEntry = RankingEntryShared;
 
 const STRATEGY_LABELS: Record<StrategyFilter, string> = {
     RANDOM:                 "Random",
@@ -25,17 +21,6 @@ const STRATEGY_LABELS: Record<StrategyFilter, string> = {
     MONTE_CARLO_MEJORADO:   "Monte Carlo Mejorado",
     MONTE_CARLO_ENDURECIDO: "Monte Carlo Endurecido",
 };
-
-function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
-    return data.slice().sort((a, b) => {
-        if (sortBy === "percentage") {
-            const diff = Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
-            return diff || b.value - a.value;
-        }
-        const diff = b.value - a.value;
-        return diff || Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
-    });
-}
 
 export default function RankingStrategy({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
 
@@ -84,12 +69,12 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal, sort
                     </tr>
                 </thead>
                 <tbody>
-                    {sortData(data, sortBy).map((entry, idx) => (
+                    {sortData(data, sortBy).map((entry) => (
                         <tr
                             key={entry.username}
                             className={entry.username === username ? "ranking-row--me" : ""}
                         >
-                            <td>{getMedal(idx + 1)}</td>
+                            <td>{getMedal(entry.position)}</td>
                             <td>
                                 {entry.username}
                             </td>

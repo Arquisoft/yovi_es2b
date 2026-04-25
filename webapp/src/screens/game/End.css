@@ -1,26 +1,17 @@
-:root {
-  --end-accent: #023eb6;
-  --end-win-color: #2da44e;
-  --end-lose-color: #cf222e;
-  --end-text: #24292f;
-  --end-muted: #57606a;
-  --end-border: #d0d7de;
-  --end-bg-from: #f6f8fa;
-  --end-bg-to: #eaeef2;
-  --end-card-bg: #ffffff;
-  --end-radius: 16px;
-  --end-shadow: 0 8px 48px rgba(36, 41, 47, 0.14);
-}
+:root,
+
 
 /* Screen */
 .end-screen {
   position: fixed;
   inset: 0;
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  background: linear-gradient(135deg, var(--end-bg-from) 0%, var(--end-bg-to) 100%);
-  overflow: hidden;
+  background: var(--end-bg-to);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem;
   font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
@@ -38,6 +29,7 @@
   flex-direction: column;
   align-items: center;
   gap: 0;
+  margin: 1rem auto;
 
   /* entrada */
   animation: end-card-in 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;

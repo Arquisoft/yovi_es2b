@@ -1,0 +1,233 @@
+.lobby-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-page);
+}
+
+.lobby-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 400px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  box-shadow: 0 2px 12px var(--card-shadow);
+}
+
+.lobby-logo {
+  width: 180px;
+  height: auto;
+  margin-bottom: 0.25rem;
+}
+
+.lobby-card__title {
+  margin: 0 0 0.5rem;
+  font-size: 1.6rem;
+  font-weight: 750;
+  color: var(--text-primary);
+}
+
+.lobby-card__label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  align-self: flex-start;
+}
+
+.lobby-input {
+  width: 100%;
+  padding: 0.6rem 0.9rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--input-bg);
+  color: var(--input-text);
+  border: 1.5px solid var(--input-border);
+  border-radius: 6px;
+  outline: none;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.lobby-input:focus {
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.lobby-difficulty {
+  display: flex;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.lobby-diff-btn {
+  flex: 1;
+  padding: 0.5rem 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  border: 1.5px solid var(--input-border);
+  border-radius: 6px;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.lobby-diff-btn:hover {
+  background: var(--surface-soft-hover);
+}
+
+.lobby-diff-btn--active {
+  background: var(--btn-primary-bg);
+  border-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+/* Código generado */
+.lobby-waiting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.lobby-code {
+  font-size: 2.4rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: var(--btn-primary-bg);
+}
+
+.lobby-waiting__text {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  text-align: center;
+  margin: 0;
+}
+
+/* Botones */
+.lobby-btn {
+  width: 100%;
+  padding: 0.75rem 1.2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+}
+
+.lobby-btn--primary {
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+}
+
+.lobby-btn--primary:hover {
+  background: var(--btn-primary-hover);
+}
+
+.lobby-btn--copy {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  font-size: 1.1rem;
+  width: auto;
+}
+
+.lobby-btn--back {
+  background: transparent;
+  color: var(--btn-primary-bg);
+  border: 1px solid var(--btn-primary-bg);
+}
+
+.lobby-btn--back:hover {
+  background: rgba(2, 62, 182, 0.08);
+}
+
+.lobby-error {
+  color: var(--danger-color);
+  font-size: 0.85rem;
+  margin: 0;
+  align-self: flex-start;
+}
+
+/* ── Switch temporizador (idéntico al de Home) ───────────────────────────── */
+.home-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.home-toggle__text {
+  text-align: left;
+}
+
+.home-toggle__control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.home-toggle__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.home-toggle__slider {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  background: var(--toggle-track-off);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.home-toggle__slider::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease;
+}
+
+.home-toggle__input:checked + .home-toggle__slider {
+  background: var(--toggle-track-on);
+}
+
+.home-toggle__input:checked + .home-toggle__slider::after {
+  transform: translateX(22px);
+}
+
+.home-toggle__input:focus-visible + .home-toggle__slider {
+  outline: 3px solid rgba(2, 62, 182, 0.28);
+  outline-offset: 2px;
+}

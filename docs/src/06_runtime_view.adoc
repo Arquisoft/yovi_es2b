@@ -3,10 +3,30 @@ ifndef::imagesdir[:imagesdir: ../images]
 [[section-runtime-view]]
 == Vista en tiempo de ejecución
 
-Ahora podremos ver diferentes diagramas, que representarán el juego a lo largo de su tiempo de vida para casos concretos en tiempo de ejecución. Más específicamente, se verá la interacción entre usuario y el resto del sistema (interfaces, servicio, base de datos, etc.), y cómo afectará al juego en cada caso.
+Este apartado describe cómo interactúan los componentes del sistema durante su funcionamiento. Para cada flujo se especifican los actores implicados, las llamadas HTTP realizadas y los datos intercambiados.
 
-En un primer punto vemos el flujo de ejecución de una petición. Es decir, una sola interacción entre el usuario y el juego.
-image:gamey_peticion.png[gamey_peticion]
+Los componentes que participan son:
 
-Mediante este otro diagrama veremos los flujos de la petición, pero según su tipo. Aquí se especificarán de manera más clara los endpoint.
-image:gamey_endpoint.png[gamey_endpoint]
+* *Webapp*: frontend React ejecutado en el navegador del usuario.
+* *Users Service*: microservicio Node.js en el puerto 3000.
+* *GameY Service*: microservicio Rust en el puerto 4000.
+* *MongoDB*: base de datos NoSQL de persistencia.
+
+=== Registro e inicio de sesión
+
+El registro crea un nuevo usuario en MongoDB comprobando previamente que el nombre no esté en uso. El inicio de sesión verifica las credenciales y habilita el acceso a las funcionalidades del juego.
+
+image::diagramaRegistroInicioSesion.png[diagramaRegistroInicioSesion]
+
+=== Flujo de una partida completa
+
+Al iniciar una partida, el microservicio de usuarios registra el evento en MongoDB y GameY crea la sesión de juego en memoria. Los movimientos del jugador y las respuestas del bot se resuelven íntegramente en GameY sin acceder a la base de datos. Al terminar, el resultado se persiste en MongoDB y la sesión de juego se elimina de GameY.
+
+image::diagramaFlujoPartida.png[diagramaFlujoPartida]
+
+=== Consulta de estadísticas y ranking
+
+Las estadísticas y el ranking se obtienen directamente de MongoDB a través del microservicio de usuarios. No interviene GameY en este flujo.
+
+
+image::diagramaEstadisticasRanking.png[diagramaEstadisticasRanking]

@@ -7,10 +7,11 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #ffffff;
+  background: var(--bg-page);
   box-sizing: border-box;
   overflow-y: auto;
-  padding-top: 64px;
+  overflow-x: hidden;
+  padding-top: var(--app-header-height);
 }
 
 /* ── Logo ─────────────────────────────────────────────────────────────────── */
@@ -25,7 +26,7 @@
   margin: 0 0 1.5rem;
   font-size: 1.75rem;
   font-weight: 750;
-  color: #191a1c;
+  color: var(--text-primary);
   text-align: center;
 }
 
@@ -89,17 +90,17 @@
   width: 100%;
   max-width: 360px;
   padding: 2rem 2.5rem;
-  background: #ffffff;
-  border: 1px solid #d0d7de;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
   border-radius: 12px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 16px var(--card-shadow);
 }
 
 /* ── Labels dentro de config ──────────────────────────────────────────────── */
 .home-config__label {
   font-size: 0.9rem;
   font-weight: 600;
-  color: #24292f;
+  color: var(--text-primary);
   text-align: center;
   margin: 0;
 }
@@ -108,19 +109,19 @@
 .home-config__select {
   width: 100%;
   padding: 0.65rem 0.9rem;
-  background: #f6f8fa;
-  border: 1px solid #d0d7de;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: 6px;
-  color: #24292f;
+  color: var(--input-text);
   font-size: 1rem;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .home-config__select:focus {
-  border-color: #023eb6;
-  box-shadow: 0 0 0 3px rgba(2, 62, 182, 0.18);
-  background: #ffffff;
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+  background: var(--card-bg);
 }
 
 /* ── Botones de dificultad ────────────────────────────────────────────────── */
@@ -210,17 +211,83 @@
 .home-config__label--section {
   font-size: 1.1rem;
   font-weight: 700;
-  color: #191a1c;
+  color: var(--text-primary);
+}
+
+/* ── Switch temporizador ─────────────────────────────────────────────────── */
+.home-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  width: 100%;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.home-toggle__text {
+  text-align: left;
+}
+
+.home-toggle__control {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.home-toggle__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.home-toggle__slider {
+  position: relative;
+  width: 52px;
+  height: 30px;
+  background: var(--toggle-track-off);
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+
+.home-toggle__slider::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  transition: transform 0.2s ease;
+}
+
+.home-toggle__input:checked + .home-toggle__slider {
+  background: var(--toggle-track-on);
+}
+
+.home-toggle__input:checked + .home-toggle__slider::after {
+  transform: translateX(22px);
+}
+
+.home-toggle__input:focus-visible + .home-toggle__slider {
+  outline: 3px solid rgba(2, 62, 182, 0.28);
+  outline-offset: 2px;
 }
 
 /* ── Input texto (jugador 2) ──────────────────────────────────────────────── */
 .home-config__input {
   width: 100%;
   padding: 0.65rem 0.9rem;
-  background: #ffffff;
-  border: 1px solid #d0d7de;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
   border-radius: 6px;
-  color: #24292f;
+  color: var(--input-text);
   font-size: 1rem;
   outline: none;
   box-sizing: border-box;
@@ -228,18 +295,18 @@
 }
 
 .home-config__input::placeholder {
-  color: #8c959f;
+  color: var(--input-placeholder);
 }
 
 .home-config__input:focus {
-  border-color: #023eb6;
-  box-shadow: 0 0 0 3px rgba(2, 62, 182, 0.18);
+  border-color: var(--input-border-focus);
+  box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 /* ── Separador dentro de config ───────────────────────────────────────────── */
 .home-config__divider {
   border: none;
-  border-top: 1px solid #d0d7de;
+  border-top: 1px solid var(--divider-color);
   margin: 0;
 }
 
@@ -247,8 +314,8 @@
 .home-config__start {
   width: 100%;
   padding: 0.7rem 1.2rem;
-  background: #023eb6;
-  color: #fff;
+  background: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
   font-size: 1rem;
   font-weight: 600;
   border: none;
@@ -259,7 +326,7 @@
 }
 
 .home-config__start:hover {
-  background: #014694;
+  background: var(--btn-primary-hover);
 }
 
 .home-config__start:active {
@@ -304,23 +371,25 @@
 /* ── Cuerpo bajo el header ────────────────────────────────────────────────── */
 .home-body {
   flex: 1;
+  min-height: calc(100vh - var(--app-header-height));
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 2rem;
+  justify-content: flex-start;
+  padding: 1.5rem 2rem 2rem;
   gap: 1.5rem;
   width: 100%;
   box-sizing: border-box;
+  transform: none;
 }
 
-/* ── Dos paneles en columnas ──────────────────────────────────────────────── */
+/* ── Tres paneles en columnas ─────────────────────────────────────────────── */
 .home-panels {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 1.5rem;
   width: 100%;
-  max-width: 860px;
+  max-width: 1200px;
   align-items: stretch;
 }
 
@@ -349,7 +418,35 @@
   width: 100%;
 }
 
+/* ── Panel Online ─────────────────────────────────────────────────────────── */
+.home-config--online {
+  display: flex;
+  flex-direction: column;
+}
+
+.home-config__online-desc {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.home-config__start--secondary {
+  background: transparent;
+  color: #023eb6;
+  border: 1.5px solid #023eb6;
+}
+
+.home-config__start--secondary:hover {
+  background: rgba(2, 62, 182, 0.08);
+}
+
+@media (max-width: 960px) {
+  .home-panels { grid-template-columns: 1fr 1fr; }
+}
+
 @media (max-width: 680px) {
   .home-panels { grid-template-columns: 1fr; }
   .home-header  { padding: 0 1rem; }
+  .home-body { transform: none; }
 }

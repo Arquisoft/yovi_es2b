@@ -3,11 +3,12 @@ import Home from "../game/Home";
 import "./Ranking.css";
 import RankingFiltered from "./RankingFiltered";
 import InitialScreen from "../init/InitialScreen";
-import AppHeader from "../../components/AppHeader";
+import AppHeader from "../../components/header/AppHeader";
 
 type RankingApiEntry = {
     username: string;
     value: number;
+    percentage?: string | number;
 };
 
 export default function Ranking({ username }: Readonly<{ username: string }>) {
@@ -29,11 +30,23 @@ export default function Ranking({ username }: Readonly<{ username: string }>) {
                     throw new Error("Ranking no disponible");
                 }
 
-                const index = (data.ranking as RankingApiEntry[]).findIndex(
-                    (entry) => entry.username === username
-                );
+                const entries = data.ranking as RankingApiEntry[];
+                const positions: number[] = [];
+                for (let i = 0; i < entries.length; i++) {
+                    let pos: number;
+                    if (i === 0) {
+                        pos = 1;
+                    } else {
+                        const prev = entries[i - 1];
+                        const sameValue = entries[i].value === prev.value;
+                        const samePct = String(entries[i].percentage ?? "0").replace("%", "") === String(prev.percentage ?? "0").replace("%", "");
+                        pos = (sameValue && samePct) ? positions[i - 1] : i + 1;
+                    }
+                    positions.push(pos);
+                }
 
-                setPosition(index >= 0 ? index + 1 : null);
+                const index = entries.findIndex((entry) => entry.username === username);
+                setPosition(index >= 0 ? positions[index] : null);
                 setPositionError(false);
             } catch {
                 setPosition(null);

@@ -5,7 +5,7 @@ import GameStatsDifficulty from "./GameStatsDifficuty.tsx";
 import GameStatsStrategy from "./GameStatsStrategy.tsx";
 import InitialScreen from "../init/InitialScreen.tsx";
 import "./GameStats.css";
-import AppHeader from "../../components/AppHeader";
+import AppHeader from "../../components/header/AppHeader.tsx";
 
 export default function GameStatsFiltered( {username} : { username: string }) {
 

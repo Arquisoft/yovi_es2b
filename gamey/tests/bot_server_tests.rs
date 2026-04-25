@@ -2,26 +2,44 @@ use axum::{
     body::Body,
     http::{Request, StatusCode},
 };
-use gamey::{YBotRegistry, YEN, create_default_state, create_router, state::AppState, RandomBot, MoveResponse, ErrorResponse};
+use gamey::{YBotRegistry, YEN, create_default_state, create_test_router, state::AppState, RandomBot, MoveResponse, ErrorResponse};
 use http_body_util::BodyExt;
 use std::sync::Arc;
 use tower::ServiceExt;
 
 /// Helper to create a test app with the default state
 fn test_app() -> axum::Router {
-    create_router(create_default_state())
+    create_test_router(create_default_state())
 }
 
 /// Helper to create a test app with a custom state
 fn test_app_with_state(state: AppState) -> axum::Router {
-    create_router(state)
+    create_test_router(state)
 }
 
-/// Helper to build a JSON body for the /play endpoint
-fn play_body(yen: &YEN, bot_type: Option<&str>) -> String {
-    match bot_type {
-        Some(bot) => serde_json::json!({ "position": yen, "bot_type": bot }).to_string(),
-        None => serde_json::json!({ "position": yen }).to_string(),
+/// Percent-encodes a string for use as a URL query parameter value.
+fn percent_encode(s: &str) -> String {
+    let mut result = String::new();
+    for byte in s.bytes() {
+        match byte {
+            b'A'..=b'Z' | b'a'..=b'z' | b'0'..=b'9' | b'-' | b'_' | b'.' | b'~' => {
+                result.push(byte as char);
+            }
+            _ => {
+                result.push_str(&format!("%{:02X}", byte));
+            }
+        }
+    }
+    result
+}
+
+/// Helper to build a GET URI for the /play endpoint
+fn play_uri(yen: &YEN, bot_id: Option<&str>) -> String {
+    let position = serde_json::to_string(yen).unwrap();
+    let position_encoded = percent_encode(&position);
+    match bot_id {
+        Some(bot) => format!("/play?position={}&bot_id={}", position_encoded, bot),
+        None => format!("/play?position={}", position_encoded),
     }
 }
 
@@ -64,10 +82,9 @@ async fn test_choose_endpoint_with_valid_request() {
     let response = app
         .oneshot(
             Request::builder()
-                .method("POST")
-                .uri("/play")
-                .header("content-type", "application/json")
-                .body(Body::from(play_body(&yen, Some("random_bot"))))
+                .method("GET")
+                .uri(play_uri(&yen, Some("random_bot")))
+                .body(Body::empty())
                 .unwrap(),
         )
         .await
@@ -78,8 +95,8 @@ async fn test_choose_endpoint_with_valid_request() {
     let body = response.into_body().collect().await.unwrap().to_bytes();
     let move_response: MoveResponse = serde_json::from_slice(&body).unwrap();
 
-    assert_eq!(move_response.bot_id, "random_bot");
-    // Coordinates should be valid (we can't predict exactly which one the random bot picks)
+    // Random bot should return a valid move (coordinates)
+    assert!(matches!(move_response, MoveResponse::Move { .. }));
 }
 
 #[tokio::test]
@@ -92,10 +109,9 @@ async fn test_choose_endpoint_with_partially_filled_board() {
     let response = app
         .oneshot(
             Request::builder()
-                .method("POST")
-                .uri("/play")
-                .header("content-type", "application/json")
-                .body(Body::from(play_body(&yen, Some("random_bot"))))
+                .method("GET")
+                .uri(play_uri(&yen, Some("random_bot")))
+                .body(Body::empty())
                 .unwrap(),
         )
         .await
@@ -106,11 +122,11 @@ async fn test_choose_endpoint_with_partially_filled_board() {
     let body = response.into_body().collect().await.unwrap().to_bytes();
     let move_response: MoveResponse = serde_json::from_slice(&body).unwrap();
 
-    assert_eq!(move_response.bot_id, "random_bot");
+    assert!(matches!(move_response, MoveResponse::Move { .. }));
 }
 
 #[tokio::test]
-async fn test_choose_endpoint_without_bot_type_uses_default() {
+async fn test_choose_endpoint_without_bot_id_uses_default() {
     let app = test_app();
 
     let yen = YEN::new(3, 0, vec!['B', 'R'], "./../...".to_string());
@@ -118,10 +134,9 @@ async fn test_choose_endpoint_without_bot_type_uses_default() {
     let response = app
         .oneshot(
             Request::builder()
-                .method("POST")
-                .uri("/play")
-                .header("content-type", "application/json")
-                .body(Body::from(play_body(&yen, None)))
+                .method("GET")
+                .uri(play_uri(&yen, None))
+                .body(Body::empty())
                 .unwrap(),
         )
         .await
@@ -132,7 +147,38 @@ async fn test_choose_endpoint_without_bot_type_uses_default() {
     let body = response.into_body().collect().await.unwrap().to_bytes();
     let move_response: MoveResponse = serde_json::from_slice(&body).unwrap();
 
-    assert_eq!(move_response.bot_id, "montecarlo_endurecido_bot");
+    // Default bot should return a valid move or action
+    assert!(matches!(move_response, MoveResponse::Move { .. }) || matches!(move_response, MoveResponse::Action { .. }));
+}
+
+// ============================================================================
+// Swap action test
+// ============================================================================
+
+#[tokio::test]
+async fn test_choose_endpoint_triggers_swap_action() {
+    let app = test_app();
+
+    // Turno 1, una sola piedra en posición central de tamaño 5 → debe responder con swap
+    let yen = YEN::new(5, 1, vec!['B', 'R'], "..../.../.B./..".to_string());
+
+    let response = app
+        .oneshot(
+            Request::builder()
+                .method("GET")
+                .uri(play_uri(&yen, Some("random_bot")))
+                .body(Body::empty())
+                .unwrap(),
+        )
+        .await
+        .unwrap();
+
+    assert_eq!(response.status(), StatusCode::OK);
+
+    let body = response.into_body().collect().await.unwrap().to_bytes();
+    let move_response: MoveResponse = serde_json::from_slice(&body).unwrap();
+
+    assert_eq!(move_response, MoveResponse::Action { action: "swap".to_string() });
 }
 
 // ============================================================================
@@ -148,10 +194,9 @@ async fn test_choose_endpoint_with_unknown_bot() {
     let response = app
         .oneshot(
             Request::builder()
-                .method("POST")
-                .uri("/play")
-                .header("content-type", "application/json")
-                .body(Body::from(play_body(&yen, Some("unknown_bot"))))
+                .method("GET")
+                .uri(play_uri(&yen, Some("unknown_bot")))
+                .body(Body::empty())
                 .unwrap(),
         )
         .await
@@ -168,44 +213,40 @@ async fn test_choose_endpoint_with_unknown_bot() {
 }
 
 #[tokio::test]
-async fn test_choose_endpoint_with_invalid_json() {
+async fn test_choose_endpoint_with_invalid_position() {
     let app = test_app();
 
     let response = app
         .oneshot(
             Request::builder()
-                .method("POST")
-                .uri("/play")
-                .header("content-type", "application/json")
-                .body(Body::from("{ invalid json }"))
+                .method("GET")
+                .uri("/play?position=invalid_json&bot_id=random_bot")
+                .body(Body::empty())
                 .unwrap(),
         )
         .await
         .unwrap();
 
-    // Invalid JSON should return a 4xx error
+    // Invalid position JSON should return a 4xx error
     assert!(response.status().is_client_error());
 }
 
 #[tokio::test]
-async fn test_choose_endpoint_with_missing_content_type() {
+async fn test_choose_endpoint_with_missing_position() {
     let app = test_app();
-
-    let yen = YEN::new(3, 0, vec!['B', 'R'], "./../...".to_string());
 
     let response = app
         .oneshot(
             Request::builder()
-                .method("POST")
-                .uri("/play")
-                // No content-type header
-                .body(Body::from(play_body(&yen, Some("random_bot"))))
+                .method("GET")
+                .uri("/play?bot_id=random_bot")
+                .body(Body::empty())
                 .unwrap(),
         )
         .await
         .unwrap();
 
-    // Missing content-type should return an error
+    // Missing required position param should return a 4xx error
     assert!(response.status().is_client_error());
 }
 
@@ -225,10 +266,9 @@ async fn test_choose_with_custom_bot_registry() {
     let response = app
         .oneshot(
             Request::builder()
-                .method("POST")
-                .uri("/play")
-                .header("content-type", "application/json")
-                .body(Body::from(play_body(&yen, Some("random_bot"))))
+                .method("GET")
+                .uri(play_uri(&yen, Some("random_bot")))
+                .body(Body::empty())
                 .unwrap(),
         )
         .await
@@ -249,10 +289,9 @@ async fn test_choose_with_empty_bot_registry() {
     let response = app
         .oneshot(
             Request::builder()
-                .method("POST")
-                .uri("/play")
-                .header("content-type", "application/json")
-                .body(Body::from(play_body(&yen, None)))
+                .method("GET")
+                .uri(play_uri(&yen, None))
+                .body(Body::empty())
                 .unwrap(),
         )
         .await
@@ -307,13 +346,13 @@ async fn test_wrong_method_on_status_endpoint() {
 }
 
 #[tokio::test]
-async fn test_get_on_play_endpoint_returns_method_not_allowed() {
+async fn test_post_on_play_endpoint_returns_method_not_allowed() {
     let app = test_app();
 
     let response = app
         .oneshot(
             Request::builder()
-                .method("GET")
+                .method("POST")
                 .uri("/play")
                 .body(Body::empty())
                 .unwrap(),

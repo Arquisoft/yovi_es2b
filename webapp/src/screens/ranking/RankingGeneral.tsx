@@ -1,16 +1,11 @@
 import { useState, useEffect } from "react";
-import type { GetMedal, ObtenerDatosRanking, SortRule} from "./RankingFiltered";
+import type { GetMedal, ObtenerDatosRanking, SortRule, RankingEntryShared } from "./RankingFiltered";
+import { sortData } from "./RankingFiltered";
 import "./RankingFilterTypes.css";
 
 type FilterKey = "victorias" | "derrotas";
 
-// TIPO DE ENTRADA DEL RANKING. 
-type RankingEntry = {
-    position: number; // posición en el ranking 
-    username: string; // nombre del jugador
-    value: number; // número de victorias, derrotas o abandonos según el filtro
-    percentage: string; // porcentaje de victorias, derrotas o abandonos sobre el total de partidas
-};
+type RankingEntry = RankingEntryShared;
 
 const FILTER_LABELS: Record<FilterKey, string> = {
     victorias:   "Victorias",
@@ -26,17 +21,6 @@ const FILTER_COLORS: Record<FilterKey, string> = {
     victorias: "ranking-info--green",
     derrotas: "ranking-info--red",
 };
-
-function sortData(data: RankingEntry[], sortBy: SortRule): RankingEntry[] {
-    return data.slice().sort((a, b) => {
-        if (sortBy === "percentage") {
-            const diff = Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
-            return diff || b.value - a.value;
-        }
-        const diff = b.value - a.value;
-        return diff || Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
-    });
-}
 
 export default function RankingGeneral({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
 
@@ -93,12 +77,12 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal, sortB
                     </tr>
                 </thead>
                 <tbody>
-                    {sortData(data, sortBy).map((entry, idx) => (
+                    {sortData(data, sortBy).map((entry) => (
                         <tr
                             key={entry.username}
                             className={entry.username === username ? "ranking-row--me" : ""}
                         >
-                            <td>{getMedal(idx + 1)}</td>
+                            <td>{getMedal(entry.position)}</td>
                             <td>
                                 {entry.username}
                             </td>

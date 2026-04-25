@@ -28,7 +28,7 @@ try {
   //Crea un endpoint (creando una pagina web), donde /api-docs define el URL, el serve levanta el servidor de documentación (archivos para la web), y setup configura ese servidor (genera la lista de endpoints).
   app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 } catch (e) {
-  console.log(e);
+  console.error(e);
 }
 
 //Se configura el middleware para manejar CORS (Cross-Origin Resource Sharing)
@@ -85,11 +85,9 @@ async function startServer() {
  * Si este archivo se ejecuta directamente (node users.js), entonces se llama a la función startServer para iniciar el servidor.
  * Esta funcion conecta a la base de datos y arranca el servidor en el puerto definido
  */
-if (require.main === module) {
+if (require.main == module) {
   connectDB().then(() => {
-    app.listen(port, () => {
-      console.log(`User Service listening at http://localhost:${port}`);
-    });
+    app.listen(port);
   });
 }
 startServer();

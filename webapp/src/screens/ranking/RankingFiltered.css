@@ -1,14 +1,17 @@
 .ranking-filtered-screen {
     position: fixed;
     inset: 0;
+    width: 100%;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: #ffffff;
+    background: var(--ranking-screen-bg);
     padding: 2rem;
-    padding-top: calc(64px + 2rem);
+    padding-top: calc(var(--app-header-height) + 2rem);
     box-sizing: border-box;
     overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .ranking-filtered-header {
@@ -20,7 +23,7 @@
 .ranking-filtered-title {
     font-size: 2rem;
     font-weight: 750;
-    color: #191a1c;
+    color: var(--ranking-title-color);
     text-align: center;
     margin-bottom: 38px;
 }
@@ -48,8 +51,8 @@
     align-items: center;
     gap: 0;
     margin-bottom: 22px;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
+    background: var(--ranking-controls-bg);
+    border: 1px solid var(--ranking-controls-border);
     border-radius: 14px;
     padding: 12px 16px;
 }
@@ -60,14 +63,14 @@
     gap: 6px;
     padding: 0 0 0 16px;
     border: none;
-    border-left: 1px solid #e5e7eb;
+    border-left: 1px solid var(--ranking-controls-border);
     background: transparent;
 }
 
 .ranking-sort-label {
     font-size: 0.85rem;
     font-weight: 600;
-    color: #4b5563;
+    color: var(--ranking-sort-label);
     margin-right: 4px;
     white-space: nowrap;
 }
@@ -108,8 +111,8 @@
 }
 
 .ranking-toggle-btn--active:hover {
-    background: rgba(2, 62, 182, 0.129);
-    color: #023eb6;
+    background: #01247a;
+    color: #fff;
 }
 
 .ranking-toggle-check {
@@ -121,23 +124,23 @@
     margin: 0;
     font-size: 0.8rem;
     font-weight: 600;
-    border: 1px solid #c7d2fe;
+    border: 1px solid var(--ranking-sort-btn-border);
     border-radius: 7px;
-    background: #eef2ff;
-    color: #1e3a8a;
+    background: var(--ranking-sort-btn-bg);
+    color: var(--ranking-sort-btn-color);
     cursor: pointer;
     transition: all 0.18s;
 }
 
 .ranking-sort-btn:not(.ranking-sort-btn--active):hover {
-    background: #dbeafe;
-    border-color: #93c5fd;
+    background: var(--ranking-sort-btn-hover-bg);
+    border-color: var(--ranking-sort-btn-hover-border);
 }
 
 .ranking-sort-btn--active {
-    background: #1d4ed8;
-    border-color: #2053df;
-    color: #fff;
+    background: var(--ranking-sort-btn-active-bg);
+    border-color: var(--ranking-sort-btn-active-border);
+    color: var(--ranking-sort-btn-active-color);
 }
 
 @media (max-width: 600px) {
@@ -148,7 +151,7 @@
 
     .ranking-sort-menu {
         border-left: none;
-        border-top: 1px solid #e5e7eb;
+        border-top: 1px solid var(--ranking-controls-border);
         padding: 12px 0 0 0;
         justify-content: center;
         width: 100%;
