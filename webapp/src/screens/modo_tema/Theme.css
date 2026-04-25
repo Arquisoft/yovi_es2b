@@ -239,12 +239,12 @@ body,
     --stats-table-head-bg:       #002ca9;
     --stats-table-head-text:     #f8fafc;
     --stats-table-cell-border:   #334155;
-    --stats-row-easy-bg:         #9ed1ff;
-    --stats-row-medium-bg:       #6bb2ff;
-    --stats-row-hard-bg:         #1786ff;
-    --stats-row-strategy-low-bg: #5de386f2;
-    --stats-row-strategy-mid-bg: #ffe10ede;
-    --stats-row-strategy-high-bg: #ff5169c4;
+    --stats-row-easy-bg:         #57748d;
+    --stats-row-medium-bg:       #2a5e96;
+    --stats-row-hard-bg:         #074991;
+    --stats-row-strategy-low-bg: #29663cf2;
+    --stats-row-strategy-mid-bg: #756807de;
+    --stats-row-strategy-high-bg: #581a23c4;
  
     /* Ranking */
     --ranking-screen-bg:           #0f172a;
@@ -408,5 +408,13 @@ body,
     .back-button {
         color: var(--btn-primary-bg);
         border-color: var(--btn-primary-bg);
+    }
+
+    /* ── Stats first columns text ── */
+    .stats-total-table tbody td:first-child,
+    .stats-total-table tbody td:nth-child(2),
+    .stats-strat-table tbody td:first-child,
+    .stats-diff-table tbody td:first-child {
+        color: #ffffff;
     }
 }
