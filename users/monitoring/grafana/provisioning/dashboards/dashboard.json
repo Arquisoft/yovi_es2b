@@ -24,10 +24,10 @@
       "fieldConfig": { "defaults": { "custom": {} }, "overrides": [] },
       "fill": 2,
       "fillGradient": 3,
-      "gridPos": { "h": 10, "w": 8, "x": 0, "y": 1 },
+      "gridPos": { "h": 10, "w": 6, "x": 0, "y": 1 },
       "hiddenSeries": false,
       "id": 10,
-      "legend": { "show": true, "alignAsTable": false },
+      "legend": { "show": true },
       "lines": true,
       "linewidth": 2,
       "nullPointMode": "null",
@@ -75,10 +75,10 @@
       "fieldConfig": { "defaults": { "custom": {} }, "overrides": [] },
       "fill": 1,
       "fillGradient": 0,
-      "gridPos": { "h": 10, "w": 8, "x": 8, "y": 1 },
+      "gridPos": { "h": 10, "w": 6, "x": 6, "y": 1 },
       "hiddenSeries": false,
       "id": 11,
-      "legend": { "show": true, "alignAsTable": false },
+      "legend": { "show": true },
       "lines": true,
       "linewidth": 2,
       "nullPointMode": "null",
@@ -136,10 +136,10 @@
       "fieldConfig": { "defaults": { "custom": {} }, "overrides": [] },
       "fill": 2,
       "fillGradient": 2,
-      "gridPos": { "h": 10, "w": 8, "x": 16, "y": 1 },
+      "gridPos": { "h": 10, "w": 6, "x": 12, "y": 1 },
       "hiddenSeries": false,
       "id": 12,
-      "legend": { "show": true, "alignAsTable": false },
+      "legend": { "show": true },
       "lines": true,
       "linewidth": 2,
       "nullPointMode": "null",
@@ -185,116 +185,6 @@
     },
 
     {
-      "aliasColors": {
-        "Heap usado": "#5794F2",
-        "Heap total": "#B877D9",
-        "RAM (RSS)": "#FF9830"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fieldConfig": { "defaults": { "custom": {} }, "overrides": [] },
-      "fill": 2,
-      "fillGradient": 3,
-      "gridPos": { "h": 10, "w": 8, "x": 0, "y": 11 },
-      "hiddenSeries": false,
-      "id": 13,
-      "legend": { "show": true },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "options": { "dataLinks": [] },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "nodejs_heap_size_used_bytes{job=\"users-service\"}",
-          "legendFormat": "Heap usado",
-          "refId": "A"
-        },
-        {
-          "expr": "nodejs_heap_size_total_bytes{job=\"users-service\"}",
-          "legendFormat": "Heap total",
-          "refId": "B"
-        },
-        {
-          "expr": "process_resident_memory_bytes{job=\"users-service\"}",
-          "legendFormat": "RAM (RSS)",
-          "refId": "C"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Uso de memoria",
-      "tooltip": { "shared": true, "sort": 0, "value_type": "individual" },
-      "type": "graph",
-      "xaxis": { "buckets": null, "mode": "time", "name": null, "show": true, "values": [] },
-      "yaxes": [
-        { "format": "bytes", "label": null, "logBase": 1, "max": null, "min": 0, "show": true },
-        { "format": "short", "label": null, "logBase": 1, "max": null, "min": null, "show": false }
-      ],
-      "yaxis": { "align": false, "alignLevel": null }
-    },
-
-    {
-      "aliasColors": {
-        "CPU %": "#F2495C"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fieldConfig": { "defaults": { "custom": {} }, "overrides": [] },
-      "fill": 2,
-      "fillGradient": 3,
-      "gridPos": { "h": 10, "w": 8, "x": 8, "y": 11 },
-      "hiddenSeries": false,
-      "id": 14,
-      "legend": { "show": true },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "options": { "dataLinks": [] },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "rate(process_cpu_seconds_total{job=\"users-service\"}[1m]) * 100",
-          "legendFormat": "CPU %",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Uso de CPU",
-      "tooltip": { "shared": true, "sort": 0, "value_type": "individual" },
-      "type": "graph",
-      "xaxis": { "buckets": null, "mode": "time", "name": null, "show": true, "values": [] },
-      "yaxes": [
-        { "format": "percent", "label": "%", "logBase": 1, "max": 100, "min": 0, "show": true },
-        { "format": "short", "label": null, "logBase": 1, "max": null, "min": null, "show": false }
-      ],
-      "yaxis": { "align": false, "alignLevel": null }
-    },
-
-    {
       "aliasColors": {},
       "bars": true,
       "dashLength": 10,
@@ -303,7 +193,7 @@
       "fieldConfig": { "defaults": { "custom": {} }, "overrides": [] },
       "fill": 1,
       "fillGradient": 0,
-      "gridPos": { "h": 10, "w": 8, "x": 16, "y": 11 },
+      "gridPos": { "h": 10, "w": 6, "x": 18, "y": 1 },
       "hiddenSeries": false,
       "id": 15,
       "legend": { "show": true, "sort": "current", "sortDesc": true },
@@ -343,14 +233,16 @@
 
     {
       "collapsed": false,
-      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 21 },
-      "id": 2,
-      "title": "Servicio de Juego (Gamey)",
+      "gridPos": { "h": 1, "w": 24, "x": 0, "y": 12 },
+      "id": 3,
+      "title": "Servicio de Salas (Rooms)",
       "type": "row"
     },
 
     {
-      "aliasColors": {},
+      "aliasColors": {
+        "Salas activas": "#73BF69"
+      },
       "bars": false,
       "dashLength": 10,
       "dashes": false,
@@ -358,9 +250,9 @@
       "fieldConfig": { "defaults": { "custom": {} }, "overrides": [] },
       "fill": 2,
       "fillGradient": 3,
-      "gridPos": { "h": 10, "w": 6, "x": 0, "y": 22 },
+      "gridPos": { "h": 10, "w": 12, "x": 0, "y": 13 },
       "hiddenSeries": false,
-      "id": 30,
+      "id": 40,
       "legend": { "show": true },
       "lines": true,
       "linewidth": 2,
@@ -376,8 +268,8 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(axum_http_requests_total{job=\"gamey-service\"}[1m])) * 60",
-          "legendFormat": "peticiones / min",
+          "expr": "rooms_active_total{job=\"rooms-service\"}",
+          "legendFormat": "Salas activas",
           "refId": "A"
         }
       ],
@@ -385,12 +277,12 @@
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Peticiones por minuto",
+      "title": "Salas activas",
       "tooltip": { "shared": true, "sort": 0, "value_type": "individual" },
       "type": "graph",
       "xaxis": { "buckets": null, "mode": "time", "name": null, "show": true, "values": [] },
       "yaxes": [
-        { "format": "short", "label": "peticiones/min", "logBase": 1, "max": null, "min": 0, "show": true },
+        { "format": "short", "label": "salas", "logBase": 1, "max": null, "min": 0, "show": true },
         { "format": "short", "label": null, "logBase": 1, "max": null, "min": null, "show": false }
       ],
       "yaxis": { "align": false, "alignLevel": null }
@@ -398,70 +290,7 @@
 
     {
       "aliasColors": {
-        "p90": "#FF9830",
-        "Mediana": "#73BF69",
-        "Media": "#5794F2"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fieldConfig": { "defaults": { "custom": {} }, "overrides": [] },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": { "h": 10, "w": 6, "x": 6, "y": 22 },
-      "hiddenSeries": false,
-      "id": 31,
-      "legend": { "show": true },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "options": { "dataLinks": [] },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "histogram_quantile(0.9, sum(rate(axum_http_requests_duration_seconds_bucket{job=\"gamey-service\"}[5m])) by (le))",
-          "legendFormat": "p90",
-          "refId": "A"
-        },
-        {
-          "expr": "histogram_quantile(0.5, sum(rate(axum_http_requests_duration_seconds_bucket{job=\"gamey-service\"}[5m])) by (le))",
-          "legendFormat": "Mediana",
-          "refId": "B"
-        },
-        {
-          "expr": "sum(rate(axum_http_requests_duration_seconds_sum{job=\"gamey-service\"}[5m])) / sum(rate(axum_http_requests_duration_seconds_count{job=\"gamey-service\"}[5m]))",
-          "legendFormat": "Media",
-          "refId": "C"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Tiempo de respuesta",
-      "tooltip": { "shared": true, "sort": 0, "value_type": "individual" },
-      "type": "graph",
-      "xaxis": { "buckets": null, "mode": "time", "name": null, "show": true, "values": [] },
-      "yaxes": [
-        { "format": "s", "label": "segundos", "logBase": 1, "max": null, "min": 0, "show": true },
-        { "format": "short", "label": null, "logBase": 1, "max": null, "min": null, "show": false }
-      ],
-      "yaxis": { "align": false, "alignLevel": null }
-    },
-
-    {
-      "aliasColors": {
-        "Correctas (2xx)": "#73BF69",
-        "Error cliente (4xx)": "#FADE2A",
-        "Error servidor (5xx)": "#F2495C"
+        "Salas creadas / min": "#5794F2"
       },
       "bars": false,
       "dashLength": 10,
@@ -469,10 +298,10 @@
       "datasource": null,
       "fieldConfig": { "defaults": { "custom": {} }, "overrides": [] },
       "fill": 2,
-      "fillGradient": 2,
-      "gridPos": { "h": 10, "w": 6, "x": 12, "y": 22 },
+      "fillGradient": 3,
+      "gridPos": { "h": 10, "w": 12, "x": 12, "y": 13 },
       "hiddenSeries": false,
-      "id": 32,
+      "id": 41,
       "legend": { "show": true },
       "lines": true,
       "linewidth": 2,
@@ -488,92 +317,21 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum(rate(axum_http_requests_total{job=\"gamey-service\",status=~\"2.*\"}[1m]))",
-          "legendFormat": "Correctas (2xx)",
+          "expr": "rate(rooms_created_total{job=\"rooms-service\"}[1m]) * 60",
+          "legendFormat": "Salas creadas / min",
           "refId": "A"
-        },
-        {
-          "expr": "sum(rate(axum_http_requests_total{job=\"gamey-service\",status=~\"4.*\"}[1m]))",
-          "legendFormat": "Error cliente (4xx)",
-          "refId": "B"
-        },
-        {
-          "expr": "sum(rate(axum_http_requests_total{job=\"gamey-service\",status=~\"5.*\"}[1m]))",
-          "legendFormat": "Error servidor (5xx)",
-          "refId": "C"
         }
       ],
       "thresholds": [],
       "timeFrom": null,
       "timeRegions": [],
       "timeShift": null,
-      "title": "Respuestas por tipo",
+      "title": "Ritmo de creación de salas",
       "tooltip": { "shared": true, "sort": 0, "value_type": "individual" },
       "type": "graph",
       "xaxis": { "buckets": null, "mode": "time", "name": null, "show": true, "values": [] },
       "yaxes": [
-        { "format": "reqps", "label": "req/s", "logBase": 1, "max": null, "min": 0, "show": true },
-        { "format": "short", "label": null, "logBase": 1, "max": null, "min": null, "show": false }
-      ],
-      "yaxis": { "align": false, "alignLevel": null }
-    },
-
-    {
-      "aliasColors": {
-        "GET": "#5794F2",
-        "POST": "#FF9830",
-        "DELETE": "#F2495C"
-      },
-      "bars": false,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": null,
-      "fieldConfig": { "defaults": { "custom": {} }, "overrides": [] },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": { "h": 10, "w": 6, "x": 18, "y": 22 },
-      "hiddenSeries": false,
-      "id": 33,
-      "legend": { "show": true },
-      "lines": true,
-      "linewidth": 2,
-      "nullPointMode": "null",
-      "options": { "dataLinks": [] },
-      "percentage": false,
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "expr": "sum(rate(axum_http_requests_total{job=\"gamey-service\",method=\"GET\"}[1m]))",
-          "legendFormat": "GET",
-          "refId": "A"
-        },
-        {
-          "expr": "sum(rate(axum_http_requests_total{job=\"gamey-service\",method=\"POST\"}[1m]))",
-          "legendFormat": "POST",
-          "refId": "B"
-        },
-        {
-          "expr": "sum(rate(axum_http_requests_total{job=\"gamey-service\",method=\"DELETE\"}[1m]))",
-          "legendFormat": "DELETE",
-          "refId": "C"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Tipo de operación (método HTTP)",
-      "tooltip": { "shared": true, "sort": 0, "value_type": "individual" },
-      "type": "graph",
-      "xaxis": { "buckets": null, "mode": "time", "name": null, "show": true, "values": [] },
-      "yaxes": [
-        { "format": "reqps", "label": "req/s", "logBase": 1, "max": null, "min": 0, "show": true },
+        { "format": "short", "label": "salas/min", "logBase": 1, "max": null, "min": 0, "show": true },
         { "format": "short", "label": null, "logBase": 1, "max": null, "min": null, "show": false }
       ],
       "yaxis": { "align": false, "alignLevel": null }
@@ -592,5 +350,5 @@
   "timezone": "",
   "title": "Monitorización del Sistema",
   "uid": "1DYaynomMk",
-  "version": 6
+  "version": 7
 }
