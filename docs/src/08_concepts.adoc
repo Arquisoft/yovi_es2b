@@ -3,7 +3,7 @@ ifndef::imagesdir[:imagesdir: ../images]
 [[section-concepts]]
 == Conceptos transversales
 
-En este apartado se explicarán distintos aspectos de la gestión del proyecto, centrándose en los niveles de prioridad para abordar las tareas, los patrones de diseño seguidos, la testeabilidad y seguridad del proyecto y las librerías usadas. Además, mencionaremos algunos aspectos extras del desarrollo si se acaban implementando.. 
+En este apartado se explicarán distintos aspectos de la gestión del proyecto, centrándose en los niveles de prioridad para abordar las tareas, los patrones de diseño seguidos, la testeabilidad y seguridad del proyecto y las librerías usadas. Además, mencionaremos algunos aspectos extras del desarrollo si se acaban implementando..
 
 Por tanto, se recogen decisiones y criterios comunes que atraviesan todo el sistema sin describir una funcionalidad concreta, sino reglas y prácticas que se aplican en frontend, backend, servicio de usuarios y documentación para mantener el proyecto coherente y mantenible.
 
@@ -61,9 +61,37 @@ Las reglas principales que hemos seguido en la elaboración del proyecto son:
 
 En el caso de autenticación y operaciones de usuario, la aplicación debe asegurar que cada acción se asocia al usuario correcto y que no se pueden reutilizar datos de sesión de forma indebida.
 
+=== Monitorización
+
+El sistema incorpora una pila de monitorización basada en **Prometheus** y **Grafana** que permite observar el estado de los microservicios en tiempo real sin necesidad de acceder a los logs directamente.
+
+==== Recopilación de métricas con Prometheus
+
+Prometheus recopila métricas de los microservicios backend mediante scraping del endpoint `/metrics` de cada uno, con un intervalo de 5 segundos. Los servicios monitorizados son:
+
+* **users** (puerto 3000) — métricas HTTP del servicio de usuarios.
+* **rooms** (puerto 3001) — métricas del servicio de salas multijugador, incluyendo el número de salas creadas y el número de salas activas en cada momento.
+
+La configuración de Prometheus está definida en `users/monitoring/prometheus/prometheus.yml` y se monta en el contenedor mediante un volumen Docker.
+
+==== Visualización con Grafana
+
+Grafana se conecta a Prometheus como fuente de datos y expone un dashboard predefinido llamado **Monitorización del Sistema**, provisionado automáticamente al arrancar el contenedor a partir de los ficheros en `users/monitoring/grafana/provisioning/`.
+
+El dashboard se organiza en dos secciones:
+
+* **Servicio de Usuarios:** muestra peticiones por minuto, tiempo de respuesta, distribución de respuestas por tipo de código HTTP y tráfico desglosado por endpoint.
+* **Servicio de Salas (Rooms):** muestra el ritmo de creación de salas a lo largo del tiempo y el número de salas activas en cada instante.
+
+Grafana es accesible en el puerto 9091 tanto en local como en producción.
+
+En la imagen se puede observar el dashboard en funcionamiento durante una sesión de prueba. En la sección de usuarios se aprecia el pico de peticiones por minuto, los tiempos de respuesta (p90, mediana y media), la distribución de respuestas correctas (2xx) frente a errores de cliente (4xx) y el tráfico desglosado por endpoint. En la sección de salas se puede ver cómo el número de salas activas sube y baja conforme los jugadores crean y terminan partidas, y el ritmo de creación de salas a lo largo del tiempo.
+
+image::grafana.png[dashboard grafana monitorización del sistema]
+
 === Librerías y tecnologías utilizadas
 
-El proyecto usa librerías y herramientas distintas según la parte del sistema. Las más destacadas son las siguientes: 
+El proyecto usa librerías y herramientas distintas según la parte del sistema. Las más destacadas son las siguientes:
 
 * **React:** para construir la interfaz del webapp con componentes reutilizables.
 * **Vite:** para el arranque y empaquetado del frontend.
@@ -72,6 +100,8 @@ El proyecto usa librerías y herramientas distintas según la parte del sistema.
 * **Rust:** para la lógica principal del juego, priorizando rendimiento y seguridad.
 * **Docker:** para facilitar ejecución y despliegue en entornos homogéneos.
 * **OpenAPI:** para documentar los contratos de los servicios.
+* **Prometheus:** para la recopilación de métricas de los microservicios mediante scraping periódico.
+* **Grafana:** para la visualización de métricas en dashboards provisionados automáticamente.
 
 El uso de estas herramientas busca lograr tanto simplicidad de desarrollo (teniendo en cuenta nuestra falta de experiencia en Rust, Node.js y React) como facilidad de pruebas y mantenimiento a medio plazo.
 
@@ -84,5 +114,6 @@ Además de lo estrictamente funcional, se han desarrollado otros aspectos que de
 * **Mantenibilidad visual:** la interfaz intenta reutilizar patrones de diseño comunes para que nuevas pantallas se integren sin esfuerzo: buscamos de nuevo la simplicidad en una interfaz intuitiva y familiar.
 * **Posibilidad para crecimiento:** la estructura del proyecto permite añadir nuevas pantallas, modos de juego o métricas sin rehacer la base, y nos permite añadir los aspectos extra del proyecto.
 * **Detectabilidad de fallos:** la separación entre servicios y la personalización de errores facilita localizar errores y analizar fallos por capas.
+* **Observabilidad:** la integración de Prometheus y Grafana permite detectar anomalías de rendimiento y comportamiento sin necesidad de intervención manual sobre los servidores.
 
 Si en futuras ampliaciones se incorporan nuevas funcionalidades, estos criterios servirán como referencia para mantener la misma línea de calidad.
