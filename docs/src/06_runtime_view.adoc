@@ -9,6 +9,7 @@ Los componentes que participan son:
 
 * *Webapp*: frontend React ejecutado en el navegador del usuario.
 * *Users Service*: microservicio Node.js en el puerto 3000.
+* *Rooms Service*: microservicio Node.js en el puerto 3001, comunicación via WebSocket (Socket.io).
 * *GameY Service*: microservicio Rust en el puerto 4000.
 * *MongoDB*: base de datos NoSQL de persistencia.
 
@@ -23,6 +24,12 @@ image::diagramaRegistroInicioSesion.png[diagramaRegistroInicioSesion]
 Al iniciar una partida, el microservicio de usuarios registra el evento en MongoDB y GameY crea la sesión de juego en memoria. Los movimientos del jugador y las respuestas del bot se resuelven íntegramente en GameY sin acceder a la base de datos. Al terminar, el resultado se persiste en MongoDB y la sesión de juego se elimina de GameY.
 
 image::diagramaFlujoPartida.png[diagramaFlujoPartida]
+
+=== Flujo de una partida multijugador
+
+Para iniciar una partida multijugador, el primer jugador crea una sala a través del Rooms Service, que solicita a GameY la creación de una nueva partida y devuelve un código de sala al jugador. El segundo jugador se une con ese código y, en ese momento, el servidor notifica a ambos que la partida puede comenzar. Cada movimiento es recibido por Rooms, retransmitido a GameY y el nuevo estado del tablero se reenvía a los dos jugadores. Si un jugador abandona o pierde la conexión, el otro recibe una notificación inmediata.
+
+image::diagramaFlujoPartidaMultijugador.png[diagramaFlujoPartidaMultijugador]
 
 === Consulta de estadísticas y ranking
 
