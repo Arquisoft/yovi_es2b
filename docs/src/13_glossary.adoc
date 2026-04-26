@@ -9,10 +9,20 @@ Se explicarán varios conceptos necesarios para comprender la documentación y e
 |===
 |Concepto|Definición
 |**Algoritmo de Monte Carlo**|Algoritmo complejo usado en los bots de nuestra aplicación que evalúa las decisiones (o movimientos) del usuario mediante expresiones matemáticas complejas y costosas para elegir sus movimientos y poder ganar.
+|**BDD (Behavior Driven Development)**|Metodología de desarrollo orientada al comportamiento que define los requisitos del sistema como escenarios legibles en lenguaje natural mediante el formato Gherkin. Es la base de los tests E2E con Cucumber y Playwright.
+|**Bot**|Oponente artificial controlado por el motor de juego (GameY). Implementa distintas estrategias y niveles de dificultad para simular el comportamiento de un jugador humano.
+|**Docker Compose**|Herramienta que permite definir y orquestar múltiples contenedores Docker a partir de un único fichero de configuración (`docker-compose.yml`), facilitando el arranque coordinado de todos los servicios del sistema.
 |**Entorno de ejecución (NodeJS)**|Es una plataforma que facilita la ejecución de programas directamente desde el sistema operativo, y que funcione de forma escalable y concurrente.
+|**Grafana**|Plataforma de visualización de métricas que se conecta a Prometheus como fuente de datos y muestra la información en dashboards configurables en tiempo real.
 |**Microservicio**|Parte de una aplicación (servicio) que maneja esa parte y se comunica con el resto para crear un producto mayor sin necesidad de que esté entero en un solo lenguaje.
-|**Pruebas de carga**|Pruebas no funcionales para evaluar el comportamiento de la app con una mayor cantidad de usuarios o transacciones actuando al mismo tiempo. Pretenden verificar el rendimento en condiciones normales (tiempos de respuesta, recursos, ...)
-|**Test E2E**|Tipo de test de extremo a extremo, que pretende abarcar todos los procesos de la aplicación, considerando todos los componentes e iteracciones. Por tanto, son las pruebas que verifican que todo el flujo de la app sea correcto
+|**Notación YEN**|Formato propio del proyecto para representar de forma compacta el estado del tablero de juego en un instante dado, incluyendo el tamaño del tablero, el turno actual y la disposición de las piezas de cada jugador.
+|**Prometheus**|Sistema de monitorización y alertas de código abierto que recopila métricas de los microservicios mediante scraping periódico del endpoint `/metrics` de cada servicio.
+|**Pruebas de carga**|Pruebas no funcionales para evaluar el comportamiento de la app con una mayor cantidad de usuarios o transacciones actuando al mismo tiempo. Pretenden verificar el rendimiento en condiciones normales (tiempos de respuesta, recursos, ...)
+|**Sala (Room)**|Espacio virtual que agrupa a dos jugadores para disputar una partida multijugador. Cada sala se identifica con un código único de seis caracteres y su estado se mantiene en memoria durante el transcurso de la partida.
+|**Scraping**|Proceso mediante el cual Prometheus consulta periódicamente el endpoint `/metrics` de cada microservicio para recopilar sus métricas de rendimiento y estado.
+|**Socket.io**|Librería JavaScript que implementa comunicación en tiempo real sobre WebSocket, utilizada por el microservicio Rooms para gestionar la comunicación bidireccional con el frontend durante las partidas multijugador.
+|**Test E2E**|Tipo de test de extremo a extremo, que pretende abarcar todos los procesos de la aplicación, considerando todos los componentes e iteraciones. Por tanto, son las pruebas que verifican que todo el flujo de la app sea correcto.
 |**WebApp**|Aplicación ejecutada desde algún navegador.
+|**WebSocket**|Protocolo de comunicación que establece un canal bidireccional y persistente entre cliente y servidor sobre una única conexión TCP, permitiendo el intercambio de mensajes en tiempo real sin necesidad de realizar peticiones HTTP repetidas.
 
 |===

@@ -3,6 +3,7 @@
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
+const client = require('prom-client');
 const roomManager = require('./room-manager');
 
 const app = express();
@@ -13,7 +14,26 @@ const io = new Server(server, {
 
 const GAMEY_URL = process.env.GAMEY_URL || 'http://localhost:4000';
 
+const register = new client.Registry();
+
+const roomsCreatedTotal = new client.Counter({
+  name: 'rooms_created_total',
+  help: 'Total number of rooms created since startup',
+  registers: [register],
+});
+
+const roomsActiveTotal = new client.Gauge({
+  name: 'rooms_active_total',
+  help: 'Number of active rooms at this moment',
+  registers: [register],
+  collect() { this.set(roomManager.rooms.size); },
+});
+
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+app.get('/metrics', async (_req, res) => {
+  res.set('Content-Type', register.contentType);
+  res.end(await register.metrics());
+});
 
 function difficultyToSize(difficulty) {
   const map = { EASY: 8, MEDIUM: 10, HARD: 12 };
@@ -57,6 +77,7 @@ io.on('connection', (socket) => {
       const gameId = await createGameOnGameY(boardSize);
       const room = roomManager.createRoom(socket.id, username, difficulty, timerEnabled);
       room.gameId = gameId;
+      roomsCreatedTotal.inc();
       socket.join(room.code);
       socket.emit('room-created', {
         code: room.code,

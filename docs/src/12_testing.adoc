@@ -32,7 +32,7 @@ image::test_users_endmatch.png[test de endmatch de users]
 
 * **users-service-statistics: ** Que prueba que la recuperación de estadísticas, tanto las totales como las parciales, funciona de forma correcta, o lanza error cuando debería.
 
-image::test_users_statistics.png[test de statistics de users]
+image::test_users_stats.PNG[test de statistics de users]
 
 * **users-service-ranking: ** Que prueba que la correcta creación y distribución del ranking de usuarios, tanto el ranking personal como el general por partidas, dificultad y estrategia. Asegura que es capaz de ordenar por el número o por el porcentaje adecuado, y responde correctamente en caso de error.
 
@@ -55,7 +55,7 @@ image::test_users_final.png[resultado test final de users]
 Estos son los considerados test de frontend, y serán ejecutados después de cada actualización en la interfaz del sistema. Para este caso, se prueba la capacidad de nuestras pantallas de responder adecuadamente a las interacciones con el usuario, navegando como es esperado. No tiene en cuenta aspectos relacionados con la base de datos o el backend, sino que solo comprueba aspectos de estilos, organización, interacción, ...
 Para estas pruebas, separamos los test por funcionalidad en clases **Webapp-[Pantalla].test.tsx**, haciendo que en cada una pruebe test con casos específicos de cada tipo.
 
-* **WebApp-HomeScreen.test: ** Prueba que la pantalla inicial de bienvenida sea la adecuada y tenga el testo que esperamos, mostrando un panel para jugar contra la máquina y otro para jugar contra otro usuario. Además, se asegura que todos los botones funcionen según lo esperado, navegando, seleccionando o mostrando mensaje de error cuando sea necesario. 
+* **WebApp-HomeScreen.test: ** Prueba que la pantalla inicial de bienvenida sea la adecuada y tenga el testo que esperamos, mostrando un panel para jugar contra la máquina y otro para jugar contra otro usuario. Además, se asegura que todos los botones funcionen según lo esperado, navegando, seleccionando o mostrando mensaje de error cuando sea necesario.
 * **WebApp-Appheader.test: ** Prueba que el encabezado de la aplicación se renderice correctamente (logo y botón de menú), que el menú desplegable se abra y cierre como corresponde, que las opciones internas respondan bien (tema, cierre de sesión) y que el header no aparezca en pantallas donde no debe mostrarse.
 * **WebApp-Board.test: ** Prueba la lógica visual y de interacción del tablero, validando carga inicial, número de celdas según dificultad, bloqueos de interacción, gestión de turnos y actualización del estado del juego tras realizar movimientos.
 * **WebApp-GameScreen.test: ** Prueba que la pantalla del juego responda como es debido, mostrando la información de la partida, representado correctamente cuando este elije una casilla, navegando como se espera si el usuario decide terminar la partida, ...
@@ -67,6 +67,45 @@ Para estas pruebas, separamos los test por funcionalidad en clases **Webapp-[Pan
 * **WebApp-RankingScreen.test: ** Prueba que las pantallas de ranking muestran la información de la manera esperada en el caso de el ranking personal y de los rankings filtrados, respetando los estilos y el correcto funcionamiento de cada botón para la representación de los datos y para la navegación.
 * **WebApp-Timer.test: ** Prueba el componente de temporizador, comprobando la representación del tiempo y su actualización en función del estado de la partida y del paso del tiempo.
 * **WebApp-Theme.test: ** Prueba el contexto de tema (claro/oscuro), su alternancia y la persistencia de preferencias para asegurar un comportamiento consistente en toda la interfaz.
+
+=== Test del microservicio GameY
+
+El microservicio GameY, al estar implementado en Rust, utiliza el framework de testing nativo del lenguaje (`cargo test`). Los tests están organizados en seis ficheros dentro de la carpeta `/gamey/tests/`, cada uno orientado a una capa o responsabilidad distinta del sistema.
+
+* **core_tests.rs — Tests del núcleo del juego:** prueban directamente la lógica principal a través de la API pública de la librería. Cubren la inicialización del tablero, el flujo de movimientos y alternancia de turnos, las condiciones de victoria (conectar los tres lados), el manejo de errores como celdas ocupadas o turno incorrecto, las acciones especiales de resignación y swap, la serialización y deserialización en notación YEN, el guardado y carga de partidas en ficheros `.yen`, el sistema de coordenadas tridimensionales y el renderizado del tablero en texto.
+
+* **bot_unit_tests.rs — Tests unitarios de los bots:** verifican el comportamiento de cada estrategia de bot de forma aislada. Para cada bot disponible se comprueba que su nombre es el esperado, que devuelve un movimiento válido cuando hay celdas libres, que las coordenadas elegidas corresponden a una celda existente, y que devuelve `None` cuando el tablero está completo.
+
+* **game_service_tests.rs — Tests de la capa de servicio:** prueban el ciclo de vida de las partidas en memoria. Incluyen el flujo básico de crear, mover, listar, deshacer y eliminar una partida, la consulta del estado tras una resignación, y el manejo de errores como partida no encontrada, celda ocupada o deshacer sin historial suficiente.
+
+* **game_controller_tests.rs — Tests de los controladores HTTP:** prueban los endpoints REST del servidor Axum usando un router de test sin necesidad de levantar un servidor real. Verifican el flujo completo: creación de partida, listado, consulta de estado, realización de movimiento, deshacer y eliminación.
+
+* **bot_server_tests.rs — Tests de integración del servidor de bots:** prueban el servidor HTTP dedicado al cálculo de movimientos, comprobando los endpoints disponibles, el manejo de parámetros de posición codificados en la URL y la correcta devolución de movimientos.
+
+* **cli_tests.rs — Tests de la interfaz de línea de comandos:** prueban el parsing de comandos de la CLI del motor de juego, verificando que índices válidos, índices fuera de rango, comandos especiales y entradas desconocidas producen el resultado correcto.
+
+image::testGamey.png[resultado tests gamey]
+
+=== Tests End-to-End (E2E)
+
+Los tests E2E validan el comportamiento de la aplicación completa desde el punto de vista del usuario, simulando interacciones reales en el navegador. Se utilizan **Playwright** para la automatización del navegador y **Cucumber** para definir los escenarios en formato Gherkin (BDD). Los tests están organizados en tres ficheros de features dentro de `/webapp/test/e2e/features/`.
+
+* **register-logout-login.feature — Registro, cierre de sesión e inicio de sesión:** valida el flujo básico de autenticación de un usuario nuevo de principio a fin. Un usuario se registra con credenciales nuevas, comprueba que llega a la pantalla principal, cierra sesión, vuelve a la pantalla de inicio de sesión e inicia sesión con las mismas credenciales, verificando que regresa a la pantalla principal.
+
+* **logout-stats.feature — Cierre de sesión desde las pantallas de estadísticas:** verifica que el botón de cierre de sesión funciona correctamente desde cualquiera de las pantallas de estadísticas. Cubre tres escenarios: cierre desde el menú principal de estadísticas, desde la pantalla de todas las estadísticas y desde la pantalla de estadísticas filtradas. En los tres casos se verifica que el usuario es redirigido a la página de inicio de sesión.
+
+* **password-errors.feature — Validación de contraseña en el registro:** comprueba que el formulario de registro muestra el mensaje de error correcto cuando la contraseña no cumple los requisitos. Utiliza un `Scenario Outline` con una tabla de ejemplos para cubrir los cuatro casos de validación:
+
+[options="header",cols="1,2"]
+|===
+|Contraseña introducida|Mensaje de error esperado
+|`abc`|La contraseña debe tener 5 o más caracteres.
+|`abcde`|La contraseña debe contener al menos una mayúscula.
+|`ABCDE`|La contraseña debe contener al menos una minúscula.
+|`abcDE`|La contraseña debe contener al menos un número.
+|===
+
+image::teste2e.png[resultado tests e2e]
 
 === Test de carga
 

@@ -20,6 +20,8 @@ Se han usado muchas otras tecnologías, entre ellas:
 * **CSS:** Lenguaje de programación en el que se definirán los estilos y el aspecto de la interfaz en un documento.
 * **GitHub:** Servicio web en la nube donde se subirán las distintas versiones, cambios, reuniones, decisiones, … en torno a la aplicación.
 * **Gatling:** Software que se usará para las pruebas de carga del juego.
+* **Prometheus:** Sistema de monitorización y alertas que recopila métricas de los microservicios en intervalos regulares.
+* **Grafana:** Plataforma de visualización que conecta con Prometheus para mostrar las métricas del sistema en dashboards en tiempo real.
 
 === Decisiones sobre los objetivos de calidad
 
