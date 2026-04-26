@@ -1,0 +1,30 @@
+export const es = {
+  common: {
+    language: "Idioma",
+    spanish: "🇪🇸 Español",
+    english: "🇬🇧 English",
+  },
+  header: {
+    menu: "MENU",
+    menuAria: "Menú de opciones",
+    closeMenuAria: "Cerrar menú",
+    darkMode: "🌙 Modo oscuro",
+    lightMode: "☀️ Modo claro",
+    logout: "Cerrar sesión",
+  },
+  initial: {
+    welcome: "Bienvenido de nuevo, inicia sesión aquí",
+    subtitle: "Escriba su usuario y contraseña para iniciar sesión.",
+    usernameLabel: "Usuario",
+    passwordLabel: "Contraseña",
+    loginButton: "Iniciar sesión",
+    loadingButton: "Cargando usuario...",
+    signupPrompt: "¿No tienes usuario? Haz click aquí para crear uno.",
+    signupButton: "Regístrate",
+    logoAlt: "Logo YOVI",
+    errorUsername: "Escriba el usuario.",
+    errorPassword: "Escriba la contraseña.",
+    serverError: "Error del servidor.",
+    networkError: "Error de red.",
+  },
+};
