@@ -17,13 +17,13 @@ A alto nivel, el sistema está compuesto por cinco bloques principales, uno de f
 * Microservicio Rooms
 * Base de datos
 
-Estos componentes interactúan entre sí mediante API REST (modelo, servicio y controlers) y mensajes en formato JSON.
+Estos componentes interactúan entre sí mediante API REST y mensajes en formato JSON, a excepción del microservicio Rooms, con el que el frontend se comunica a través de WebSocket (Socket.io) para permitir la interacción en tiempo real durante las partidas multijugador.
 
 image::app_static.png[aplicacion estatica sencilla]
 
 ==== Frontend Web: WEBAPP
 
-El frontend es una aplicación web desarrollada en React y que es ejecutada en el navegador del usuario. Divide el códgio en screens y componentes, que interactúan directamente con los controllers del juego
+El frontend es una aplicación web desarrollada en React y que es ejecutada en el navegador del usuario. Divide el código en screens y componentes, que interactúan directamente con los controllers del juego.
 
 Sus responsabilidades principales son:
 
@@ -52,7 +52,7 @@ Entre sus responsabilidades se incluyen:
 ==== Microservicio GameY
 
 El microservicio GameY está desarrollado en Rust y contiene toda la lógica principal del juego.
-De nuevo gracias a la API REST usada el frontend envia el estado actual de una partida y recibe como respuesta el nuevo estado del tablero o el siguiente movimiento calculado. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.
+De nuevo gracias a la API REST usada el frontend envía el estado actual de una partida y recibe como respuesta el nuevo estado del tablero o el siguiente movimiento calculado. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.
 
 
 Sus responsabilidades son:
@@ -100,14 +100,15 @@ El objetivo de este nivel es mostrar cómo se separan las distintas capas de la 
 
 ==== Frontend
 
-El frontend actúa principalmente como una capa de presentación, delegando la lógica de negocio y la validación de las reglas del juego en los servicios backend. 
+El frontend actúa principalmente como una capa de presentación, delegando la lógica de negocio y la validación de las reglas del juego en los servicios backend.
 Así, lograr una arquitectura clara y evitar que el cliente deba controlar los aspectos críticos es posible.
 
 El frontend puede dividirse internamente en varios módulos:
 
 * *Interfaz de usuario:* encargados de representar el tablero, el menú y los elementos visuales de la aplicación.
 * *Gestión de estado:* control del estado actual de la partida y de la sesión del usuario.
-* *Peticiones del cliente:* módulo encargado de realizar las peticiones HTTP a los microservicios backend, comunicandose con los controllers.
+* *Peticiones del cliente:* módulo encargado de realizar las peticiones HTTP a los microservicios User y GameY.
+* *Cliente WebSocket:* módulo encargado de mantener la conexión con el microservicio Rooms durante las partidas multijugador, emitiendo y recibiendo eventos en tiempo real.
 
 ==== Microservicio User
 
@@ -140,15 +141,15 @@ Esta organización permite modificar o añadir nuevas estrategias de juego sin a
 
 Las principales ventajas que proporciona la estructura elegida son:
 
-* *Separación clara de responsabilidades* - como cada componente tiene una responsabilidad bien definida, se facilita el mantenimiento del sistema y reduce el acoplamiento entre componentes..
-* *Escalabilidad*, permitiendo desplegar y escalar cada microservicio de manera independiente, lo que permitira por ejemplo crear varias instancias del juego
+* *Separación clara de responsabilidades* - como cada componente tiene una responsabilidad bien definida, se facilita el mantenimiento del sistema y reduce el acoplamiento entre componentes.
+* *Escalabilidad*, permitiendo desplegar y escalar cada microservicio de manera independiente, lo que permitirá por ejemplo crear varias instancias del juego.
 * *Flexibilidad tecnológica*, ya que cada servicio puede desarrollarse con el lenguaje más adecuado según sus necesidades.
 * *Extensibilidad*, permitiendo añadir nuevas funcionalidades o variantes del juego sin rediseñar el sistema completo.
-* *Despliegue reproducible* , ya que el uso de contenedores Docker permite ejecutar el sistema en diferentes entornos de forma consistente.
+* *Despliegue reproducible*, ya que el uso de contenedores Docker permite ejecutar el sistema en diferentes entornos de forma consistente.
 
 
 === Nivel 3: Interfaces entre componentes
-Los  componentes del sistema se comunican entre sí mediante las interfaces basadas en servicios web y mensajes, que también contribuyen al desacoplamiento y la separación de responabilidades.
+Los componentes del sistema se comunican entre sí mediante las interfaces basadas en servicios web y mensajes, que también contribuyen al desacoplamiento y la separación de responsabilidades.
 
 Las principales interfaces del sistema son las siguientes.
 
@@ -186,9 +187,17 @@ El frontend se comunica con el microservicio Rooms a través de WebSocket (Socke
 * `timer-expired` – notifica que el temporizador del turno activo ha expirado. El servidor emite `turn-skipped` indicando el siguiente jugador.
 * `abandon-game` – un jugador abandona la partida. El servidor emite `player-disconnected` y elimina la sala.
 
+==== Interfaz Rooms – Microservicio GameY
+
+El microservicio Rooms se comunica con GameY mediante HTTP REST para delegar en él toda la lógica de juego. Esta interfaz es interna entre microservicios y no es accesible directamente desde el frontend. Las operaciones principales son:
+
+* POST /v1/games – crea una nueva partida en GameY con el tamaño de tablero correspondiente a la dificultad elegida. Devuelve el identificador de partida que Rooms asocia a la sala.
+* POST /v1/games/{gameId}/move – envía el movimiento de un jugador (coordenadas y índice de jugador) y recibe el nuevo estado del tablero y el estado de la partida.
+* POST /v1/games/{gameId}/undo – deshace el último movimiento registrado en GameY. Rooms lo invoca dos veces seguidas para que ambos jugadores recuperen su turno anterior.
+
 ==== Interfaz Frontend – Microservicio GameY
 
-El frontend interactúa con el microservicio GameY para gestionar el desarrollo de las partidas gracias a la API REST . La información de la partida se representa mediante la notación YEN, que describe el tamaño del tablero, el turno actual y la disposición de las piezas.
+El frontend interactúa con el microservicio GameY para gestionar el desarrollo de las partidas en modo un jugador gracias a la API REST. La información de la partida se representa mediante la notación YEN, que describe el tamaño del tablero, el turno actual y la disposición de las piezas. En el modo multijugador, el frontend no se comunica directamente con GameY: es el microservicio Rooms quien actúa como intermediario.
 
 ==== Interfaz de acceso a datos
 
