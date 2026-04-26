@@ -314,7 +314,7 @@ body,
     .stats-total-table tbody td:nth-child(2),
     .stats-strat-table tbody td:first-child,
     .stats-diff-table tbody td:first-child {
-        color: var(--stats-types-color);
+        color: #ffffff;
     }
  
     /* ── Ranking ── */
@@ -408,13 +408,5 @@ body,
     .back-button {
         color: var(--btn-primary-bg);
         border-color: var(--btn-primary-bg);
-    }
-
-    /* ── Stats first columns text ── */
-    .stats-total-table tbody td:first-child,
-    .stats-total-table tbody td:nth-child(2),
-    .stats-strat-table tbody td:first-child,
-    .stats-diff-table tbody td:first-child {
-        color: #ffffff;
     }
 }
