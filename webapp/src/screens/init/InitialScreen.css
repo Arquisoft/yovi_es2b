@@ -237,3 +237,26 @@ input:-webkit-autofill:focus { /* para autocompletados */
 .signup button:hover {
   background: var(--btn-secondary-hover);
 }
+
+/* ── Sección idioma ─────────────────────────────────────────────────────── */
+.language-select {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.language-select label {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.language-select select {
+  padding: 0.55rem 0.75rem;
+  border: 1px solid var(--input-border);
+  border-radius: 6px;
+  background: var(--input-bg);
+  color: var(--input-text);
+}
