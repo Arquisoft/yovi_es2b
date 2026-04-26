@@ -14,6 +14,7 @@ El sistema se despliega en una máquina virtual en la nube accesible públicamen
 |Componente|Puerto expuesto|Descripción
 |webapp (React + Nginx)|80|Frontend servido por Nginx. Construido con las URLs de los backends como variables de entorno en tiempo de compilación.
 |users (Node.js / Express)|3000|Microservicio de gestión de usuarios y estadísticas.
+|rooms (Node.js / Socket.io)|3001|Microservicio de gestión de salas multijugador. Comunicación con el frontend via WebSocket y con GameY via HTTP REST.
 |gamey (Rust / Axum)|4000|Motor de juego y servicio de bots.
 |prometheus|9090|Recolección de métricas del sistema.
 |grafana|9091|Visualización de métricas en dashboards.
