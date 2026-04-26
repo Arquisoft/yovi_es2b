@@ -7,6 +7,14 @@ export const translations: Record<SupportedLocale, Record<string, any>> = {
       spanish: "Español",
       english: "English",
     },
+    header: {
+      menu: "MENU",
+      menuAria: "Menú de opciones",
+      closeMenuAria: "Cerrar menú",
+      darkMode: "🌙 Modo oscuro",
+      lightMode: "☀️ Modo claro",
+      logout: "Cerrar sesión",
+    },
     initial: {
       welcome: "Bienvenido de nuevo, inicia sesión aquí",
       subtitle: "Escriba su usuario y contraseña para iniciar sesión.",
@@ -28,6 +36,14 @@ export const translations: Record<SupportedLocale, Record<string, any>> = {
       language: "Language",
       spanish: "Español",
       english: "English",
+    },
+    header: {
+      menu: "MENU",
+      menuAria: "Options menu",
+      closeMenuAria: "Close menu",
+      darkMode: "🌙 Dark mode",
+      lightMode: "☀️ Light mode",
+      logout: "Sign out",
     },
     initial: {
       welcome: "Welcome back, sign in here",

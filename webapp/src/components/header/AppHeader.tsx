@@ -1,6 +1,7 @@
 import { useState } from "react";
 import "./AppHeader.css";
 import { useTheme } from "../../screens/modo_tema/Theme";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 
 const yoviLogo = "/yovi_icon.svg";
 
@@ -10,6 +11,7 @@ interface AppHeaderProps {
 
 export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
     const { theme, toggleTheme } = useTheme(); // Hook personalizado para cambiar el tema
+    const { t, locale, setLocale } = useLanguageContext();
     const [open, setOpen] = useState(false); // Estado para controlar el menú desplegable
 
     return (
@@ -27,7 +29,7 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
                     <button
                         className="app-header_overlay"
                         onClick={() => setOpen(false)}
-                        aria-label="Cerrar menú"
+                        aria-label={t('header.closeMenuAria')}
                     />)}
 
                 <button
@@ -36,9 +38,9 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
                     onClick={() => setOpen(prev => !prev)}
                     aria-haspopup="true" // Indica que el botón controla un menú desplegable
                     aria-expanded={open} // Indica si el menú está actualmente abierto o cerrado para mejorar la accesibilidad
-                    aria-label="Menú de opciones" //Para describir la función del botón a los usuarios de lectores de pantalla
+                    aria-label={t('header.menuAria')} //Para describir la función del botón a los usuarios de lectores de pantalla
                 >
-                    👤 MENU <span className={`app-header_chevron ${open ? "open" : ""}`}>▾</span>
+                    👤 {t('header.menu')} <span className={`app-header_chevron ${open ? "open" : ""}`}>▾</span>
                 </button>
 
                 {open && (
@@ -49,16 +51,26 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
                             role="menuitem"
                             onClick={() => { toggleTheme(); setOpen(false); }}
                         >
-                            {theme === "dark" ? "☀️ Modo claro" : "🌙 Modo oscuro"}
+                            {theme === "dark" ? t('header.lightMode') : t('header.darkMode')}
                         </button>
 
                         <button
-                            className="app-header_dropdown-item app-header_dropdown-item--disabled"
+                            className="app-header_dropdown-item app-header_dropdown-language"
+                            type="button"
                             role="menuitem"
+                            aria-label={t('common.language')}
                             disabled
-                            title="Idioma"
                         >
-                            🌐 Idioma <span className="app-header_badge">Próximamente</span>
+                            <label htmlFor="header-language-select">🌐 {t('common.language')}:</label>
+                            <select
+                                id="header-language-select"
+                                value={locale}
+                                onChange={(event) => setLocale(event.target.value as "es" | "en")}
+                                aria-label={t('common.language')}
+                            >
+                                <option value="es">{t('common.spanish')}</option>
+                                <option value="en">{t('common.english')}</option>
+                            </select>
                         </button>
 
                         <hr className="app-header_divider" />
@@ -68,7 +80,7 @@ export default function AppHeader({ onLogout }: Readonly<AppHeaderProps>) {
                             role="menuitem" // onClick para cerrar sesión, llamando a la función onLogout pasada como prop y cerrando el menú después de hacer clic
                             onClick={() => { onLogout(); setOpen(false); }}
                         >
-                            Cerrar sesión
+                            {t('header.logout')}
                         </button>
 
                     </div>

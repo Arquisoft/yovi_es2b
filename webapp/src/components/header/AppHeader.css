@@ -153,6 +153,30 @@
     font-weight: 500;
 }
 
+.app-header_dropdown-language {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 0.45rem;
+}
+
+.app-header_dropdown-language label {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.app-header_dropdown-language select {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--dropdown-border);
+    border-radius: 8px;
+    background: var(--dropdown-bg);
+    color: var(--text-primary);
+}
+
+.app-header_dropdown-language select:hover {
+    background: var(--dropdown-item-hover);
+}
+
 .app-header_divider {
     border: none;
     border-top: 1px solid var(--dropdown-border);
