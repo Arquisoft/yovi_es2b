@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Home from "../game/Home.tsx";
 import SignUp from "../init/SignUp.tsx";
 import PasswordToggleButton from "../../components/password/PasswordToggleButton.tsx";
-import { useTranslation } from "../../i18n/useTranslation.ts";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 import "./InitialScreen.css";
 import yoviLogo from "../../../public/yovi_logo.png";
 
@@ -15,7 +15,7 @@ const InitialScreen: React.FC = () => {
   const [toSigned, setToSigned] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const { t, locale, setLocale } = useTranslation();
+  const { t, locale, setLocale } = useLanguageContext();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -66,18 +66,17 @@ const InitialScreen: React.FC = () => {
 
   return (
     <div className="initial-screen">
-      <img src={yoviLogo} alt={t("initial.logoAlt")} className="initial-screen__logo" />
-     
-      <h1>{t("initial.welcome")}</h1>
+      <img src={yoviLogo} alt={t('initial.logoAlt')} className="initial-screen__logo" />
+      <h1>{t('initial.welcome')}</h1>
 
       <form onSubmit={handleSubmit} className="register-form">
-        <h1>{t("initial.subtitle")}</h1>
+        <h1>{t('initial.subtitle')}</h1>
         <div className="form-group">
-          <label htmlFor="username">{t("initial.usernameLabel")}</label>
+          <label htmlFor="username">{t('initial.usernameLabel')}</label>
           <input
             type="text" id="username" value={username}
             onChange={(e) => setUsername(e.target.value)} className="form-input"/>
-          <label htmlFor="password">{t("initial.passwordLabel")}</label>
+          <label htmlFor="password">{t('initial.passwordLabel')}</label>
           <div className="password-field">
             <input
               type={showPassword ? "text" : "password"}
@@ -93,7 +92,7 @@ const InitialScreen: React.FC = () => {
           </div>
         </div>
         <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? t("initial.loadingButton") : t("initial.loginButton")}
+          {loading ? t('initial.loadingButton') : t('initial.loginButton')}
         </button>
 
         {responseMessage && (
@@ -109,20 +108,25 @@ const InitialScreen: React.FC = () => {
       </form>
 
       <div className="signup">
-        <h2>{t("initial.signupPrompt")}</h2>
+        <h2>{t('initial.signupPrompt')}</h2>
         <button onClick={() => setToSigned(true)}>
-          {t("initial.signupButton")}
+          {t('initial.signupButton')}
         </button>
       </div>
-    </div>
 
-     <div className="language-select">
-        <label htmlFor="language-select">{t("common.language")}:</label>
+      <div className="language-select">
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <label htmlFor="language-select">{t('common.language')}:</label>
         <select id="language-select" value={locale} onChange={(event) => setLocale(event.target.value as "es" | "en")}>
-          <option value="es">{t("common.spanish")}</option>
-          <option value="en">{t("common.english")}</option>
+          <option value="es">{t('common.spanish')}</option>
+          <option value="en">{t('common.english')}</option>
         </select>
       </div>
+
+    </div>
     
   );
 };
