@@ -134,9 +134,19 @@ Esta interfaz permite realizar operaciones de registro de usuarios, información
 
 Las peticiones se realizan mediante HTTP y utilizan mensajes en formato JSON para el intercambio de datos. Algunas de las operaciones disponibles son:
 
-* POST /loginuser – iniciar sesión con un usuario existente
-* GET /users/{id} – obtener información de un usuario.
-* POST /createuser – crea un nuevo usuario, validando que no exista
+* POST /loginuser - iniciar sesión con un usuario existente
+* GET /users/{id} - obtener información de un usuario.
+* POST /createuser - crea un nuevo usuario, validando que no exista
+* POST /initmatch - creación de una partida vs bot propio
+* POST /endmatch - finalización de una partida ganada vs bot, para más sencillez a la hora de estadísticas y ranking
+* POST /allstats - recuperación de las estadísticas totales
+* POST /diffstats - recuperación de las estadísticas por dificultad (tamaño de tablero)
+* POST /stratstats - recuperación de las estadísticas por estrategia (del bot contra el que se juegue)
+* GET /ranking/wins - recuperación del ranking por partidas ganadas (vs bot propio)
+* GET /ranking/defeats - recuperación del ranking por partidas perdidas (vs bot propio)
+* POST /ranking/wins/difficulty - recuperación del ranking por partidas ganadas por dificultad (vs bot propio)
+* POST /ranking/wins/strategy - recuperación del ranking por partidas ganadas por estrategia (vs bot propio)
+* Existen también métodos que no se podrán acceder por usuarios normales, y existen solo para realización de pruebas y tests de la aplicación
 
 image::yovi-interfazusers.png[interfaz-users-yovi]
 

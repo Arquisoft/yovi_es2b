@@ -68,5 +68,186 @@ Para estas pruebas, separamos los test por funcionalidad en clases **Webapp-[Pan
 * **WebApp-Timer.test: ** Prueba el componente de temporizador, comprobando la representación del tiempo y su actualización en función del estado de la partida y del paso del tiempo.
 * **WebApp-Theme.test: ** Prueba el contexto de tema (claro/oscuro), su alternancia y la persistencia de preferencias para asegurar un comportamiento consistente en toda la interfaz.
 
+=== Test de carga
+
+Estos test analizan el rendimiento de la aplicación y su comportamiento respecto a la ejecución.
+Simularán ciclos de ejecución, y se verá como responde la aplicación dados cierto parámetros en relación a ciertos límites.
+Todo ello, la herramienta, las simulaciones o escenarios, el análisis de resultados y conclusiones se describirán más adelante.
 
 
+==== Diseño de test
+
+El siguiente apartado se corresponde con como fueron diseñados los test de carga.
+
+[cols="1,2,4"]
+|===
+.2+|**Escenarios**
+|Creación de usuario|Este escanario se refiere a la capacidad del programa para crear usuarios, y su acceso a base datos para guardar el usuario.
+Para esto, debemos tener un .csv, que creará la cantidad de usuarios pedidos de forma automática.
+En esta simulación también se meten los usuarios en la base datos, pero se eliminarán al final de la ejecución de los test para evitar problemas de rendimiento en el despliegue general de la aplicación.
+Para el análisis de este apartado se debe simular de forma lo más parecido a la realidad un flujo normal de creación de usuario, por eso el acceso a la base no se mockea.
+|Ciclo de ejecución (sin jugar)|Siguiendo con el escenario anterior, el rendimiento analizado en este caso es probar un ciclo de ejecución, cercano a una ejecución real.
+En este caso, se prueba el siguiente ciclo de peticiones: **login > inicio de partida > fin de partida** (que se ejecuta cuando se gana una partida) **> ver estadísticas personales > ver el ranking global**.
+Estas opciones son las que acceden a la base de datos, ya que son las funciones que todas acceden al mismo sitio, y son las que pueden hacer que el rendimiento baje en ejecuciones simultáneas.
+
+.2+|**Parámetros de carga**
+|Nº de usuarios|Como hemos hecho varios análisis, con diferentes escenarios, se ha probado con diferente cantidad de usuarios que "realizan" el ciclo de ejecución.
+Se ha probado con 50, 100 y 200 usuarios, pero el resto de los escenarios, creación o ciclo, serán constantes respectivamente.
+|Ejecución|La ejecución en todos los escenarios, en los tres casos de usuarios permanecerá constante.
+Cada ejecución individual, cada usuario, realizará de forma secuencial, para una simulación aproximada a la realidad.
+Es decir, todos los usuarios seguirán el ciclo de vida que se ha indicado, con los mismos pasos.
+También, tenemos la ejecución global, que nos dice que la ejecución en cada flujo será concurrente, lo que significa que todos los usuarios intentarán acceder más o menos al mismo tiempo a la misma base de datos con peticiones similares.
+Por último, respecto a los escenarios, se realizarán de forma que cada escenario se ejecutará por separado. Como lo ejecutamos en la terminal, primero debemos ejecutar la de creación de usuarios, más que nada para optimizar nuestro tiempo, y luego ejecutar el escenario del ciclo de vida.
+Ambos escenarios serán independientes a la hora de medir su rendimiento, pero el ciclo de vida depende de la creación de usuarios para usarlos desde la base de datos.
+
+.3+|**Valores del análisis**
+|Intervalos de tiempos de análisis|Para tener un espacio controlado, situaremos unos tiempos límites para ajustar los resultados obtenidos.
+Como límite inferior, tomamos el intervalo de 0ms a 800ms, este límite indica las peticiones que se responden de forma rápida, nuestro objetivo es tener la mayor cantidad de peticiones en este intervalo.
+El límite superior es cuando supera los 1200ms, si una petición supera este límite, debería tenerse en cuenta, ya que puede producir fallos graves de rendimiento a largo plazo.
+El intervalo intermedio, entre los 800ms y 1200ms, es donde podríamos considerar reducir el rendimiento, pero en principio no tenedría que considerarse prioridad principal a arreglar.
+|Tiempos de respuesta|Los tiempos de respuesta indican el tiempo en responder de cada petición, y son los que se analizarán para medir el rendimiento general de la aplicación.
+|Fallos/KOs|Indican las peticiones que no se han realizado de forma correcta, no se ejecutaron de manera correcta o devuelven un error al realizarse.
+En caso de la existencia de alguno, aunque sea de uno solo, sería prioridad máxima el modificar el programa para su arreglo inmediato.
+
+|**Otros**
+|Eliminación de usuario|Como la creación de usuarios se realiza mediante unos test, y todos ellos acceden directamente a la base de datos, estos usuarios se deben eliminar para que la base de datos no se llene de usuarios de prueba.
+Este borrado se hace con un comando especial, aplicado también desde la terminal y es súper importante de hacer después de probar ambos escenarios.
+Como la opción de borrado no está disponible para los usuarios, si no que es exclusiva de los test, no se prueba en un escenario, por eso se ejecutará a parte.
+
+|===
+
+==== Herramienta
+
+La herramienta que hemos usado para este análisis de carga es **Gatling**, framework ofrecido por la asignatura para realizar estas pruebas de rendimiento.
+Para estos test se creó un proyecto a parte, indirectamente enlazado con este proyecto de forma local.
+Esto significa que se ha creado como un programa no incluido en las carpetas de este, pero mediante el uso de Docker, que despliega la aplicación de forma local,
+y la terminal del sistema usado, que en este caso fue Windows, se ejecutarán los test de carga.
+Los resultados de estos se ofrecen en una carpeta en este nuevo proyecto en carpetas, que también fueron incluidas, por si se quisiera realizar un análisis más exhausto, en la carpeta /gatling.
+Para visualizarlos de forma clara y accesible, podemos acceder a interfaces mediante .html, que se podrán abrir con un navegador.
+Estos interfaces se separan en "index.html", que realiza un análisis general del test, y "req_*.html", que muestra de forma más exhausta, el estudio de cada petición individualmente.
+
+==== Resultados
+
+* **Creación de 50 usuarios**
+
++
+image::test_carga_create_050.png[rendimiento crear 50 usuarios]
++
+
+* **Ciclo de vida de 50 usuarios**
+
++
+image::test_carga_general_050.png[rendimiento general 50 usuarios]
++
+
+** Login (50 usuarios)
+
++
+image::test_carga_login_050.png[rendimiento login 50 usuarios]
+
+** Inicio de partida (50 usuarios)
+
++
+image::test_carga_init_050.png[rendimiento init match 50 usuarios]
+
+** Fin de partida (50 usuarios)
+
++
+image::test_carga_end_050.png[rendimiento end match 50 usuarios]
+
+** Visualizar estadísticas (50 usuarios)
+
++
+image::test_carga_stats_050.png[rendimiento stats 50 usuarios]
+
+** Visualizar ranking (50 usuarios)
+
++
+image::test_carga_rank_050.png[rendimiento ranking 50 usuarios]
+
+* **Creación de 100 usuarios**
++
+image::test_carga_create_100.png[rendimiento crear 100 usuarios]
++
+
+* **Ciclo de vida de 100 usuarios**
+
++
+image::test_carga_general_100.png[rendimiento general 100 usuarios]
++
+
+** Login (100 usuarios)
+
++
+image::test_carga_login_100.png[rendimiento login 100 usuarios]
+
+** Inicio de partida (100 usuarios)
+
++
+image::test_carga_init_100.png[rendimiento init match 100 usuarios]
+
+** Fin de partida (100 usuarios)
+
++
+image::test_carga_end_100.png[rendimiento end match 100 usuarios]
+
+** Visualizar estadísticas (100 usuarios)
+
++
+image::test_carga_stats_100.png[rendimiento stats 100 usuarios]
+
+** Visualizar ranking (100 usuarios)
+
++
+image::test_carga_rank_100.png[rendimiento ranking 100 usuarios]
+
+* **Creación de 200 usuarios**
+
++
+image::test_carga_create_200.png[rendimiento crear 200 usuarios]
++
+
+* **Ciclo de vida de 200 usuarios**
+
++
+image::test_carga_general_200.png[rendimiento general 200 usuarios]
++
+
+** Login (200 usuarios)
+
++
+image::test_carga_login_200.png[rendimiento login 200 usuarios]
+
+** Inicio de partida (200 usuarios)
+
++
+image::test_carga_init_200.png[rendimiento init match 200 usuarios]
+
+** Fin de partida (200 usuarios)
+
++
+image::test_carga_end_200.png[rendimiento end match 200 usuarios]
+
+** Visualizar estadísticas (200 usuarios)
+
++
+image::test_carga_stats_200.png[rendimiento stats 200 usuarios]
+
+** Visualizar ranking (200 usuarios)
+
++
+image::test_carga_rank_200.png[rendimiento ranking 200 usuarios]
+
+==== Conclusiones
+
+Dados los resultados anteriores, podemos obtener varias conclusiones importantes.
+
+* No existen errores que causen que una petición pare. Esto implica que, aunque en ciertos casos pueda tardar más o menos en acceder a la base de datos y responder, en ninguna circunstancia se sufre un error con resultado catastrófico al punto de parar el flujo de la aplicación. Toda petición fue respondida.
+* Podemos ver que con 50 usuarios, la aplicación, en ambos escenarios, propones unos datos muy favorables, teniendo la mayoría de peticiones en el primer intervalo, por lo que el rendimiento no es un gran problema a resolver.
+* Con 100 usuarios también vemos que la creación de usuarios puede ser bastante más costosa en términos de rendimiento, incluso superando el escenario con 200 usuarios. Además, también es notable su aumento de ejecución en el flujo del ciclo de vida.
+* Por último con 200 usuarios vemos una gran cantidad de peticiones en el último intervalo. En este caso, sí que deberíamos mirar de forma más exhaustiva el rendimiento con los 200 usuarios concurrentemente, en especial si queremos lanzarlo como aplicación más profesional.
+* Viendo las ejecuciones individuales de cada tipo de petición observamos que las peticiones más costosas en términos de tiempo son las que modifican la base de datos, creación de usuario, inicio y fin de partida, lo que puede ser razonable, ya que no sabemos a ciencia cierta como va la base de datos por debajo. Pero, en cuanto al resto, login, estadísticas y ranking vemos un coste relativamente alto para la obtención de datos.
+
+Como conclusión final, si quisiéramos una escalabilidad más profesional, deberíamos intentar mejorar el rendimiento. Para ello, crearemos una nueva issue (Issue 118) para la mejora del rendimiento. En esta issue especialmente nos centraremos en los endpoint que no modifican la base de datos, como el login o ranking global.
+
+image::test_carga_issue.png[issue para mejora rendimiento]
