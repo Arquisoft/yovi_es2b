@@ -9,11 +9,12 @@ La arquitectura de YOVI se organiza siguiendo un modelo modular basado en micros
 
 === Nivel 1 – Visión general del sistema
 
-A alto nivel, el sistema está compuesto por cuatro bloques principales, uno de frontend, dos de backend y uno de persistencia:
+A alto nivel, el sistema está compuesto por cinco bloques principales, uno de frontend, tres de backend y uno de persistencia:
 
 * Frontend web
 * Microservicio User
 * Microservicio GameY
+* Microservicio Rooms
 * Base de datos
 
 Estos componentes interactúan entre sí mediante API REST (modelo, servicio y controlers) y mensajes en formato JSON.
@@ -64,6 +65,21 @@ Sus responsabilidades son:
 
 Para representar el estado del juego se utiliza la notación YEN, que permite describir de forma compacta la situación del tablero.
 
+==== Microservicio Rooms
+
+El microservicio Rooms está implementado en Node.js y se encarga de gestionar las partidas multijugador en tiempo real. A diferencia del resto de microservicios, la comunicación con el frontend no se realiza mediante API REST sino a través de WebSocket (Socket.io), lo que permite una interacción bidireccional e inmediata entre los jugadores.
+
+Entre sus responsabilidades se incluyen:
+
+* Crear y gestionar salas de juego identificadas por un código único de seis caracteres.
+* Coordinar la unión de un segundo jugador a una sala existente.
+* Retransmitir los movimientos de cada jugador al microservicio GameY y reenviar el nuevo estado del tablero a ambos jugadores.
+* Gestionar eventos de fin de turno por temporizador, deshacer movimientos y abandono o desconexión de jugadores.
+* Exponer métricas de Prometheus sobre el número de salas creadas y activas.
+
+El estado de las salas se mantiene en memoria durante el transcurso de la partida. El microservicio se comunica internamente con GameY mediante HTTP REST para crear partidas y validar movimientos.
+
+
 ==== Base de Datos
 
 El sistema utiliza MongoDB como sistema de persistencia.
@@ -100,6 +116,14 @@ Este microservicio se compone de los siguientes módulos internos:
 * *Controladores API:* reciben las peticiones REST y gestionan las respuestas.
 * *Lógica de negocio de usuarios:* implementa las operaciones relacionadas la gestión de usuarios y estadísticas.
 * *Acceso a datos:* es el encargado de interactuar con la base de datos MongoDB: crear usuarios, iniciar sesión, ...
+
+==== Microservicio Rooms
+
+Este microservicio se compone de los siguientes módulos internos:
+
+* *Servidor Socket.io:* gestiona las conexiones WebSocket de los clientes y enruta los eventos entrantes.
+* *Gestor de salas:* mantiene en memoria el estado de cada sala activa, incluyendo los jugadores conectados, el identificador de partida y la configuración elegida.
+* *Cliente HTTP de GameY:* realiza las llamadas REST a GameY para crear partidas y retransmitir movimientos o deshacerlos.
 
 ==== Microservicio GameY
 
@@ -150,6 +174,17 @@ Las peticiones se realizan mediante HTTP y utilizan mensajes en formato JSON par
 
 image::yovi-interfazusers.png[interfaz-users-yovi]
 
+
+==== Interfaz Frontend – Microservicio Rooms
+
+El frontend se comunica con el microservicio Rooms a través de WebSocket (Socket.io) para gestionar las partidas multijugador en tiempo real. Los principales eventos son:
+
+* `create-room` – el jugador crea una sala indicando nombre de usuario, dificultad y si el temporizador está activo. El servidor responde con `room-created` (código de sala e identificador de partida).
+* `join-room` – el segundo jugador se une a una sala existente con su código. El servidor responde con `room-joined` y emite `game-start` a ambos jugadores para iniciar la partida.
+* `make-move` – un jugador envía su movimiento. El servidor lo retransmite a GameY y responde con `move-made` al resto de la sala.
+* `undo-move` – solicita deshacer los dos últimos movimientos. El servidor responde con el nuevo estado del tablero.
+* `timer-expired` – notifica que el temporizador del turno activo ha expirado. El servidor emite `turn-skipped` indicando el siguiente jugador.
+* `abandon-game` – un jugador abandona la partida. El servidor emite `player-disconnected` y elimina la sala.
 
 ==== Interfaz Frontend – Microservicio GameY
 
