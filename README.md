@@ -59,17 +59,18 @@
 
 ## Visión general de la arquitectura
 
-El sistema se compone de tres servicios independientes que se comunican por HTTP:
+El sistema se compone de cuatro servicios independientes. La comunicación entre el frontend y los servicios de usuarios y juego se realiza mediante HTTP/REST, mientras que la comunicación con el servicio de salas se realiza en tiempo real a través de WebSocket (Socket.io).
 
 <p align="center">
   <img src="docs/images/servicios.png" width="600" alt="Servicios"/>
 </p>
 
-| Servicio | Tecnología       | Puerto | Responsabilidad                         |
-|----------|-----------------|--------|-----------------------------------------|
-| webapp   | React/Vite/TS   | 80     | SPA frontend                            |
-| users    | Node.js/Express | 3000   | Registro y autenticación de usuarios    |
-| gamey    | Rust/Axum       | 4000   | Motor de juego y servicio de bots       |
+| Servicio | Tecnología          | Puerto | Responsabilidad                                      |
+|----------|---------------------|--------|------------------------------------------------------|
+| webapp   | React/Vite/TS       | 80     | SPA frontend                                         |
+| users    | Node.js/Express     | 3000   | Registro y autenticación de usuarios                 |
+| rooms    | Node.js/Socket.io   | 3001   | Gestión de salas y partidas multijugador en tiempo real |
+| gamey    | Rust/Axum           | 4000   | Motor de juego y servicio de bots                    |
 
 La documentación de arquitectura sigue la plantilla [Arc42](docs/).
 
@@ -81,6 +82,7 @@ La documentación de arquitectura sigue la plantilla [Arc42](docs/).
 yovi_es2b/
 ├── webapp/         # Frontend React + Vite + TypeScript
 ├── users/          # Servicio de usuarios Node.js + Express
+├── rooms/          # Servicio de salas multijugador Node.js + Socket.io
 ├── gamey/          # Motor de juego y bots en Rust
 ├── docs/           # Documentación de arquitectura Arc42
 └── docker-compose.yml
@@ -114,6 +116,13 @@ Cada servicio se puede configurar mediante variables de entorno. Ajústalas en u
 | `PORT`          | `3000`            | Puerto en el que escucha el servicio  |
 | `USERS_DB_URL`  | _(ninguno)_       | Cadena de conexión a la base de datos |
 
+### Servicio rooms
+
+| Variable    | Valor por defecto        | Descripción                                  |
+|-------------|--------------------------|----------------------------------------------|
+| `PORT`      | `3001`                   | Puerto en el que escucha el servicio         |
+| `GAMEY_URL` | `http://localhost:4000`  | URL del servicio gamey para relay de partidas |
+
 ### Servicio gamey
 
 | Variable    | Valor por defecto | Descripción                                     |
@@ -123,10 +132,11 @@ Cada servicio se puede configurar mediante variables de entorno. Ajústalas en u
 
 ### webapp
 
-| Variable            | Valor por defecto       | Descripción                     |
-|---------------------|-------------------------|---------------------------------|
-| `VITE_API_BASE_URL` | `http://localhost:3000` | URL base del servicio users     |
-| `VITE_GAMEY_URL`    | `http://localhost:4000` | URL base del servicio gamey     |
+| Variable              | Valor por defecto       | Descripción                         |
+|-----------------------|-------------------------|-------------------------------------|
+| `VITE_API_BASE_URL`   | `http://localhost:3000` | URL base del servicio users         |
+| `VITE_API_URL_ROOMS`  | `http://localhost:3001` | URL base del servicio rooms         |
+| `VITE_GAMEY_URL`      | `http://localhost:4000` | URL base del servicio gamey         |
 
 ---
 
@@ -149,11 +159,12 @@ docker-compose down
 
 Una vez en marcha, los servicios están disponibles en:
 
-| Servicio        | URL                   |
-|-----------------|-----------------------|
-| Aplicación web  | http://localhost      |
-| API users       | http://localhost:3000 |
-| API gamey       | http://localhost:4000 |
+| Servicio              | URL                   |
+|-----------------------|-----------------------|
+| Aplicación web        | http://localhost      |
+| API users             | http://localhost:3000 |
+| Salas multijugador    | http://localhost:3001 |
+| API gamey             | http://localhost:4000 |
 
 ---
 
@@ -170,7 +181,16 @@ npm start
 # Disponible en http://localhost:3000
 ```
 
-#### 2. Aplicación web
+#### 2. Servicio rooms
+
+```bash
+cd rooms
+npm install
+npm start
+# Disponible en http://localhost:3001
+```
+
+#### 3. Aplicación web
 
 ```bash
 cd webapp
@@ -186,7 +206,7 @@ cd webapp
 npm run start:all
 ```
 
-#### 3. Servicio gamey
+#### 4. Servicio gamey
 
 ```bash
 cd gamey
@@ -215,6 +235,12 @@ cargo run
 |-------------|--------------------------------|
 | `npm start` | Inicia el servicio de usuarios |
 | `npm test`  | Ejecuta los tests              |
+
+### rooms
+
+| Comando     | Descripción                          |
+|-------------|--------------------------------------|
+| `npm start` | Inicia el servicio de salas          |
 
 ### gamey
 
@@ -289,5 +315,9 @@ rustup update stable
 **La webapp no alcanza el servicio users**
 
 Comprueba que `VITE_API_BASE_URL` apunta a la dirección real del servicio users. Dentro de Docker, los servicios se comunican por nombre de servicio, no por `localhost`.
+
+**La webapp no alcanza el servicio rooms**
+
+Comprueba que `VITE_API_URL_ROOMS` apunta a la dirección real del servicio rooms. Recuerda que rooms usa WebSocket, por lo que la URL debe ser accesible desde el navegador del cliente, no solo desde dentro de Docker.
 
 ---

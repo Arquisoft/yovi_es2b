@@ -5,3 +5,11 @@ scrape_configs:
   - job_name: 'users-service'
     static_configs:
       - targets: ['users:3000']
+
+  - job_name: 'gamey-service'
+    static_configs:
+      - targets: ['gamey:4000']
+
+  - job_name: 'rooms-service'
+    static_configs:
+      - targets: ['rooms:3001']
