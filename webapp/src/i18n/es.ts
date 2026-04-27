@@ -53,7 +53,7 @@ export const es = {
     vsOnline: "Juega contra otro jugador en línea",
     onlinedescription: "Juega contra otro jugador desde distintos dispositivos en tiempo real.",
     create: "Crear una partida",
-    join: "Unirse a unapartida",
+    join: "Unirse a una partida",
   },
   initial: {
     welcome: "Bienvenido de nuevo, inicia sesión aquí",
@@ -74,5 +74,11 @@ export const es = {
     signupButton: "Crear usuario",
     backlabel: "¿Ya tienes usuario? Inicia sesión.",
     backbutton: "Atrás",
+  },
+  stats: {
+    description: "Eliga que estadísticas desea ver",
+    total: "Ver todas las estadísticas",
+    filter: "Ver estadísticas filtradas",
+    back: "Volver al menú principal",
   }
 };

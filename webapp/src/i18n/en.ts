@@ -73,5 +73,11 @@ export const en = {
     signupButton: "Create user",
     backlabel: "Already have a user? Log in.",
     backbutton: "Go back",
+  },
+  stats: {
+    description: "Choose which statistics you want to view",
+    total: "View all statistics",
+    filter: "View filtered statistics",
+    back: "Go back to main menu",
   }
 };
