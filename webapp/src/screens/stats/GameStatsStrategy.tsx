@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./GameStats.css";
 import "./GameStatsTable.css"
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 
 // TIPO ESTADISTICA ESTRATEGIA
 type StatStr = {
@@ -11,7 +12,7 @@ type StatStr = {
     porcentaje: string;
 };
 
-async function obtenerDatos(username: string) {
+async function obtenerDatos(username: string, t: (key: string) => string) {
     try {
         const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
         const res = await fetch(`${API_URL}/stratstats`, {
@@ -26,20 +27,20 @@ async function obtenerDatos(username: string) {
         if(res.ok) {
             return stats.stats;
         } else {
-            throw new Error(stats.error || 'Server error');
+            throw new Error(stats.error || t("error.serverError"));
         }
     } catch (err) {
-        throw new Error(err instanceof Error ? err.message : 'Network error', { cause: err });
+        throw new Error(err instanceof Error ? err.message : t("error.networkError"), { cause: err });
     }    
 }
 
 export default function GameStatsStra( {username} : { username: string }) {
 
     const [data, setData] = useState<StatStr[]>([]);
-
+    const { t } = useLanguageContext();
     useEffect(() => {
             const cargarDatos = async () => {
-                const resultado = await obtenerDatos(username);
+                const resultado = await obtenerDatos(username, t);
                 setData(resultado);
             };
         cargarDatos();
@@ -52,11 +53,11 @@ export default function GameStatsStra( {username} : { username: string }) {
             <table className="stats-strat-table">
                 <thead>
                     <tr>
-                        <td>Estrategia</td>
-                        <td>Victorias</td>
-                        <td>Derrotas</td>
-                        <td>Partidas jugadas</td>
-                        <td>Porcentaje de victorias</td>
+                        <td>{t("stats.strat")}</td>
+                        <td>{t("stats.wins")}</td>
+                        <td>{t("stats.losses")}</td>
+                        <td>{t("stats.played")}</td>
+                        <td>{t("stats.percentage")}</td>
                     </tr>
                 </thead>
                 <tbody>

@@ -80,5 +80,17 @@ export const es = {
     total: "Ver todas las estadísticas",
     filter: "Ver estadísticas filtradas",
     back: "Volver al menú principal",
+
+    totaldescription: "Todas las estadísticas de:",
+    filtereddescription: "Estadísticas filtradas de:",
+    gobackstats: "Volver al menú de estadísticas",
+    gohome: "Volver al menú principal",
+
+    dif: "Dificultad",
+    strat: "Estrategia",
+    wins: "Victorias",
+    losses: "Derrotas",
+    played: "Partidas jugadas",
+    percentage: "Porcentaje de victorias",
   }
 };

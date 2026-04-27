@@ -79,5 +79,17 @@ export const en = {
     total: "View all statistics",
     filter: "View filtered statistics",
     back: "Go back to main menu",
+
+    totaldescription: "All statistics of:",
+    filtereddescription: "Filtered statistics of:",
+    gobackstats: "Go back to statistics menu",
+    gohome: "Go back to main menu",
+
+    dif: "Difficulty",
+    strat: "Strategy",
+    wins: "Victories",
+    losses: "Defeats",
+    played: "Games played",
+    percentage: "Win percentage",
   }
 };
