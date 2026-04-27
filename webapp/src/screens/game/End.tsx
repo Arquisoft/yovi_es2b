@@ -68,12 +68,20 @@ export function End({ winner, username, username2 = "", twoPlayers = false, onli
           )}
           <div className="end-summary-row">
             <dt>{twoPlayers ? t("end.player2size") : t("end.player1diff")}</dt>
-            <dd>{twoPlayers ? ({ EASY: t("end.player2s"), MEDIUM: t("end.player2m"), HARD: t("end.player2l") } as Record<string, string>)[settings.difficulty] : settings.difficulty}</dd>
+            <dd>
+              {twoPlayers
+                ? ({
+                    EASY: t("end.player2s"),
+                    MEDIUM: t("end.player2m"),
+                    HARD: t("end.player2l")
+                  } as Record<string, string>)[settings.difficulty]
+                : t(`end.${settings.difficulty.toLowerCase()}`)}
+            </dd>
           </div>
           {!twoPlayers && (
             <div className="end-summary-row">
               <dt>{t("end.player1strat")}</dt>
-              <dd>{settings.strategy}</dd>
+              <dd>{t(`end.${settings.strategy.toLowerCase()}`)}</dd>
             </div>
           )}
           {!twoPlayers && (

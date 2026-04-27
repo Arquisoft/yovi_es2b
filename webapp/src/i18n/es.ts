@@ -27,6 +27,17 @@ export const es = {
     personalwin: "¡Enhorabuena, {player}, ganaste la partida!",
     personalloss: "Has perdido. ¡Inténtalo de nuevo!",
 
+    easy: "Fácil",
+    medium: "Media",
+    hard: "Difícil",
+
+    random: "Aleatoria",
+    defensivo: "Defensiva",
+    ofensivo: "Ofensiva",
+    monte_carlo: "Monte Carlo",
+    monte_carlo_mejorado: "Monte Carlo Mejorado",
+    monte_carlo_endurecido: "Monte Carlo Endurecido",
+
     again: "Jugar de nuevo",
     home: "Volver al menú",
   },
