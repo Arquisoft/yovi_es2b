@@ -3,6 +3,13 @@ export const en = {
     language: "Language",
     spanish: "🇪🇸 Español",
     english: "🇬🇧 English",
+    logoAlt: "Logo YOVI",
+  },
+  error: {
+    errorUsername: "Enter your username.",
+    errorPassword: "Enter your password.",
+    serverError: "Server error.",
+    networkError: "Network error.",
   },
   header: {
     menu: "MENU",
@@ -21,11 +28,6 @@ export const en = {
     loadingButton: "Loading user...",
     signupPrompt: "Don't have a user? Click here to create one.",
     signupButton: "Sign up",
-    logoAlt: "YOVI logo",
-    errorUsername: "Enter your username.",
-    errorPassword: "Enter your password.",
-    serverError: "Server error.",
-    networkError: "Network error.",
   },
   signup: {
     welcome: "Welcome, sign up here",

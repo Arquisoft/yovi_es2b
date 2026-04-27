@@ -39,10 +39,10 @@ const SignUp: React.FC = () => {
                 setPassword('');
                 setSigned(true);
             } else {
-                setError(data.error || t('initial.serverError'));
+                setError(data.error || t('error.serverError'));
             }
         } catch (err) {
-            setError(err instanceof Error ? err.message : t('initial.networkError'));
+            setError(err instanceof Error ? err.message : t('error.networkError'));
         } finally {
             setLoading(false);
         }
@@ -57,8 +57,8 @@ const SignUp: React.FC = () => {
 
     return (
         <div className="signup-screen">
-            <img src={yoviLogo} alt={t('initial.logoAlt')} className="signup-screen__logo" />
-            <h1>{t('initial.welcome')}</h1>
+            <img src={yoviLogo} alt={t('common.logoAlt')} className="signup-screen__logo" />
+            <h1>{t('signup.welcome')}</h1>
             
             <form onSubmit={handleLogin} className="signup-form">
                 <h1>{t('signup.welcome')}</h1>

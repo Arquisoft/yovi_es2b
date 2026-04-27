@@ -23,11 +23,11 @@ const InitialScreen: React.FC = () => {
     setError(null);
 
     if (!username.trim()) {
-      setError(t('initial.errorUsername'));
+      setError(t('error.errorUsername'));
       return;
     }
     if (!password.trim()) {
-      setError(t('initial.errorPassword'));
+      setError(t('error.errorPassword'));
       return;
     }
 
@@ -48,10 +48,10 @@ const InitialScreen: React.FC = () => {
         setPassword('');
         setLogged(true);
       } else {
-        setError(data.error || t('initial.serverError'));
+        setError(data.error || t('error.serverError'));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('initial.networkError'));
+      setError(err instanceof Error ? err.message : t('error.networkError'));
     } finally {
       setLoading(false);
     }
@@ -66,7 +66,7 @@ const InitialScreen: React.FC = () => {
 
   return (
     <div className="initial-screen">
-      <img src={yoviLogo} alt={t('initial.logoAlt')} className="initial-screen__logo" />
+      <img src={yoviLogo} alt={t('common.logoAlt')} className="initial-screen__logo" />
       <h1>{t('initial.welcome')}</h1>
 
       <form onSubmit={handleSubmit} className="register-form">
