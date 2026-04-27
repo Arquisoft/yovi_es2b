@@ -63,9 +63,6 @@ export const es = {
     turn: "Turno actual:",
     status: "Estado de la partida:",
 
-    undo: "Deshacer movimiento",
-    exit: "Salir de la partida",
-
     easy: "Fácil",
     medium: "Media",
     hard: "Difícil",
@@ -76,6 +73,15 @@ export const es = {
     monte_carlo: "Monte Carlo",
     monte_carlo_mejorado: "Monte Carlo Mejorado",
     monte_carlo_endurecido: "Monte Carlo Endurecido",
+
+    hint: "Pista",
+    hintRemaining: "pista restante",
+    hintRemainingPlural: "pistas restantes",
+
+    undo: "Deshacer movimiento",
+    exit: "Salir de la partida",
+
+    
   },
   header: {
     menu: "MENÚ",

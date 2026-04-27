@@ -74,6 +74,10 @@ export const en = {
     monte_carlo_mejorado: "Better Monte Carlo",
     monte_carlo_endurecido: "Monte Carlo final boss",
 
+    hint: "Hint",
+    hintRemaining: "hint remaining",
+    hintRemainingPlural: "hints remaining",
+
     undo: "Undo Move",
     exit: "Exit Game",
   },

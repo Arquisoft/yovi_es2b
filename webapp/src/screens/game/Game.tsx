@@ -9,6 +9,7 @@ import "./Game.css";
 import { End } from "./End";
 import Home from "./Home";
 import { getSocket } from "../../socket";
+import { useLanguageContext } from "../../i18n/LanguageProvider";
 
 interface GameProps {
   settings: GameSettings;
@@ -54,6 +55,7 @@ export function Game({
   onlineMode = false, roomCode, localPlayerIndex = 0, initialGameId,
 }: Readonly<GameProps>) {
 
+  const { t } = useLanguageContext();
   const [turno, setTurno] = useState("Inicio");
   const [gameState, setGameState] = useState("Inicio");
   const [gameId, setGameId] = useState("");
@@ -324,8 +326,8 @@ if (data.status?.kind === 'Finished') {
         <div className="controls-bottom">
           {!twoPlayers && (
             <div id="hint-container">
-              <button id="hint-button" onClick={handleHint} disabled={hintCoords !== null || hintsUsed >= 3}>Pista</button>
-              <span id="hint-counter">{3 - hintsUsed} pista{3 - hintsUsed === 1 ? "" : "s"} restante{3 - hintsUsed === 1 ? "" : "s"}</span>
+              <button id="hint-button" onClick={handleHint} disabled={hintCoords !== null || hintsUsed >= 3}>{t("game.hint")}</button>
+              <span id="hint-counter">{3 - hintsUsed} {3 - hintsUsed === 1 ? t("game.hintRemaining") : t("game.hintRemainingPlural")}</span>
             </div>
           )}
           <ControlPanel
