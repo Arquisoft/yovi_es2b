@@ -70,11 +70,19 @@ export const es = {
   ranking: {
     title: "Ranking global",
     position: "Tu posición en el ranking es...",
+    bymatches: "Por partidas jugadas",
+    bydiff: "Por dificultad",
+    bystrat: "Por estrategia",
+    selectCat: "Selecciona al menos una categoría del menu superior.",
+    sort: "Ordenar por:",
+    number: "Nº",
+    percentage: "%",
 
     noposition: "Sin posición",
     notavailable: "No disponible",
 
     seerank: "Ver ranking",
+    seepersonalrank: "Ver mi posición en el ranking",
     back: "Volver al menú principal",
   },
   signup: {

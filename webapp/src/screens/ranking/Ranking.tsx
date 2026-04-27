@@ -68,7 +68,7 @@ export default function Ranking({ username }: Readonly<{ username: string }>) {
     return (
         <div className="ranking-screen">
             <AppHeader onLogout={() => setGoLogin(true)} />
-            <img className="ranking-logo" src="/yovi_logo.png" alt="YOVI Logo" />
+            <img className="ranking-logo" src="/yovi_logo.png" alt={t("common.logoAlt")} />
             <h1 className="ranking-screen-title">{t("ranking.title")}</h1>
 
             <div className="ranking-position-card">

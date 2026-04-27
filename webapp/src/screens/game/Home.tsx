@@ -215,7 +215,7 @@ export default function HomePage( {username} : { username: string }) {
                             onChange={(e) => { setUsername2(e.target.value); setUsername2Error(null); }}
                         />
 
-                        <span className="home-config__label">{t("home.boardSize")}</span>
+                        <span className="home-config__label">{t("home.boardsize")}</span>
                         <div className="home-difficulty">
                             <button
                                 className={`home-difficulty__btn home-difficulty__btn--easy${difficulty2 === Difficulty.EASY ? " home-difficulty__btn--easy--active" : ""}`}
