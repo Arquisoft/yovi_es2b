@@ -136,8 +136,10 @@ export default function HomePage( {username} : { username: string }) {
     return (
         <div className="home-screen">
 
-            {/* Header */}
-            <AppHeader onLogout={() => setScreen("login")} />
+        {/* Header */}
+            <AppHeader onLogout={() => { localStorage.removeItem('yovi-username'); setScreen("login"); }} />
+           {/* Para dejar de guardar la sesión del usuario al pulsar cerrar sesión */}
+
 
             {/* Contenido */}
             <div className="home-body">
