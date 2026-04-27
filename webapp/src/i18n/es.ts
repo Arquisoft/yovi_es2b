@@ -5,7 +5,7 @@ export const es = {
     english: "🇬🇧 English",
   },
   header: {
-    menu: "MENU",
+    menu: "MENÚ",
     menuAria: "Menú de opciones",
     closeMenuAria: "Cerrar menú",
     darkMode: "🌙 Modo oscuro",
@@ -27,4 +27,14 @@ export const es = {
     serverError: "Error del servidor.",
     networkError: "Error de red.",
   },
+  signup: {
+    welcome: "Bienvenido, regístrate aquí",
+    subtitle: "Crea tu usuario y contraseña para registrarte en Yovi.",
+    userlabel: "Usuario",
+    passwlabel: "Contraseña",
+    loadingButton: "Creando usuario...",
+    signupButton: "Crear usuario",
+    backlabel: "¿Ya tienes usuario? Inicia sesión.",
+    backbutton: "Atrás",
+  }
 };
