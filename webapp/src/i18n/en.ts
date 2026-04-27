@@ -10,6 +10,8 @@ export const en = {
     errorPassword: "Enter your password.",
     serverError: "Server error.",
     networkError: "Network error.",
+
+    player2unfilled: "Player 2's name cannot be empty.",
   },
   header: {
     menu: "MENU",
@@ -33,9 +35,24 @@ export const en = {
     easybutton: "Easy",
     mediumbutton: "Medium",
     hardbutton: "Hard",
-    startmatch: "Start match",
+    startmatchBot: "Start match",
     stats: "My statistics",
     rank: "Global ranking",
+
+    vsLocal: "Play against another local player",
+    player2: "Player 2's name",
+    boardsize: "Board size",
+    boardsmall: "Small",
+    boardmedium: "Medium",
+    boardlarge: "Large",
+    timer: "Timer",
+    activateTimer: "Activate timer",
+    startmatchLocal: "Start local match",
+
+    vsOnline: "Play against another player online",
+    onlinedescription: "Play against another player from different devices in real-time.",
+    create: "Create a match",
+    join: "Join a match",
   },
   initial: {
     welcome: "Welcome back, log in here",

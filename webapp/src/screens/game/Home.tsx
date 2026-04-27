@@ -187,7 +187,7 @@ export default function HomePage( {username} : { username: string }) {
                         </div>
 
                         <button className="home-config__start" onClick={() => setScreen("game")}>
-                            {t("home.startmatch")}
+                            {t("home.startmatchBot")}
                         </button>
 
                         <hr className="home-config__divider" />
@@ -204,40 +204,40 @@ export default function HomePage( {username} : { username: string }) {
 
                     {/* Panel 2 Jugadores Local */}
                     <div className="home-config home-config--pvp">
-                        <span className="home-config__label home-config__label--section">Partida de 2 Jugadores</span>
+                        <span className="home-config__label home-config__label--section">{t("home.vsLocal")}</span>
 
-                        <label className="home-config__label" htmlFor="username2">Nombre del jugador 2</label>
+                        <label className="home-config__label" htmlFor="username2">{t("home.player2")}</label>
                         <input
                             id="username2"
                             className="home-config__input"
                             type="text"
-                            placeholder="Nombre del jugador 2"
+                            placeholder={t("home.player2")}
                             value={username2}
                             onChange={(e) => { setUsername2(e.target.value); setUsername2Error(null); }}
                         />
 
-                        <span className="home-config__label">Tamaño del tablero</span>
+                        <span className="home-config__label">{t("home.boardsize")}</span>
                         <div className="home-difficulty">
                             <button
                                 className={`home-difficulty__btn home-difficulty__btn--easy${difficulty2 === Difficulty.EASY ? " home-difficulty__btn--easy--active" : ""}`}
                                 onClick={() => setDifficulty2(Difficulty.EASY)}>
-                                Pequeño
+                                {t("home.boardsmall")}
                             </button>
                             <button
                                 className={`home-difficulty__btn home-difficulty__btn--medium${difficulty2 === Difficulty.MEDIUM ? " home-difficulty__btn--medium--active" : ""}`}
                                 onClick={() => setDifficulty2(Difficulty.MEDIUM)}>
-                                Mediano
+                                {t("home.boardmedium")}
                             </button>
                             <button
                                 className={`home-difficulty__btn home-difficulty__btn--hard${difficulty2 === Difficulty.HARD ? " home-difficulty__btn--hard--active" : ""}`}
                                 onClick={() => setDifficulty2(Difficulty.HARD)}>
-                                Grande
+                                {t("home.boardlarge")}
                             </button>
                         </div>
 
-                        <span className="home-config__label">Temporizador</span>
+                        <span className="home-config__label">{t("home.timer")}</span>
                         <label className="home-toggle" htmlFor="timer-enabled-2p">
-                            <span className="home-toggle__text">Partida con temporizador activo</span>
+                            <span className="home-toggle__text">{t("home.activateTimer")}</span>
                             <span className="home-toggle__control">
                                 <input
                                     id="timer-enabled-2p"
@@ -261,21 +261,21 @@ export default function HomePage( {username} : { username: string }) {
                             className="home-config__start"
                             onClick={() => {
                                 if (username2.trim() === "") {
-                                    setUsername2Error("El nombre del jugador 2 no puede estar vacío.");
+                                    setUsername2Error(t("home.player2unfilled"));
                                     return;
                                 }
                                 setTwoPlayersStarted(true);
                             }}
                         >
-                            Empezar partida 2 jugadores
+                            {t("home.startmatchLocal")}
                         </button>
                     </div>
 
                     {/* Panel Online */}
                     <div className="home-config home-config--online">
-                        <span className="home-config__label home-config__label--section">Jugar Online</span>
+                        <span className="home-config__label home-config__label--section">{t("home.vsOnline")}</span>
                         <p className="home-config__online-desc">
-                            Juega contra otro jugador desde distintos dispositivos en tiempo real.
+                            {t("home.onlinedescription")}
                         </p>
 
                         <div className="home-config__spacer" />
@@ -284,14 +284,14 @@ export default function HomePage( {username} : { username: string }) {
                             className="home-config__start"
                             onClick={() => setScreen("online-create")}
                         >
-                            Crear sala
+                            {t("home.create")}
                         </button>
 
                         <button
                             className="home-menu__btn"
                             onClick={() => setScreen("online-join")}
                         >
-                            Unirse a sala
+                            {t("home.join")}
                         </button>
                     </div>
 

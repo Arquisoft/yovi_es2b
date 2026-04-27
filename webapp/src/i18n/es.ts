@@ -10,6 +10,8 @@ export const es = {
     errorPassword: "Escriba la contraseña.",
     serverError: "Error del servidor.",
     networkError: "Error de red.",
+
+    player2unfilled: "El nombre del jugador 2 no puede estar vacío.",
   },
   header: {
     menu: "MENÚ",
@@ -21,6 +23,7 @@ export const es = {
   },
   home: {
     welcome: "Bienvenido a tu menú principal",
+
     vsBot: "Juega contra un bot",
     strategy: "Estrategia",
     botRandom: "Aleatoria",
@@ -33,9 +36,24 @@ export const es = {
     easybutton: "Fácil",
     mediumbutton: "Media",
     hardbutton: "Difícil",
-    startmatch: "Empezar partida",
+    startmatchBot: "Empezar partida",
     stats: "Mis estadísticas",
     rank: "Ranking global",
+
+    vsLocal: "Juega contra otro jugador local",
+    player2: "Nombre del jugador 2",
+    boardsize: "Tamaño del tablero",
+    boardsmall: "Pequeño",
+    boardmedium: "Mediano",
+    boardlarge: "Grande",
+    timer: "Temporizador",
+    activateTimer: "Activar temporizador",
+    startmatchLocal: "Empezar partida local",
+
+    vsOnline: "Juega contra otro jugador en línea",
+    onlinedescription: "Juega contra otro jugador desde distintos dispositivos en tiempo real.",
+    create: "Crear una partida",
+    join: "Unirse a unapartida",
   },
   initial: {
     welcome: "Bienvenido de nuevo, inicia sesión aquí",
