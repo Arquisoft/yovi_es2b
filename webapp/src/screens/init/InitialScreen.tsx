@@ -20,6 +20,13 @@ const InitialScreen: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  /**
+   * Funcion para manejar el envío del formulario de inicio de sesión.
+   * Valida que se hayan escrito el usuario y la contraseña, y muestra un mensaje de error si no es así. 
+   * Si ambos campos están escritos, hace una petición POST al endpoint /loginuser con el usuario y la contraseña en el body, y maneja la respuesta mostrando un mensaje de éxito o error según corresponda. 
+   * Si el inicio de sesión es exitoso, guarda el usuario en localStorage para mantener la sesión iniciada incluso después de recargar la página, y cambia el estado a logged para mostrar el componente Home. 
+   * Si hay un error en la petición, muestra un mensaje de error genérico o específico según corresponda.
+   */
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setResponseMessage(null);

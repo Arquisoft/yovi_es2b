@@ -12,24 +12,29 @@ interface CreateRoomProps {
 }
 
 export default function CreateRoom({ username, onGameReady, onBack }: Readonly<CreateRoomProps>) {
-  const [difficulty, setDifficulty] = useState<DifficultyType>(Difficulty.MEDIUM);
-  const [timerEnabled, setTimerEnabled] = useState(true);
-  const [code, setCode] = useState<string | null>(null);
-  const [waiting, setWaiting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [difficulty, setDifficulty] = useState<DifficultyType>(Difficulty.MEDIUM); // Estado para almacenar la dificultad seleccionada, por defecto "MEDIUM"
+  const [timerEnabled, setTimerEnabled] = useState(true); // Estado para almacenar si el temporizador está habilitado, por defecto "true"
+  const [code, setCode] = useState<string | null>(null); // Estado para almacenar el código de la sala creada, inicialmente null porque no se ha creado ninguna sala
+  const [waiting, setWaiting] = useState(false); // Estado para indicar si se está esperando a que un rival se conecte, inicialmente false porque no se ha creado ninguna sala
+  const [error, setError] = useState<string | null>(null); // Estado para almacenar el mensaje de error en caso de que ocurra algún error al crear la sala o durante la espera
   // Ref para tener siempre el código actualizado dentro de los handlers del socket
-  const codeRef = useRef<string | null>(null);
-  const timerEnabledRef = useRef(true);
+  const codeRef = useRef<string | null>(null); // Ref para tener siempre el estado del temporizador actualizado dentro de los handlers del socket
+  const timerEnabledRef = useRef(true); // Ref para tener siempre el estado del temporizador actualizado dentro de los handlers del socket
+
 
   useEffect(() => {
-    const socket = getSocket();
+    const socket = getSocket(); // Obtiene la instancia del socket para comunicarse con el backend
 
+    // Handler para el evento "room-created" que se emite desde el backend cuando se crea una sala. 
+    // Actualiza el estado con el código de la sala y muestra la pantalla de espera.
     socket.on('room-created', ({ code: roomCode }: { code: string; gameId: string; playerIndex: number }) => {
       codeRef.current = roomCode;
       setCode(roomCode);
       setWaiting(true);
     });
 
+    // Handler para el evento "game-start" que se emite desde el backend cuando un rival se conecta a la sala y el juego está listo para comenzar.
+    // Llama a la función onGameReady con la información del juego para iniciarlo.
     socket.on('game-start', ({ gameId, difficulty: diff, players, timerEnabled: te }: {
       gameId: string;
       difficulty: string;
@@ -48,11 +53,17 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
       });
     });
 
+    // Handler para el evento "room-error" que se emite desde el backend si ocurre algún error al crear la sala o durante la espera.
+    // Actualiza el estado con el mensaje de error y deja de mostrar la pantalla de espera.
     socket.on('room-error', ({ message }: { message: string }) => {
       setError(message);
       setWaiting(false);
     });
 
+    /**
+     * Funcion para cuando el usuario intente cerrar la pestaña o recargar la página mientras está en la pantalla de espera, para evitar que se quede una sala huérfana en el backend.
+     * Emite el evento "abandon-game" al backend con el código de la sala para que el backend pueda eliminar la sala y liberar los recursos asociados.
+     */
     function handleBeforeUnload() {
       if (codeRef.current) {
         getSocket().emit('abandon-game', { code: codeRef.current });
@@ -68,6 +79,11 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
     };
   }, [onGameReady]);
 
+  /**
+   * Funcion para manejar el botón de volver, para abandonar la sala si se ha creado y volver al menú principal.
+   * Si se ha creado una sala (codeRef.current no es null), emite el evento "abandon-game" al backend con el código de la sala 
+   * Luego llama a la función onBack para volver al menú principal.
+   */
   function handleBack() {
     if (codeRef.current) {
       getSocket().emit('abandon-game', { code: codeRef.current });
@@ -75,6 +91,11 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
     onBack();
   }
 
+  /**
+   * Funcion para manejar el botón de crear sala, para enviar la solicitud al backend con las opciones seleccionadas.
+   * Emite el evento "create-room" al backend con el nombre de usuario, la dificultad seleccionada y si el temporizador está habilitado. 
+   * También actualiza el ref del temporizador para que esté actualizado en los handlers del socket.
+   */
   function handleCreate() {
     setError(null);
     timerEnabledRef.current = timerEnabled;

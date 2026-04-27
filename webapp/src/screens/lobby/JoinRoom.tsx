@@ -9,17 +9,26 @@ interface JoinRoomProps {
   onBack: () => void;
 }
 
+/**
+ * Funcion para unirse a una sala de juego online existente. Permite al usuario:
+ * - Ingresar un código de sala para unirse a esa sala, 
+ * - Manejar la comunicación con el backend a través de sockets para unirse a la sala
+ * Al unirse a la sala, espera a que el juego comience y luego llama a la función onGameReady con la información del juego para iniciar la partida.
+ * Si el usuario intenta volver o cerrar la pestaña mientras está en la sala, emite un evento al backend para abandonar la sala y evitar que quede una sala huérfana.
+ */
 export default function JoinRoom({ username, onGameReady, onBack }: Readonly<JoinRoomProps>) {
-  const [inputCode, setInputCode] = useState("");
-  const [joined, setJoined] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [inputCode, setInputCode] = useState(""); // Estado para almacenar el código de sala ingresado por el usuario
+  const [joined, setJoined] = useState(false); //Estado para indicar si el usuario se ha unido a la sala, inicialmente false porque no se ha unido a ninguna sala
+  const [error, setError] = useState<string | null>(null); // Estado para almacenar el mensaje de error en caso de que ocurra algún error al unirse a la sala o durante la espera
   // Refs para tener valores actualizados dentro de los handlers del socket
-  const inputCodeRef = useRef("");
-  const joinedInfoRef = useRef<Partial<OnlineGameInfo> | null>(null);
+  const inputCodeRef = useRef(""); // Ref para tener siempre el código de sala actualizado dentro de los handlers del socket
+  const joinedInfoRef = useRef<Partial<OnlineGameInfo> | null>(null); // Ref para tener siempre la información de la sala a la que se ha unido el usuario actualizada 
 
   useEffect(() => {
-    const socket = getSocket();
+    const socket = getSocket(); // Obtiene la instancia del socket para comunicarse con el backend
 
+    // Handler para el evento "room-joined" que se emite desde el backend cuando el usuario se une a una sala. 
+    // Actualiza el estado para mostrar la pantalla de espera y guarda la información de la sala a la que se ha unido el usuario en un ref para tenerla disponible en los handlers del socket.
     socket.on('room-joined', ({ code, gameId, difficulty, opponentUsername }: {
       code: string;
       gameId: string;
@@ -27,10 +36,16 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
       difficulty: string;
       opponentUsername: string;
     }) => {
-      joinedInfoRef.current = { code, gameId, playerIndex: 1, difficulty, opponentUsername };
+      joinedInfoRef.current = { code, gameId, playerIndex: 1, difficulty, opponentUsername }; 
+      //Guarda la información de la sala a la que se ha unido el usuario en un ref para tenerla disponible en los handlers del socket
       setJoined(true);
     });
 
+    /**
+     * Handler para el evento "game-start" que se emite desde el backend cuando el juego está listo para comenzar después de que el usuario se ha unido a la sala.
+     * Llama a la función onGameReady con la información del juego para iniciarlo.
+     * Si el usuario no se ha unido a ninguna sala (joinedInfoRef.current es null), no hace nada.
+     */
     socket.on('game-start', ({ gameId, difficulty, players, timerEnabled }: {
       gameId: string;
       difficulty: string;
@@ -49,11 +64,14 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
       });
     });
 
+    // Handler para el evento "room-error" que se emite desde el backend si ocurre algún error al unirse a la sala o durante la espera.
+    // Actualiza el estado con el mensaje de error y deja de mostrar la pantalla de espera.
     socket.on('room-error', ({ message }: { message: string }) => {
       setError(message);
       setJoined(false);
     });
 
+    //Funcion para cuando el usuario intente cerrar la pestaña o recargar la página mientras está en la pantalla de espera, para evitar que se quede una sala huérfana en el backend.
     function handleBeforeUnload() {
       const info = joinedInfoRef.current;
       if (info?.code) {
@@ -70,6 +88,7 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
     };
   }, [onGameReady]);
 
+  // Funcion para manejar el botón de volver, para abandonar la sala si se ha unido a alguna y volver al menú principal.
   function handleBack() {
     const info = joinedInfoRef.current;
     if (info?.code) {
@@ -78,6 +97,7 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
     onBack();
   }
 
+  // Funcion para manejar el botón de unirse a la sala, para enviar la solicitud al backend con el código de sala ingresado.
   function handleJoin() {
     if (!inputCode.trim()) {
       setError("Introduce el código de la sala");
