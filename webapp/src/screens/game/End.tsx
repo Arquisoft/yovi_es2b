@@ -16,13 +16,13 @@ interface EndProps {
 }
 
 function getTitle(twoPlayers: boolean, onlineMode: boolean, winner: string, playerWon: boolean, t: (key: string) => string): string {
-  if (twoPlayers && !onlineMode) return `¡Ganó ${winner}!`;
+  if (twoPlayers && !onlineMode) return t("end.whowon").replace("{winner}", winner);
   return playerWon ? t("end.victory") : t("end.defeat");
 }
 
 function getSubtitle(twoPlayers: boolean, onlineMode: boolean, winner: string, username: string, playerWon: boolean, t: (key: string) => string): string {
-  if (twoPlayers && !onlineMode) return `¡Enhorabuena, ${winner}, ganaste la partida!`;
-  if (playerWon)  return `¡Enhorabuena, ${username}, ganaste la partida!`;
+  if (twoPlayers && !onlineMode) return t("end.personalwin").replace("{player}", winner);
+  if (playerWon)  return t("end.personalwin").replace("{player}", username);
   return t("end.personalloss");
 }
 

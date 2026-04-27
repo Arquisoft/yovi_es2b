@@ -23,6 +23,8 @@ export const en = {
     lose: "Ugly defeat",
     victory: "Victory is yours!",
     defeat: "You were defeated!",
+    whowon: "{winner} won!",
+    personalwin: "Congratulations, {player}, winner, winner, chicken dinner!",
     personalloss: "You lost. Humiliating. Try again!",
 
     again: "Play Again",

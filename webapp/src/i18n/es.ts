@@ -18,13 +18,13 @@ export const es = {
     player2m: "Mediano",
     player2l: "Grande",
 
-
-
     result: "Resultado",
     win: "Victoria",
     lose: "Derrota",
     victory: "¡Victoria!",
     defeat: "¡Derrota!",
+    whowon: "¡Ganó {winner}!",
+    personalwin: "¡Enhorabuena, {player}, ganaste la partida!",
     personalloss: "Has perdido. ¡Inténtalo de nuevo!",
 
     again: "Jugar de nuevo",
