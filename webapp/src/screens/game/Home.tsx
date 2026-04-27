@@ -141,7 +141,7 @@ export default function HomePage( {username} : { username: string }) {
 
             {/* Contenido */}
             <div className="home-body">
-                <img src="/yovi_logo.png" alt="YOVI Logo" className="home-screen__logo" />
+                <img src="/yovi_logo.png" alt={t("common.logoAlt")} className="home-screen__logo" />
                 <h2 className="home-screen__title">{t("home.welcome")}, {username}</h2>
 
                 <div className="home-panels">
@@ -205,7 +205,7 @@ export default function HomePage( {username} : { username: string }) {
                     <div className="home-config home-config--pvp">
                         <span className="home-config__label home-config__label--section">{t("home.vsLocal")}</span>
 
-                        <label className="home-config__label" htmlFor="username2">home.player2</label>
+                        <label className="home-config__label" htmlFor="username2">{t("home.player2")}</label>
                         <input
                             id="username2"
                             className="home-config__input"

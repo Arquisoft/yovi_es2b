@@ -12,6 +12,8 @@ export const es = {
     networkError: "Error de red.",
 
     player2unfilled: "El nombre del jugador 2 no puede estar vacío.",
+
+    rankingError: "Ranking no disponible.",
   },
   header: {
     menu: "MENÚ",
@@ -64,6 +66,16 @@ export const es = {
     loadingButton: "Cargando usuario...",
     signupPrompt: "¿No tienes usuario? Haz click aquí para crear uno.",
     signupButton: "Regístrate",
+  },
+  ranking: {
+    title: "Ranking global",
+    position: "Tu posición en el ranking es...",
+
+    noposition: "Sin posición",
+    notavailable: "No disponible",
+
+    seerank: "Ver ranking",
+    back: "Volver al menú principal",
   },
   signup: {
     welcome: "Bienvenido, regístrate aquí",

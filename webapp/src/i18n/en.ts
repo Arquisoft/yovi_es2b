@@ -12,6 +12,8 @@ export const en = {
     networkError: "Network error.",
 
     player2unfilled: "Player 2's name cannot be empty.",
+
+    rankingError: "Ranking not available.",
   },
   header: {
     menu: "MENU",
@@ -63,6 +65,16 @@ export const en = {
     loadingButton: "Loading user...",
     signupPrompt: "Don't have a user? Click here to create one.",
     signupButton: "Sign up",
+  },
+  ranking: {
+    title: "Global ranking",
+    position: "Your position in the ranking is...",
+
+    noposition: "No position",
+    notavailable: "Not available",
+
+    seerank: "View ranking",
+    back: "Go back to main menu",
   },
   signup: {
     welcome: "Welcome, sign up here",
