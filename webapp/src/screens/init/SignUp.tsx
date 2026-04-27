@@ -8,15 +8,15 @@ import yoviLogo from "../../../public/yovi_logo.png";
 
 const SignUp: React.FC = () => {
 
-      const [username, setUsername] = useState('');
-      const [password, setPassword] = useState('');
-      const [showPassword, setShowPassword] = useState(false);
-      const [responseMessage, setResponseMessage] = useState<string | null>(null);
-      const [signed, setSigned] = useState(false);
-      const [toLog, setToLog] = useState(false);
-      const [error, setError] = useState<string | null>(null);
-      const [loading, setLoading] = useState(false);
-      const { t } = useLanguageContext();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [responseMessage, setResponseMessage] = useState<string | null>(null);
+    const [signed, setSigned] = useState(false);
+    const [toLog, setToLog] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const { t } = useLanguageContext();
 
     const handleLogin = async (event: React.FormEvent) => {
         event.preventDefault();

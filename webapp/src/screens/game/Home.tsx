@@ -14,12 +14,13 @@ import CreateRoom from "../lobby/CreateRoom";
 import JoinRoom from "../lobby/JoinRoom";
 import type { OnlineGameInfo } from "../lobby/OnlineGameInfo";
 import AppHeader from "../../components/header/AppHeader";
-
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 
 /**
  * Declaración primera de esto, para que funcione el guardar datos de la partida
  */
 async function iniciarPartida(username: string, strategy: string, difficulty: string) {
+    const { t } = useLanguageContext();
     try {
         const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
         const res = await fetch(`${API_URL}/initmatch`, {
@@ -31,10 +32,10 @@ async function iniciarPartida(username: string, strategy: string, difficulty: st
 
         const data = await res.json();
         if (!res.ok) {
-            throw new Error(data.error || 'Server error');
+            throw new Error(data.error || t("error.serverError"));
         }
     } catch (err) {
-        throw new Error(err instanceof Error ? err.message : 'Network error', { cause: err });
+        throw new Error(err instanceof Error ? err.message : t("error.networkError"), { cause: err });
     }
 }
 
@@ -51,6 +52,7 @@ export default function HomePage( {username} : { username: string }) {
     const [timerEnabled2, setTimerEnabled2] = useState(true);
     const [screen, setScreen] = useState("home");
     const [onlineGameInfo, setOnlineGameInfo] = useState<OnlineGameInfo | null>(null);
+    const { t } = useLanguageContext();
 
     // como es función async, llamamos useEffect
     useEffect(() => {
@@ -141,61 +143,61 @@ export default function HomePage( {username} : { username: string }) {
             {/* Contenido */}
             <div className="home-body">
                 <img src="/yovi_logo.png" alt="YOVI Logo" className="home-screen__logo" />
-                <h2 className="home-screen__title">Bienvenido a tu menú principal, {username}</h2>
+                <h2 className="home-screen__title">{t("home.welcome")}, {username}</h2>
 
                 <div className="home-panels">
 
                     {/* Panel VS Bot */}
                     <div className="home-config">
-                        <span className="home-config__label home-config__label--section">Juega contra el bot</span>
+                        <span className="home-config__label home-config__label--section">{t("home.vsBot")}</span>
 
-                        <label className="home-config__label" htmlFor="estrategia">Estrategia</label>
+                        <label className="home-config__label" htmlFor="estrategia">{t("home.strategy")}</label>
                         <select
                             id="estrategia"
                             className="home-config__select"
                             value={settings.strategy}
                             onChange={(e) => setSettings({ ...settings, strategy: e.target.value as StrategyType })}
                         >
-                            <option value={Strategy.RANDOM}>Random</option>
-                            <option value={Strategy.DEFENSIVO}>Defensiva</option>
-                            <option value={Strategy.OFENSIVO}>Ofensiva</option>
-                            <option value={Strategy.MONTE_CARLO}>Monte Carlo</option>
-                            <option value={Strategy.MONTE_CARLO_MEJORADO}>Monte Carlo Mejorado</option>
-                            <option value={Strategy.MONTE_CARLO_ENDURECIDO}>Monte Carlo Endurecido</option>
+                            <option value={Strategy.RANDOM}>{t("home.botRandom")}</option>
+                            <option value={Strategy.DEFENSIVO}>{t("home.botDefensive")}</option>
+                            <option value={Strategy.OFENSIVO}>{t("home.botAggressive")}</option>
+                            <option value={Strategy.MONTE_CARLO}>{t("home.botMC")}</option>
+                            <option value={Strategy.MONTE_CARLO_MEJORADO}>{t("home.botMCBetter")}</option>
+                            <option value={Strategy.MONTE_CARLO_ENDURECIDO}>{t("home.botMCHard")}</option>
                             {/* <option value={Strategy.MONTE_CARLO_ENDURECIDO_CONCURSO}>Monte Carlo Endurecido Concurso</option> */}
                         </select>
 
-                        <span className="home-config__label">Dificultad</span>
+                        <span className="home-config__label">{t("home.difficulty")}</span>
                         <div className="home-difficulty">
                             <button
                                 className={`home-difficulty__btn home-difficulty__btn--easy${settings.difficulty === Difficulty.EASY ? " home-difficulty__btn--easy--active" : ""}`}
                                 onClick={() => setSettings({ ...settings, difficulty: Difficulty.EASY })}>
-                                Fácil
+                                {t("home.easybutton")}
                             </button>
                             <button
                                 className={`home-difficulty__btn home-difficulty__btn--medium${settings.difficulty === Difficulty.MEDIUM ? " home-difficulty__btn--medium--active" : ""}`}
                                 onClick={() => setSettings({ ...settings, difficulty: Difficulty.MEDIUM })}>
-                                Media
+                                {t("home.mediumbutton")}
                             </button>
                             <button
                                 className={`home-difficulty__btn home-difficulty__btn--hard${settings.difficulty === Difficulty.HARD ? " home-difficulty__btn--hard--active" : ""}`}
                                 onClick={() => setSettings({ ...settings, difficulty: Difficulty.HARD })}>
-                                Difícil
+                                {t("home.hardbutton")}
                             </button>
                         </div>
 
                         <button className="home-config__start" onClick={() => setScreen("game")}>
-                            Empezar partida
+                            {t("home.startmatch")}
                         </button>
 
                         <hr className="home-config__divider" />
 
                         <div className="home-menu">
                             <button className="home-menu__btn" onClick={() => setScreen("stats")}>
-                                Mis estadísticas
+                                {t("home.stats")}
                             </button>
                             <button className="home-menu__btn" onClick={() => setScreen("ranking")}>
-                                Ranking
+                                {t("home.rank")}
                             </button>
                         </div>
                     </div>
