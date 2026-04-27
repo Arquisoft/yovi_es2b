@@ -18,7 +18,7 @@ export default function GameInfo(props: Props) {
 
   return (
     <div className="game-info">
-      <h2>{t("game.title")}</h2>
+      <h2>{t("game.info")}</h2>
       <div className="info-section">
         {!props.twoPlayers && <p><strong>{t("game.player")} </strong> {props.currentPlayer}</p>}
         {!props.twoPlayers && <p><strong>{t("game.opponent")} </strong> BOT</p>}

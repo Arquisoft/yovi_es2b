@@ -8,6 +8,7 @@
   align-items: center;
   justify-content: center;
   background: var(--bg-page);
+  flex-direction: column;
 }
 
 .lobby-card {
