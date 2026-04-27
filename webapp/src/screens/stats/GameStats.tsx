@@ -9,10 +9,10 @@ import yoviLogo from "../../../public/yovi_logo.png";
 
 export default function GameStats( {username} : { username: string }) {
 
-    const [goBack, setGoBack] = useState(false);
-    const [goTotal, setGoTotal] = useState(false);
-    const [goFiltered, setGoFiltered] = useState(false);
-    const [goLogin, setGoLogin] = useState(false);
+    const [goBack, setGoBack] = useState(false); // Estado para volver al menú principal
+    const [goTotal, setGoTotal] = useState(false); // Estado para mostrar las estadísticas totales
+    const [goFiltered, setGoFiltered] = useState(false); // Estado para mostrar las estadísticas filtradas
+    const [goLogin, setGoLogin] = useState(false); // Estado para volver a la pantalla de inicio de sesión
 
     if (goLogin) return <InitialScreen />;
     if (goBack) return <Home username={username}/>;

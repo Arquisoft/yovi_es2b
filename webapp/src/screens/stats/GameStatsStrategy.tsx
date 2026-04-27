@@ -11,6 +11,11 @@ type StatStr = {
     porcentaje: string;
 };
 
+/**
+ * Funcion para obtener las estadísticas de estrategia del usuario desde el backend.
+ * Hace una petición POST al endpoint /stratstats con el nombre de usuario en el cuerpo de la solicitud, 
+ * devuelve un array de objetos con las estadísticas de estrategia del usuario.
+ */
 async function obtenerDatos(username: string) {
     try {
         const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
@@ -33,10 +38,14 @@ async function obtenerDatos(username: string) {
     }    
 }
 
+/**
+ * Funcion para mostrar las estadísticas de estrategia del usuario.
+ */
 export default function GameStatsStra( {username} : { username: string }) {
 
-    const [data, setData] = useState<StatStr[]>([]);
+    const [data, setData] = useState<StatStr[]>([]); // Estado para almacenar las estadísticas de estrategia del usuario
 
+    // Carga las estadísticas de estrategia del usuario al montar el componente, y cada vez que cambie el nombre de usuario.
     useEffect(() => {
             const cargarDatos = async () => {
                 const resultado = await obtenerDatos(username);

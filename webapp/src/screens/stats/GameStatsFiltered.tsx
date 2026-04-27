@@ -7,11 +7,14 @@ import InitialScreen from "../init/InitialScreen.tsx";
 import "./GameStats.css";
 import AppHeader from "../../components/header/AppHeader.tsx";
 
+/**
+ * Funcion para mostrar las estadísticas filtradas del usuario.
+ */
 export default function GameStatsFiltered( {username} : { username: string }) {
 
-    const [goBack, setGoBack] = useState(false);
-    const [goHome, setGoHome] = useState(false);
-    const [goLogin, setGoLogin] = useState(false);
+    const [goBack, setGoBack] = useState(false); // Estado para volver al menú de estadísticas
+    const [goHome, setGoHome] = useState(false); // Estado para volver al menú principal
+    const [goLogin, setGoLogin] = useState(false); // Estado para volver a la pantalla de inicio de sesión
 
     if (goLogin) return <InitialScreen />;
     if (goBack) return <GameStats username={username}/>;
