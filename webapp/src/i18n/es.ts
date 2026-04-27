@@ -5,6 +5,31 @@ export const es = {
     english: "🇬🇧 English",
     logoAlt: "Logo YOVI",
   },
+  end: {
+    winner: "Ganador",
+    loser: "Perdedor",
+    player: "Jugador",
+
+    player1diff: "Dificultad",
+    player1strat: "Estrategia",
+    player2size: "Tamaño del tablero",
+
+    player2s: "Pequeño",
+    player2m: "Mediano",
+    player2l: "Grande",
+
+
+
+    result: "Resultado",
+    win: "Victoria",
+    lose: "Derrota",
+    victory: "¡Victoria!",
+    defeat: "¡Derrota!",
+    personalloss: "Has perdido. ¡Inténtalo de nuevo!",
+
+    again: "Jugar de nuevo",
+    home: "Volver al menú",
+  },
   error: {
     errorUsername: "Escriba el usuario.",
     errorPassword: "Escriba la contraseña.",
