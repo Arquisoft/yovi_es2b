@@ -138,5 +138,29 @@ export const es = {
     losses: "Derrotas",
     played: "Partidas jugadas",
     percentage: "Porcentaje de victorias",
+  },
+  rooms: {
+    // CreateRoom
+    createRoomTitle: "Crear sala online",
+    boardSize: "Tamaño del tablero",
+    small: "Pequeño",
+    medium: "Mediano",
+    large: "Grande",
+    timer: "Temporizador",
+    timerActive: "Partida con temporizador activo",
+    createRoomButton: "Crear sala",
+    shareCode: "Comparte este código con tu rival:",
+    waitingRival: "Esperando a que tu rival se conecte…",
+
+    // JoinRoom
+    joinRoomTitle: "Unirse a sala online",
+    roomCode: "Código de sala",
+    roomCodePlaceholder: "Ej: ABC123",
+    joinRoomButton: "Unirse",
+    connectedStarting: "Conectado. Iniciando partida…",
+
+    // Shared
+    back: "Volver",
+    errorEmptyCode: "Introduce el código de la sala",
   }
 };
