@@ -28,7 +28,7 @@ export const es = {
     strategy: "Estrategia",
     botRandom: "Aleatoria",
     botDefensive: "Defensiva",
-    botAggressive: "Agresiva",
+    botOffensive: "Ofensiva",
     botMC: "Montecarlo",
     botMCBetter: "Montecarlo mejorado",
     botMCHard: "Montecarlo final boss",

@@ -19,8 +19,7 @@ import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 /**
  * Declaración primera de esto, para que funcione el guardar datos de la partida
  */
-async function iniciarPartida(username: string, strategy: string, difficulty: string) {
-    const { t } = useLanguageContext();
+async function iniciarPartida(username: string, strategy: string, difficulty: string, t: (key: string) => string) {
     try {
         const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
         const res = await fetch(`${API_URL}/initmatch`, {
@@ -57,7 +56,7 @@ export default function HomePage( {username} : { username: string }) {
     // como es función async, llamamos useEffect
     useEffect(() => {
         if (screen==="game") {
-            iniciarPartida(username, settings.strategy, settings.difficulty);
+            iniciarPartida(username, settings.strategy, settings.difficulty, t);
         }
     }, [screen]);
 
@@ -116,7 +115,7 @@ export default function HomePage( {username} : { username: string }) {
                 twoPlayers={false}
                 stateStart={true}
                 onGoMenu={() => setScreen("home")}
-                onPlayAgain={() => iniciarPartida(username, settings.strategy, settings.difficulty)}
+                onPlayAgain={() => iniciarPartida(username, settings.strategy, settings.difficulty, t)}
             />
         );
     }
@@ -160,7 +159,7 @@ export default function HomePage( {username} : { username: string }) {
                         >
                             <option value={Strategy.RANDOM}>{t("home.botRandom")}</option>
                             <option value={Strategy.DEFENSIVO}>{t("home.botDefensive")}</option>
-                            <option value={Strategy.OFENSIVO}>{t("home.botAggressive")}</option>
+                            <option value={Strategy.OFENSIVO}>{t("home.botOffensive")}</option>
                             <option value={Strategy.MONTE_CARLO}>{t("home.botMC")}</option>
                             <option value={Strategy.MONTE_CARLO_MEJORADO}>{t("home.botMCBetter")}</option>
                             <option value={Strategy.MONTE_CARLO_ENDURECIDO}>{t("home.botMCHard")}</option>
@@ -206,7 +205,7 @@ export default function HomePage( {username} : { username: string }) {
                     <div className="home-config home-config--pvp">
                         <span className="home-config__label home-config__label--section">{t("home.vsLocal")}</span>
 
-                        <label className="home-config__label" htmlFor="username2">{t("home.player2")}</label>
+                        <label className="home-config__label" htmlFor="username2">home.player2</label>
                         <input
                             id="username2"
                             className="home-config__input"
@@ -216,7 +215,7 @@ export default function HomePage( {username} : { username: string }) {
                             onChange={(e) => { setUsername2(e.target.value); setUsername2Error(null); }}
                         />
 
-                        <span className="home-config__label">{t("home.boardsize")}</span>
+                        <span className="home-config__label">{t("home.boardSize")}</span>
                         <div className="home-difficulty">
                             <button
                                 className={`home-difficulty__btn home-difficulty__btn--easy${difficulty2 === Difficulty.EASY ? " home-difficulty__btn--easy--active" : ""}`}
@@ -261,7 +260,7 @@ export default function HomePage( {username} : { username: string }) {
                             className="home-config__start"
                             onClick={() => {
                                 if (username2.trim() === "") {
-                                    setUsername2Error(t("home.player2unfilled"));
+                                    setUsername2Error(t("error.player2unfilled"));
                                     return;
                                 }
                                 setTwoPlayersStarted(true);
