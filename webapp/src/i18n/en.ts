@@ -51,6 +51,32 @@ export const en = {
 
     rankingError: "Ranking not available.",
   },
+  game: {
+    info: "Game Info",
+    player: "Player:",
+    opponent: "Opponent:",
+
+    strategy: "Strategy:",
+    difficulty: "Difficulty:",
+    boardsize: "Board Size:",
+
+    turn: "Current Turn:",
+    status: "Game Status:",
+
+    easy: "Easy",
+    medium: "Medium",
+    hard: "Hard",
+
+    random: "Random",
+    defensivo: "Defensive",
+    ofensivo: "Offensive",
+    monte_carlo: "Monte Carlo",
+    monte_carlo_mejorado: "Better Monte Carlo",
+    monte_carlo_endurecido: "Monte Carlo final boss",
+
+    undo: "Undo Move",
+    exit: "Exit Game",
+  },
   header: {
     menu: "MENU",
     menuAria: "Options menu",

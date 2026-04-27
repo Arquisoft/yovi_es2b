@@ -51,6 +51,32 @@ export const es = {
 
     rankingError: "Ranking no disponible.",
   },
+  game: {
+    info: "Información de la partida",
+    player: "Jugador:",
+    opponent: "Oponente:",
+
+    strategy: "Estrategia:",
+    difficulty: "Dificultad:",
+    boardsize: "Tamaño del tablero:",
+
+    turn: "Turno actual:",
+    status: "Estado de la partida:",
+
+    undo: "Deshacer movimiento",
+    exit: "Salir de la partida",
+
+    easy: "Fácil",
+    medium: "Media",
+    hard: "Difícil",
+
+    random: "Aleatoria",
+    defensivo: "Defensiva",
+    ofensivo: "Ofensiva",
+    monte_carlo: "Monte Carlo",
+    monte_carlo_mejorado: "Monte Carlo Mejorado",
+    monte_carlo_endurecido: "Monte Carlo Endurecido",
+  },
   header: {
     menu: "MENÚ",
     menuAria: "Menú de opciones",
