@@ -83,6 +83,29 @@ export const en = {
     seerank: "View ranking",
     seepersonalrank: "View my position in the ranking",
     back: "Go back to main menu",
+
+    generalTitle: "General classification",
+    wins: "Wins",
+    defeats: "Defeats",
+
+    diffTitle: "Wins by difficulty",
+    easy: "Easy",
+    medium: "Medium",
+    hard: "Hard",
+
+    stratTitle: "Wins by strategy",
+    random: "Random",
+    defensive: "Defensive",
+    offensive: "Offensive",
+    monteCarlo: "MonteCarlo",
+    monteCarloBetter: "Better MonteCarlo",
+    monteCarloHard: "MonteCarlo final boss",
+
+    // Shared
+    positionCol: "Position",
+    playerCol: "Player",
+    winsCol: "Wins",
+    percentageCol: "%",
   },
   signup: {
     welcome: "Welcome, sign up here",

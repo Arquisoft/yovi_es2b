@@ -84,6 +84,32 @@ export const es = {
     seerank: "Ver ranking",
     seepersonalrank: "Ver mi posición en el ranking",
     back: "Volver al menú principal",
+
+    // RankingGeneral
+    generalTitle: "Clasificación general",
+    wins: "Victorias",
+    defeats: "Derrotas",
+
+    // RankingDifficulty
+    diffTitle: "Victorias por dificultad",
+    easy: "Fácil",
+    medium: "Media",
+    hard: "Difícil",
+
+    // RankingStrategy
+    stratTitle: "Victorias por estrategia",
+    random: "Random",
+    defensive: "Defensiva",
+    offensive: "Ofensiva",
+    monteCarlo: "Monte Carlo",
+    monteCarloBetter: "Monte Carlo Mejorado",
+    monteCarloHard: "Monte Carlo Endurecido",
+
+    // Shared
+    positionCol: "Posición",
+    playerCol: "Jugador",
+    winsCol: "Victorias",
+    percentageCol: "%",
   },
   signup: {
     welcome: "Bienvenido, regístrate aquí",
