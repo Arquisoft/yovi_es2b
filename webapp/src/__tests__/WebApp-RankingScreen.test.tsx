@@ -111,7 +111,7 @@ describe('Ranking', () => {
         } as Response)
         renderWithProviders(<Ranking username="desconocido" />)
         await waitFor(() => {
-            expect(screen.getByText('Sin posicion')).toBeInTheDocument()
+            expect(screen.getByText('Sin posición')).toBeInTheDocument()
         })
     })
 
@@ -156,7 +156,7 @@ describe('Ranking', () => {
         await waitFor(() => {
             expect(screen.queryByText(/Tu posición en el ranking es\.\.\./i)).not.toBeInTheDocument()
             expect(screen.getByText(/Ranking global/i)).toBeInTheDocument()
-            expect(screen.getByRole('button', { name: /Volver al ranking general/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Ver mi posición en el ranking/i })).toBeInTheDocument()
         })
     })
 
@@ -302,7 +302,7 @@ describe('Ranking', () => {
             json: async () => ({ ranking: mockRanking }),
         } as Response)
         renderWithProviders(<RankingFiltered username="sara" />)
-        await user.click(screen.getByRole('button', { name: /Volver al ranking general/i }))
+        await user.click(screen.getByRole('button', { name: /Ver mi posición en el ranking/i }))
         await waitFor(() => {
             expect(screen.queryByText(/Ranking global/i)).toBeInTheDocument()
             expect(screen.queryByText(/Victorias por dificultad/i)).not.toBeInTheDocument()

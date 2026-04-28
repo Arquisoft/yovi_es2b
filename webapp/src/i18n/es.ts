@@ -80,8 +80,6 @@ export const es = {
 
     undo: "Deshacer movimiento",
     exit: "Salir de la partida",
-
-    
   },
   header: {
     menu: "MENÚ",
@@ -153,18 +151,15 @@ export const es = {
     seepersonalrank: "Ver mi posición en el ranking",
     back: "Volver al menú principal",
 
-    // RankingGeneral
     generalTitle: "Clasificación general",
     wins: "Victorias",
     defeats: "Derrotas",
 
-    // RankingDifficulty
     diffTitle: "Victorias por dificultad",
     easy: "Fácil",
     medium: "Media",
     hard: "Difícil",
 
-    // RankingStrategy
     stratTitle: "Victorias por estrategia",
     random: "Random",
     defensive: "Defensiva",
@@ -173,7 +168,6 @@ export const es = {
     monteCarloBetter: "Monte Carlo Mejorado",
     monteCarloHard: "Monte Carlo Endurecido",
 
-    // Shared
     positionCol: "Posición",
     playerCol: "Jugador",
     winsCol: "Victorias",
@@ -208,7 +202,6 @@ export const es = {
     percentage: "Porcentaje de victorias",
   },
   rooms: {
-    // CreateRoom
     createRoomTitle: "Crear sala online",
     boardSize: "Tamaño del tablero",
     small: "Pequeño",
@@ -220,14 +213,12 @@ export const es = {
     shareCode: "Comparte este código con tu rival:",
     waitingRival: "Esperando a que tu rival se conecte…",
 
-    // JoinRoom
     joinRoomTitle: "Unirse a sala online",
     roomCode: "Código de sala",
     roomCodePlaceholder: "Ej: ABC123",
     joinRoomButton: "Unirse",
     connectedStarting: "Conectado. Iniciando partida…",
 
-    // Shared
     back: "Volver",
     errorEmptyCode: "Introduce el código de la sala",
   }

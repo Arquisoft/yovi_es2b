@@ -108,7 +108,7 @@ describe('Game', () => {
         )
         await waitFor(() => {
             expect(screen.getByRole('button', { name: /pista/i })).toBeInTheDocument()
-            expect(screen.getByRole('button', { name: /Terminar partida/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Salir de la partida/i })).toBeInTheDocument()
             expect(screen.queryByRole('button', { name: /Deshacer movimiento/i })).not.toBeInTheDocument()
         })
     })
@@ -124,7 +124,7 @@ describe('Game', () => {
         )
         await waitFor(() => {
             expect(screen.getByRole('button', { name: /Deshacer movimiento/i })).toBeInTheDocument()
-            expect(screen.getByRole('button', { name: /Terminar partida/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Salir de la partida/i })).toBeInTheDocument()
             expect(screen.queryByRole('button', { name: /pista/i })).not.toBeInTheDocument()
         })
     })
@@ -174,7 +174,7 @@ describe('Game', () => {
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(async () => {
-            await user.click(screen.getByRole('button', { name: /Terminar partida/i }))
+            await user.click(screen.getByRole('button', { name: /Salir de la partida/i }))
             expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
         })
     })
@@ -189,7 +189,7 @@ describe('Game', () => {
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(async () => {
-            await user.click(screen.getByRole('button', { name: /Terminar partida/i }))
+            await user.click(screen.getByRole('button', { name: /Salir de la partida/i }))
             expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
         })
     })
@@ -371,7 +371,7 @@ describe('Game', () => {
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(async () => {
-            await user.click(screen.getByRole('button', { name: /Terminar partida/i }))
+            await user.click(screen.getByRole('button', { name: /Salir de la partida/i }))
             expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
         })
     })

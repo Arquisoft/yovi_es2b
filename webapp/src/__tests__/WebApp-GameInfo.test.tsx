@@ -46,7 +46,7 @@ describe('GameInfo', () => {
             <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
         )
         await waitFor(() => {
-            expect(screen.getByText(/Información de partida/i)).toBeInTheDocument()
+            expect(screen.getByText(/Información de la partida/i)).toBeInTheDocument()
             expect(screen.getByText(/Tamaño del tablero/i)).toBeInTheDocument()
             expect(screen.getByText(/Estado/i)).toBeInTheDocument()
 
@@ -74,7 +74,7 @@ describe('GameInfo', () => {
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(() => {
-            expect(screen.getByText(/Información de partida/i)).toBeInTheDocument()
+            expect(screen.getByText(/Información de la partida/i)).toBeInTheDocument()
 
             // "sara" aparece en "Jugador" y en "Turno actual", usamos getAllByText
             expect(screen.getAllByText(/sara/i).length).toBeGreaterThan(0)
