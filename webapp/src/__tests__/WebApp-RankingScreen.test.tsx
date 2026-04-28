@@ -6,8 +6,13 @@ import RankingGeneral from '../screens/ranking/RankingGeneral'
 import RankingDifficulty from '../screens/ranking/RankingDifficulty'
 import RankingStrategy from '../screens/ranking/RankingStrategy'
 import { getMedal, sortData } from '../screens/ranking/RankingFiltered'
-import { afterEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
+
+// Forzar idioma español para los tests
+beforeEach(() => {
+    localStorage.setItem('yovi-locale', 'es')
+})
 
 // Datos mock compartidos 
 

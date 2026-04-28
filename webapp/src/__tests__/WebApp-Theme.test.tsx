@@ -17,7 +17,9 @@ function ThemeConsumer() {
 }
 
 // Crea matchMedia mock, que se encarga de simular la función window.matchMedia en el entorno de pruebas.
+// Forzar idioma español para los tests
 beforeEach(() => {
+    localStorage.setItem('yovi-locale', 'es')
     Object.defineProperty(window, 'matchMedia', {
         writable: true,
         value: vi.fn().mockReturnValue({

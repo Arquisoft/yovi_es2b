@@ -21,6 +21,11 @@ vi.mock('../socket', () => ({
 const onGameReady = vi.fn()
 const onBack = vi.fn()
 
+// Forzar idioma español para los tests
+beforeEach(() => {
+  localStorage.setItem('yovi-locale', 'es')
+})
+
 describe('CreateRoom', () => {
   beforeEach(() => {
     vi.clearAllMocks()

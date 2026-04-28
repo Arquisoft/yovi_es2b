@@ -3,6 +3,11 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import TurnTimer from '../components/timer/Timer'
 
+// Forzar idioma español para los tests
+beforeEach(() => {
+    localStorage.setItem('yovi-locale', 'es')
+})
+
 describe('TurnTimer', () => {
     beforeEach(() => {
         vi.useFakeTimers() // controlamos el tiempo manualmente en cada test

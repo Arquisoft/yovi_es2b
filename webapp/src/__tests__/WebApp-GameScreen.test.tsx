@@ -47,6 +47,12 @@ function mockFetch() {
 }
 
 /**
+// Forzar idioma español para los tests
+beforeEach(() => {
+    localStorage.setItem('yovi-locale', 'es')
+})
+
+/**
  * Test para Game que comprueba que:
  * - No se crea partida si stateStart es false
  * - Se llama a la API para crear partida cuando stateStart es true
