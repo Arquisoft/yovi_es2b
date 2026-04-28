@@ -7,11 +7,16 @@ import "./InitialScreen.css";
 import yoviLogo from "../../../public/yovi_logo.png";
 
 const InitialScreen: React.FC = () => {
-  const [username, setUsername] = useState('');
+
+  const [username, setUsername] = useState(() => localStorage.getItem('yovi-username') ?? '');  
+  // useState tiene una funcion para que se guarde el inicio de sesion aunque se recargue la pagina, guardando el usuario en el localStorage del navegador, y recuperandolo al cargar el componente (carga perezosa)
+ 
+  //useState define una funcion que recupera el usuario guardado en localStorage si este existe o devuelve una cadena vacía si no hay ningún usuario guardado.
+  const [logged, setLogged] = useState(() => Boolean(localStorage.getItem('yovi-username')));
+
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [responseMessage, setResponseMessage] = useState<string | null>(null);
-  const [logged, setLogged] = useState(false);
   const [toSigned, setToSigned] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -23,11 +28,11 @@ const InitialScreen: React.FC = () => {
     setError(null);
 
     if (!username.trim()) {
-      setError(t('initial.errorUsername'));
+      setError(t('error.errorUsername'));
       return;
     }
     if (!password.trim()) {
-      setError(t('initial.errorPassword'));
+      setError(t('error.errorPassword'));
       return;
     }
 
@@ -46,12 +51,14 @@ const InitialScreen: React.FC = () => {
       if (res.ok) {
         setResponseMessage(data.message);
         setPassword('');
+        // Guardar el usuario en localStorage para mantener la sesión iniciada incluso después de recargar la página. LocalStorage es un almacenamiento web de TypeScript.
+        localStorage.setItem('yovi-username', username);
         setLogged(true);
       } else {
-        setError(data.error || t('initial.serverError'));
+        setError(data.error || t('error.serverError'));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : t('initial.networkError'));
+      setError(err instanceof Error ? err.message : t('error.networkError'));
     } finally {
       setLoading(false);
     }
@@ -66,7 +73,7 @@ const InitialScreen: React.FC = () => {
 
   return (
     <div className="initial-screen">
-      <img src={yoviLogo} alt={t('initial.logoAlt')} className="initial-screen__logo" />
+      <img src={yoviLogo} alt={t('common.logoAlt')} className="initial-screen__logo" />
       <h1>{t('initial.welcome')}</h1>
 
       <form onSubmit={handleSubmit} className="register-form">

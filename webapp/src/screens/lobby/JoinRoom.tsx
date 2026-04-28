@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { getSocket } from "../../socket";
 import type { OnlineGameInfo } from "./OnlineGameInfo";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 import "./Lobby.css";
 
 interface JoinRoomProps {
@@ -10,6 +11,7 @@ interface JoinRoomProps {
 }
 
 export default function JoinRoom({ username, onGameReady, onBack }: Readonly<JoinRoomProps>) {
+  const { t } = useLanguageContext();
   const [inputCode, setInputCode] = useState("");
   const [joined, setJoined] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -80,7 +82,7 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
 
   function handleJoin() {
     if (!inputCode.trim()) {
-      setError("Introduce el código de la sala");
+      setError(t('rooms.errorEmptyCode'));
       return;
     }
     setError(null);
@@ -90,18 +92,18 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
 
   return (
     <div className="lobby-screen">
+      <img src="/yovi_logo.png" alt={t('common.logoAlt')} className="lobby-logo" />
       <div className="lobby-card">
-        <img src="/yovi_logo.png" alt="YOVI Logo" className="lobby-logo" />
-        <h2 className="lobby-card__title">Unirse a sala online</h2>
+        <h2 className="lobby-card__title">{t('rooms.joinRoomTitle')}</h2>
 
         {!joined && (
           <>
-            <label className="lobby-card__label" htmlFor="room-code">Código de sala</label>
+            <label className="lobby-card__label" htmlFor="room-code">{t('rooms.roomCode')}</label>
             <input
               id="room-code"
               className="lobby-input"
               type="text"
-              placeholder="Ej: ABC123"
+              placeholder={t('rooms.roomCodePlaceholder')}
               maxLength={6}
               value={inputCode}
               onChange={(e) => { setInputCode(e.target.value.toUpperCase()); setError(null); }}
@@ -110,17 +112,17 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
             {error && <p className="lobby-error">{error}</p>}
 
             <button className="lobby-btn lobby-btn--primary" onClick={handleJoin}>
-              Unirse
+              {t('rooms.joinRoomButton')}
             </button>
           </>
         )}
 
         {joined && (
-          <p className="lobby-waiting__text">Conectado. Iniciando partida…</p>
+          <p className="lobby-waiting__text">{t('rooms.connectedStarting')}</p>
         )}
 
         <button className="lobby-btn lobby-btn--back" onClick={handleBack}>
-          Volver
+          {t('rooms.back')}
         </button>
       </div>
     </div>

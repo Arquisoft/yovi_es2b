@@ -1,5 +1,6 @@
 import "./End.css";
 import type { GameSettings } from "../../components/gameOptions/GameSettings";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 
 // Definimos la interfaz de las props, necesaria para mostrar el resultado de la partida y ofrecer opciones al usuario
 interface EndProps {
@@ -14,23 +15,24 @@ interface EndProps {
   onPlayAgain: () => void; // función para iniciar una nueva partida con las mismas configuraciones
 }
 
-function getTitle(twoPlayers: boolean, onlineMode: boolean, winner: string, playerWon: boolean): string {
-  if (twoPlayers && !onlineMode) return `¡Ganó ${winner}!`;
-  return playerWon ? "¡Victoria!" : "¡Derrota!";
+function getTitle(twoPlayers: boolean, onlineMode: boolean, winner: string, playerWon: boolean, t: (key: string) => string): string {
+  if (twoPlayers && !onlineMode) return t("end.whowon").replace("{winner}", winner);
+  return playerWon ? t("end.victory") : t("end.defeat");
 }
 
-function getSubtitle(twoPlayers: boolean, onlineMode: boolean, winner: string, username: string, playerWon: boolean): string {
-  if (twoPlayers && !onlineMode) return `¡Enhorabuena, ${winner}, ganaste la partida!`;
-  if (playerWon)  return `¡Enhorabuena, ${username}, ganaste la partida!`;
-  return "Has perdido. ¡Intentalo de nuevo!";
+function getSubtitle(twoPlayers: boolean, onlineMode: boolean, winner: string, username: string, playerWon: boolean, t: (key: string) => string): string {
+  if (twoPlayers && !onlineMode) return t("end.personalwin").replace("{player}", winner);
+  if (playerWon)  return t("end.personalwin").replace("{player}", username);
+  return t("end.personalloss");
 }
 
 export function End({ winner, username, username2 = "", twoPlayers = false, onlineMode = false, showPlayAgain = true, settings, onGoHome, onPlayAgain }: Readonly<EndProps>) {
+  const { t } = useLanguageContext();
   const playerWon = winner === username;
-  const title    = getTitle(twoPlayers, onlineMode, winner, playerWon);
+  const title    = getTitle(twoPlayers, onlineMode, winner, playerWon, t);
   const showWin  = (twoPlayers && !onlineMode) || playerWon;
   const icon     = showWin ? "🏆" : "💀";
-  const subtitle = getSubtitle(twoPlayers, onlineMode, winner, username, playerWon);
+  const subtitle = getSubtitle(twoPlayers, onlineMode, winner, username, playerWon, t);
 
   return (
     <div className="end-screen">
@@ -55,30 +57,38 @@ export function End({ winner, username, username2 = "", twoPlayers = false, onli
         {/* Resumen de la partida */}
         <dl className="end-summary">
           <div className="end-summary-row">
-            <dt>{twoPlayers ? "Ganador" : "Jugador"}</dt>
+            <dt>{twoPlayers ? t("end.winner") : t("end.player")}</dt>
             <dd>{twoPlayers ? winner : username}</dd>
           </div>
           {twoPlayers && (
             <div className="end-summary-row">
-              <dt>Perdedor</dt>
+              <dt>{t("end.loser")}</dt>
               <dd>{winner === username ? username2 : username}</dd>
             </div>
           )}
           <div className="end-summary-row">
-            <dt>{twoPlayers ? "Tamaño del tablero" : "Dificultad"}</dt>
-            <dd>{twoPlayers ? ({ EASY: "Pequeño", MEDIUM: "Mediano", HARD: "Grande" } as Record<string, string>)[settings.difficulty] : settings.difficulty}</dd>
+            <dt>{twoPlayers ? t("end.player2size") : t("end.player1diff")}</dt>
+            <dd>
+              {twoPlayers
+                ? ({
+                    EASY: t("end.player2s"),
+                    MEDIUM: t("end.player2m"),
+                    HARD: t("end.player2l")
+                  } as Record<string, string>)[settings.difficulty]
+                : t(`end.${settings.difficulty.toLowerCase()}`)}
+            </dd>
           </div>
           {!twoPlayers && (
             <div className="end-summary-row">
-              <dt>Estrategia</dt>
-              <dd>{settings.strategy}</dd>
+              <dt>{t("end.player1strat")}</dt>
+              <dd>{t(`end.${settings.strategy.toLowerCase()}`)}</dd>
             </div>
           )}
           {!twoPlayers && (
             <div className="end-summary-row">
-              <dt>Resultado</dt>
+              <dt>{t("end.result")}</dt>
               <dd className={playerWon ? "result-win" : "result-lose"}>
-                {playerWon ? "Victoria" : "Derrota"}
+                {playerWon ? t("end.win") : t("end.lose")}
               </dd>
             </div>
           )}
@@ -89,12 +99,12 @@ export function End({ winner, username, username2 = "", twoPlayers = false, onli
           {showPlayAgain && (
             <button className="end-btn end-btn-primary" onClick={onPlayAgain}>
               <span className="end-btn-icon">↺</span>
-              Jugar de nuevo
+              {t("end.again")}
             </button>
           )}
           <button className="end-btn end-btn-secondary" onClick={onGoHome}>
             <span className="end-btn-icon">⌂</span>
-            Volver al menú
+            {t("end.home")}
           </button>
         </div>
       </div>

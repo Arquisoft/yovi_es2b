@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import type { GetMedal, ObtenerDatosRanking, SortRule, RankingEntryShared } from "./RankingFiltered";
 import { sortData } from "./RankingFiltered";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 import "./RankingFilterTypes.css";
 
 type StrategyFilter =
@@ -13,17 +14,8 @@ type StrategyFilter =
 
 type RankingEntry = RankingEntryShared;
 
-const STRATEGY_LABELS: Record<StrategyFilter, string> = {
-    RANDOM:                 "Random",
-    DEFENSIVO:              "Defensiva",
-    OFENSIVO:               "Ofensiva",
-    MONTE_CARLO:            "Monte Carlo",
-    MONTE_CARLO_MEJORADO:   "Monte Carlo Mejorado",
-    MONTE_CARLO_ENDURECIDO: "Monte Carlo Endurecido",
-};
-
 export default function RankingStrategy({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
-
+    const { t } = useLanguageContext();
     const [strategy, setStrategy] = useState<StrategyFilter>("RANDOM");
     const [data, setData] = useState<RankingEntry[]>([]);
 
@@ -44,28 +36,61 @@ export default function RankingStrategy({ username, obtenerDatos, getMedal, sort
     return (
         <div className="ranking-strat-screen">
 
-            <h3 className="ranking-table-title">Victorias por estrategia</h3>
+            <h3 className="ranking-table-title">{t('ranking.stratTitle')}</h3>
 
             <div className="ranking-filter-row">
-                {(Object.keys(STRATEGY_LABELS) as StrategyFilter[]).map((s) => (
-                    <button
-                        key={s}
-                        className={strategy === s ? "ranking-info ranking-info--active" : "ranking-info"}
-                        onClick={() => setStrategy(s)}
-                    >
-                        {STRATEGY_LABELS[s]}
-                    </button>
-                ))}
+                <button
+                    key="RANDOM"
+                    className={strategy === "RANDOM" ? "ranking-info ranking-info--active" : "ranking-info"}
+                    onClick={() => setStrategy("RANDOM")}
+                >
+                    {t('ranking.random')}
+                </button>
+                <button
+                    key="DEFENSIVO"
+                    className={strategy === "DEFENSIVO" ? "ranking-info ranking-info--active" : "ranking-info"}
+                    onClick={() => setStrategy("DEFENSIVO")}
+                >
+                    {t('ranking.defensive')}
+                </button>
+                <button
+                    key="OFENSIVO"
+                    className={strategy === "OFENSIVO" ? "ranking-info ranking-info--active" : "ranking-info"}
+                    onClick={() => setStrategy("OFENSIVO")}
+                >
+                    {t('ranking.offensive')}
+                </button>
+                <button
+                    key="MONTE_CARLO"
+                    className={strategy === "MONTE_CARLO" ? "ranking-info ranking-info--active" : "ranking-info"}
+                    onClick={() => setStrategy("MONTE_CARLO")}
+                >
+                    {t('ranking.monteCarlo')}
+                </button>
+                <button
+                    key="MONTE_CARLO_MEJORADO"
+                    className={strategy === "MONTE_CARLO_MEJORADO" ? "ranking-info ranking-info--active" : "ranking-info"}
+                    onClick={() => setStrategy("MONTE_CARLO_MEJORADO")}
+                >
+                    {t('ranking.monteCarloBetter')}
+                </button>
+                <button
+                    key="MONTE_CARLO_ENDURECIDO"
+                    className={strategy === "MONTE_CARLO_ENDURECIDO" ? "ranking-info ranking-info--active" : "ranking-info"}
+                    onClick={() => setStrategy("MONTE_CARLO_ENDURECIDO")}
+                >
+                    {t('ranking.monteCarloHard')}
+                </button>
             </div>
 
 
             <table className="ranking-table">
                 <thead>
                     <tr>
-                        <td>Posición</td>
-                        <td>Jugador</td>
-                        <td>Victorias ({STRATEGY_LABELS[strategy]})</td>
-                        <td>%</td>
+                        <td>{t('ranking.positionCol')}</td>
+                        <td>{t('ranking.playerCol')}</td>
+                        <td>{t('ranking.winsCol')}</td>
+                        <td>{t('ranking.percentageCol')}</td>
                     </tr>
                 </thead>
                 <tbody>

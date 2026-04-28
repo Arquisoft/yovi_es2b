@@ -1,17 +1,12 @@
 import { useState, useEffect } from "react";
 import type { GetMedal, ObtenerDatosRanking, SortRule, RankingEntryShared } from "./RankingFiltered";
 import { sortData } from "./RankingFiltered";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 import "./RankingFilterTypes.css";
 
 type DifficultyFilter = "EASY" | "MEDIUM" | "HARD";
 
 type RankingEntry = RankingEntryShared;
-
-const DIFFICULTY_LABELS: Record<DifficultyFilter, string> = {
-    EASY:   "Fácil",
-    MEDIUM: "Media",
-    HARD:   "Difícil",
-};
 
 const DIFFICULTY_COLORS: Record<DifficultyFilter, string> = {
     EASY: "ranking-info--green",
@@ -20,7 +15,7 @@ const DIFFICULTY_COLORS: Record<DifficultyFilter, string> = {
 };
 
 export default function RankingDifficulty({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
-
+    const { t } = useLanguageContext();
     const [difficulty, setDifficulty] = useState<DifficultyFilter>("EASY");
     const [data, setData] = useState<RankingEntry[]>([]);
 
@@ -41,27 +36,39 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal, so
     return (
         <div className="ranking-diff-screen">
 
-            <h3 className="ranking-table-title">Victorias por dificultad</h3>
+            <h3 className="ranking-table-title">{t('ranking.diffTitle')}</h3>
 
             <div className="ranking-filter-row">
-                {(Object.keys(DIFFICULTY_LABELS) as DifficultyFilter[]).map((d) => (
-                    <button
-                        key={d}
-                        className={difficulty === d ? `ranking-info ${DIFFICULTY_COLORS[d]} ${DIFFICULTY_COLORS[d]}--active` : `ranking-info ${DIFFICULTY_COLORS[d]}`}
-                        onClick={() => setDifficulty(d)}
-                    >
-                        {DIFFICULTY_LABELS[d]}
-                    </button>
-                ))}
+                <button
+                    key="EASY"
+                    className={difficulty === "EASY" ? `ranking-info ${DIFFICULTY_COLORS["EASY"]} ${DIFFICULTY_COLORS["EASY"]}--active` : `ranking-info ${DIFFICULTY_COLORS["EASY"]}`}
+                    onClick={() => setDifficulty("EASY")}
+                >
+                    {t('ranking.easy')}
+                </button>
+                <button
+                    key="MEDIUM"
+                    className={difficulty === "MEDIUM" ? `ranking-info ${DIFFICULTY_COLORS["MEDIUM"]} ${DIFFICULTY_COLORS["MEDIUM"]}--active` : `ranking-info ${DIFFICULTY_COLORS["MEDIUM"]}`}
+                    onClick={() => setDifficulty("MEDIUM")}
+                >
+                    {t('ranking.medium')}
+                </button>
+                <button
+                    key="HARD"
+                    className={difficulty === "HARD" ? `ranking-info ${DIFFICULTY_COLORS["HARD"]} ${DIFFICULTY_COLORS["HARD"]}--active` : `ranking-info ${DIFFICULTY_COLORS["HARD"]}`}
+                    onClick={() => setDifficulty("HARD")}
+                >
+                    {t('ranking.hard')}
+                </button>
             </div>
 
             <table className="ranking-table">
                 <thead>
                     <tr>
-                        <td>Posición</td>
-                        <td>Jugador</td>
-                        <td>Victorias ({DIFFICULTY_LABELS[difficulty]})</td>
-                        <td>%</td>
+                        <td>{t('ranking.positionCol')}</td>
+                        <td>{t('ranking.playerCol')}</td>
+                        <td>{t('ranking.winsCol')}</td>
+                        <td>{t('ranking.percentageCol')}</td>
                     </tr>
                 </thead>
                 <tbody>
