@@ -40,7 +40,7 @@ describe('CreateRoom', () => {
 
   test('Volver llama a onBack', async () => {
     const user = userEvent.setup()
-    render(<CreateRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    renderWithProviders(<CreateRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     await user.click(screen.getByRole('button', { name: /Volver/i }))
     expect(onBack).toHaveBeenCalledOnce()
   })
