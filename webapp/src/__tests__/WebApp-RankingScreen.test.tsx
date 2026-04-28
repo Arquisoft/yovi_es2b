@@ -79,8 +79,10 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<Ranking username="sara" />) 
-        expect(screen.getByText('Ranking global')).toBeInTheDocument()
+        render(<Ranking username="sara" />)
+        await waitFor(() => {
+            expect(screen.getByText('Ranking global')).toBeInTheDocument()
+        })
     })
 
     /**
@@ -136,8 +138,10 @@ describe('Ranking', () => {
             json: async () => ({ ranking: mockRanking }),
         } as Response)
         render(<Ranking username="sara" />)
-        expect(screen.getByRole('button', { name: /Ver ranking/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Volver al menú principal/i })).toBeInTheDocument()
+        await waitFor(() => {
+            expect(screen.getByRole('button', { name: /Ver ranking/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Volver al menú principal/i })).toBeInTheDocument()
+        })
     })
 
     /**
@@ -191,10 +195,12 @@ describe('Ranking', () => {
             json: async () => ({ ranking: mockRanking }),
         } as Response)
         render(<RankingFiltered username="sara" />)
-        expect(screen.getByText('Ranking global')).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Por partidas/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Por dificultad/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Por estrategia/i })).toBeInTheDocument()
+        await waitFor(() => {
+            expect(screen.getByText('Ranking global')).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Por partidas/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Por dificultad/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Por estrategia/i })).toBeInTheDocument()
+        })
     })
 
     /**
@@ -207,8 +213,10 @@ describe('Ranking', () => {
             json: async () => ({ ranking: mockRanking }),
         } as Response)
         render(<RankingFiltered username="sara" />)
-        expect(screen.getByRole('button', { name: /Nº/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /%/i })).toBeInTheDocument()
+        await waitFor(() => {
+            expect(screen.getByRole('button', { name: /Nº/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /%/i })).toBeInTheDocument()
+        })
     })
 
     /**
@@ -338,9 +346,11 @@ describe('Ranking', () => {
      */
     test('muestra el título y las cabeceras', async () => {
         render(<RankingGeneral username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
-        expect(screen.getByText('Clasificación general')).toBeInTheDocument()
-        expect(screen.getByText('Posición')).toBeInTheDocument()
-        expect(screen.getByText('Jugador')).toBeInTheDocument()
+        await waitFor(() => {
+            expect(screen.getByText('Clasificación general')).toBeInTheDocument()
+            expect(screen.getByText('Posición')).toBeInTheDocument()
+            expect(screen.getByText('Jugador')).toBeInTheDocument()
+        })
     })
 
     /**
@@ -390,10 +400,12 @@ describe('Ranking', () => {
      */
     test('muestra el título y los botones de dificultad', async () => {
         render(<RankingDifficulty username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
-        expect(screen.getByText('Victorias por dificultad')).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Fácil/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Media/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Difícil/i })).toBeInTheDocument()
+        await waitFor(() => {
+            expect(screen.getByText('Victorias por dificultad')).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Fácil/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Media/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Difícil/i })).toBeInTheDocument()
+        })
     })
 
     /**
@@ -433,14 +445,14 @@ describe('Ranking', () => {
      */
     test('muestra el título y los botones de estrategia', async () => {
         render(<RankingStrategy username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
-        expect(screen.getByText('Victorias por estrategia')).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Random/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Defensiva/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Ofensiva/i })).toBeInTheDocument()
-        //expect(screen.getByRole('button', { name: /Monte Carlo/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Monte Carlo Endurecido/i })).toBeInTheDocument()
-        expect(screen.getByRole('button', { name: /Monte Carlo Mejorado/i })).toBeInTheDocument()
-
+        await waitFor(() => {
+            expect(screen.getByText('Victorias por estrategia')).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Random/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Defensiva/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Ofensiva/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Monte Carlo Endurecido/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Monte Carlo Mejorado/i })).toBeInTheDocument()
+        })
     })
 
     test('RankingStrategy: carga datos al cambiar estrategia', async () => {
