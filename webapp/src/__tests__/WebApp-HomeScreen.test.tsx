@@ -4,11 +4,6 @@ import Home from '../screens/game/Home'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 
-// Forzar idioma español para los tests
-beforeEach(() => {
-    localStorage.setItem('yovi-locale', 'es')
-})
-
 const socketEventHandlers: Record<string, (...args: any[]) => void> = {}
 const mockSocket = {
     on: vi.fn((event: string, handler: (...args: any[]) => void) => {

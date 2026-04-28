@@ -3,14 +3,9 @@ import userEvent from '@testing-library/user-event'
 import { End } from '../screens/game/End'
 import { Difficulty } from '../components/gameOptions/Difficulty'
 import { Strategy } from '../components/gameOptions/Strategy'
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import type { ComponentProps } from 'react'
-
-// Forzar idioma español para los tests
-beforeEach(() => {
-    localStorage.setItem('yovi-locale', 'es')
-})
 
 const baseProps = {
     winner: 'sara',

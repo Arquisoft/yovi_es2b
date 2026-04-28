@@ -1,14 +1,9 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import InitialScreen from '../screens/init/InitialScreen'
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { LanguageProvider } from '../i18n/LanguageProvider'
-
-// Forzar idioma español para los tests
-beforeEach(() => {
-    localStorage.setItem('yovi-locale', 'es')
-})
 
 //Para asegurar que el idioma por defecto es el español en los test
 // Se establece el valor 'es' en localStorage antes de renderizar el componente InitialScreen. 

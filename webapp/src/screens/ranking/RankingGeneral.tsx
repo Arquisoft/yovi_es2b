@@ -8,16 +8,7 @@ type FilterKey = "victorias" | "derrotas";
 
 type RankingEntry = RankingEntryShared;
 
-<<<<<<< HEAD
-=======
-// Etiquetas para cada filtro, usados en los botones de filtro y en la tabla de ranking.
-const FILTER_LABELS: Record<FilterKey, string> = {
-    victorias:   "Victorias",
-    derrotas:    "Derrotas",
-};
-
 // Endpoints para cada filtro, usados para cargar los datos del ranking según el filtro seleccionado.
->>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
 const ENDPOINTS: Record<FilterKey, string> = {
     victorias:   "/ranking/wins",
     derrotas:    "/ranking/defeats",

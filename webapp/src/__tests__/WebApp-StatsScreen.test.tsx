@@ -4,13 +4,8 @@ import GameStatsTotal from '../screens/stats/GameStatsTotal'
 import GameStatsFiltered from '../screens/stats/GameStatsFiltered'
 import GameStatsDiff from '../screens/stats/GameStatsDifficuty'
 import GameStatsStra from '../screens/stats/GameStatsStrategy'
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
-
-// Forzar idioma español para los tests
-beforeEach(() => {
-    localStorage.setItem('yovi-locale', 'es')
-})
 
 /**
  * Imita las respuestas de las APIs de estadísticas para poder testear los componentes sin depender de la base de datos ni del backend.

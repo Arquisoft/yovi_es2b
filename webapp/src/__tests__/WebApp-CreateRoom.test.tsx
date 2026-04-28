@@ -4,11 +4,6 @@ import { vi, describe, test, expect, beforeEach } from 'vitest'
 import '@testing-library/jest-dom'
 import CreateRoom from '../screens/lobby/CreateRoom'
 
-// Forzar idioma español para los tests
-beforeEach(() => {
-    localStorage.setItem('yovi-locale', 'es')
-})
-
 const eventHandlers: Record<string, (...args: any[]) => void> = {}
 
 const mockSocket = {

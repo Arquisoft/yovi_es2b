@@ -1,15 +1,10 @@
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Game } from '../screens/game/Game'
-import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
+import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { Difficulty } from '../components/gameOptions/Difficulty'
 import { Strategy } from '../components/gameOptions/Strategy'
-
-// Forzar idioma español para los tests
-beforeEach(() => {
-    localStorage.setItem('yovi-locale', 'es')
-})
 
 const baseSettings = {
     strategy: Strategy.RANDOM,

@@ -6,11 +6,6 @@ import '@testing-library/jest-dom'
 import { Theme } from '../screens/modo_tema/Theme'
 import { LanguageProvider } from '../i18n/LanguageProvider'
 
-// Forzar idioma español para los tests
-beforeEach(() => {
-    localStorage.setItem('yovi-locale', 'es')
-})
-
 // Wrapper que proporciona el contexto de tema e idioma necesario para AppHeader
 function renderWithTheme(onLogout: () => void) {
     localStorage.setItem('yovi-locale', 'es')

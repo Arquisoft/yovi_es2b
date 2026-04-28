@@ -13,20 +13,15 @@ interface CreateRoomProps {
 }
 
 export default function CreateRoom({ username, onGameReady, onBack }: Readonly<CreateRoomProps>) {
-<<<<<<< HEAD
-  const { t } = useLanguageContext();
-  const [difficulty, setDifficulty] = useState<DifficultyType>(Difficulty.MEDIUM);
-  const [timerEnabled, setTimerEnabled] = useState(true);
-  const [code, setCode] = useState<string | null>(null);
-  const [waiting, setWaiting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-=======
+
+  const { t } = useLanguageContext(); // para internacionalizar
+
   const [difficulty, setDifficulty] = useState<DifficultyType>(Difficulty.MEDIUM); // Estado para almacenar la dificultad seleccionada, por defecto "MEDIUM"
   const [timerEnabled, setTimerEnabled] = useState(true); // Estado para almacenar si el temporizador está habilitado, por defecto "true"
   const [code, setCode] = useState<string | null>(null); // Estado para almacenar el código de la sala creada, inicialmente null porque no se ha creado ninguna sala
   const [waiting, setWaiting] = useState(false); // Estado para indicar si se está esperando a que un rival se conecte, inicialmente false porque no se ha creado ninguna sala
   const [error, setError] = useState<string | null>(null); // Estado para almacenar el mensaje de error en caso de que ocurra algún error al crear la sala o durante la espera
->>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
+
   // Ref para tener siempre el código actualizado dentro de los handlers del socket
   const codeRef = useRef<string | null>(null); // Ref para tener siempre el estado del temporizador actualizado dentro de los handlers del socket
   const timerEnabledRef = useRef(true); // Ref para tener siempre el estado del temporizador actualizado dentro de los handlers del socket

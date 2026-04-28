@@ -4,11 +4,6 @@ import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { Theme, useTheme } from '../screens/modo_tema/Theme'
 
-// Forzar idioma español para los tests
-beforeEach(() => {
-    localStorage.setItem('yovi-locale', 'es')
-})
-
 // Componente auxiliar que expone el tema actual y el botón para alternarlo.
 // Permite verificar el comportamiento del contexto sin depender de componentes reales.
 function ThemeConsumer() {

@@ -6,11 +6,6 @@ import '@testing-library/jest-dom'
 import { Difficulty } from '../components/gameOptions/Difficulty'
 import { Strategy } from '../components/gameOptions/Strategy'
 
-// Forzar idioma español para los tests
-beforeEach(() => {
-    localStorage.setItem('yovi-locale', 'es')
-})
-
 const socketEventHandlers: Record<string, (...args: any[]) => void> = {}
 const mockSocket = {
     on: vi.fn((event: string, handler: (...args: any[]) => void) => {

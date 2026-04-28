@@ -47,12 +47,9 @@ export default function GameStatsTotal( {username} : { username: string }) {
 
     const [data, setData] = useState<AllStat[]>([]); // Estado para almacenar las estadísticas totales del usuario
 
-<<<<<<< HEAD
-    const { t } = useLanguageContext();
+    const { t } = useLanguageContext(); // para internacionalizar
 
-=======
     // Carga las estadísticas totales del usuario al montar el componente, y cada vez que cambie el nombre de usuario.
->>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
     useEffect(() => {
         const cargarDatos = async () => {
             const resultado = await obtenerDatos(username, t);

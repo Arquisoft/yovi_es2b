@@ -18,16 +18,12 @@ interface JoinRoomProps {
  * Si el usuario intenta volver o cerrar la pestaña mientras está en la sala, emite un evento al backend para abandonar la sala y evitar que quede una sala huérfana.
  */
 export default function JoinRoom({ username, onGameReady, onBack }: Readonly<JoinRoomProps>) {
-<<<<<<< HEAD
-  const { t } = useLanguageContext();
-  const [inputCode, setInputCode] = useState("");
-  const [joined, setJoined] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-=======
+
+  const { t } = useLanguageContext(); // para internacionalizar
   const [inputCode, setInputCode] = useState(""); // Estado para almacenar el código de sala ingresado por el usuario
   const [joined, setJoined] = useState(false); //Estado para indicar si el usuario se ha unido a la sala, inicialmente false porque no se ha unido a ninguna sala
   const [error, setError] = useState<string | null>(null); // Estado para almacenar el mensaje de error en caso de que ocurra algún error al unirse a la sala o durante la espera
->>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
+
   // Refs para tener valores actualizados dentro de los handlers del socket
   const inputCodeRef = useRef(""); // Ref para tener siempre el código de sala actualizado dentro de los handlers del socket
   const joinedInfoRef = useRef<Partial<OnlineGameInfo> | null>(null); // Ref para tener siempre la información de la sala a la que se ha unido el usuario actualizada 

@@ -8,17 +8,7 @@ type DifficultyFilter = "EASY" | "MEDIUM" | "HARD";
 
 type RankingEntry = RankingEntryShared; // El ranking de dificultad tiene la misma estructura que el ranking global, pero con un valor específico para cada dificultad, por lo que se puede reutilizar el mismo tipo.
 
-<<<<<<< HEAD
-=======
-// Etiquetas para cada dificultad, usados en los botones de filtro y en la tabla de ranking.
-const DIFFICULTY_LABELS: Record<DifficultyFilter, string> = {
-    EASY:   "Fácil",
-    MEDIUM: "Media",
-    HARD:   "Difícil",
-};
-
 // Colores para cada dificultad, usados en los botones de filtro y en la tabla de ranking. Se definen como clases CSS para facilitar su aplicación condicionalmente.
->>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
 const DIFFICULTY_COLORS: Record<DifficultyFilter, string> = {
     EASY: "ranking-info--green",
     MEDIUM: "ranking-info--orange",
@@ -26,15 +16,11 @@ const DIFFICULTY_COLORS: Record<DifficultyFilter, string> = {
 };
 
 export default function RankingDifficulty({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
-<<<<<<< HEAD
-    const { t } = useLanguageContext();
-    const [difficulty, setDifficulty] = useState<DifficultyFilter>("EASY");
-    const [data, setData] = useState<RankingEntry[]>([]);
-=======
+
+    const { t } = useLanguageContext(); // para internacionalizar
 
     const [difficulty, setDifficulty] = useState<DifficultyFilter>("EASY"); // Estado para almacenar la dificultad seleccionada, por defecto "EASY"
     const [data, setData] = useState<RankingEntry[]>([]); // Estado para almacenar los datos del ranking filtrado por dificultad
->>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
 
     // Carga los datos del ranking filtrado por dificultad al montar el componente, y cada vez que cambie la dificultad seleccionada.
     useEffect(() => {

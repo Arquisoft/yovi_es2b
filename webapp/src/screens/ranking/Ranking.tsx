@@ -13,22 +13,15 @@ type RankingApiEntry = {
 };
 
 export default function Ranking({ username }: Readonly<{ username: string }>) {
-<<<<<<< HEAD
-    const [goBack, setGoBack] = useState(false);
-    const [goFiltered, setGoFiltered] = useState(false);
-    const [goLogin, setGoLogin] = useState(false);
-    const [position, setPosition] = useState<number | null>(null);
-    const [loadingPosition, setLoadingPosition] = useState(true);
-    const [positionError, setPositionError] = useState(false);
-    const { t } = useLanguageContext();
-=======
+
+    const { t } = useLanguageContext(); // para internacionalizar
+
     const [goBack, setGoBack] = useState(false); // Estado para volver al menú principal
     const [goFiltered, setGoFiltered] = useState(false); // Estado para mostrar el ranking filtrado por victorias (en lugar del global)
     const [goLogin, setGoLogin] = useState(false); // Estado para volver a la pantalla de inicio de sesión
     const [position, setPosition] = useState<number | null>(null); // Estado para almacenar la posición del usuario en el ranking global
     const [loadingPosition, setLoadingPosition] = useState(true); // Estado para indicar si se está cargando la posición del usuario en el ranking global
     const [positionError, setPositionError] = useState(false); // Estado para indicar si ha habido un error al cargar la posición del usuario en el ranking global
->>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
 
     // Carga la posición del usuario en el ranking global al montar el componente, y cada vez que cambie el nombre de usuario.
     // Hace una petición GET al endpoint /ranking/wins para obtener el ranking global de victorias, y calcula la posición del usuario en el ranking global.

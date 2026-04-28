@@ -12,10 +12,6 @@ type StatDif = {
     porcentaje: string;
 };
 
-<<<<<<< HEAD
-
-async function obtenerDatos(username: string, t: (key: string) => string) {
-=======
 /**
  * Funcion para obtener las estadísticas de dificultad del usuario desde el backend.
  * Hace una petición POST al endpoint /diffstats con el nombre de usuario en el cuerpo de la solicitud, 
@@ -23,8 +19,8 @@ async function obtenerDatos(username: string, t: (key: string) => string) {
  * @param username 
  * @returns 
  */
-async function obtenerDatos(username: string) {
->>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
+async function obtenerDatos(username: string, t: (key: string) => string) {
+
     try {
         const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
         const res = await fetch(`${API_URL}/diffstats`, {
@@ -55,12 +51,8 @@ async function obtenerDatos(username: string) {
  */
 export default function GameStatsDiff( {username} : { username: string }) {
 
-<<<<<<< HEAD
-    const [data, setData] = useState<StatDif[]>([]);
-    const { t } = useLanguageContext();
-=======
+    const { t } = useLanguageContext(); // para internacionalizar
     const [data, setData] = useState<StatDif[]>([]); // Estado para almacenar las estadísticas de dificultad del usuario
->>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
 
     // Carga las estadísticas de dificultad del usuario al montar el componente, y cada vez que cambie el nombre de usuario.
     useEffect(() => {
