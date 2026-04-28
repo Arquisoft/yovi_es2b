@@ -200,5 +200,4 @@ describe('AppHeader', () => {
         await user.click(getMenuButton())
         expect(screen.getByRole('menuitem', { name: /modo claro/i })).toBeInTheDocument()
     })
-
 })

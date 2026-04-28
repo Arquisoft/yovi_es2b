@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { vi, describe, test, expect, beforeEach } from 'vitest'
 import '@testing-library/jest-dom'
 import CreateRoom from '../screens/lobby/CreateRoom'
+import { es } from '../i18n/es'
 
 const eventHandlers: Record<string, (...args: any[]) => void> = {}
 
@@ -29,9 +30,9 @@ describe('CreateRoom', () => {
 
   test('muestra los botones de dificultad, Crear sala y Volver', () => {
     render(<CreateRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
-    expect(screen.getByText('Pequeño')).toBeInTheDocument()
-    expect(screen.getByText('Mediano')).toBeInTheDocument()
-    expect(screen.getByText('Grande')).toBeInTheDocument()
+    expect(screen.getByText(es.rooms.small)).toBeInTheDocument()
+    expect(screen.getByText(es.rooms.medium)).toBeInTheDocument()
+    expect(screen.getByText(es.rooms.large)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Crear sala/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Volver/i })).toBeInTheDocument()
   })
