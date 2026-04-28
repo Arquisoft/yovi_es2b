@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { Casilla } from "./Casilla";
 import { getBoardSize } from "../gameOptions/Difficulty";
@@ -72,11 +72,12 @@ async function partidaGanada(username: string, strategy: string, difficulty: str
 export function Board(props: BoardProps) {
 
   const [bloq, setBloq] = useState(false); // Indica si el tablero está bloqueado para evitar movimientos durante la espera de respuesta del servidor
+  const bloqRef = useRef(false); // Ref síncrona para evitar doble clic antes de que React re-renderice
   const [valores, setValores] = useState<Record<string, number>>({}); // Almacena el estado actual del tablero
   const [gameOver, setGameOver] = useState(false); // Indica si la partida ha terminado, para evitar más movimientos y mostrar el ganador
 
-  const bloquearTablero   = () => setBloq(true); // Función para bloquear el tablero, impidiendo que el jugador realice movimientos mientras se espera la respuesta del servidor
-  const desbloquearTablero = () => setBloq(false); // Función para desbloquear el tablero, permitiendo que el jugador realice movimientos después de recibir la respuesta del servidor
+  const bloquearTablero   = () => { bloqRef.current = true;  setBloq(true);  };
+  const desbloquearTablero = () => { bloqRef.current = false; setBloq(false); };
 
   const selectedDifficulty: DifficultyType = props.difficulty; // Dificultad seleccionada por el jugador, que determina el tamaño del tablero 
   const selectedStrategy: StrategyType    = props.strategy; // Estrategia seleccionada por el jugador para el bot, que determina cómo el bot elegirá sus movimientos
@@ -264,7 +265,7 @@ export function Board(props: BoardProps) {
 
 
   const manejarClick = async (id: string) => {
-    if (bloq || gameOver) return;
+    if (bloqRef.current || gameOver) return;
     const { x, y, z } = keyToCoords(id, BOARDHIGHT);
 
     if (props.onlineMode) {
