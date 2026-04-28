@@ -18,7 +18,6 @@ beforeEach(() => {
 describe('SignUp', () => {
     afterEach(() => {
         vi.restoreAllMocks()
-        localStorage.clear()
     })
 
     /**

@@ -1,5 +1,10 @@
 import { vi, describe, test, expect, beforeEach } from 'vitest'
 
+// Forzar idioma español para los tests
+beforeEach(() => {
+    localStorage.setItem('yovi-locale', 'es')
+})
+
 // Instancia de socket simulada compartida entre tests
 const mockDisconnect = vi.fn()
 const mockSocketInstance = { disconnect: mockDisconnect } as any
@@ -9,14 +14,9 @@ vi.mock('socket.io-client', () => ({
   io: vi.fn(() => mockSocketInstance),
 }))
 
-// Forzar idioma español para los tests
-beforeEach(() => {
-  localStorage.setItem('yovi-locale', 'es')
-})
-
 describe('socket', () => {
   // Reiniciamos mocks y caché de módulos antes de cada test para que la
-  // variable de módulo `socket` empieza siendo null
+  // variable de módulo `socket` empiece siendo null
   beforeEach(() => {
     vi.clearAllMocks()
     vi.resetModules()

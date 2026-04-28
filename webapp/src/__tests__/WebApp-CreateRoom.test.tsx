@@ -4,6 +4,11 @@ import { vi, describe, test, expect, beforeEach } from 'vitest'
 import '@testing-library/jest-dom'
 import CreateRoom from '../screens/lobby/CreateRoom'
 
+// Forzar idioma español para los tests
+beforeEach(() => {
+    localStorage.setItem('yovi-locale', 'es')
+})
+
 const eventHandlers: Record<string, (...args: any[]) => void> = {}
 
 const mockSocket = {
@@ -20,11 +25,6 @@ vi.mock('../socket', () => ({
 
 const onGameReady = vi.fn()
 const onBack = vi.fn()
-
-// Forzar idioma español para los tests
-beforeEach(() => {
-  localStorage.setItem('yovi-locale', 'es')
-})
 
 describe('CreateRoom', () => {
   beforeEach(() => {

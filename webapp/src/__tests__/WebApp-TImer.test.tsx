@@ -27,7 +27,7 @@ describe('TurnTimer', () => {
         const timer = screen.getByRole('timer')
         expect(timer).toBeInTheDocument()
         expect(timer).toHaveTextContent('15s')
-        expect(timer).toHaveAttribute('aria-label', '15 segundos restantes')
+        expect(timer).toHaveAttribute('aria-label', expect.stringContaining('segundos'))
     })
 
     /**

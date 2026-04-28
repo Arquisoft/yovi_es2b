@@ -6,6 +6,11 @@ import '@testing-library/jest-dom'
 import { Difficulty } from '../components/gameOptions/Difficulty'
 import { Strategy } from '../components/gameOptions/Strategy'
 
+// Forzar idioma español para los tests
+beforeEach(() => {
+    localStorage.setItem('yovi-locale', 'es')
+})
+
 const socketEventHandlers: Record<string, (...args: any[]) => void> = {}
 const mockSocket = {
     on: vi.fn((event: string, handler: (...args: any[]) => void) => {
@@ -45,12 +50,6 @@ function mockFetch() {
         .mockResolvedValueOnce({ ok: true, json: async () => ({ kind: 'Ongoing', next_player: 0 }) }) // getTurnoPartida
         .mockResolvedValue(boardStateMock) // todas las demás llamadas de Board, sin límite
 }
-
-/**
-// Forzar idioma español para los tests
-beforeEach(() => {
-    localStorage.setItem('yovi-locale', 'es')
-})
 
 /**
  * Test para Game que comprueba que:
