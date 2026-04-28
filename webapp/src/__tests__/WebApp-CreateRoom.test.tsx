@@ -4,7 +4,7 @@ import { vi, describe, test, expect, beforeEach } from 'vitest'
 import '@testing-library/jest-dom'
 import CreateRoom from '../screens/lobby/CreateRoom'
 import { es } from '../i18n/es'
-import { renderWithProviders } from '../test/test-utils'
+import { renderWithProviders } from './test-utils'
 
 const eventHandlers: Record<string, (...args: any[]) => void> = {}
 
