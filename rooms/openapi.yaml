@@ -1,0 +1,328 @@
+openapi: 3.0.0
+info:
+  title: Rooms Service API
+  description: >
+    API del microservicio de salas multijugador. Gestiona la creación y unión a salas
+    de juego en tiempo real. La comunicación principal se realiza mediante **Socket.io
+    (WebSocket)**; los endpoints HTTP se limitan a health check y métricas Prometheus.
+
+    ## Conexión Socket.io
+    El cliente debe conectarse a `ws://localhost:3001` usando Socket.io.
+    Una vez conectado, puede emitir y recibir los eventos descritos a continuación.
+
+    ## Eventos cliente → servidor
+    - `create-room`: crea una nueva sala de juego
+    - `join-room`: se une a una sala existente
+    - `make-move`: realiza un movimiento en la partida
+    - `undo-move`: deshace el último par de movimientos
+    - `timer-expired`: notifica que el temporizador del turno ha expirado
+    - `abandon-game`: abandona la partida voluntariamente
+
+    ## Eventos servidor → cliente
+    - `room-created`: confirmación de sala creada (solo al creador)
+    - `room-joined`: confirmación de unión a sala (solo al segundo jugador)
+    - `game-start`: inicio de partida (a todos los jugadores de la sala)
+    - `move-made`: movimiento aplicado o deshecho (a todos)
+    - `turn-skipped`: turno saltado por temporizador (a todos)
+    - `player-disconnected`: un jugador se ha desconectado (a todos)
+    - `room-error`: error al crear o unirse a sala (solo al emisor)
+    - `move-error`: error al realizar un movimiento (solo al emisor)
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:3001
+    description: Development server
+
+paths:
+
+  /health:
+    get:
+      summary: Health check del servicio
+      description: Verifica que el servidor de salas está en marcha.
+      responses:
+        '200':
+          description: El servicio está activo
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: "ok"
+
+  /metrics:
+    get:
+      summary: Métricas Prometheus
+      description: >
+        Expone métricas en formato Prometheus para monitorización.
+        Métricas disponibles:
+        - `rooms_created_total`: contador total de salas creadas desde el inicio del servicio.
+        - `rooms_active_total`: número de salas activas en el momento de la consulta.
+      responses:
+        '200':
+          description: Métricas en formato Prometheus
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: |
+                  # HELP rooms_created_total Total de salas creadas
+                  # TYPE rooms_created_total counter
+                  rooms_created_total 42
+                  # HELP rooms_active_total Salas activas actualmente
+                  # TYPE rooms_active_total gauge
+                  rooms_active_total 3
+
+components:
+  schemas:
+
+    # ──────────────────────────────────────────────
+    # Payloads de eventos cliente → servidor
+    # ──────────────────────────────────────────────
+
+    CreateRoomPayload:
+      type: object
+      description: Payload del evento Socket.io `create-room`
+      required:
+        - username
+        - difficulty
+      properties:
+        username:
+          type: string
+          description: Nombre del jugador que crea la sala
+          example: "sara"
+        difficulty:
+          type: string
+          enum:
+            - EASY
+            - MEDIUM
+            - HARD
+          description: Dificultad de la partida (determina el tamaño del tablero)
+          example: "MEDIUM"
+        timerEnabled:
+          type: boolean
+          description: Si la partida usará temporizador por turno. Por defecto false.
+          example: true
+
+    JoinRoomPayload:
+      type: object
+      description: Payload del evento Socket.io `join-room`
+      required:
+        - code
+        - username
+      properties:
+        code:
+          type: string
+          description: Código de sala de 6 caracteres (se convierte a mayúsculas automáticamente)
+          example: "ABC123"
+        username:
+          type: string
+          description: Nombre del jugador que se une
+          example: "iyan"
+
+    MakeMovePayload:
+      type: object
+      description: Payload del evento Socket.io `make-move`
+      required:
+        - code
+        - x
+        - y
+        - z
+        - player
+      properties:
+        code:
+          type: string
+          description: Código de la sala
+          example: "ABC123"
+        x:
+          type: integer
+          description: Coordenada x de la celda
+          example: 2
+        y:
+          type: integer
+          description: Coordenada y de la celda
+          example: 0
+        z:
+          type: integer
+          description: Coordenada z de la celda
+          example: 0
+        player:
+          type: integer
+          description: Índice del jugador que realiza el movimiento (0 o 1)
+          example: 0
+
+    UndoMovePayload:
+      type: object
+      description: Payload del evento Socket.io `undo-move`. Deshace los dos últimos movimientos para que ambos jugadores vuelvan a su turno anterior.
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          description: Código de la sala
+          example: "ABC123"
+
+    TimerExpiredPayload:
+      type: object
+      description: Payload del evento Socket.io `timer-expired`. El cliente lo emite cuando el temporizador del turno activo expira.
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          description: Código de la sala
+          example: "ABC123"
+
+    AbandonGamePayload:
+      type: object
+      description: Payload del evento Socket.io `abandon-game`. El jugador abandona voluntariamente la partida.
+      required:
+        - code
+      properties:
+        code:
+          type: string
+          description: Código de la sala
+          example: "ABC123"
+
+    # ──────────────────────────────────────────────
+    # Payloads de eventos servidor → cliente
+    # ──────────────────────────────────────────────
+
+    RoomCreatedEvent:
+      type: object
+      description: Payload del evento Socket.io `room-created`. Se emite únicamente al jugador que creó la sala.
+      properties:
+        code:
+          type: string
+          description: Código de sala generado (6 caracteres alfanuméricos en mayúsculas)
+          example: "ABC123"
+        gameId:
+          type: string
+          description: Identificador de la partida creada en GameY
+          example: "game-1"
+        playerIndex:
+          type: integer
+          description: Índice del jugador en la partida (siempre 0 para el creador)
+          example: 0
+
+    RoomJoinedEvent:
+      type: object
+      description: Payload del evento Socket.io `room-joined`. Se emite únicamente al segundo jugador al unirse.
+      properties:
+        code:
+          type: string
+          description: Código de la sala
+          example: "ABC123"
+        gameId:
+          type: string
+          description: Identificador de la partida en GameY
+          example: "game-1"
+        playerIndex:
+          type: integer
+          description: Índice del jugador en la partida (siempre 1 para el segundo jugador)
+          example: 1
+        difficulty:
+          type: string
+          enum:
+            - EASY
+            - MEDIUM
+            - HARD
+          description: Dificultad de la partida definida por el creador
+          example: "MEDIUM"
+        opponentUsername:
+          type: string
+          description: Nombre del jugador que creó la sala
+          example: "sara"
+
+    GameStartEvent:
+      type: object
+      description: Payload del evento Socket.io `game-start`. Se emite a todos los jugadores de la sala cuando el segundo jugador se une.
+      properties:
+        gameId:
+          type: string
+          description: Identificador de la partida en GameY
+          example: "game-1"
+        difficulty:
+          type: string
+          enum:
+            - EASY
+            - MEDIUM
+            - HARD
+          example: "MEDIUM"
+        timerEnabled:
+          type: boolean
+          description: Si la partida usa temporizador por turno
+          example: true
+        players:
+          type: array
+          description: Lista de jugadores de la sala
+          items:
+            type: object
+            properties:
+              username:
+                type: string
+                example: "sara"
+              playerIndex:
+                type: integer
+                example: 0
+          example:
+            - username: "sara"
+              playerIndex: 0
+            - username: "iyan"
+              playerIndex: 1
+
+    MoveMadeEvent:
+      type: object
+      description: Payload del evento Socket.io `move-made`. Se emite a todos los jugadores de la sala tras un movimiento o deshacer exitoso.
+      properties:
+        state:
+          type: object
+          description: Estado actual del tablero en formato YEN (devuelto por GameY)
+        status:
+          type: object
+          description: Estado de la partida (devuelto por GameY)
+
+    TurnSkippedEvent:
+      type: object
+      description: Payload del evento Socket.io `turn-skipped`. Se emite a todos cuando el temporizador de un jugador expira.
+      properties:
+        next_player:
+          type: integer
+          description: Índice del jugador al que le corresponde el siguiente turno
+          example: 1
+
+    PlayerDisconnectedEvent:
+      type: object
+      description: Payload del evento Socket.io `player-disconnected`. Se emite a todos los jugadores restantes cuando uno abandona o se desconecta.
+      properties:
+        username:
+          type: string
+          description: Nombre del jugador que se desconectó o abandonó
+          example: "iyan"
+
+    RoomErrorEvent:
+      type: object
+      description: >
+        Payload del evento Socket.io `room-error`. Se emite solo al cliente que causó el error.
+        Posibles mensajes:
+        - "Error al crear la sala"
+        - "Sala no encontrada"
+        - "La sala está llena"
+        - "No puedes unirte con el mismo nombre que el creador de la sala"
+      properties:
+        message:
+          type: string
+          example: "Sala no encontrada"
+
+    MoveErrorEvent:
+      type: object
+      description: >
+        Payload del evento Socket.io `move-error`. Se emite solo al cliente que intentó el movimiento inválido.
+        Posibles mensajes:
+        - "No es tu turno"
+        - "Movimiento inválido"
+      properties:
+        message:
+          type: string
+          example: "No es tu turno"

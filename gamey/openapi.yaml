@@ -24,34 +24,33 @@ paths:
                 example: "OK"
 
   /play:
-    post:
+    get:
       summary: Solicita un movimiento al bot
       description: >
-        Dado el estado actual de la partida en formato YEN y un tipo de bot opcional,
-        devuelve las coordenadas del movimiento elegido por el bot.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - position
-              properties:
-                position:
-                  $ref: '#/components/schemas/YEN'
-                bot_type:
-                  type: string
-                  description: >
-                    Identificador del bot a usar. Por defecto "montecarlo_endurecido_bot".
-                  enum:
-                    - random_bot
-                    - defensive_bot
-                    - offensive_bot
-                    - montecarlo_bot
-                    - montecarlo_mejorado_bot
-                    - montecarlo_endurecido_bot
-                  example: "montecarlo_endurecido_bot"
+        Dado el estado actual de la partida en formato YEN y un identificador de bot opcional,
+        devuelve el movimiento elegido por el bot (coordenadas de colocación o acción especial).
+      parameters:
+        - name: position
+          in: query
+          required: true
+          description: Estado actual de la partida en formato YEN (objeto JSON serializado como string)
+          schema:
+            type: string
+            example: '{"size":3,"turn":0,"players":["B","R"],"layout":"B/BR/.R."}'
+        - name: bot_id
+          in: query
+          required: false
+          description: Identificador del bot a usar. Por defecto "montecarlo_endurecido_bot".
+          schema:
+            type: string
+            enum:
+              - random_bot
+              - defensive_bot
+              - offensive_bot
+              - montecarlo_bot
+              - montecarlo_mejorado_bot
+              - montecarlo_endurecido_bot
+            example: "montecarlo_endurecido_bot"
       responses:
         '200':
           description: Movimiento elegido por el bot
@@ -376,18 +375,26 @@ components:
           example: 0
 
     MoveResponse:
-      type: object
-      description: Respuesta del endpoint /play con el movimiento elegido por el bot
-      required:
-        - bot_id
-        - coords
-      properties:
-        bot_id:
-          type: string
-          description: Identificador del bot que seleccionó el movimiento
-          example: "montecarlo_endurecido_bot"
-        coords:
-          $ref: '#/components/schemas/Coordinates'
+      description: >
+        Respuesta del endpoint /play. Puede ser un movimiento de colocación de pieza
+        o una acción especial (p.ej. swap).
+      oneOf:
+        - type: object
+          description: Movimiento de colocación de pieza
+          required:
+            - coords
+          properties:
+            coords:
+              $ref: '#/components/schemas/Coordinates'
+        - type: object
+          description: Acción especial
+          required:
+            - action
+          properties:
+            action:
+              type: string
+              description: Acción especial a realizar
+              example: "swap"
 
     BotErrorResponse:
       type: object
