@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import Home from '../screens/game/Home'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
+import { renderWithProviders } from './test-utils'
 
 const socketEventHandlers: Record<string, (...args: any[]) => void> = {}
 const mockSocket = {
