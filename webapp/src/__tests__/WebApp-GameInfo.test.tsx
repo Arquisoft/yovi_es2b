@@ -1,10 +1,11 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Game } from '../screens/game/Game'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { Difficulty } from '../components/gameOptions/Difficulty'
 import { Strategy } from '../components/gameOptions/Strategy'
+import { renderWithProviders } from './test-utils'
 
 const baseSettings = {
     strategy: Strategy.RANDOM,
@@ -41,7 +42,7 @@ describe('GameInfo', () => {
     test('muestra la información correcta en modo 2 jugadores', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
         )
         await waitFor(() => {
@@ -69,7 +70,7 @@ describe('GameInfo', () => {
     test('muestra la información correcta en modo 1 jugador (contra bot)', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(() => {

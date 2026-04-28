@@ -1,8 +1,9 @@
-import { render, screen, act } from '@testing-library/react'
+import { screen, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { vi, describe, test, expect, beforeEach } from 'vitest'
 import '@testing-library/jest-dom'
 import JoinRoom from '../screens/lobby/JoinRoom'
+import { renderWithProviders } from './test-utils'
 
 const eventHandlers: Record<string, (...args: any[]) => void> = {}
 
@@ -28,7 +29,7 @@ describe('JoinRoom', () => {
   })
 
   test('muestra el input, botón Unirse y botón Volver', () => {
-    render(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    renderWithProviders(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     expect(screen.getByLabelText(/Código de sala/i)).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Unirse/i })).toBeInTheDocument()
     expect(screen.getByRole('button', { name: /Volver/i })).toBeInTheDocument()
@@ -36,14 +37,14 @@ describe('JoinRoom', () => {
 
   test('Volver llama a onBack', async () => {
     const user = userEvent.setup()
-    render(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    renderWithProviders(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     await user.click(screen.getByRole('button', { name: /Volver/i }))
     expect(onBack).toHaveBeenCalledOnce()
   })
 
   test('Unirse con input vacío muestra error', async () => {
     const user = userEvent.setup()
-    render(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    renderWithProviders(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     await user.click(screen.getByRole('button', { name: /Unirse/i }))
     expect(screen.getByText(/Introduce el código de la sala/i)).toBeInTheDocument()
     expect(mockSocket.emit).not.toHaveBeenCalled()
@@ -51,7 +52,7 @@ describe('JoinRoom', () => {
 
   test('Unirse con código válido emite join-room en mayúsculas', async () => {
     const user = userEvent.setup()
-    render(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    renderWithProviders(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     await user.type(screen.getByLabelText(/Código de sala/i), 'abc123')
     await user.click(screen.getByRole('button', { name: /Unirse/i }))
     expect(mockSocket.emit).toHaveBeenCalledWith('join-room', { code: 'ABC123', username: 'sara' })
@@ -59,7 +60,7 @@ describe('JoinRoom', () => {
 
   test('el input convierte el texto a mayúsculas', async () => {
     const user = userEvent.setup()
-    render(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    renderWithProviders(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     const input = screen.getByLabelText(/Código de sala/i)
     await user.type(input, 'abc')
     expect(input).toHaveValue('ABC')
@@ -67,7 +68,7 @@ describe('JoinRoom', () => {
 
   test('escribir en el input limpia el error', async () => {
     const user = userEvent.setup()
-    render(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    renderWithProviders(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     await user.click(screen.getByRole('button', { name: /Unirse/i }))
     expect(screen.getByText(/Introduce el código de la sala/i)).toBeInTheDocument()
     await user.type(screen.getByLabelText(/Código de sala/i), 'A')
@@ -75,7 +76,7 @@ describe('JoinRoom', () => {
   })
 
   test('room-joined muestra mensaje de espera y oculta el formulario', () => {
-    render(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    renderWithProviders(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     act(() => {
       eventHandlers['room-joined']({
         code: 'ABC123',
@@ -90,7 +91,7 @@ describe('JoinRoom', () => {
   })
 
   test('game-start llama a onGameReady con la info correcta', () => {
-    render(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    renderWithProviders(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     act(() => {
       eventHandlers['room-joined']({
         code: 'ABC123',
@@ -122,7 +123,7 @@ describe('JoinRoom', () => {
   })
 
   test('room-error muestra el mensaje de error', () => {
-    render(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    renderWithProviders(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     act(() => {
       eventHandlers['room-error']({ message: 'Sala no encontrada' })
     })
@@ -131,7 +132,7 @@ describe('JoinRoom', () => {
   })
 
   test('los listeners del socket se limpian al desmontar', () => {
-    const { unmount } = render(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
+    const { unmount } = renderWithProviders(<JoinRoom username="sara" onGameReady={onGameReady} onBack={onBack} />)
     unmount()
     expect(mockSocket.off).toHaveBeenCalledWith('room-joined')
     expect(mockSocket.off).toHaveBeenCalledWith('game-start')

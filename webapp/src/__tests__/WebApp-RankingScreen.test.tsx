@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Ranking from '../screens/ranking/Ranking'
 import RankingFiltered from '../screens/ranking/RankingFiltered'
@@ -8,6 +8,7 @@ import RankingStrategy from '../screens/ranking/RankingStrategy'
 import { getMedal, sortData } from '../screens/ranking/RankingFiltered'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
+import { renderWithProviders } from './test-utils'
 
 // Datos mock compartidos 
 
@@ -79,7 +80,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<Ranking username="sara" />)
+        renderWithProviders(<Ranking username="sara" />)
         expect(screen.getByText('Ranking global')).toBeInTheDocument()
     })
 
@@ -92,7 +93,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<Ranking username="sara" />)
+        renderWithProviders(<Ranking username="sara" />)
         await waitFor(() => {
             expect(screen.queryByText(/Tu posición en el ranking es\.\.\./i)).toBeInTheDocument()
             expect(screen.getByText('#3')).toBeInTheDocument()
@@ -108,7 +109,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<Ranking username="desconocido" />)
+        renderWithProviders(<Ranking username="desconocido" />)
         await waitFor(() => {
             expect(screen.getByText('Sin posicion')).toBeInTheDocument()
         })
@@ -120,7 +121,7 @@ describe('Ranking', () => {
      */
     test('muestra "No disponible" si la llamada falla', async () => {
         global.fetch = vi.fn().mockRejectedValue(new Error('Network error'))
-        render(<Ranking username="sara" />)
+        renderWithProviders(<Ranking username="sara" />)
         await waitFor(() => {
             expect(screen.getByText('No disponible')).toBeInTheDocument()
         })
@@ -135,7 +136,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<Ranking username="sara" />)
+        renderWithProviders(<Ranking username="sara" />)
         expect(screen.getByRole('button', { name: /Ver ranking/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Volver al menú principal/i })).toBeInTheDocument()
     })
@@ -150,7 +151,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<Ranking username="sara" />)
+        renderWithProviders(<Ranking username="sara" />)
         await user.click(screen.getByRole('button', { name: /Ver ranking/i }))
         await waitFor(() => {
             expect(screen.queryByText(/Tu posición en el ranking es\.\.\./i)).not.toBeInTheDocument()
@@ -169,7 +170,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<Ranking username="sara" />)
+        renderWithProviders(<Ranking username="sara" />)
         await user.click(screen.getByRole('button', { name: /Volver al menú principal/i }))
         await waitFor(() => {
             expect(screen.queryByText('Ranking global')).not.toBeInTheDocument()
@@ -190,7 +191,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<RankingFiltered username="sara" />)
+        renderWithProviders(<RankingFiltered username="sara" />)
         expect(screen.getByText('Ranking global')).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Por partidas/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Por dificultad/i })).toBeInTheDocument()
@@ -206,7 +207,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<RankingFiltered username="sara" />)
+        renderWithProviders(<RankingFiltered username="sara" />)
         expect(screen.getByRole('button', { name: /Nº/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /%/i })).toBeInTheDocument()
     })
@@ -221,7 +222,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<RankingFiltered username="sara" />)
+        renderWithProviders(<RankingFiltered username="sara" />)
         // Por defecto "general" está activa (muestra Clasificación general)
         await waitFor(() => {
             expect(screen.getByText('Clasificación general')).toBeInTheDocument()
@@ -243,7 +244,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<RankingFiltered username="sara" />)
+        renderWithProviders(<RankingFiltered username="sara" />)
         await user.click(screen.getByRole('button', { name: /Por dificultad/i }))
         await waitFor(() => {
             expect(screen.getByText('Victorias por dificultad')).toBeInTheDocument()
@@ -260,7 +261,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<RankingFiltered username="sara" />)
+        renderWithProviders(<RankingFiltered username="sara" />)
         await user.click(screen.getByRole('button', { name: /Por estrategia/i }))
         await waitFor(() => {
             expect(screen.getByText('Victorias por estrategia')).toBeInTheDocument()
@@ -277,7 +278,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<RankingFiltered username="sara" />)
+        renderWithProviders(<RankingFiltered username="sara" />)
         expect(screen.getByText('Clasificación general')).toBeInTheDocument()
       
         await user.click(screen.getByRole('button', { name: /Por dificultad/i }))
@@ -300,7 +301,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<RankingFiltered username="sara" />)
+        renderWithProviders(<RankingFiltered username="sara" />)
         await user.click(screen.getByRole('button', { name: /Volver al ranking general/i }))
         await waitFor(() => {
             expect(screen.queryByText(/Ranking global/i)).toBeInTheDocument()
@@ -322,7 +323,7 @@ describe('Ranking', () => {
             ok: true,
             json: async () => ({ ranking: mockRanking }),
         } as Response)
-        render(<RankingFiltered username="sara" />)
+        renderWithProviders(<RankingFiltered username="sara" />)
         await user.click(screen.getByRole('button', { name: /Volver al menú principal/i }))
         await waitFor(() => {
             expect(screen.queryByText('Ranking global')).not.toBeInTheDocument()
@@ -337,7 +338,7 @@ describe('Ranking', () => {
      * El test simula la carga de la sección de clasificación general dentro del ranking filtrado con un usuario "sara", y verifica que se muestre el título "Clasificación general" y las cabeceras "Posición" y "Jugador" en la pantalla, indicando que se ha cargado correctamente la sección de clasificación general con su estructura básica.
      */
     test('muestra el título y las cabeceras', async () => {
-        render(<RankingGeneral username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
+        renderWithProviders(<RankingGeneral username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         expect(screen.getByText('Clasificación general')).toBeInTheDocument()
         expect(screen.getByText('Posición')).toBeInTheDocument()
         expect(screen.getByText('Jugador')).toBeInTheDocument()
@@ -348,7 +349,7 @@ describe('Ranking', () => {
      * El test simula la carga de la sección de clasificación general dentro del ranking filtrado con un usuario "sara", y verifica que se muestren los datos de los usuarios "iyan" y "sara" en la pantalla después de que se hayan cargado los datos mock proporcionados por la función mockObtenerDatos, indicando que la sección de clasificación general muestra correctamente los datos obtenidos.
      */
     test('muestra los datos tras cargar', async () => {
-        render(<RankingGeneral username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
+        renderWithProviders(<RankingGeneral username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         await waitFor(() => {
             expect(screen.getByText('iyan')).toBeInTheDocument()
             expect(screen.getByText('sara')).toBeInTheDocument()
@@ -362,7 +363,7 @@ describe('Ranking', () => {
      * El test simula la carga de la sección de clasificación general dentro del ranking filtrado con un usuario "sara", y verifica que la fila correspondiente al usuario "sara" en la tabla de clasificación general tenga la clase CSS "ranking-row--me", indicando que se ha marcado correctamente la fila del usuario actual para destacarla visualmente en el ranking.
      */
     test('marca la fila del usuario actual', async () => {
-        render(<RankingGeneral username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
+        renderWithProviders(<RankingGeneral username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         await waitFor(() => {
             const fila = screen.getByText('sara').closest('tr')
             expect(fila).toHaveClass('ranking-row--me')
@@ -375,7 +376,7 @@ describe('Ranking', () => {
      */
     test('cambia a Derrotas al pulsar el filtro', async () => {
         const user = userEvent.setup()
-        render(<RankingGeneral username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
+        renderWithProviders(<RankingGeneral username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         await user.click(screen.getByRole('button', { name: /Derrotas/i }))
         await waitFor(() => {
             expect(mockObtenerDatos).toHaveBeenCalledWith('/ranking/defeats', {})
@@ -389,7 +390,7 @@ describe('Ranking', () => {
      * El test simula la carga de la sección de clasificación por dificultad dentro del ranking filtrado con un usuario "sara", y verifica que se muestre el título "Victorias por dificultad" y los botones de filtro "Fácil", "Media" y "Difícil" en la pantalla, indicando que se ha cargado correctamente la sección de clasificación por dificultad con su estructura básica y opciones de filtro.
      */
     test('muestra el título y los botones de dificultad', async () => {
-        render(<RankingDifficulty username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
+        renderWithProviders(<RankingDifficulty username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         expect(screen.getByText('Victorias por dificultad')).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Fácil/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Media/i })).toBeInTheDocument()
@@ -402,7 +403,7 @@ describe('Ranking', () => {
      */
     test('RankingDifficulty: carga datos al cambiar dificultad', async () => {
         const user = userEvent.setup()
-        render(<RankingDifficulty username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
+        renderWithProviders(<RankingDifficulty username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         await user.click(screen.getByRole('button', { name: /Media/i }))
         await waitFor(() => {
             expect(mockObtenerDatos).toHaveBeenCalledWith('/ranking/wins/difficulty', { difficulty: 'MEDIUM' })
@@ -415,7 +416,7 @@ describe('Ranking', () => {
      * El test simula la carga de datos en la sección de clasificación por dificultad y verifica que se muestren los nombres de los usuarios en la pantalla, indicando que se han cargado correctamente los datos.
      */
     test('muestra los datos tras cargar', async () => {
-        render(<RankingDifficulty username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
+        renderWithProviders(<RankingDifficulty username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         await waitFor(() => {
             expect(screen.getByText('iyan')).toBeInTheDocument()
             expect(screen.getByText('jimena')).toBeInTheDocument()
@@ -432,7 +433,7 @@ describe('Ranking', () => {
      * El test simula la carga de la sección de clasificación por estrategia dentro del ranking filtrado con un usuario "sara", y verifica que se muestre el título "Victorias por estrategia" y los botones de filtro "Random", "Defensiva" y "Monte Carlo" en la pantalla, indicando que se ha cargado correctamente la sección de clasificación por estrategia con su estructura básica y opciones de filtro.
      */
     test('muestra el título y los botones de estrategia', async () => {
-        render(<RankingStrategy username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
+        renderWithProviders(<RankingStrategy username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         expect(screen.getByText('Victorias por estrategia')).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Random/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Defensiva/i })).toBeInTheDocument()
@@ -444,7 +445,7 @@ describe('Ranking', () => {
 
     test('RankingStrategy: carga datos al cambiar estrategia', async () => {
         const user = userEvent.setup()
-        render(<RankingStrategy username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
+        renderWithProviders(<RankingStrategy username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         await user.click(screen.getByRole('button', { name: /Defensiva/i }))
         await waitFor(() => {
             expect(mockObtenerDatos).toHaveBeenCalledWith('/ranking/wins/strategy', { strategy: 'DEFENSIVO' })
@@ -456,7 +457,7 @@ describe('Ranking', () => {
      * El test simula la carga de datos en la sección de clasificación por estrategia y verifica que se muestren los nombres de los usuarios en la pantalla, indicando que se han cargado correctamente los datos.
      */
     test('RankingStrategy: muestra los datos tras cargar', async () => {
-        render(<RankingStrategy username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
+        renderWithProviders(<RankingStrategy username="sara" obtenerDatos={mockObtenerDatos} getMedal={mockGetMedal} sortBy="value" />)
         await waitFor(() => {
             expect(screen.getByText('iyan')).toBeInTheDocument()
             expect(screen.getByText('jimena')).toBeInTheDocument()

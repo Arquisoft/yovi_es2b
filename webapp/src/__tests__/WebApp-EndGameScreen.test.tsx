@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { End } from '../screens/game/End'
 import { Difficulty } from '../components/gameOptions/Difficulty'
@@ -6,6 +6,7 @@ import { Strategy } from '../components/gameOptions/Strategy'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import type { ComponentProps } from 'react'
+import { renderWithProviders } from './test-utils'
 
 const baseProps = {
     winner: 'sara',
@@ -28,7 +29,7 @@ type EndTestProps = ComponentProps<typeof End>
  */
 function renderEnd(overrides: Partial<EndTestProps> = {}) {
     const props: EndTestProps = Object.assign({}, baseProps, overrides)
-    return render(
+    return renderWithProviders(
         <End
             winner={props.winner}
             username={props.username}
