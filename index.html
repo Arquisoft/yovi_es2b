@@ -482,7 +482,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_registro_e_inicio_de_sesión">6.1. Registro e inicio de sesión</a></li>
 <li><a href="#_flujo_de_una_partida_completa">6.2. Flujo de una partida completa</a></li>
-<li><a href="#_consulta_de_estadísticas_y_ranking">6.3. Consulta de estadísticas y ranking</a></li>
+<li><a href="#_flujo_de_una_partida_multijugador">6.3. Flujo de una partida multijugador</a></li>
+<li><a href="#_consulta_de_estadísticas_y_ranking">6.4. Consulta de estadísticas y ranking</a></li>
 </ul>
 </li>
 <li><a href="#section-deployment-view">7. Vista de despliegue</a>
@@ -497,8 +498,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_patrones_y_principios_de_diseño">8.2. Patrones y principios de diseño</a></li>
 <li><a href="#_testeabilidad">8.3. Testeabilidad</a></li>
 <li><a href="#_seguridad">8.4. Seguridad</a></li>
-<li><a href="#_librerías_y_tecnologías_utilizadas">8.5. Librerías y tecnologías utilizadas</a></li>
-<li><a href="#_aspectos_del_desarrollo">8.6. Aspectos del desarrollo</a></li>
+<li><a href="#_monitorización">8.5. Monitorización</a></li>
+<li><a href="#_librerías_y_tecnologías_utilizadas">8.6. Librerías y tecnologías utilizadas</a></li>
+<li><a href="#_aspectos_del_desarrollo">8.7. Aspectos del desarrollo</a></li>
 </ul>
 </li>
 <li><a href="#section-design-decisions">9. Decisiones arquitectónicas</a>
@@ -506,7 +508,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_tabla_de_decisiones">9.1. Tabla de decisiones</a></li>
 </ul>
 </li>
-<li><a href="#section-quality-scenarios">10. Requisitos de calidad</a></li>
+<li><a href="#section-quality-scenarios">10. Requisitos de calidad</a>
+<ul class="sectlevel2">
+<li><a href="#_descripción_general_de_requisitos">10.1. Descripción general de requisitos</a></li>
+<li><a href="#_escenarios_de_calidad">10.2. Escenarios de calidad</a></li>
+</ul>
+</li>
 <li><a href="#section-technical-risks">11. Riesgos y deuda técnica</a>
 <ul class="sectlevel2">
 <li><a href="#_tabla_de_riesgos_técnicos">11.1. Tabla de riesgos técnicos</a></li>
@@ -517,6 +524,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_test_del_microservicio_users">12.1. Test del microservicio Users</a></li>
 <li><a href="#_test_del_microservicio_webapp">12.2. Test del microservicio WebApp</a></li>
+<li><a href="#_test_del_microservicio_gamey">12.3. Test del microservicio GameY</a></li>
+<li><a href="#_tests_end_to_end_e2e">12.4. Tests End-to-End (E2E)</a></li>
+<li><a href="#_test_de_carga">12.5. Test de carga</a></li>
 </ul>
 </li>
 <li><a href="#section-glossary">13. Glosario</a></li>
@@ -527,6 +537,27 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <style>
+body {
+    text-align: justify;
+}
+
+h1, h2, h3, h4 {
+    text-align: left;
+}
+
+.imageblock {
+    text-align: center;
+}
+
+#toc {
+    text-align: left;
+}
+
+.tableblock td,
+.tableblock th {
+    text-align: justify;
+}
+
 .arc42help {font-size:small; width: 14px; height: 16px; overflow: hidden; position: absolute; right: 0; padding: 2px 0 3px 2px;}
 .arc42help::before {content: "?";}
 .arc42help:hover {width:auto; height: auto; z-index: 100; padding: 10px;}
@@ -840,7 +871,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <p><strong>El frontend web:</strong> Desarrollado en React, hace que la aplicación se pueda ejecutar en el navegador. También se encarga de la presentación visual del juego, es decir, de la interfaz; la gestión de interacciones de los jugadores y la comunicación con el backend.</p>
 </li>
 <li>
-<p><strong>El backend:</strong> Se divide en dos microservicios independientes que gestionan distintas responsabilidades del sistema. El microservicio de GameY, en Rust, que tiene por función el manejo del juego como tal, los turnos del juego, los bots y sus estrategias, etc. El otro microservicio es el que maneja los usuarios, aquí, usaremos Node.js, que resultará más sencillo para la cominucación con la base de datos.</p>
+<p><strong>El backend:</strong> Se divide en tres microservicios independientes que gestionan distintas responsabilidades del sistema. El microservicio de GameY, en Rust, que tiene por función el manejo del juego como tal, los turnos del juego, los bots y sus estrategias, etc. El microservicio de usuarios, en Node.js, que resultará más sencillo para la comunicación con la base de datos. Por último, el microservicio de Rooms, también en Node.js, que gestiona las salas de juego multijugador en tiempo real mediante WebSocket (Socket.io), coordinando la creación y unión de salas y retransmitiendo los movimientos entre jugadores a través de GameY.</p>
 </li>
 <li>
 <p><strong>La persistencia de datos:</strong> Se realiza mediante MongoDB, que almacena la información de los usuarios con sus partidas y resultados. Elegimos el modelo noSQL por la facilidad de despliegue y la capacidad de ver los datos en tiempo real.</p>
@@ -854,7 +885,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </ul>
 </div>
 <div class="paragraph">
-<p>La comunicación se realiza mediante una API REST que intercambia mensajes JSON. Esta arquitectura modular y distribuida permite que el sistema sea escalable y extensible para futuras versiones que incluyan variantes adicionales del juego, soporte para varios jugadores o funcionalidades opcionales avanzadas.</p>
+<p>La comunicación entre el frontend y los microservicios se realiza principalmente mediante una API REST que intercambia mensajes JSON, a excepción del microservicio de Rooms, con el que la comunicación es en tiempo real a través de WebSocket (Socket.io). Esta arquitectura modular y distribuida permite que el sistema sea escalable y extensible para futuras versiones que incluyan variantes adicionales del juego o funcionalidades opcionales avanzadas.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -903,6 +934,12 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <li>
 <p><strong>Gatling:</strong> Software que se usará para las pruebas de carga del juego.</p>
 </li>
+<li>
+<p><strong>Prometheus:</strong> Sistema de monitorización y alertas que recopila métricas de los microservicios en intervalos regulares.</p>
+</li>
+<li>
+<p><strong>Grafana:</strong> Plataforma de visualización que conecta con Prometheus para mostrar las métricas del sistema en dashboards en tiempo real.</p>
+</li>
 </ul>
 </div>
 </div>
@@ -946,7 +983,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <div class="sect2">
 <h3 id="_nivel_1_visión_general_del_sistema">5.1. Nivel 1 – Visión general del sistema</h3>
 <div class="paragraph">
-<p>A alto nivel, el sistema está compuesto por cuatro bloques principales, uno de frontend, dos de backend y uno de persistencia:</p>
+<p>A alto nivel, el sistema está compuesto por cinco bloques principales, uno de frontend, tres de backend y uno de persistencia:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -960,20 +997,25 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <p>Microservicio GameY</p>
 </li>
 <li>
+<p>Microservicio Rooms</p>
+</li>
+<li>
 <p>Base de datos</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Estos componentes interactúan entre sí mediante API REST (modelo, servicio y controlers) y mensajes en formato JSON.</p>
+<p>Estos componentes interactúan entre sí mediante API REST y mensajes en formato JSON, a excepción del microservicio Rooms, con el que el frontend se comunica a través de WebSocket (Socket.io) para permitir la interacción en tiempo real durante las partidas multijugador.</p>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/app_static.png" alt="aplicacion estatica sencilla"></span></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/app_static.png" alt="aplicacion estatica sencilla">
+</div>
 </div>
 <div class="sect3">
 <h4 id="_frontend_web_webapp">5.1.1. Frontend Web: WEBAPP</h4>
 <div class="paragraph">
-<p>El frontend es una aplicación web desarrollada en React y que es ejecutada en el navegador del usuario. Divide el códgio en screens y componentes, que interactúan directamente con los controllers del juego</p>
+<p>El frontend es una aplicación web desarrollada en React y que es ejecutada en el navegador del usuario. Divide el código en screens y componentes, que interactúan directamente con los controllers del juego.</p>
 </div>
 <div class="paragraph">
 <p>Sus responsabilidades principales son:</p>
@@ -1000,8 +1042,10 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <div class="paragraph">
 <p>El frontend no contiene lógica del juego. Toda la validación de movimientos y cálculo del estado del tablero se delega al backend para garantizar la integridad de las partidas.</p>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/app_static_webapp.png" alt="aplicacion estatica sencilla" width="parte webapp"></span></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/app_static_webapp.png" alt="aplicacion estatica sencilla" width="parte webapp">
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -1033,7 +1077,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <h4 id="_microservicio_gamey">5.1.3. Microservicio GameY</h4>
 <div class="paragraph">
 <p>El microservicio GameY está desarrollado en Rust y contiene toda la lógica principal del juego.
-De nuevo gracias a la API REST usada el frontend envia el estado actual de una partida y recibe como respuesta el nuevo estado del tablero o el siguiente movimiento calculado. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.</p>
+De nuevo gracias a la API REST usada el frontend envía el estado actual de una partida y recibe como respuesta el nuevo estado del tablero o el siguiente movimiento calculado. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.</p>
 </div>
 <div class="paragraph">
 <p>Sus responsabilidades son:</p>
@@ -1062,7 +1106,38 @@ De nuevo gracias a la API REST usada el frontend envia el estado actual de una p
 </div>
 </div>
 <div class="sect3">
-<h4 id="_base_de_datos">5.1.4. Base de Datos</h4>
+<h4 id="_microservicio_rooms">5.1.4. Microservicio Rooms</h4>
+<div class="paragraph">
+<p>El microservicio Rooms está implementado en Node.js y se encarga de gestionar las partidas multijugador en tiempo real. A diferencia del resto de microservicios, la comunicación con el frontend no se realiza mediante API REST sino a través de WebSocket (Socket.io), lo que permite una interacción bidireccional e inmediata entre los jugadores.</p>
+</div>
+<div class="paragraph">
+<p>Entre sus responsabilidades se incluyen:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Crear y gestionar salas de juego identificadas por un código único de seis caracteres.</p>
+</li>
+<li>
+<p>Coordinar la unión de un segundo jugador a una sala existente.</p>
+</li>
+<li>
+<p>Retransmitir los movimientos de cada jugador al microservicio GameY y reenviar el nuevo estado del tablero a ambos jugadores.</p>
+</li>
+<li>
+<p>Gestionar eventos de fin de turno por temporizador, deshacer movimientos y abandono o desconexión de jugadores.</p>
+</li>
+<li>
+<p>Exponer métricas de Prometheus sobre el número de salas creadas y activas.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>El estado de las salas se mantiene en memoria durante el transcurso de la partida. El microservicio se comunica internamente con GameY mediante HTTP REST para crear partidas y validar movimientos.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_base_de_datos">5.1.5. Base de Datos</h4>
 <div class="paragraph">
 <p>El sistema utiliza MongoDB como sistema de persistencia.
 Se trata de una base de datos NoSQL orientada a documentos, adecuada para almacenar estructuras de datos flexibles como partidas de juego y estadísticas.</p>
@@ -1075,10 +1150,10 @@ Se trata de una base de datos NoSQL orientada a documentos, adecuada para almace
 </div>
 </div>
 <div class="sect3">
-<h4 id="_esquema_del_sistema">5.1.5. Esquema del sistema</h4>
+<h4 id="_esquema_del_sistema">5.1.6. Esquema del sistema</h4>
 <div class="paragraph">
 <p>Este es el esquema del juego completo:
-<span class="image"><img src="./images/yovi-estructura.png" alt="componentes-yovi"></span></p>
+image::yovi-estructura.png[componentes-yovi]</p>
 </div>
 </div>
 </div>
@@ -1106,7 +1181,10 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <p><strong>Gestión de estado:</strong> control del estado actual de la partida y de la sesión del usuario.</p>
 </li>
 <li>
-<p><strong>Peticiones del cliente:</strong> módulo encargado de realizar las peticiones HTTP a los microservicios backend, comunicandose con los controllers.</p>
+<p><strong>Peticiones del cliente:</strong> módulo encargado de realizar las peticiones HTTP a los microservicios User y GameY.</p>
+</li>
+<li>
+<p><strong>Cliente WebSocket:</strong> módulo encargado de mantener la conexión con el microservicio Rooms durante las partidas multijugador, emitiendo y recibiendo eventos en tiempo real.</p>
 </li>
 </ul>
 </div>
@@ -1131,7 +1209,26 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_microservicio_gamey_2">5.2.3. Microservicio GameY</h4>
+<h4 id="_microservicio_rooms_2">5.2.3. Microservicio Rooms</h4>
+<div class="paragraph">
+<p>Este microservicio se compone de los siguientes módulos internos:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Servidor Socket.io:</strong> gestiona las conexiones WebSocket de los clientes y enruta los eventos entrantes.</p>
+</li>
+<li>
+<p><strong>Gestor de salas:</strong> mantiene en memoria el estado de cada sala activa, incluyendo los jugadores conectados, el identificador de partida y la configuración elegida.</p>
+</li>
+<li>
+<p><strong>Cliente HTTP de GameY:</strong> realiza las llamadas REST a GameY para crear partidas y retransmitir movimientos o deshacerlos.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_microservicio_gamey_2">5.2.4. Microservicio GameY</h4>
 <div class="paragraph">
 <p>Está organizado en las siguientes partes internas:</p>
 </div>
@@ -1156,17 +1253,17 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_beneficios_de_la_arquitectura">5.2.4. Beneficios de la arquitectura</h4>
+<h4 id="_beneficios_de_la_arquitectura">5.2.5. Beneficios de la arquitectura</h4>
 <div class="paragraph">
 <p>Las principales ventajas que proporciona la estructura elegida son:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Separación clara de responsabilidades</strong> - como cada componente tiene una responsabilidad bien definida, se facilita el mantenimiento del sistema y reduce el acoplamiento entre componentes..</p>
+<p><strong>Separación clara de responsabilidades</strong> - como cada componente tiene una responsabilidad bien definida, se facilita el mantenimiento del sistema y reduce el acoplamiento entre componentes.</p>
 </li>
 <li>
-<p><strong>Escalabilidad</strong>, permitiendo desplegar y escalar cada microservicio de manera independiente, lo que permitira por ejemplo crear varias instancias del juego</p>
+<p><strong>Escalabilidad</strong>, permitiendo desplegar y escalar cada microservicio de manera independiente, lo que permitirá por ejemplo crear varias instancias del juego.</p>
 </li>
 <li>
 <p><strong>Flexibilidad tecnológica</strong>, ya que cada servicio puede desarrollarse con el lenguaje más adecuado según sus necesidades.</p>
@@ -1175,7 +1272,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <p><strong>Extensibilidad</strong>, permitiendo añadir nuevas funcionalidades o variantes del juego sin rediseñar el sistema completo.</p>
 </li>
 <li>
-<p><strong>Despliegue reproducible</strong> , ya que el uso de contenedores Docker permite ejecutar el sistema en diferentes entornos de forma consistente.</p>
+<p><strong>Despliegue reproducible</strong>, ya que el uso de contenedores Docker permite ejecutar el sistema en diferentes entornos de forma consistente.</p>
 </li>
 </ul>
 </div>
@@ -1184,7 +1281,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <div class="sect2">
 <h3 id="_nivel_3_interfaces_entre_componentes">5.3. Nivel 3: Interfaces entre componentes</h3>
 <div class="paragraph">
-<p>Los  componentes del sistema se comunican entre sí mediante las interfaces basadas en servicios web y mensajes, que también contribuyen al desacoplamiento y la separación de responabilidades.</p>
+<p>Los componentes del sistema se comunican entre sí mediante las interfaces basadas en servicios web y mensajes, que también contribuyen al desacoplamiento y la separación de responsabilidades.</p>
 </div>
 <div class="paragraph">
 <p>Las principales interfaces del sistema son las siguientes.</p>
@@ -1200,28 +1297,107 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <div class="ulist">
 <ul>
 <li>
-<p>POST /loginuser – iniciar sesión con un usuario existente</p>
+<p>POST /loginuser - iniciar sesión con un usuario existente</p>
 </li>
 <li>
-<p>GET /users/{id} – obtener información de un usuario.</p>
+<p>GET /users/{id} - obtener información de un usuario.</p>
 </li>
 <li>
-<p>POST /createuser – crea un nuevo usuario, validando que no exista</p>
+<p>POST /createuser - crea un nuevo usuario, validando que no exista</p>
+</li>
+<li>
+<p>POST /initmatch - creación de una partida vs bot propio</p>
+</li>
+<li>
+<p>POST /endmatch - finalización de una partida ganada vs bot, para más sencillez a la hora de estadísticas y ranking</p>
+</li>
+<li>
+<p>POST /allstats - recuperación de las estadísticas totales</p>
+</li>
+<li>
+<p>POST /diffstats - recuperación de las estadísticas por dificultad (tamaño de tablero)</p>
+</li>
+<li>
+<p>POST /stratstats - recuperación de las estadísticas por estrategia (del bot contra el que se juegue)</p>
+</li>
+<li>
+<p>GET /ranking/wins - recuperación del ranking por partidas ganadas (vs bot propio)</p>
+</li>
+<li>
+<p>GET /ranking/defeats - recuperación del ranking por partidas perdidas (vs bot propio)</p>
+</li>
+<li>
+<p>POST /ranking/wins/difficulty - recuperación del ranking por partidas ganadas por dificultad (vs bot propio)</p>
+</li>
+<li>
+<p>POST /ranking/wins/strategy - recuperación del ranking por partidas ganadas por estrategia (vs bot propio)</p>
+</li>
+<li>
+<p>Existen también métodos que no se podrán acceder por usuarios normales, y existen solo para realización de pruebas y tests de la aplicación</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/yovi-interfazusers.png" alt="interfaz-users-yovi"></span></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/yovi-interfazusers.png" alt="interfaz-users-yovi">
 </div>
-</div>
-<div class="sect3">
-<h4 id="_interfaz_frontend_microservicio_gamey">5.3.2. Interfaz Frontend – Microservicio GameY</h4>
-<div class="paragraph">
-<p>El frontend interactúa con el microservicio GameY para gestionar el desarrollo de las partidas gracias a la API REST . La información de la partida se representa mediante la notación YEN, que describe el tamaño del tablero, el turno actual y la disposición de las piezas.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_interfaz_de_acceso_a_datos">5.3.3. Interfaz de acceso a datos</h4>
+<h4 id="_interfaz_frontend_microservicio_rooms">5.3.2. Interfaz Frontend – Microservicio Rooms</h4>
+<div class="paragraph">
+<p>El frontend se comunica con el microservicio Rooms a través de WebSocket (Socket.io) para gestionar las partidas multijugador en tiempo real. Los principales eventos son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><code>create-room</code> – el jugador crea una sala indicando nombre de usuario, dificultad y si el temporizador está activo. El servidor responde con <code>room-created</code> (código de sala e identificador de partida).</p>
+</li>
+<li>
+<p><code>join-room</code> – el segundo jugador se une a una sala existente con su código. El servidor responde con <code>room-joined</code> y emite <code>game-start</code> a ambos jugadores para iniciar la partida.</p>
+</li>
+<li>
+<p><code>make-move</code> – un jugador envía su movimiento. El servidor lo retransmite a GameY y responde con <code>move-made</code> al resto de la sala.</p>
+</li>
+<li>
+<p><code>undo-move</code> – solicita deshacer los dos últimos movimientos. El servidor responde con el nuevo estado del tablero.</p>
+</li>
+<li>
+<p><code>timer-expired</code> – notifica que el temporizador del turno activo ha expirado. El servidor emite <code>turn-skipped</code> indicando el siguiente jugador.</p>
+</li>
+<li>
+<p><code>abandon-game</code> – un jugador abandona la partida. El servidor emite <code>player-disconnected</code> y elimina la sala.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_interfaz_rooms_microservicio_gamey">5.3.3. Interfaz Rooms – Microservicio GameY</h4>
+<div class="paragraph">
+<p>El microservicio Rooms se comunica con GameY mediante HTTP REST para delegar en él toda la lógica de juego. Esta interfaz es interna entre microservicios y no es accesible directamente desde el frontend. Las operaciones principales son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>POST /v1/games – crea una nueva partida en GameY con el tamaño de tablero correspondiente a la dificultad elegida. Devuelve el identificador de partida que Rooms asocia a la sala.</p>
+</li>
+<li>
+<p>POST /v1/games/{gameId}/move – envía el movimiento de un jugador (coordenadas y índice de jugador) y recibe el nuevo estado del tablero y el estado de la partida.</p>
+</li>
+<li>
+<p>POST /v1/games/{gameId}/undo – deshace el último movimiento registrado en GameY. Rooms lo invoca dos veces seguidas para que ambos jugadores recuperen su turno anterior.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_interfaz_frontend_microservicio_gamey">5.3.4. Interfaz Frontend – Microservicio GameY</h4>
+<div class="paragraph">
+<p>El frontend interactúa con el microservicio GameY para gestionar el desarrollo de las partidas en modo un jugador gracias a la API REST. La información de la partida se representa mediante la notación YEN, que describe el tamaño del tablero, el turno actual y la disposición de las piezas. En el modo multijugador, el frontend no se comunica directamente con GameY: es el microservicio Rooms quien actúa como intermediario.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_interfaz_de_acceso_a_datos">5.3.5. Interfaz de acceso a datos</h4>
 <div class="paragraph">
 <p>Los microservicios del sistema acceden a la base de datos de MongoDB para almacenar y recuperar la información persistente. Entre las principales operaciones destacan el almacenamiento de usuarios ya registrados, el registro de las partidas jugadas, la consulta de estadísticas del juego o del ranking, &#8230;&#8203;</p>
 </div>
@@ -1234,7 +1410,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <h3 id="_diagrama_de_clases">5.4. Diagrama de clases</h3>
 <div class="paragraph">
 <p>Vemos en la siguiente imagen el diagrama de clases de este proyecto.
-<span class="image"><img src="./images/gamey_uml.png" alt="gamey_uml"></span></p>
+image::gamey_uml.png[gamey_uml]</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1258,6 +1434,9 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <p><strong>Users Service</strong>: microservicio Node.js en el puerto 3000.</p>
 </li>
 <li>
+<p><strong>Rooms Service</strong>: microservicio Node.js en el puerto 3001, comunicación via WebSocket (Socket.io).</p>
+</li>
+<li>
 <p><strong>GameY Service</strong>: microservicio Rust en el puerto 4000.</p>
 </li>
 <li>
@@ -1270,8 +1449,10 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <div class="paragraph">
 <p>El registro crea un nuevo usuario en MongoDB comprobando previamente que el nombre no esté en uso. El inicio de sesión verifica las credenciales y habilita el acceso a las funcionalidades del juego.</p>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/diagramaRegistroInicioSesion.png" alt="diagramaRegistroInicioSesion"></span></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/diagramaRegistroInicioSesion.png" alt="diagramaRegistroInicioSesion">
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1279,17 +1460,32 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <div class="paragraph">
 <p>Al iniciar una partida, el microservicio de usuarios registra el evento en MongoDB y GameY crea la sesión de juego en memoria. Los movimientos del jugador y las respuestas del bot se resuelven íntegramente en GameY sin acceder a la base de datos. Al terminar, el resultado se persiste en MongoDB y la sesión de juego se elimina de GameY.</p>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/diagramaFlujoPartida.png" alt="diagramaFlujoPartida"></span></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/diagramaFlujoPartida.png" alt="diagramaFlujoPartida">
+</div>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_consulta_de_estadísticas_y_ranking">6.3. Consulta de estadísticas y ranking</h3>
+<h3 id="_flujo_de_una_partida_multijugador">6.3. Flujo de una partida multijugador</h3>
+<div class="paragraph">
+<p>Para iniciar una partida multijugador, el primer jugador crea una sala a través del Rooms Service, que solicita a GameY la creación de una nueva partida y devuelve un código de sala al jugador. El segundo jugador se une con ese código y, en ese momento, el servidor notifica a ambos que la partida puede comenzar. Cada movimiento es recibido por Rooms, retransmitido a GameY y el nuevo estado del tablero se reenvía a los dos jugadores. Si un jugador abandona o pierde la conexión, el otro recibe una notificación inmediata.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/diagramaFlujoPartidaMultijugador.png" alt="diagramaFlujoPartidaMultijugador">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_consulta_de_estadísticas_y_ranking">6.4. Consulta de estadísticas y ranking</h3>
 <div class="paragraph">
 <p>Las estadísticas y el ranking se obtienen directamente de MongoDB a través del microservicio de usuarios. No interviene GameY en este flujo.</p>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/diagramaEstadisticasRanking.png" alt="diagramaEstadisticasRanking"></span></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/diagramaEstadisticasRanking.png" alt="diagramaEstadisticasRanking">
+</div>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -1331,6 +1527,11 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <td class="tableblock halign-left valign-top"><p class="tableblock">Microservicio de gestión de usuarios y estadísticas.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">rooms (Node.js / Socket.io)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3001</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Microservicio de gestión de salas multijugador. Comunicación con el frontend via WebSocket y con GameY via HTTP REST.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">gamey (Rust / Axum)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">4000</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Motor de juego y servicio de bots.</p></td>
@@ -1358,8 +1559,10 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <div class="paragraph">
 <p>El despliegue en producción se activa automáticamente al publicar una nueva release en GitHub. El pipeline definido en <code>.github/workflows/release-deploy.yml</code> sigue las siguientes fases:</p>
 </div>
-<div class="paragraph">
-<p><span class="image"><img src="./images/diagramaPipelineDespliegue.png" alt="diagramaPipelineDespliegue"></span></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/diagramaPipelineDespliegue.png" alt="diagramaPipelineDespliegue">
+</div>
 </div>
 <div class="paragraph">
 <p>Las imágenes Docker se publican en el registro de contenedores de GitHub (<code>ghcr.io</code>). La VM de producción descarga siempre la última versión de <code>docker-compose.yml</code> directamente desde la rama <code>master</code> del repositorio y lanza los contenedores con <code>--pull always</code>, garantizando que se usen las imágenes recién publicadas.</p>
@@ -1500,7 +1703,62 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_librerías_y_tecnologías_utilizadas">8.5. Librerías y tecnologías utilizadas</h3>
+<h3 id="_monitorización">8.5. Monitorización</h3>
+<div class="paragraph">
+<p>El sistema incorpora una pila de monitorización basada en <strong>Prometheus</strong> y <strong>Grafana</strong> que permite observar el estado de los microservicios en tiempo real sin necesidad de acceder a los logs directamente.</p>
+</div>
+<div class="sect3">
+<h4 id="_recopilación_de_métricas_con_prometheus">8.5.1. Recopilación de métricas con Prometheus</h4>
+<div class="paragraph">
+<p>Prometheus recopila métricas de los microservicios backend mediante scraping del endpoint <code>/metrics</code> de cada uno, con un intervalo de 5 segundos. Los servicios monitorizados son:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>users</strong> (puerto 3000) — métricas HTTP del servicio de usuarios.</p>
+</li>
+<li>
+<p><strong>rooms</strong> (puerto 3001) — métricas del servicio de salas multijugador, incluyendo el número de salas creadas y el número de salas activas en cada momento.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>La configuración de Prometheus está definida en <code>users/monitoring/prometheus/prometheus.yml</code> y se monta en el contenedor mediante un volumen Docker.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_visualización_con_grafana">8.5.2. Visualización con Grafana</h4>
+<div class="paragraph">
+<p>Grafana se conecta a Prometheus como fuente de datos y expone un dashboard predefinido llamado <strong>Monitorización del Sistema</strong>, provisionado automáticamente al arrancar el contenedor a partir de los ficheros en <code>users/monitoring/grafana/provisioning/</code>.</p>
+</div>
+<div class="paragraph">
+<p>El dashboard se organiza en dos secciones:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Servicio de Usuarios:</strong> muestra peticiones por minuto, tiempo de respuesta, distribución de respuestas por tipo de código HTTP y tráfico desglosado por endpoint.</p>
+</li>
+<li>
+<p><strong>Servicio de Salas (Rooms):</strong> muestra el ritmo de creación de salas a lo largo del tiempo y el número de salas activas en cada instante.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Grafana es accesible en el puerto 9091 tanto en local como en producción.</p>
+</div>
+<div class="paragraph">
+<p>En la imagen se puede observar el dashboard en funcionamiento durante una sesión de prueba. En la sección de usuarios se aprecia el pico de peticiones por minuto, los tiempos de respuesta (p90, mediana y media), la distribución de respuestas correctas (2xx) frente a errores de cliente (4xx) y el tráfico desglosado por endpoint. En la sección de salas se puede ver cómo el número de salas activas sube y baja conforme los jugadores crean y terminan partidas, y el ritmo de creación de salas a lo largo del tiempo.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/grafana.png" alt="dashboard grafana monitorización del sistema">
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_librerías_y_tecnologías_utilizadas">8.6. Librerías y tecnologías utilizadas</h3>
 <div class="paragraph">
 <p>El proyecto usa librerías y herramientas distintas según la parte del sistema. Las más destacadas son las siguientes:</p>
 </div>
@@ -1527,6 +1785,12 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <li>
 <p><strong>OpenAPI:</strong> para documentar los contratos de los servicios.</p>
 </li>
+<li>
+<p><strong>Prometheus:</strong> para la recopilación de métricas de los microservicios mediante scraping periódico.</p>
+</li>
+<li>
+<p><strong>Grafana:</strong> para la visualización de métricas en dashboards provisionados automáticamente.</p>
+</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -1534,7 +1798,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </div>
 </div>
 <div class="sect2">
-<h3 id="_aspectos_del_desarrollo">8.6. Aspectos del desarrollo</h3>
+<h3 id="_aspectos_del_desarrollo">8.7. Aspectos del desarrollo</h3>
 <div class="paragraph">
 <p>Además de lo estrictamente funcional, se han desarrollado otros aspectos que de gran importancia para el proyecto:</p>
 </div>
@@ -1554,6 +1818,9 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </li>
 <li>
 <p><strong>Detectabilidad de fallos:</strong> la separación entre servicios y la personalización de errores facilita localizar errores y analizar fallos por capas.</p>
+</li>
+<li>
+<p><strong>Observabilidad:</strong> la integración de Prometheus y Grafana permite detectar anomalías de rendimiento y comportamiento sin necesidad de intervención manual sobre los servidores.</p>
 </li>
 </ul>
 </div>
@@ -1613,9 +1880,143 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <h2 id="section-quality-scenarios">10. Requisitos de calidad</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Se definirán los requisitos de calidad necesarios para que el proyecto esté realmente correcto y finalizado.</p>
+<p>Se definirán los requisitos de calidad necesarios para que el proyecto esté realmente correcto y finalizado.
+Nos basaremos en los objetivos de calidad descritos brevemente en el apartado 1.2, y los explicaremos de una forma un poco más desarrollada.
+También veremos algunos requisitos de menor importancia a destacar, necesarios para considerar en este proyecto.
+Estos requisitos han influenciado en nuestro trabajo, haciendo que este se ajuste en lo máximo posible a ellos.</p>
 </div>
+<div class="sect2">
+<h3 id="_descripción_general_de_requisitos">10.1. Descripción general de requisitos</h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Funcionalidad</strong> (obligatoria):
+El sistema realiza las funciones obligatorias de creación de usuario e inicio de sesión con otro ya creado.
+También es posible jugar contra varios bot, que pueden tener diferentes estrategias y se puede ajustar la dificultad, que corresponde con el tamaño del tablero sobre el que se va a jugar.
+Existe la posibilidad de visualizar estadísticas personales de partidas contra bot: en general, por dificultad o por estrategia.
+Escenarios Funcionalidad del 1 al 3.</p>
+</li>
+<li>
+<p><strong>Mantenibilidad</strong>:
+Para modificaciones de funcionalidades voluntarias, necesitamos que nuestro programa pueda adaptarse sin tener que tocar el resto de código.
+Así, al poder crear implementaciones extra, no tendremos que sacrificar el rendimiento del programa o tiempo empleado en hacerlo, entre otras cosas.</p>
+</li>
+<li>
+<p><strong>Usabilidad</strong>:
+Debe poder ser usada para el público objetivo, que en nuestro caso, será apto para todos los públicos.
+Tendrá que tener una interfaz intuitiva y fácil de usar, con un rendimiento de la aplicación (creación de usuario, jugar un  turno, etc.) que sea lo más rápido y correcto posible.</p>
+</li>
+<li>
+<p><strong>Escalabilidad</strong>:
+Este programa será capaz de funcionar en varios dispositivos al mismo tiempo.
+De esta forma, en un futuro, podría tener la capacidad de ser usado con mayor carga, pero sin perder rendimiento o calidad.</p>
+</li>
+<li>
+<p><strong>Funcionalidad</strong> (extra):
+Existe la capacidad de jugar un jugador contra otro, tanto de forma local, en el mismo ordenador, como de forma remota, con diferentes cuentas.
+También está la capacidad de poder ver un ranking global, con todos los usuarios registrados.
+Se ha implementado la capacidad de obtener pistas al jugar un usuario contra un bot, teniendo un límite de 3 pistas por patida.
+También se proporciona un temporizador en las partidas jugador vs jugador, si no se responde en ese tiempo, se cambiará el turno.
+Otra implementación es poder aplicar el modo oscuro, pudiendo elegir si usar la aplicación con modo claro (que en principio se había forzado) o en modo oscuro, este apartado está muy relacionado también con la usabilidad.
+Respecto a la usabilidad, de nuevo, se ha implementado la internacionalización, centrado en idiomas con letras latinas (español, inglés, &#8230;&#8203;).
+Escenarios Funcionalidad del 4 al 7.</p>
+</li>
+<li>
+<p><strong>Rendimiento</strong>:
+Este programa deberá responder a las peticiones de forma rápida y clara.
+La rapidez se corresponde con un sistema productivo, y la claridad con el como responde la aplicación y se muestra en el interfaz de usuario.</p>
+</li>
+<li>
+<p><strong>Testeabilidad</strong>:
+Corresponde con la capacidad de que cada parte de la aplicación tenga funcionalidades que pueden ser probadas.
+Estas pruebas se hacen mediante diferentes tipos de test: los unitarios, que hay uno por microservicio, sobre juego (gamey), sobre el interfaz (webapp) o sobre la base de datos (users);
+otros test son los test e2e, que prueban el flujo de una aplicación de principio a fin (e2e), que simulan la experiencia real de un usuario, probando que todos los componentes (frontend, backend, base de datos) funcionen conjuntamente;
+también tenemos las pruebas de carga, que muestran la capacidad del sistema para probar el acceso a la aplicación a la vez para simular una carga de trabajo más similar a la realidad;
+por último, tenemos las pruebas de usabilidad, que se hacen respecto a usuarios reales para ver su interacción con el juego.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_escenarios_de_calidad">10.2. Escenarios de calidad</h3>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 40%;">
+<col style="width: 40%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Escenario</th>
+<th class="tableblock halign-left valign-top">Estímulo</th>
+<th class="tableblock halign-left valign-top">Respuesta</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Funcionalidad 1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El usuario crea un usuario, y juega una partida contra un bot.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El programa responde rápidamente, creando el usuario y entrando en la página, puede elegir un tamaño de tablero y estrategia y peude jugar.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Funcionalidad 2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El usuario juega una partida contra un bot.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Al jugar y hacer un movimiento, ofrece una respuesta casi inmediata con el movimiento de otro bot, o con respuesta de fin de partida.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Funcionalidad 3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">El usuario puede ver sus estadísticas personales.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Se pueden ver las estadísticas personales de un usuario propio, con capacidad de ver las estadísticas generales, o separadas por dificultad y estrategia.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Mantenibilidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">En un futuro queremos añadir más funcionalidad.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Añadimos otras funcionalidades y no tenemos que modificar o quitar código creado, añadir o mover código sí serían opciones viables en estos casos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Usabilidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Estímulos analizados más adelante en el apartado de Test &gt; Usabilidad.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Respuestas respectivas vistas más adelante en el apartado de Test &gt; Usabilidad.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Escalabilidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Estímulos analizados más adelante en el apartado de Test &gt; Test de carga.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Respuestas respectivas vistas más adelante en el apartado de Test &gt; Test de carga.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Funcionalidad 4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un usuario quiere jugar un jugador contra otro de forma local.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Desde el mismo ordenador, dos personas pueden jugar entre ellos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Funcionalidad 5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un usuario quiere jugar un jugador contra otro de forma global.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Desde diferentes despositivos, dos personas pueden jugar entre ellos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Funcionalidad 6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un usuario quiere cambiar de modo claro a oscuro en la aplicación.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Todo el programa se adapta a lo que necesite el usuario.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Funcionalidad 7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Un usuario quiere cambiar el idioma de la aplicación.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Todo el programa se adapta a lo que necesite el usuario.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Rendimiento</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Estímulos analizados más adelante en el apartado de Test &gt; Test de carga.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Respuestas respectivas vistas más adelante en el apartado de Test &gt; Test de carga.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Testeabilidad</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Gran cantidad de estímulos analizados más adelante en el apartado de Test.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Respuestas respectivas vistas más adelante en el apartado de Test.</p></td>
+</tr>
+</tbody>
+</table>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 <div class="sect1">
@@ -1715,27 +2116,110 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <p>Estos son test serán ejecutados después de cada actualización al programa principal. En este caso, se probará la capacidad de la base de datos para todo lo que tenga que ver con usuarios, desde creación y registro de usuario, hasta la obtención y gestión de estadísticas. Estos test no son pruebas respecto al usuario, a la interacción con este, si no al manejo de la base de datos, de que se llama correctamente a los endpoint y lo que devuelve es correcto, sea error o no.
 Para ello, separamos los test por funcionalidad en clases <strong>users-service-[funcionalidad].test.js</strong>, haciendo que en cada una pruebe test con casos específicos de cada tipo.</p>
 </div>
+<div class="sect3">
+<h4 id="_tests_individuales">12.1.1. Tests individuales</h4>
+<div class="paragraph">
+<p>Estos test se ejecutaron en la terminal de forma local desde la carpeta /users/<em>test</em> con el comando <strong>&gt; npx vitest run --reporter=tree</strong>, y de ahí se han tomado las capturas, excepto en el test de coverage.</p>
+</div>
 <div class="ulist">
 <ul>
 <li>
 <p><strong>users-service-login: </strong> Que prueba que un usuario ya creado se registre bien, además de contener los casos donde faltan datos al llamar el endpoint o que el inicio de sesión falló por contraseña incorrecta.</p>
 </li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_users_login.png" alt="test de login de users">
+</div>
+</div>
+<div class="ulist">
+<ul>
 <li>
 <p><strong>users-service-signup: </strong> Que prueba que un usuario se puede iniciar sesión, si los datos son correctos, y que lanza en error en su defecto.</p>
 </li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_users_signup.png" alt="test de signup de users">
+</div>
+</div>
+<div class="ulist">
+<ul>
 <li>
 <p><strong>users-service-initmatch: </strong> Que prueba que el inicio de una partida es correcto, o lanza error cuando debería.</p>
 </li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_users_initmatch.png" alt="test de initmatch de users">
+</div>
+</div>
+<div class="ulist">
+<ul>
 <li>
 <p><strong>users-service-endmatch: </strong> Que prueba que el fin de una partida ganada es correcta, o lanza error cuando debería.</p>
 </li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_users_endmatch.png" alt="test de endmatch de users">
+</div>
+</div>
+<div class="ulist">
+<ul>
 <li>
 <p><strong>users-service-statistics: </strong> Que prueba que la recuperación de estadísticas, tanto las totales como las parciales, funciona de forma correcta, o lanza error cuando debería.</p>
 </li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_users_stats.PNG" alt="test de statistics de users">
+</div>
+</div>
+<div class="ulist">
+<ul>
 <li>
 <p><strong>users-service-ranking: </strong> Que prueba que la correcta creación y distribución del ranking de usuarios, tanto el ranking personal como el general por partidas, dificultad y estrategia. Asegura que es capaz de ordenar por el número o por el porcentaje adecuado, y responde correctamente en caso de error.</p>
 </li>
 </ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_users_ranking.png" alt="test de ranking de users">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>users-service-model: </strong> Que prueba el modelo de usuario, verificando que se construye correctamente con <code>username</code>, <code>password</code> y <code>createdAt</code>, y que la fecha se asigna por defecto cuando no se proporciona.</p>
+</li>
+<li>
+<p><strong>users-service-controller: </strong> Que prueba  el controlador de usuarios con mocks del servicio, validando respuestas HTTP de éxito y de error en operaciones clave como inicio de sesión, creación y obtención de usuario.</p>
+</li>
+<li>
+<p><strong>Test de Coverage: </strong> Que comprueban que el código usado en la aplicación esté probado en los test anteriores.
+En este caso, la captura está sacada de las Actions de GitHub, más específicamente en el <strong>Build &#8594; Merge pull request #109 from Arquisoft/JimenaIssue29 #213</strong>.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_users_coverage.png" alt="test coverage de users">
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_resultados_finales">12.1.2. Resultados finales</h4>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_users_final.png" alt="resultado test final de users">
+</div>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -1750,7 +2234,16 @@ Para estas pruebas, separamos los test por funcionalidad en clases <strong>Webap
 <p><strong>WebApp-HomeScreen.test: </strong> Prueba que la pantalla inicial de bienvenida sea la adecuada y tenga el testo que esperamos, mostrando un panel para jugar contra la máquina y otro para jugar contra otro usuario. Además, se asegura que todos los botones funcionen según lo esperado, navegando, seleccionando o mostrando mensaje de error cuando sea necesario.</p>
 </li>
 <li>
+<p><strong>WebApp-Appheader.test: </strong> Prueba que el encabezado de la aplicación se renderice correctamente (logo y botón de menú), que el menú desplegable se abra y cierre como corresponde, que las opciones internas respondan bien (tema, cierre de sesión) y que el header no aparezca en pantallas donde no debe mostrarse.</p>
+</li>
+<li>
+<p><strong>WebApp-Board.test: </strong> Prueba la lógica visual y de interacción del tablero, validando carga inicial, número de celdas según dificultad, bloqueos de interacción, gestión de turnos y actualización del estado del juego tras realizar movimientos.</p>
+</li>
+<li>
 <p><strong>WebApp-GameScreen.test: </strong> Prueba que la pantalla del juego responda como es debido, mostrando la información de la partida, representado correctamente cuando este elije una casilla, navegando como se espera si el usuario decide terminar la partida, &#8230;&#8203;</p>
+</li>
+<li>
+<p><strong>WebApp-GameInfo.test: </strong> Prueba que la zona de información de partida (estado, mensajes y datos auxiliares) refleje correctamente el contexto del juego y se actualice cuando cambian las propiedades recibidas.</p>
 </li>
 <li>
 <p><strong>WebApp-EndGameScreen.test: </strong> Prueba que la pantalla final, la que sale cuando se gana o se pierde el juego (sin pulsar al botón terminar) aparezca con la información adecuada y correspondiente a la partida, además de que los botones de navegación funcionen correctamente.</p>
@@ -1767,9 +2260,410 @@ Para estas pruebas, separamos los test por funcionalidad en clases <strong>Webap
 <li>
 <p><strong>WebApp-RankingScreen.test: </strong> Prueba que las pantallas de ranking muestran la información de la manera esperada en el caso de el ranking personal y de los rankings filtrados, respetando los estilos y el correcto funcionamiento de cada botón para la representación de los datos y para la navegación.</p>
 </li>
+<li>
+<p><strong>WebApp-Timer.test: </strong> Prueba el componente de temporizador, comprobando la representación del tiempo y su actualización en función del estado de la partida y del paso del tiempo.</p>
+</li>
+<li>
+<p><strong>WebApp-Theme.test: </strong> Prueba el contexto de tema (claro/oscuro), su alternancia y la persistencia de preferencias para asegurar un comportamiento consistente en toda la interfaz.</p>
+</li>
 </ul>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_test_del_microservicio_gamey">12.3. Test del microservicio GameY</h3>
+<div class="paragraph">
+<p>El microservicio GameY, al estar implementado en Rust, utiliza el framework de testing nativo del lenguaje (<code>cargo test</code>). Los tests están organizados en seis ficheros dentro de la carpeta <code>/gamey/tests/</code>, cada uno orientado a una capa o responsabilidad distinta del sistema.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>core_tests.rs — Tests del núcleo del juego:</strong> prueban directamente la lógica principal a través de la API pública de la librería. Cubren la inicialización del tablero, el flujo de movimientos y alternancia de turnos, las condiciones de victoria (conectar los tres lados), el manejo de errores como celdas ocupadas o turno incorrecto, las acciones especiales de resignación y swap, la serialización y deserialización en notación YEN, el guardado y carga de partidas en ficheros <code>.yen</code>, el sistema de coordenadas tridimensionales y el renderizado del tablero en texto.</p>
+</li>
+<li>
+<p><strong>bot_unit_tests.rs — Tests unitarios de los bots:</strong> verifican el comportamiento de cada estrategia de bot de forma aislada. Para cada bot disponible se comprueba que su nombre es el esperado, que devuelve un movimiento válido cuando hay celdas libres, que las coordenadas elegidas corresponden a una celda existente, y que devuelve <code>None</code> cuando el tablero está completo.</p>
+</li>
+<li>
+<p><strong>game_service_tests.rs — Tests de la capa de servicio:</strong> prueban el ciclo de vida de las partidas en memoria. Incluyen el flujo básico de crear, mover, listar, deshacer y eliminar una partida, la consulta del estado tras una resignación, y el manejo de errores como partida no encontrada, celda ocupada o deshacer sin historial suficiente.</p>
+</li>
+<li>
+<p><strong>game_controller_tests.rs — Tests de los controladores HTTP:</strong> prueban los endpoints REST del servidor Axum usando un router de test sin necesidad de levantar un servidor real. Verifican el flujo completo: creación de partida, listado, consulta de estado, realización de movimiento, deshacer y eliminación.</p>
+</li>
+<li>
+<p><strong>bot_server_tests.rs — Tests de integración del servidor de bots:</strong> prueban el servidor HTTP dedicado al cálculo de movimientos, comprobando los endpoints disponibles, el manejo de parámetros de posición codificados en la URL y la correcta devolución de movimientos.</p>
+</li>
+<li>
+<p><strong>cli_tests.rs — Tests de la interfaz de línea de comandos:</strong> prueban el parsing de comandos de la CLI del motor de juego, verificando que índices válidos, índices fuera de rango, comandos especiales y entradas desconocidas producen el resultado correcto.</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/testGamey.png" alt="resultado tests gamey">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_tests_end_to_end_e2e">12.4. Tests End-to-End (E2E)</h3>
+<div class="paragraph">
+<p>Los tests E2E validan el comportamiento de la aplicación completa desde el punto de vista del usuario, simulando interacciones reales en el navegador. Se utilizan <strong>Playwright</strong> para la automatización del navegador y <strong>Cucumber</strong> para definir los escenarios en formato Gherkin (BDD). Los tests están organizados en tres ficheros de features dentro de <code>/webapp/test/e2e/features/</code>.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>register-logout-login.feature — Registro, cierre de sesión e inicio de sesión:</strong> valida el flujo básico de autenticación de un usuario nuevo de principio a fin. Un usuario se registra con credenciales nuevas, comprueba que llega a la pantalla principal, cierra sesión, vuelve a la pantalla de inicio de sesión e inicia sesión con las mismas credenciales, verificando que regresa a la pantalla principal.</p>
+</li>
+<li>
+<p><strong>logout-stats.feature — Cierre de sesión desde las pantallas de estadísticas:</strong> verifica que el botón de cierre de sesión funciona correctamente desde cualquiera de las pantallas de estadísticas. Cubre tres escenarios: cierre desde el menú principal de estadísticas, desde la pantalla de todas las estadísticas y desde la pantalla de estadísticas filtradas. En los tres casos se verifica que el usuario es redirigido a la página de inicio de sesión.</p>
+</li>
+<li>
+<p><strong>password-errors.feature — Validación de contraseña en el registro:</strong> comprueba que el formulario de registro muestra el mensaje de error correcto cuando la contraseña no cumple los requisitos. Utiliza un <code>Scenario Outline</code> con una tabla de ejemplos para cubrir los cuatro casos de validación:</p>
+</li>
+</ul>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 33.3333%;">
+<col style="width: 66.6667%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">Contraseña introducida</th>
+<th class="tableblock halign-left valign-top">Mensaje de error esperado</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>abc</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La contraseña debe tener 5 o más caracteres.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>abcde</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La contraseña debe contener al menos una mayúscula.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ABCDE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La contraseña debe contener al menos una minúscula.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>abcDE</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La contraseña debe contener al menos un número.</p></td>
+</tr>
+</tbody>
+</table>
+<div class="imageblock">
+<div class="content">
+<img src="./images/teste2e.png" alt="resultado tests e2e">
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_test_de_carga">12.5. Test de carga</h3>
+<div class="paragraph">
+<p>Estos test analizan el rendimiento de la aplicación y su comportamiento respecto a la ejecución.
+Simularán ciclos de ejecución, y se verá como responde la aplicación dados cierto parámetros en relación a ciertos límites.
+Todo ello, la herramienta, las simulaciones o escenarios, el análisis de resultados y conclusiones se describirán más adelante.</p>
+</div>
+<div class="sect3">
+<h4 id="_diseño_de_test">12.5.1. Diseño de test</h4>
+<div class="paragraph">
+<p>El siguiente apartado se corresponde con como fueron diseñados los test de carga.</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 14.2857%;">
+<col style="width: 28.5714%;">
+<col style="width: 57.1429%;">
+</colgroup>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock"><strong>Escenarios</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Creación de usuario</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Este escanario se refiere a la capacidad del programa para crear usuarios, y su acceso a base datos para guardar el usuario.
+Para esto, debemos tener un .csv, que creará la cantidad de usuarios pedidos de forma automática.
+En esta simulación también se meten los usuarios en la base datos, pero se eliminarán al final de la ejecución de los test para evitar problemas de rendimiento en el despliegue general de la aplicación.
+Para el análisis de este apartado se debe simular de forma lo más parecido a la realidad un flujo normal de creación de usuario, por eso el acceso a la base no se mockea.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ciclo de ejecución (sin jugar)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Siguiendo con el escenario anterior, el rendimiento analizado en este caso es probar un ciclo de ejecución, cercano a una ejecución real.
+En este caso, se prueba el siguiente ciclo de peticiones: <strong>login &gt; inicio de partida &gt; fin de partida</strong> (que se ejecuta cuando se gana una partida) <strong>&gt; ver estadísticas personales &gt; ver el ranking global</strong>.
+Estas opciones son las que acceden a la base de datos, ya que son las funciones que todas acceden al mismo sitio, y son las que pueden hacer que el rendimiento baje en ejecuciones simultáneas.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock"><strong>Parámetros de carga</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Nº de usuarios</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Como hemos hecho varios análisis, con diferentes escenarios, se ha probado con diferente cantidad de usuarios que "realizan" el ciclo de ejecución.
+Se ha probado con 50, 100 y 200 usuarios, pero el resto de los escenarios, creación o ciclo, serán constantes respectivamente.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Ejecución</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">La ejecución en todos los escenarios, en los tres casos de usuarios permanecerá constante.
+Cada ejecución individual, cada usuario, realizará de forma secuencial, para una simulación aproximada a la realidad.
+Es decir, todos los usuarios seguirán el ciclo de vida que se ha indicado, con los mismos pasos.
+También, tenemos la ejecución global, que nos dice que la ejecución en cada flujo será concurrente, lo que significa que todos los usuarios intentarán acceder más o menos al mismo tiempo a la misma base de datos con peticiones similares.
+Por último, respecto a los escenarios, se realizarán de forma que cada escenario se ejecutará por separado. Como lo ejecutamos en la terminal, primero debemos ejecutar la de creación de usuarios, más que nada para optimizar nuestro tiempo, y luego ejecutar el escenario del ciclo de vida.
+Ambos escenarios serán independientes a la hora de medir su rendimiento, pero el ciclo de vida depende de la creación de usuarios para usarlos desde la base de datos.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock"><strong>Valores del análisis</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Intervalos de tiempos de análisis</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Para tener un espacio controlado, situaremos unos tiempos límites para ajustar los resultados obtenidos.
+Como límite inferior, tomamos el intervalo de 0ms a 800ms, este límite indica las peticiones que se responden de forma rápida, nuestro objetivo es tener la mayor cantidad de peticiones en este intervalo.
+El límite superior es cuando supera los 1200ms, si una petición supera este límite, debería tenerse en cuenta, ya que puede producir fallos graves de rendimiento a largo plazo.
+El intervalo intermedio, entre los 800ms y 1200ms, es donde podríamos considerar reducir el rendimiento, pero en principio no tenedría que considerarse prioridad principal a arreglar.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tiempos de respuesta</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Los tiempos de respuesta indican el tiempo en responder de cada petición, y son los que se analizarán para medir el rendimiento general de la aplicación.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Fallos/KOs</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Indican las peticiones que no se han realizado de forma correcta, no se ejecutaron de manera correcta o devuelven un error al realizarse.
+En caso de la existencia de alguno, aunque sea de uno solo, sería prioridad máxima el modificar el programa para su arreglo inmediato.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Otros</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Eliminación de usuario</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Como la creación de usuarios se realiza mediante unos test, y todos ellos acceden directamente a la base de datos, estos usuarios se deben eliminar para que la base de datos no se llene de usuarios de prueba.
+Este borrado se hace con un comando especial, aplicado también desde la terminal y es súper importante de hacer después de probar ambos escenarios.
+Como la opción de borrado no está disponible para los usuarios, si no que es exclusiva de los test, no se prueba en un escenario, por eso se ejecutará a parte.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="sect3">
+<h4 id="_herramienta">12.5.2. Herramienta</h4>
+<div class="paragraph">
+<p>La herramienta que hemos usado para este análisis de carga es <strong>Gatling</strong>, framework ofrecido por la asignatura para realizar estas pruebas de rendimiento.
+Para estos test se creó un proyecto a parte, indirectamente enlazado con este proyecto de forma local.
+Esto significa que se ha creado como un programa no incluido en las carpetas de este, pero mediante el uso de Docker, que despliega la aplicación de forma local,
+y la terminal del sistema usado, que en este caso fue Windows, se ejecutarán los test de carga.
+Los resultados de estos se ofrecen en una carpeta en este nuevo proyecto en carpetas, que también fueron incluidas, por si se quisiera realizar un análisis más exhausto, en la carpeta /gatling.
+Para visualizarlos de forma clara y accesible, podemos acceder a interfaces mediante .html, que se podrán abrir con un navegador.
+Estos interfaces se separan en "index.html", que realiza un análisis general del test, y "req_*.html", que muestra de forma más exhausta, el estudio de cada petición individualmente.</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_resultados">12.5.3. Resultados</h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>Creación de 50 usuarios</strong></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_create_050.png" alt="rendimiento crear 50 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p><strong>Ciclo de vida de 50 usuarios</strong></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_general_050.png" alt="rendimiento general 50 usuarios">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Login (50 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_login_050.png" alt="rendimiento login 50 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Inicio de partida (50 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_init_050.png" alt="rendimiento init match 50 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Fin de partida (50 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_end_050.png" alt="rendimiento end match 50 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Visualizar estadísticas (50 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_stats_050.png" alt="rendimiento stats 50 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Visualizar ranking (50 usuarios)</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_rank_050.png" alt="rendimiento ranking 50 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p><strong>Creación de 100 usuarios</strong></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_create_100.png" alt="rendimiento crear 100 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p><strong>Ciclo de vida de 100 usuarios</strong></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_general_100.png" alt="rendimiento general 100 usuarios">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Login (100 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_login_100.png" alt="rendimiento login 100 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Inicio de partida (100 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_init_100.png" alt="rendimiento init match 100 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Fin de partida (100 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_end_100.png" alt="rendimiento end match 100 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Visualizar estadísticas (100 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_stats_100.png" alt="rendimiento stats 100 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Visualizar ranking (100 usuarios)</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_rank_100.png" alt="rendimiento ranking 100 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p><strong>Creación de 200 usuarios</strong></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_create_200.png" alt="rendimiento crear 200 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p><strong>Ciclo de vida de 200 usuarios</strong></p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_general_200.png" alt="rendimiento general 200 usuarios">
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Login (200 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_login_200.png" alt="rendimiento login 200 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Inicio de partida (200 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_init_200.png" alt="rendimiento init match 200 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Fin de partida (200 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_end_200.png" alt="rendimiento end match 200 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Visualizar estadísticas (200 usuarios)</p>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_stats_200.png" alt="rendimiento stats 200 usuarios">
+</div>
+</div>
+</li>
+<li>
+<p>Visualizar ranking (200 usuarios)</p>
+</li>
+</ul>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_rank_200.png" alt="rendimiento ranking 200 usuarios">
+</div>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_conclusiones">12.5.4. Conclusiones</h4>
+<div class="paragraph">
+<p>Dados los resultados anteriores, podemos obtener varias conclusiones importantes.</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>No existen errores que causen que una petición pare. Esto implica que, aunque en ciertos casos pueda tardar más o menos en acceder a la base de datos y responder, en ninguna circunstancia se sufre un error con resultado catastrófico al punto de parar el flujo de la aplicación. Toda petición fue respondida.</p>
+</li>
+<li>
+<p>Podemos ver que con 50 usuarios, la aplicación, en ambos escenarios, propones unos datos muy favorables, teniendo la mayoría de peticiones en el primer intervalo, por lo que el rendimiento no es un gran problema a resolver.</p>
+</li>
+<li>
+<p>Con 100 usuarios también vemos que la creación de usuarios puede ser bastante más costosa en términos de rendimiento, incluso superando el escenario con 200 usuarios. Además, también es notable su aumento de ejecución en el flujo del ciclo de vida.</p>
+</li>
+<li>
+<p>Por último con 200 usuarios vemos una gran cantidad de peticiones en el último intervalo. En este caso, sí que deberíamos mirar de forma más exhaustiva el rendimiento con los 200 usuarios concurrentemente, en especial si queremos lanzarlo como aplicación más profesional.</p>
+</li>
+<li>
+<p>Viendo las ejecuciones individuales de cada tipo de petición observamos que las peticiones más costosas en términos de tiempo son las que modifican la base de datos, creación de usuario, inicio y fin de partida, lo que puede ser razonable, ya que no sabemos a ciencia cierta como va la base de datos por debajo. Pero, en cuanto al resto, login, estadísticas y ranking vemos un coste relativamente alto para la obtención de datos.</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Como conclusión final, si quisiéramos una escalabilidad más profesional, deberíamos intentar mejorar el rendimiento. Para ello, crearemos una nueva issue (Issue 118) para la mejora del rendimiento. En esta issue especialmente nos centraremos en los endpoint que no modifican la base de datos, como el login o ranking global.</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="./images/test_carga_issue.png" alt="issue para mejora rendimiento">
+</div>
+</div>
 <div style="page-break-after: always;"></div>
+</div>
 </div>
 </div>
 </div>
@@ -1796,24 +2690,64 @@ Para estas pruebas, separamos los test por funcionalidad en clases <strong>Webap
 <td class="tableblock halign-left valign-top"><p class="tableblock">Algoritmo complejo usado en los bots de nuestra aplicación que evalúa las decisiones (o movimientos) del usuario mediante expresiones matemáticas complejas y costosas para elegir sus movimientos y poder ganar.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>BDD (Behavior Driven Development)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Metodología de desarrollo orientada al comportamiento que define los requisitos del sistema como escenarios legibles en lenguaje natural mediante el formato Gherkin. Es la base de los tests E2E con Cucumber y Playwright.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Bot</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Oponente artificial controlado por el motor de juego (GameY). Implementa distintas estrategias y niveles de dificultad para simular el comportamiento de un jugador humano.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Docker Compose</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Herramienta que permite definir y orquestar múltiples contenedores Docker a partir de un único fichero de configuración (<code>docker-compose.yml</code>), facilitando el arranque coordinado de todos los servicios del sistema.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Entorno de ejecución (NodeJS)</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Es una plataforma que facilita la ejecución de programas directamente desde el sistema operativo, y que funcione de forma escalable y concurrente.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Grafana</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Plataforma de visualización de métricas que se conecta a Prometheus como fuente de datos y muestra la información en dashboards configurables en tiempo real.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Microservicio</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Parte de una aplicación (servicio) que maneja esa parte y se comunica con el resto para crear un producto mayor sin necesidad de que esté entero en un solo lenguaje.</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Notación YEN</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Formato propio del proyecto para representar de forma compacta el estado del tablero de juego en un instante dado, incluyendo el tamaño del tablero, el turno actual y la disposición de las piezas de cada jugador.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Prometheus</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Sistema de monitorización y alertas de código abierto que recopila métricas de los microservicios mediante scraping periódico del endpoint <code>/metrics</code> de cada servicio.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Pruebas de carga</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pruebas no funcionales para evaluar el comportamiento de la app con una mayor cantidad de usuarios o transacciones actuando al mismo tiempo. Pretenden verificar el rendimiento en condiciones normales (tiempos de respuesta, recursos, &#8230;&#8203;)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Sala (Room)</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Espacio virtual que agrupa a dos jugadores para disputar una partida multijugador. Cada sala se identifica con un código único de seis caracteres y su estado se mantiene en memoria durante el transcurso de la partida.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Scraping</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Proceso mediante el cual Prometheus consulta periódicamente el endpoint <code>/metrics</code> de cada microservicio para recopilar sus métricas de rendimiento y estado.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Socket.io</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Librería JavaScript que implementa comunicación en tiempo real sobre WebSocket, utilizada por el microservicio Rooms para gestionar la comunicación bidireccional con el frontend durante las partidas multijugador.</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Test E2E</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tipo de test de extremo a extremo, que pretende abarcar todos los procesos de la aplicación, considerando todos los componentes e iteraciones. Por tanto, son las pruebas que verifican que todo el flujo de la app sea correcto.</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>WebApp</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Aplicación ejecutada desde algún navegador.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Test E2E</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Tipo de test de extremo a extremo, que pretende abarcar todos los procesos de la aplicación, considerando todos los componentes e iteracciones. Por tanto, son las pruebas que verifican que todo el flujo de la app sea correcto</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Pruebas de carga</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Pruebas no funcionales para evaluar el comportamiento de la app con una mayor cantidad de usuarios o transacciones actuando al mismo tiempo. Pretenden verificar el rendimento en condiciones normales (tiempos de respuesta, recursos, &#8230;&#8203;)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>WebSocket</strong></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Protocolo de comunicación que establece un canal bidireccional y persistente entre cliente y servidor sobre una única conexión TCP, permitiendo el intercambio de mensajes en tiempo real sin necesidad de realizar peticiones HTTP repetidas.</p></td>
 </tr>
 </tbody>
 </table>
@@ -1822,7 +2756,7 @@ Para estas pruebas, separamos los test por funcionalidad en clases <strong>Webap
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-04-06 12:30:21 +0200
+Last updated 2026-04-27 11:17:03 +0200
 </div>
 </div>
 </body>
