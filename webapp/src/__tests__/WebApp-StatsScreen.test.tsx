@@ -47,10 +47,8 @@ describe('GameStats', () => {
     test('GameStatsTotal: muestra el título con el username', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockAllStats }) } as Response)
         render(<GameStatsTotal username="sara" />)
-        await waitFor(() => {
-            expect(screen.getByText(/Todas las estadísticas de:/i)).toBeInTheDocument()
-            expect(screen.getByText('sara')).toBeInTheDocument()
-        })
+        expect(screen.getByText(/Todas las estadísticas de:/i)).toBeInTheDocument()
+        expect(screen.getByText('sara')).toBeInTheDocument()
     })
 
     /**
@@ -60,14 +58,12 @@ describe('GameStats', () => {
     test('GameStatsTotal: muestra las cabeceras de la tabla', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockAllStats }) } as Response)
         render(<GameStatsTotal username="sara" />)
-        await waitFor(() => {
-            expect(screen.getByText('Dificultad')).toBeInTheDocument()
-            expect(screen.getByText('Estrategia')).toBeInTheDocument()
-            expect(screen.getByText('Victorias')).toBeInTheDocument()
-            expect(screen.getByText('Derrotas')).toBeInTheDocument()
-            expect(screen.getByText('Partidas jugadas')).toBeInTheDocument()
-            expect(screen.getByText('Porcentaje de victorias')).toBeInTheDocument()
-        })
+        expect(screen.getByText('Dificultad')).toBeInTheDocument()
+        expect(screen.getByText('Estrategia')).toBeInTheDocument()
+        expect(screen.getByText('Victorias')).toBeInTheDocument()
+        expect(screen.getByText('Derrotas')).toBeInTheDocument()
+        expect(screen.getByText('Partidas jugadas')).toBeInTheDocument()
+        expect(screen.getByText('Porcentaje de victorias')).toBeInTheDocument()
     })
 
     /**
@@ -137,10 +133,8 @@ describe('GameStats', () => {
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
         render(<GameStatsFiltered username="sara" />)
-        await waitFor(() => {
-            expect(screen.getByText(/Estadísticas filtradas de:/i)).toBeInTheDocument()
-            expect(screen.getByText('sara')).toBeInTheDocument()
-        })
+        expect(screen.getByText(/Estadísticas filtradas de:/i)).toBeInTheDocument()
+        expect(screen.getByText('sara')).toBeInTheDocument()
     })
 
     /**
@@ -215,13 +209,11 @@ describe('GameStats', () => {
     test('GameStatsDifficulty: muestra las cabeceras de la tabla', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
         render(<GameStatsDiff username="sara" />)
-        await waitFor(() => {
-            expect(screen.getByText('Dificultad')).toBeInTheDocument()
-            expect(screen.getByText('Victorias')).toBeInTheDocument()
-            expect(screen.getByText('Derrotas')).toBeInTheDocument()
-            expect(screen.getByText('Partidas jugadas')).toBeInTheDocument()
-            expect(screen.getByText('Porcentaje de victorias')).toBeInTheDocument()
-        })
+        expect(screen.getByText('Dificultad')).toBeInTheDocument()
+        expect(screen.getByText('Victorias')).toBeInTheDocument()
+        expect(screen.getByText('Derrotas')).toBeInTheDocument()
+        expect(screen.getByText('Partidas jugadas')).toBeInTheDocument()
+        expect(screen.getByText('Porcentaje de victorias')).toBeInTheDocument()
     })
 
     /**
@@ -262,13 +254,11 @@ describe('GameStats', () => {
     test('GameStatsStrategy: muestra las cabeceras de la tabla', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
         render(<GameStatsStra username="sara" />)
-        await waitFor(() => {
-            expect(screen.getByText('Estrategia')).toBeInTheDocument()
-            expect(screen.getByText('Victorias')).toBeInTheDocument()
-            expect(screen.getByText('Derrotas')).toBeInTheDocument()
-            expect(screen.getByText('Partidas jugadas')).toBeInTheDocument()
-            expect(screen.getByText('Porcentaje de victorias')).toBeInTheDocument()
-        })
+        expect(screen.getByText('Estrategia')).toBeInTheDocument()
+        expect(screen.getByText('Victorias')).toBeInTheDocument()
+        expect(screen.getByText('Derrotas')).toBeInTheDocument()
+        expect(screen.getByText('Partidas jugadas')).toBeInTheDocument()
+        expect(screen.getByText('Porcentaje de victorias')).toBeInTheDocument()
     })
 
     /**
