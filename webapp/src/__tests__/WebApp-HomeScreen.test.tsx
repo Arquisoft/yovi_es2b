@@ -75,7 +75,7 @@ describe('Home', () => {
      */
     test('se muestra el botón de empezar partida 2 jugadores', () => {
         renderWithProviders(<Home username="sara" />)
-        expect(screen.getByRole('button', { name: /empezar partida 2 jugadores/i })).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: /juega contra otro jugador local/i })).toBeInTheDocument()
     })
 
     /**
@@ -86,7 +86,7 @@ describe('Home', () => {
         renderWithProviders(<Home username="sara" />)
         const user = userEvent.setup()
         await waitFor(async () => {
-            await user.click(screen.getByRole('button', { name: /empezar partida 2 jugadores/i }))
+            await user.click(screen.getByRole('button', { name: /juega contra otro jugador local/i }))
             expect(screen.getByText(/El nombre del jugador 2 no puede estar vacío/i)).toBeInTheDocument()
         })
     })
