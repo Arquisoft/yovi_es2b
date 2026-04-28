@@ -22,8 +22,6 @@ Aquí definiremos también mediante duplas de “Título-Descripción” de algu
 |===
 
 
-También existen otros riesgos no tan relacionados con los aspectos tecnológicos del proyecto, que definiremos del mismo modo:
-
 === Tabla de otros riesgos
 
 [options="header",cols="1,2"]
