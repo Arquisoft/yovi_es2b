@@ -411,6 +411,145 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /ranking/wins:
+    get:
+      summary: Ranking global por victorias
+      description: Devuelve la lista de usuarios ordenados por porcentaje de victorias (partidas ganadas / jugadas).
+      responses:
+        '202':
+          description: Ranking obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ranking:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RankingEntry'
+                  message:
+                    type: string
+                    example: "Ranking global por porcentaje de victorias."
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /ranking/defeats:
+    get:
+      summary: Ranking global por derrotas
+      description: Devuelve la lista de usuarios ordenados por porcentaje de derrotas (partidas perdidas / jugadas).
+      responses:
+        '202':
+          description: Ranking obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ranking:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RankingEntry'
+                  message:
+                    type: string
+                    example: "Ranking global por porcentaje de derrotas."
+        '500':
+          description: Error interno del servidor
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /ranking/wins/difficulty:
+    post:
+      summary: Ranking de victorias por dificultad
+      description: Devuelve la lista de usuarios con victorias para la dificultad indicada, ordenados por porcentaje.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - difficulty
+              properties:
+                difficulty:
+                  type: string
+                  enum:
+                    - EASY
+                    - MEDIUM
+                    - HARD
+                  example: "EASY"
+      responses:
+        '202':
+          description: Ranking obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ranking:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RankingEntry'
+                  message:
+                    type: string
+                    example: "Ranking de porcentaje de victorias para dificultad EASY."
+        '400':
+          description: Dificultad ausente o inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /ranking/wins/strategy:
+    post:
+      summary: Ranking de victorias por estrategia
+      description: Devuelve la lista de usuarios con victorias para la estrategia indicada, ordenados por porcentaje.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - strategy
+              properties:
+                strategy:
+                  type: string
+                  enum:
+                    - RANDOM
+                    - DEFENSIVO
+                    - OFENSIVO
+                    - MONTE_CARLO
+                    - MONTE_CARLO_MEJORADO
+                    - MONTE_CARLO_ENDURECIDO
+                  example: "RANDOM"
+      responses:
+        '202':
+          description: Ranking obtenido correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ranking:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/RankingEntry'
+                  message:
+                    type: string
+                    example: "Ranking de porcentaje de victorias para estrategia RANDOM."
+        '400':
+          description: Estrategia ausente o inválida
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 components:
   schemas:
 
@@ -570,3 +709,24 @@ components:
         porcentaje:
           type: string
           example: "66.67 %"
+
+    RankingEntry:
+      type: object
+      description: Entrada del ranking global con posición, usuario, valor y porcentaje
+      properties:
+        position:
+          type: integer
+          description: Posición en el ranking (puede repetirse en caso de empate)
+          example: 1
+        username:
+          type: string
+          example: "testuser"
+        value:
+          type: integer
+          description: Número de victorias o derrotas según el endpoint
+          example: 5
+        percentage:
+          type: number
+          format: float
+          description: Porcentaje de victorias (o derrotas) sobre partidas jugadas
+          example: 83.33
