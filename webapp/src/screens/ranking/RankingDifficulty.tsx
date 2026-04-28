@@ -5,14 +5,16 @@ import "./RankingFilterTypes.css";
 
 type DifficultyFilter = "EASY" | "MEDIUM" | "HARD";
 
-type RankingEntry = RankingEntryShared;
+type RankingEntry = RankingEntryShared; // El ranking de dificultad tiene la misma estructura que el ranking global, pero con un valor específico para cada dificultad, por lo que se puede reutilizar el mismo tipo.
 
+// Etiquetas para cada dificultad, usados en los botones de filtro y en la tabla de ranking.
 const DIFFICULTY_LABELS: Record<DifficultyFilter, string> = {
     EASY:   "Fácil",
     MEDIUM: "Media",
     HARD:   "Difícil",
 };
 
+// Colores para cada dificultad, usados en los botones de filtro y en la tabla de ranking. Se definen como clases CSS para facilitar su aplicación condicionalmente.
 const DIFFICULTY_COLORS: Record<DifficultyFilter, string> = {
     EASY: "ranking-info--green",
     MEDIUM: "ranking-info--orange",
@@ -21,9 +23,10 @@ const DIFFICULTY_COLORS: Record<DifficultyFilter, string> = {
 
 export default function RankingDifficulty({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
 
-    const [difficulty, setDifficulty] = useState<DifficultyFilter>("EASY");
-    const [data, setData] = useState<RankingEntry[]>([]);
+    const [difficulty, setDifficulty] = useState<DifficultyFilter>("EASY"); // Estado para almacenar la dificultad seleccionada, por defecto "EASY"
+    const [data, setData] = useState<RankingEntry[]>([]); // Estado para almacenar los datos del ranking filtrado por dificultad
 
+    // Carga los datos del ranking filtrado por dificultad al montar el componente, y cada vez que cambie la dificultad seleccionada.
     useEffect(() => {
         const cargarDatos = async () => {
             const resultado = await obtenerDatos("/ranking/wins/difficulty", { difficulty });
@@ -65,6 +68,8 @@ export default function RankingDifficulty({ username, obtenerDatos, getMedal, so
                     </tr>
                 </thead>
                 <tbody>
+                    {/* Mapea los datos del ranking filtrado por dificultad a filas de la tabla, ordenados según la regla de ordenación definida en sortBy. 
+                    Si el usuario actual está en el ranking, se resalta su fila con una clase CSS específica. */}
                     {sortData(data, sortBy).map((entry) => (
                         <tr
                             key={entry.username}

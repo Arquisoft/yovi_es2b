@@ -19,6 +19,7 @@ type RankingEntry = {
     percentage: string;
 };
 
+//Funcion para ordenar los datos del ranking según la regla de ordenación seleccionada (por valor o por porcentaje), y asignar la posición correcta a cada entrada teniendo en cuenta empates.
 export type ObtenerDatosRanking = (
     endpoint: string,
     body: Record<string, unknown>
@@ -33,19 +34,24 @@ export type RankingEntryShared = {
     percentage: string;
 };
 
+// Función para ordenar los datos del ranking según la regla de ordenación seleccionada (por valor o por porcentaje), y asignar la posición correcta a cada entrada teniendo en cuenta empates.
 export function sortData(data: RankingEntryShared[], sortBy: SortRule): RankingEntryShared[] {
-    const sorted = data.slice().sort((a, b) => {
+        
+    //Para cada comparación, si sortBy es "percentage", se ordena por porcentaje y en caso de empate, por valor. Si sortBy es "value", se ordena por valor y en caso de empate, por porcentaje.
+    const sorted = data.slice().sort((a, b) => { 
         if (sortBy === "percentage") {
             const diff = Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
-            return diff || b.value - a.value;
+            return diff || b.value - a.value; // Si el porcentaje es el mismo, se ordena por valor.
         }
         const diff = b.value - a.value;
-        return diff || Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage);
+        return diff || Number.parseFloat(b.percentage) - Number.parseFloat(a.percentage); // Si el valor es el mismo, se ordena por porcentaje.
     });
+
+    //
     const result: RankingEntryShared[] = [];
     for (let i = 0; i < sorted.length; i++) {
         let position: number;
-        if (i === 0) {
+        if (i === 0) { // El primer usuario siempre tiene posición 1
             position = 1;
         } else {
             const prev = result[i - 1];

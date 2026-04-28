@@ -1,5 +1,6 @@
 'use strict';
 
+// Este módulo se encarga de gestionar las salas de juego, incluyendo la creación de salas, unirse a ellas, obtener información y eliminar jugadores o salas completas.
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -12,10 +13,18 @@ const io = new Server(server, {
   cors: { origin: '*' },
 });
 
+// URL de GameY, configurable mediante la variable de entorno GAMEY_URL. Por defecto, apunta a localhost:4000 para desarrollo local.
 const GAMEY_URL = process.env.GAMEY_URL || 'http://localhost:4000';
 
+// Registro de métricas para Prometheus
 const register = new client.Registry();
 
+/**
+ * Métricas:
+ * - rooms_created_total: contador del total de salas creadas desde el inicio del servicio. 
+ * - rooms_active_total: gauge del número de salas activas en este momento (se actualiza cada vez que se consulta esta métrica). 
+ * Gauge se utiliza en lugar de Counter porque el número de salas activas puede subir y bajar, mientras que el total de salas creadas solo puede aumentar.
+ */
 const roomsCreatedTotal = new client.Counter({
   name: 'rooms_created_total',
   help: 'Total number of rooms created since startup',
@@ -29,17 +38,31 @@ const roomsActiveTotal = new client.Gauge({
   collect() { this.set(roomManager.rooms.size); },
 });
 
+// Endpoint para verificar que el servicio está funcionando correctamente. Devuelve un JSON con el estado "ok".
 app.get('/health', (_req, res) => res.json({ status: 'ok' }));
+
+// Endpoint para obtener las metricas.
 app.get('/metrics', async (_req, res) => {
   res.set('Content-Type', register.contentType);
   res.end(await register.metrics());
 });
 
+/**
+ * Convierte un nivel de dificultad a un tamaño de tablero.
+ * @param {*} difficulty 
+ * @returns 
+ */
 function difficultyToSize(difficulty) {
   const map = { EASY: 8, MEDIUM: 10, HARD: 12 };
   return map[difficulty] || 10;
 }
 
+/**
+ * Crea una partida en GameY.
+ * @param {*} boardSize, el tamaño del tablero, que se determina a partir de la dificultad seleccionada por el jugador.
+ * @returns el ID de la partida creada en GameY.
+ * @throws un error si no se pudo crear la partida en GameY.
+ */
 async function createGameOnGameY(boardSize) {
   const res = await fetch(`${GAMEY_URL}/v1/games`, {
     method: 'POST',
@@ -51,6 +74,11 @@ async function createGameOnGameY(boardSize) {
   return data.game_id;
 }
 
+/**
+ * Función para el relegar un movimiento a GameY. 
+ * Se llama cuando un jugador hace un movimiento en el cliente, y se encarga de enviar ese movimiento a GameY para que lo procese y actualice el estado de la partida.
+ * @returns 
+ */
 async function relayMove(gameId, player, x, y, z) {
   const res = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}/move`, {
     method: 'POST',
@@ -61,6 +89,11 @@ async function relayMove(gameId, player, x, y, z) {
   return res.json();
 }
 
+/**
+ * Función para relegar una solicitud de deshacer movimiento a GameY.
+ * Se llama cuando un jugador solicita deshacer su último movimiento, y se encarga de enviar esa solicitud a GameY para que procese el deshacer y actualice el estado de la partida.
+ * @returns 
+ */
 async function relayUndo(gameId) {
   const res = await fetch(`${GAMEY_URL}/v1/games/${encodeURIComponent(gameId)}/undo`, {
     method: 'POST',
@@ -69,6 +102,9 @@ async function relayUndo(gameId) {
   return res.json();
 }
 
+/**
+ * Manejador de conexiones Socket.IO. 
+ */
 io.on('connection', (socket) => {
   // Jugador 1 crea una sala
   socket.on('create-room', async ({ username, difficulty, timerEnabled = false }) => {
