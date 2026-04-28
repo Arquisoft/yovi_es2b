@@ -18,6 +18,7 @@ Before(async function () {
 
   this.browser = await chromium.launch({ headless, slowMo, devtools })
   this.page = await this.browser.newPage()
+  await this.page.addInitScript(() => localStorage.setItem('yovi-locale', 'es'))
 })
 
 After(async function () {
