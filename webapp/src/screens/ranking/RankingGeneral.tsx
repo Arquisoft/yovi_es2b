@@ -8,6 +8,16 @@ type FilterKey = "victorias" | "derrotas";
 
 type RankingEntry = RankingEntryShared;
 
+<<<<<<< HEAD
+=======
+// Etiquetas para cada filtro, usados en los botones de filtro y en la tabla de ranking.
+const FILTER_LABELS: Record<FilterKey, string> = {
+    victorias:   "Victorias",
+    derrotas:    "Derrotas",
+};
+
+// Endpoints para cada filtro, usados para cargar los datos del ranking según el filtro seleccionado.
+>>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
 const ENDPOINTS: Record<FilterKey, string> = {
     victorias:   "/ranking/wins",
     derrotas:    "/ranking/defeats",
@@ -18,6 +28,7 @@ const FILTER_COLORS: Record<FilterKey, string> = {
     derrotas: "ranking-info--red",
 };
 
+// El ranking general tiene la misma estructura que el ranking global, pero con un valor específico para cada filtro, por lo que se puede reutilizar el mismo tipo.
 export default function RankingGeneral({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
     const { t } = useLanguageContext();
     const [filter, setFilter] = useState<FilterKey>("victorias"); // Estado para el filtro seleccionado. Por defecto, se muestra el ranking por victorias.

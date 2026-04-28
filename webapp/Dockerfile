@@ -18,6 +18,8 @@ RUN export VITE_API_URL_WA=${VITE_API_URL_WA} && export VITE_API_URL_GY=${VITE_A
 
 # Production image
 FROM nginx:stable-alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY --from=builder /app/dist /usr/share/nginx/html  
+# Permite configurar nginx para redirigir todas las rutas a index.html, lo que es necesario para aplicaciones SPA como esta.
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

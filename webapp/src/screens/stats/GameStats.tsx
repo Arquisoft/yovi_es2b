@@ -10,11 +10,18 @@ import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 
 export default function GameStats( {username} : { username: string }) {
 
+<<<<<<< HEAD
     const [goBack, setGoBack] = useState(false);
     const [goTotal, setGoTotal] = useState(false);
     const [goFiltered, setGoFiltered] = useState(false);
     const [goLogin, setGoLogin] = useState(false);
     const { t } = useLanguageContext();
+=======
+    const [goBack, setGoBack] = useState(false); // Estado para volver al menú principal
+    const [goTotal, setGoTotal] = useState(false); // Estado para mostrar las estadísticas totales
+    const [goFiltered, setGoFiltered] = useState(false); // Estado para mostrar las estadísticas filtradas
+    const [goLogin, setGoLogin] = useState(false); // Estado para volver a la pantalla de inicio de sesión
+>>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
 
     if (goLogin) return <InitialScreen />;
     if (goBack) return <Home username={username}/>;

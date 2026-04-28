@@ -41,14 +41,18 @@ async function obtenerDatos(username: string, t: (key: string) => string) {
 
 export default function GameStatsTotal( {username} : { username: string }) {
 
-    const [goBack, setGoBack] = useState(false);
-    const [goHome, setGoHome] = useState(false);
-    const [goLogin, setGoLogin] = useState(false);
+    const [goBack, setGoBack] = useState(false); // Estado para volver al menú de estadísticas
+    const [goHome, setGoHome] = useState(false); // Estado para volver al menú principal
+    const [goLogin, setGoLogin] = useState(false); // Estado para volver a la pantalla de inicio de sesión
 
-    const [data, setData] = useState<AllStat[]>([]);
+    const [data, setData] = useState<AllStat[]>([]); // Estado para almacenar las estadísticas totales del usuario
 
+<<<<<<< HEAD
     const { t } = useLanguageContext();
 
+=======
+    // Carga las estadísticas totales del usuario al montar el componente, y cada vez que cambie el nombre de usuario.
+>>>>>>> 1110dc760670d7b81e57199fd2170f42248717cd
     useEffect(() => {
         const cargarDatos = async () => {
             const resultado = await obtenerDatos(username, t);
