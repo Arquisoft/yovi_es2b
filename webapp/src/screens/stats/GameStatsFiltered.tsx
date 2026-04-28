@@ -6,6 +6,7 @@ import GameStatsStrategy from "./GameStatsStrategy.tsx";
 import InitialScreen from "../init/InitialScreen.tsx";
 import "./GameStats.css";
 import AppHeader from "../../components/header/AppHeader.tsx";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 
 /**
  * Funcion para mostrar las estadísticas filtradas del usuario.
@@ -16,6 +17,8 @@ export default function GameStatsFiltered( {username} : { username: string }) {
     const [goHome, setGoHome] = useState(false); // Estado para volver al menú principal
     const [goLogin, setGoLogin] = useState(false); // Estado para volver a la pantalla de inicio de sesión
 
+    const { t } = useLanguageContext();
+
     if (goLogin) return <InitialScreen />;
     if (goBack) return <GameStats username={username}/>;
     if (goHome) return <Home username={username}/>;
@@ -24,7 +27,7 @@ export default function GameStatsFiltered( {username} : { username: string }) {
         <div className="stats-screen-filter">
             <AppHeader onLogout={() => setGoLogin(true)} />
             <div className="header">
-                <h1 className="stats-screen-filter-title">Estadísticas filtradas de:</h1>
+                <h1 className="stats-screen-filter-title">{t("stats.filtereddescription")}</h1>
                 <h2 className="stats-filter-screen-username">{username}</h2>
             </div>
 
@@ -45,11 +48,11 @@ export default function GameStatsFiltered( {username} : { username: string }) {
                 
                 <div className="btn-menu">
                     <button className="stats-total-btn-back" onClick={() => setGoBack(true)}>
-                        Volver al menú de estadísticas
+                        {t("stats.gobackstats")}
                     </button>
 
                     <button className="stats-total-btn-home" onClick={() => setGoHome(true)}>
-                        Volver al menú principal
+                        {t("stats.gohome")}
                     </button>
                 </div>
                 

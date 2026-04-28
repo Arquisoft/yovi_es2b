@@ -3,6 +3,18 @@ import userEvent from '@testing-library/user-event'
 import InitialScreen from '../screens/init/InitialScreen'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
+import { LanguageProvider } from '../i18n/LanguageProvider'
+
+//Para asegurar que el idioma por defecto es el español en los test
+// Se establece el valor 'es' en localStorage antes de renderizar el componente InitialScreen. 
+const renderInitialScreen = () => {
+    localStorage.setItem('yovi-locale', 'es')
+    return render(
+        <LanguageProvider>
+            <InitialScreen />
+        </LanguageProvider>
+    )
+}
 
 /**
  * Tests para InitialScreen que comprueban que:
@@ -18,6 +30,7 @@ import '@testing-library/jest-dom'
 describe('InitialScreen', () => {
     afterEach(() => {
         vi.restoreAllMocks()
+        localStorage.clear()
     })
 
     /**
@@ -25,7 +38,7 @@ describe('InitialScreen', () => {
      * El test verifica que el título "Bienvenido de nuevo, inicia sesión aquí" esté presente, así como los campos de entrada para usuario y contraseña, y el botón para iniciar sesión.
      */
     test('muestra el título y el formulario de inicio de sesión', () => {
-        render(<InitialScreen />)
+        renderInitialScreen()
         expect(screen.getByText(/Bienvenido de nuevo, inicia sesión aquí/i)).toBeInTheDocument()
         expect(screen.getByLabelText(/Usuario/i)).toBeInTheDocument()
         expect(screen.getByLabelText(/^Contraseña$/i)).toBeInTheDocument()
@@ -37,7 +50,7 @@ describe('InitialScreen', () => {
      * El test verifica que el texto "¿No tienes usuario?" esté presente, así como el botón "Regístrate" para navegar a la pantalla de registro.
      */
     test('muestra el enlace de registro', () => {
-        render(<InitialScreen />)
+        renderInitialScreen()
         expect(screen.getByText(/¿No tienes usuario\? Haz click aquí para crear uno\./i)).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Regístrate/i })).toBeInTheDocument()
     })
@@ -45,10 +58,10 @@ describe('InitialScreen', () => {
     /**
      * Comprueba que se muestra un error si se intenta iniciar sesión sin escribir el usuario.
      * El test simula un usuario pulsando el botón de iniciar sesión sin haber escrito nada en el campo de usuario, y verifica que se muestre el mensaje de error "Escriba el usuario".
-     */
+     */ 
     test('muestra error si se intenta iniciar sesión sin usuario', async () => {
         const user = userEvent.setup()
-        render(<InitialScreen />)
+        renderInitialScreen()
         await waitFor(async () => {
             await user.click(screen.getByRole('button', { name: /Iniciar sesión/i }))
             expect(screen.getByText(/Escriba el usuario\./i)).toBeInTheDocument()
@@ -60,7 +73,7 @@ describe('InitialScreen', () => {
      */
     test('muestra error si se intenta iniciar sesión sin contraseña', async () => {
         const user = userEvent.setup()
-        render(<InitialScreen />)
+        renderInitialScreen()
         await waitFor(async () => {
             await user.type(screen.getByLabelText(/Usuario/i), 'sara')
             await user.click(screen.getByRole('button', { name: /Iniciar sesión/i }))
@@ -74,7 +87,7 @@ describe('InitialScreen', () => {
    */
   test('navega a la pantalla de registro al pulsar Regístrate', async () => {
     const user = userEvent.setup()
-    render(<InitialScreen />)
+        renderInitialScreen()
     await waitFor(async () => {
       await user.click(screen.getByRole('button', { name: /Regístrate/i }))
       expect(screen.queryByText(/Bienvenido a tu menú principal, sara/i)).not.toBeInTheDocument()
@@ -87,7 +100,7 @@ describe('InitialScreen', () => {
  * de contraseña alterna entre tipo 'password' y tipo 'text' en cada pulsación.
  */
 test('el botón del ojo alterna la visibilidad de la contraseña', async () => {
-    render(<InitialScreen />)
+    renderInitialScreen()
     const user = userEvent.setup()
     await waitFor(async () => {
         const passwordInput = screen.getByLabelText(/^contraseña$/i)

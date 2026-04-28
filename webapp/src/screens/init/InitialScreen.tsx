@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Home from "../game/Home.tsx";
 import SignUp from "../init/SignUp.tsx";
 import PasswordToggleButton from "../../components/password/PasswordToggleButton.tsx";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 import "./InitialScreen.css";
 import yoviLogo from "../../../public/yovi_logo.png";
 
@@ -19,6 +20,7 @@ const InitialScreen: React.FC = () => {
   const [toSigned, setToSigned] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const { t, locale, setLocale } = useLanguageContext();
 
   /**
    * Funcion para manejar el envío del formulario de inicio de sesión.
@@ -33,11 +35,11 @@ const InitialScreen: React.FC = () => {
     setError(null);
 
     if (!username.trim()) {
-      setError('Escriba el usuario.');
+      setError(t('error.errorUsername'));
       return;
     }
     if (!password.trim()) {
-      setError('Escriba la contraseña.');
+      setError(t('error.errorPassword'));
       return;
     }
 
@@ -60,10 +62,10 @@ const InitialScreen: React.FC = () => {
         localStorage.setItem('yovi-username', username);
         setLogged(true);
       } else {
-        setError(data.error || 'Server error');
+        setError(data.error || t('error.serverError'));
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Network error');
+      setError(err instanceof Error ? err.message : t('error.networkError'));
     } finally {
       setLoading(false);
     }
@@ -78,17 +80,17 @@ const InitialScreen: React.FC = () => {
 
   return (
     <div className="initial-screen">
-      <img src={yoviLogo} alt="YOVI Logo" className="initial-screen__logo" />
-      <h1>Bienvenido de nuevo, inicia sesión aquí</h1>
+      <img src={yoviLogo} alt={t('common.logoAlt')} className="initial-screen__logo" />
+      <h1>{t('initial.welcome')}</h1>
 
       <form onSubmit={handleSubmit} className="register-form">
-        <h1>Escriba su usuario y contraseña para iniciar sesión.</h1>
+        <h1>{t('initial.subtitle')}</h1>
         <div className="form-group">
-          <label htmlFor="username">Usuario</label>
+          <label htmlFor="username">{t('initial.usernameLabel')}</label>
           <input
             type="text" id="username" value={username}
             onChange={(e) => setUsername(e.target.value)} className="form-input"/>
-          <label htmlFor="password">Contraseña</label>
+          <label htmlFor="password">{t('initial.passwordLabel')}</label>
           <div className="password-field">
             <input
               type={showPassword ? "text" : "password"}
@@ -104,7 +106,7 @@ const InitialScreen: React.FC = () => {
           </div>
         </div>
         <button type="submit" className="submit-button" disabled={loading}>
-          {loading ? 'Cargando usuario...' : 'Iniciar sesión'}
+          {loading ? t('initial.loadingButton') : t('initial.loginButton')}
         </button>
 
         {responseMessage && (
@@ -120,11 +122,24 @@ const InitialScreen: React.FC = () => {
       </form>
 
       <div className="signup">
-        <h2>¿No tienes usuario? Haz click aquí para crear uno.</h2>
+        <h2>{t('initial.signupPrompt')}</h2>
         <button onClick={() => setToSigned(true)}>
-          Regístrate
+          {t('initial.signupButton')}
         </button>
       </div>
+
+      <div className="language-select">
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+        <label htmlFor="language-select">{t('common.language')}:</label>
+        <select id="language-select" value={locale} onChange={(event) => setLocale(event.target.value as "es" | "en")}>
+          <option value="es">{t('common.spanish')}</option>
+          <option value="en">{t('common.english')}</option>
+        </select>
+      </div>
+
     </div>
     
   );

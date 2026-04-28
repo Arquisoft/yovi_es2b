@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { getSocket } from "../../socket";
 import type { OnlineGameInfo } from "./OnlineGameInfo";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 import "./Lobby.css";
 
 interface JoinRoomProps {
@@ -17,9 +18,12 @@ interface JoinRoomProps {
  * Si el usuario intenta volver o cerrar la pestaña mientras está en la sala, emite un evento al backend para abandonar la sala y evitar que quede una sala huérfana.
  */
 export default function JoinRoom({ username, onGameReady, onBack }: Readonly<JoinRoomProps>) {
+
+  const { t } = useLanguageContext(); // para internacionalizar
   const [inputCode, setInputCode] = useState(""); // Estado para almacenar el código de sala ingresado por el usuario
   const [joined, setJoined] = useState(false); //Estado para indicar si el usuario se ha unido a la sala, inicialmente false porque no se ha unido a ninguna sala
   const [error, setError] = useState<string | null>(null); // Estado para almacenar el mensaje de error en caso de que ocurra algún error al unirse a la sala o durante la espera
+
   // Refs para tener valores actualizados dentro de los handlers del socket
   const inputCodeRef = useRef(""); // Ref para tener siempre el código de sala actualizado dentro de los handlers del socket
   const joinedInfoRef = useRef<Partial<OnlineGameInfo> | null>(null); // Ref para tener siempre la información de la sala a la que se ha unido el usuario actualizada 
@@ -100,7 +104,7 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
   // Funcion para manejar el botón de unirse a la sala, para enviar la solicitud al backend con el código de sala ingresado.
   function handleJoin() {
     if (!inputCode.trim()) {
-      setError("Introduce el código de la sala");
+      setError(t('rooms.errorEmptyCode'));
       return;
     }
     setError(null);
@@ -110,18 +114,18 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
 
   return (
     <div className="lobby-screen">
+      <img src="/yovi_logo.png" alt={t('common.logoAlt')} className="lobby-logo" />
       <div className="lobby-card">
-        <img src="/yovi_logo.png" alt="YOVI Logo" className="lobby-logo" />
-        <h2 className="lobby-card__title">Unirse a sala online</h2>
+        <h2 className="lobby-card__title">{t('rooms.joinRoomTitle')}</h2>
 
         {!joined && (
           <>
-            <label className="lobby-card__label" htmlFor="room-code">Código de sala</label>
+            <label className="lobby-card__label" htmlFor="room-code">{t('rooms.roomCode')}</label>
             <input
               id="room-code"
               className="lobby-input"
               type="text"
-              placeholder="Ej: ABC123"
+              placeholder={t('rooms.roomCodePlaceholder')}
               maxLength={6}
               value={inputCode}
               onChange={(e) => { setInputCode(e.target.value.toUpperCase()); setError(null); }}
@@ -130,17 +134,17 @@ export default function JoinRoom({ username, onGameReady, onBack }: Readonly<Joi
             {error && <p className="lobby-error">{error}</p>}
 
             <button className="lobby-btn lobby-btn--primary" onClick={handleJoin}>
-              Unirse
+              {t('rooms.joinRoomButton')}
             </button>
           </>
         )}
 
         {joined && (
-          <p className="lobby-waiting__text">Conectado. Iniciando partida…</p>
+          <p className="lobby-waiting__text">{t('rooms.connectedStarting')}</p>
         )}
 
         <button className="lobby-btn lobby-btn--back" onClick={handleBack}>
-          Volver
+          {t('rooms.back')}
         </button>
       </div>
     </div>

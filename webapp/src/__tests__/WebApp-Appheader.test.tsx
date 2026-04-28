@@ -4,13 +4,17 @@ import AppHeader from '../components/header/AppHeader'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { Theme } from '../screens/modo_tema/Theme'
+import { LanguageProvider } from '../i18n/LanguageProvider'
 
-// Wrapper que proporciona el contexto de tema necesario para AppHeader
+// Wrapper que proporciona el contexto de tema e idioma necesario para AppHeader
 function renderWithTheme(onLogout: () => void) {
+    localStorage.setItem('yovi-locale', 'es')
     return render(
-        <Theme>
-            <AppHeader onLogout={onLogout} />
-        </Theme>
+        <LanguageProvider>
+            <Theme>
+                <AppHeader onLogout={onLogout} />
+            </Theme>
+        </LanguageProvider>
     )
 }
 
@@ -196,5 +200,4 @@ describe('AppHeader', () => {
         await user.click(getMenuButton())
         expect(screen.getByRole('menuitem', { name: /modo claro/i })).toBeInTheDocument()
     })
-
 })

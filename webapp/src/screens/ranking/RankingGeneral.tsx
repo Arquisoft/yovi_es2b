@@ -1,17 +1,12 @@
 import { useState, useEffect } from "react";
 import type { GetMedal, ObtenerDatosRanking, SortRule, RankingEntryShared } from "./RankingFiltered";
 import { sortData } from "./RankingFiltered";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 import "./RankingFilterTypes.css";
 
 type FilterKey = "victorias" | "derrotas";
 
 type RankingEntry = RankingEntryShared;
-
-// Etiquetas para cada filtro, usados en los botones de filtro y en la tabla de ranking.
-const FILTER_LABELS: Record<FilterKey, string> = {
-    victorias:   "Victorias",
-    derrotas:    "Derrotas",
-};
 
 // Endpoints para cada filtro, usados para cargar los datos del ranking según el filtro seleccionado.
 const ENDPOINTS: Record<FilterKey, string> = {
@@ -26,7 +21,7 @@ const FILTER_COLORS: Record<FilterKey, string> = {
 
 // El ranking general tiene la misma estructura que el ranking global, pero con un valor específico para cada filtro, por lo que se puede reutilizar el mismo tipo.
 export default function RankingGeneral({ username, obtenerDatos, getMedal, sortBy }: Readonly<{ username: string; obtenerDatos: ObtenerDatosRanking; getMedal: GetMedal; sortBy: SortRule }>) {
-
+    const { t } = useLanguageContext();
     const [filter, setFilter] = useState<FilterKey>("victorias"); // Estado para el filtro seleccionado. Por defecto, se muestra el ranking por victorias.
     const [data, setData] = useState<RankingEntry[]>([]); // Estado para los datos del ranking. Se actualiza cada vez que cambia el filtro.
 
@@ -52,31 +47,32 @@ export default function RankingGeneral({ username, obtenerDatos, getMedal, sortB
     return (
         <div className="ranking-general-screen">
 
-            <h3 className="ranking-table-title">Clasificación general</h3>
+            <h3 className="ranking-table-title">{t('ranking.generalTitle')}</h3>
 
             <div className="ranking-filter-row">
-                {/* La funcion map permite iterar sobre las claves del objeto FILTER_LABELS y transformarlas en botones de filtro.
-                Map es una función de los arrays en JavaScript que permite transformar cada elemento del array en otro valor. */}
-                {(Object.keys(FILTER_LABELS) as FilterKey[]).map((f) => (
-                    <button
-                    // La clase del botón cambia según si el filtro está activo o no, para mostrar visualmente cuál es el filtro seleccionado.
-                        key={f}
-                        className={filter === f ? `ranking-info ${FILTER_COLORS[f]} ${FILTER_COLORS[f]}--active` : `ranking-info ${FILTER_COLORS[f]}`}
-                        onClick={() => setFilter(f)}
-                    >
-                        {/*El texto del botón se obtiene del objeto FILTER_LABELS, que asigna una etiqueta legible a cada clave de filtro.*/}
-                        {FILTER_LABELS[f]}
-                    </button>
-                ))}
+                <button
+                    key="victorias"
+                    className={filter === "victorias" ? `ranking-info ${FILTER_COLORS["victorias"]} ${FILTER_COLORS["victorias"]}--active` : `ranking-info ${FILTER_COLORS["victorias"]}`}
+                    onClick={() => setFilter("victorias")}
+                >
+                    {t('ranking.wins')}
+                </button>
+                <button
+                    key="derrotas"
+                    className={filter === "derrotas" ? `ranking-info ${FILTER_COLORS["derrotas"]} ${FILTER_COLORS["derrotas"]}--active` : `ranking-info ${FILTER_COLORS["derrotas"]}`}
+                    onClick={() => setFilter("derrotas")}
+                >
+                    {t('ranking.defeats')}
+                </button>
             </div>
 
             <table className="ranking-table">
                 <thead>
                     <tr>
-                        <td>Posición</td>
-                        <td>Jugador</td>
-                        <td>{FILTER_LABELS[filter]}</td>
-                        <td>%</td>
+                        <td>{t('ranking.positionCol')}</td>
+                        <td>{t('ranking.playerCol')}</td>
+                        <td>{filter === "victorias" ? t('ranking.wins') : t('ranking.defeats')}</td>
+                        <td>{t('ranking.percentageCol')}</td>
                     </tr>
                 </thead>
                 <tbody>

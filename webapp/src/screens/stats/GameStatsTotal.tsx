@@ -5,6 +5,7 @@ import InitialScreen from "../init/InitialScreen.tsx";
 import "./GameStats.css";
 import "./GameStatsTable.css"
 import AppHeader from "../../components/header/AppHeader.tsx";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 
 // TIPO ESTADISTICA PARA USO EN LA TABLA
 type AllStat = {
@@ -16,7 +17,7 @@ type AllStat = {
     porcentaje: string;
 };
 
-async function obtenerDatos(username: string) {
+async function obtenerDatos(username: string, t: (key: string) => string) {
     try {
         const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
         const res = await fetch(`${API_URL}/allstats`, {
@@ -31,10 +32,10 @@ async function obtenerDatos(username: string) {
         if(res.ok) {
             return stats.stats;
         } else {
-            throw new Error(stats.error || 'Server error');
+            throw new Error(stats.error || t("error.serverError"));
         }
     } catch (err) {
-        throw new Error(err instanceof Error ? err.message : 'Network error', { cause: err });
+        throw new Error(err instanceof Error ? err.message : t("error.networkError"), { cause: err });
     } 
 }
 
@@ -46,10 +47,12 @@ export default function GameStatsTotal( {username} : { username: string }) {
 
     const [data, setData] = useState<AllStat[]>([]); // Estado para almacenar las estadísticas totales del usuario
 
+    const { t } = useLanguageContext(); // para internacionalizar
+
     // Carga las estadísticas totales del usuario al montar el componente, y cada vez que cambie el nombre de usuario.
     useEffect(() => {
         const cargarDatos = async () => {
-            const resultado = await obtenerDatos(username);
+            const resultado = await obtenerDatos(username, t);
             setData(resultado);
         };
         cargarDatos();
@@ -64,7 +67,7 @@ export default function GameStatsTotal( {username} : { username: string }) {
         <div className="stats-total-screen">
             <AppHeader onLogout={() => setGoLogin(true)} />
             <div className="header">
-                <h1 className="stats-total-screen-title">Todas las estadísticas de:</h1>
+                <h1 className="stats-total-screen-title">{t("stats.totaldescription")}</h1>
                 <h2 className="stats-total-screen-username">{username}</h2>
             </div>
 
@@ -73,12 +76,12 @@ export default function GameStatsTotal( {username} : { username: string }) {
                 <table className="stats-total-table">
                     <thead>
                         <tr>
-                            <td>Dificultad</td>
-                            <td>Estrategia</td>
-                            <td>Victorias</td>
-                            <td>Derrotas</td>
-                            <td>Partidas jugadas</td>
-                            <td>Porcentaje de victorias</td>
+                            <td>{t("stats.dif")}</td>
+                            <td>{t("stats.strat")}</td>
+                            <td>{t("stats.wins")}</td>
+                            <td>{t("stats.losses")}</td>
+                            <td>{t("stats.played")}</td>
+                            <td>{t("stats.percentage")}</td>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,11 +104,11 @@ export default function GameStatsTotal( {username} : { username: string }) {
                 
                 <div className="btn-menu">
                     <button className="stats-total-btn-back" onClick={() => setGoBack(true)}>
-                        Volver al menú de estadísticas
+                        {t("stats.gobackstats")}
                     </button>
 
                     <button className="stats-total-btn-home" onClick={() => setGoHome(true)}>
-                        Volver al menú principal
+                        {t("stats.gohome")}
                     </button>
                 </div>
                 

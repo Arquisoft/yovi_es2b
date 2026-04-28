@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./GameStats.css";
 import "./GameStatsTable.css"
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 
 // TIPO ESTADISTICA DIFICULTAD
 type StatDif = {
@@ -18,7 +19,8 @@ type StatDif = {
  * @param username 
  * @returns 
  */
-async function obtenerDatos(username: string) {
+async function obtenerDatos(username: string, t: (key: string) => string) {
+
     try {
         const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
         const res = await fetch(`${API_URL}/diffstats`, {
@@ -34,10 +36,10 @@ async function obtenerDatos(username: string) {
         if(res.ok) {
             return stats.stats;
         } else {
-            throw new Error(stats.error || 'Server error');
+            throw new Error(stats.error || t("error.serverError"));
         }
     } catch (err) {
-        throw new Error(err instanceof Error ? err.message : 'Network error', { cause: err });
+        throw new Error(err instanceof Error ? err.message : t("error.networkError"), { cause: err });
     }    
 }
 
@@ -49,12 +51,13 @@ async function obtenerDatos(username: string) {
  */
 export default function GameStatsDiff( {username} : { username: string }) {
 
+    const { t } = useLanguageContext(); // para internacionalizar
     const [data, setData] = useState<StatDif[]>([]); // Estado para almacenar las estadísticas de dificultad del usuario
 
     // Carga las estadísticas de dificultad del usuario al montar el componente, y cada vez que cambie el nombre de usuario.
     useEffect(() => {
         const cargarDatos = async () => {
-            const resultado = await obtenerDatos(username);
+            const resultado = await obtenerDatos(username, t);
             setData(resultado);
         };
         cargarDatos();
@@ -66,11 +69,11 @@ export default function GameStatsDiff( {username} : { username: string }) {
             <table className="stats-diff-table">
                 <thead>
                     <tr>
-                        <td>Dificultad</td>
-                        <td>Victorias</td>
-                        <td>Derrotas</td>
-                        <td>Partidas jugadas</td>
-                        <td>Porcentaje de victorias</td>
+                        <td>{t("stats.dif")}</td>
+                        <td>{t("stats.wins")}</td>
+                        <td>{t("stats.losses")}</td>
+                        <td>{t("stats.played")}</td>
+                        <td>{t("stats.percentage")}</td>
                     </tr>
                 </thead>
                 <tbody>

@@ -3,6 +3,7 @@ import { getSocket } from "../../socket";
 import { Difficulty } from "../../components/gameOptions/Difficulty";
 import type { DifficultyType } from "../../components/gameOptions/Difficulty";
 import type { OnlineGameInfo } from "./OnlineGameInfo";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 import "./Lobby.css";
 
 interface CreateRoomProps {
@@ -12,11 +13,15 @@ interface CreateRoomProps {
 }
 
 export default function CreateRoom({ username, onGameReady, onBack }: Readonly<CreateRoomProps>) {
+
+  const { t } = useLanguageContext(); // para internacionalizar
+
   const [difficulty, setDifficulty] = useState<DifficultyType>(Difficulty.MEDIUM); // Estado para almacenar la dificultad seleccionada, por defecto "MEDIUM"
   const [timerEnabled, setTimerEnabled] = useState(true); // Estado para almacenar si el temporizador está habilitado, por defecto "true"
   const [code, setCode] = useState<string | null>(null); // Estado para almacenar el código de la sala creada, inicialmente null porque no se ha creado ninguna sala
   const [waiting, setWaiting] = useState(false); // Estado para indicar si se está esperando a que un rival se conecte, inicialmente false porque no se ha creado ninguna sala
   const [error, setError] = useState<string | null>(null); // Estado para almacenar el mensaje de error en caso de que ocurra algún error al crear la sala o durante la espera
+
   // Ref para tener siempre el código actualizado dentro de los handlers del socket
   const codeRef = useRef<string | null>(null); // Ref para tener siempre el estado del temporizador actualizado dentro de los handlers del socket
   const timerEnabledRef = useRef(true); // Ref para tener siempre el estado del temporizador actualizado dentro de los handlers del socket
@@ -104,28 +109,28 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
 
   return (
     <div className="lobby-screen">
+      <img src="/yovi_logo.png" alt={t('common.logoAlt')} className="lobby-logo" />
       <div className="lobby-card">
-        <img src="/yovi_logo.png" alt="YOVI Logo" className="lobby-logo" />
-        <h2 className="lobby-card__title">Crear sala online</h2>
+        <h2 className="lobby-card__title">{t('rooms.createRoomTitle')}</h2>
 
         {!code && (
           <>
-            <span className="lobby-card__label">Tamaño del tablero</span>
+            <span className="lobby-card__label">{t('rooms.boardSize')}</span>
             <div className="lobby-difficulty">
               <button
                 className={`lobby-diff-btn${difficulty === Difficulty.EASY ? " lobby-diff-btn--active" : ""}`}
-                onClick={() => setDifficulty(Difficulty.EASY)}>Pequeño</button>
+                onClick={() => setDifficulty(Difficulty.EASY)}>{t('rooms.small')}</button>
               <button
                 className={`lobby-diff-btn${difficulty === Difficulty.MEDIUM ? " lobby-diff-btn--active" : ""}`}
-                onClick={() => setDifficulty(Difficulty.MEDIUM)}>Mediano</button>
+                onClick={() => setDifficulty(Difficulty.MEDIUM)}>{t('rooms.medium')}</button>
               <button
                 className={`lobby-diff-btn${difficulty === Difficulty.HARD ? " lobby-diff-btn--active" : ""}`}
-                onClick={() => setDifficulty(Difficulty.HARD)}>Grande</button>
+                onClick={() => setDifficulty(Difficulty.HARD)}>{t('rooms.large')}</button>
             </div>
 
-            <span className="lobby-card__label">Temporizador</span>
+            <span className="lobby-card__label">{t('rooms.timer')}</span>
             <label className="home-toggle" htmlFor="timer-enabled-online">
-              <span className="home-toggle__text">Partida con temporizador activo</span>
+              <span className="home-toggle__text">{t('rooms.timerActive')}</span>
               <span className="home-toggle__control">
                 <input
                   id="timer-enabled-online"
@@ -141,23 +146,23 @@ export default function CreateRoom({ username, onGameReady, onBack }: Readonly<C
             {error && <p className="lobby-error">{error}</p>}
 
             <button className="lobby-btn lobby-btn--primary" onClick={handleCreate}>
-              Crear sala
+              {t('rooms.createRoomButton')}
             </button>
           </>
         )}
 
         {code && (
           <div className="lobby-waiting">
-            <p className="lobby-card__label">Comparte este código con tu rival:</p>
+            <p className="lobby-card__label">{t('rooms.shareCode')}</p>
             <span className="lobby-code">{code}</span>
             {waiting && (
-              <p className="lobby-waiting__text">Esperando a que tu rival se conecte…</p>
+              <p className="lobby-waiting__text">{t('rooms.waitingRival')}</p>
             )}
           </div>
         )}
 
         <button className="lobby-btn lobby-btn--back" onClick={handleBack}>
-          Volver
+          {t('rooms.back')}
         </button>
       </div>
     </div>

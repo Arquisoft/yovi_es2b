@@ -1,0 +1,228 @@
+export const en = {
+  common: {
+    language: "Language",
+    spanish: "🇪🇸 Español",
+    english: "🇬🇧 English",
+    logoAlt: "Logo YOVI",
+  },
+  end: {
+    winner: "Winner",
+    loser: "Loser",
+    player: "Player",
+
+    player1diff: "Difficulty",
+    player1strat: "Strategy",
+    player2size: "Board Size",
+
+    player2s: "Small",
+    player2m: "Medium",
+    player2l: "Large",
+
+    result: "Result",
+    win: "Nice victory",
+    lose: "Ugly defeat",
+    victory: "Victory is yours!",
+    defeat: "You were defeated!",
+    whowon: "{winner} won!",
+    personalwin: "Congratulations, {player}, winner, winner, chicken dinner!",
+    personalloss: "You lost. Humiliating. Try again!",
+
+    easy: "Easy",
+    medium: "Medium",
+    hard: "Hard",
+
+    random: "Random",
+    defensivo: "Defensive",
+    ofensivo: "Offensive",
+    monte_carlo: "Monte Carlo",
+    monte_carlo_mejorado: "Better Monte Carlo",
+    monte_carlo_endurecido: "Monte Carlo final boss",
+
+    again: "Play Again",
+    home: "Go back to main menu",
+  },
+  error: {
+    errorUsername: "Enter your username.",
+    errorPassword: "Enter your password.",
+    serverError: "Server error.",
+    networkError: "Network error.",
+
+    player2unfilled: "Player 2's name cannot be empty.",
+
+    rankingError: "Ranking not available.",
+  },
+  game: {
+    info: "Game Info",
+    player: "Player:",
+    opponent: "Opponent:",
+
+    strategy: "Strategy:",
+    difficulty: "Difficulty:",
+    boardsize: "Board Size:",
+
+    turn: "Current Turn:",
+    status: "Game Status:",
+
+    easy: "Easy",
+    medium: "Medium",
+    hard: "Hard",
+
+    random: "Random",
+    defensivo: "Defensive",
+    ofensivo: "Offensive",
+    monte_carlo: "Monte Carlo",
+    monte_carlo_mejorado: "Better Monte Carlo",
+    monte_carlo_endurecido: "Monte Carlo final boss",
+
+    hint: "Hint",
+    hintRemaining: "hint remaining",
+    hintRemainingPlural: "hints remaining",
+
+    undo: "Undo Move",
+    exit: "Exit Game",
+  },
+  header: {
+    menu: "MENU",
+    menuAria: "Options menu",
+    closeMenuAria: "Close menu",
+    darkMode: "🌙 Dark mode",
+    lightMode: "☀️ Light mode",
+    logout: "Log out",
+  },
+  home: {
+    welcome: "Welcome to your main menu",
+    vsBot: "Play against a bot",
+    strategy: "Strategy",
+    botRandom: "Random",
+    botDefensive: "Defensive",
+    botOffensive: "Offensive",
+    botMC: "Montecarlo",
+    botMCBetter: "Better Montecarlo",
+    botMCHard: "Montecarlo final boss",
+    difficulty: "Difficulty",
+    easybutton: "Easy",
+    mediumbutton: "Medium",
+    hardbutton: "Hard",
+    startmatchBot: "Start match",
+    stats: "My statistics",
+    rank: "Global ranking",
+
+    vsLocal: "Play against another local player",
+    player2: "Player 2's name",
+    boardsize: "Board size",
+    boardsmall: "Small",
+    boardmedium: "Medium",
+    boardlarge: "Large",
+    timer: "Timer",
+    activateTimer: "Activate timer",
+    startmatchLocal: "Start local match",
+
+    vsOnline: "Play against another player online",
+    onlinedescription: "Play against another player from different devices in real-time.",
+    create: "Create a match",
+    join: "Join a match",
+  },
+  initial: {
+    welcome: "Welcome back, log in here",
+    subtitle: "Enter your username and password to log in.",
+    usernameLabel: "Username",
+    passwordLabel: "Password",
+    loginButton: "Log in",
+    loadingButton: "Loading user...",
+    signupPrompt: "Don't have a user? Click here to create one.",
+    signupButton: "Sign up",
+  },
+  ranking: {
+    title: "Global ranking",
+    position: "Your position in the ranking is...",
+    bymatches: "By matches played",
+    bydiff: "By difficulty",
+    bystrat: "By strategy",
+    selectCat: "Select at least one category from the top menu.",
+    sort: "Sort by:",
+    number: "Nº",
+    percentage: "%",
+
+    noposition: "No position",
+    notavailable: "Not available",
+
+    seerank: "View ranking",
+    seepersonalrank: "View my position in the ranking",
+    back: "Go back to main menu",
+
+    generalTitle: "General classification",
+    wins: "Wins",
+    defeats: "Defeats",
+
+    diffTitle: "Wins by difficulty",
+    easy: "Easy",
+    medium: "Medium",
+    hard: "Hard",
+
+    stratTitle: "Wins by strategy",
+    random: "Random",
+    defensive: "Defensive",
+    offensive: "Offensive",
+    monteCarlo: "MonteCarlo",
+    monteCarloBetter: "Better MonteCarlo",
+    monteCarloHard: "MonteCarlo final boss",
+
+    // Shared
+    positionCol: "Position",
+    playerCol: "Player",
+    winsCol: "Wins",
+    percentageCol: "%",
+  },
+  signup: {
+    welcome: "Welcome, sign up here",
+    subtitle: "Create your username and password to sign up for Yovi.",
+    userlabel: "Username",
+    passwlabel: "Password",
+    loadingButton: "Creating user...",
+    signupButton: "Create user",
+    backlabel: "Already have a user? Log in.",
+    backbutton: "Go back",
+  },
+  stats: {
+    description: "Choose which statistics you want to view",
+    total: "View all statistics",
+    filter: "View filtered statistics",
+    back: "Go back to main menu",
+
+    totaldescription: "All statistics of:",
+    filtereddescription: "Filtered statistics of:",
+    gobackstats: "Go back to statistics menu",
+    gohome: "Go back to main menu",
+
+    dif: "Difficulty",
+    strat: "Strategy",
+    wins: "Victories",
+    losses: "Defeats",
+    played: "Games played",
+    percentage: "Win percentage",
+  },
+  rooms: {
+    // CreateRoom
+    createRoomTitle: "Create online room",
+    boardSize: "Board size",
+    small: "Small",
+    medium: "Medium",
+    large: "Large",
+    timer: "Timer",
+    timerActive: "Game with active timer",
+    createRoomButton: "Create room",
+    shareCode: "Share this code with your rival:",
+    waitingRival: "Waiting for your rival to connect…",
+
+    // JoinRoom
+    joinRoomTitle: "Join online room",
+    roomCode: "Room code",
+    roomCodePlaceholder: "Ex: ABC123",
+    joinRoomButton: "Join",
+    connectedStarting: "Connected. Starting game…",
+
+    // Shared
+    back: "Go back",
+    errorEmptyCode: "Enter the room code",
+  }
+};

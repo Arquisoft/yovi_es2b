@@ -1,10 +1,11 @@
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { screen, waitFor, act } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Game } from '../screens/game/Game'
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { Difficulty } from '../components/gameOptions/Difficulty'
 import { Strategy } from '../components/gameOptions/Strategy'
+import { renderWithProviders } from './test-utils'
 
 const socketEventHandlers: Record<string, (...args: any[]) => void> = {}
 const mockSocket = {
@@ -71,7 +72,7 @@ describe('Game', () => {
         userEvent.setup()
         global.fetch = vi.fn()
         //vi.fn crea una mock para el fetch vacío para verificar si se llama o no.
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={false} />
         )
         expect(global.fetch).not.toHaveBeenCalled()
@@ -85,7 +86,7 @@ describe('Game', () => {
     test('llama a la API para crear partida cuando stateStart es true', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(() => {
@@ -102,12 +103,12 @@ describe('Game', () => {
     test('muestra los botones pista y terminar partida en modo 1 jugador', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(() => {
             expect(screen.getByRole('button', { name: /pista/i })).toBeInTheDocument()
-            expect(screen.getByRole('button', { name: /Terminar partida/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Salir de la partida/i })).toBeInTheDocument()
             expect(screen.queryByRole('button', { name: /Deshacer movimiento/i })).not.toBeInTheDocument()
         })
     })
@@ -118,12 +119,12 @@ describe('Game', () => {
     test('muestra el botón deshacer movimiento en modo 2 jugadores', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
         )
         await waitFor(() => {
             expect(screen.getByRole('button', { name: /Deshacer movimiento/i })).toBeInTheDocument()
-            expect(screen.getByRole('button', { name: /Terminar partida/i })).toBeInTheDocument()
+            expect(screen.getByRole('button', { name: /Salir de la partida/i })).toBeInTheDocument()
             expect(screen.queryByRole('button', { name: /pista/i })).not.toBeInTheDocument()
         })
     })
@@ -132,12 +133,12 @@ describe('Game', () => {
     /**
      * Comprueba que se muestra el indicador de turno en modo 2 jugadores y no se muestra en modo 1 jugador.
      * En modo 2 jugadores, el componente debe mostrar un texto indicando de quién es el turno (por ejemplo, "Turno de sara").
-     * El test renderiza el componente en ambos modos y comprueba la presencia o ausencia del texto del turno.
+     * El test renderWithProvidersiza el componente en ambos modos y comprueba la presencia o ausencia del texto del turno.
      */
     test('muestra el indicador de turno en modo 2 jugadores', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
         )
         await waitFor(() => {
@@ -153,7 +154,7 @@ describe('Game', () => {
     test('no muestra el indicador de turno en modo 1 jugador', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(() => {
@@ -169,11 +170,11 @@ describe('Game', () => {
     test('vuelve al menú al pulsar Terminar partida', async () => {
         const user = userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(async () => {
-            await user.click(screen.getByRole('button', { name: /Terminar partida/i }))
+            await user.click(screen.getByRole('button', { name: /Salir de la partida/i }))
             expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
         })
     })
@@ -184,11 +185,11 @@ describe('Game', () => {
     test('llama a onGoMenu al pulsar Terminar partida', async () => {
         const user = userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(async () => {
-            await user.click(screen.getByRole('button', { name: /Terminar partida/i }))
+            await user.click(screen.getByRole('button', { name: /Salir de la partida/i }))
             expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
         })
     })
@@ -201,7 +202,7 @@ describe('Game', () => {
     test('llama a la API al pulsar Deshacer movimiento en modo 2 jugadores', async () => {
         const user = userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
         )
         await waitFor(async () => {
@@ -221,7 +222,7 @@ describe('Game', () => {
     test('reinicia el timer al pulsar Deshacer movimiento en modo 2 jugadores', async () => {
         const user = userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} enableTimer={true} />
         )
         const timer = await screen.findByRole('timer')
@@ -248,7 +249,7 @@ describe('Game', () => {
                 .mockResolvedValueOnce(boardStateMock)                                                      // peticionEstadoPartida (Board)
                 .mockResolvedValueOnce(boardStateMock)                                                      // handleHint: GET /v1/games/:id
                 .mockResolvedValueOnce({ ok: true, json: async () => ({ coords: { x: 0, y: 0, z: 0 } }) }) // handleHint: GET /play
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="test1" username2="" twoPlayers={false} stateStart={true} />
         )
         const hintButton = await screen.findByRole('button', { name: /pista/i })
@@ -269,7 +270,7 @@ describe('Game', () => {
     test('muestra el temporizador en modo 2 jugadores con enableTimer activado', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} enableTimer={true} />
         )
         await waitFor(() => {
@@ -285,7 +286,7 @@ describe('Game', () => {
     test('no muestra el temporizador en modo 2 jugadores con enableTimer desactivado', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} enableTimer={false} />
         )
         await waitFor(() => {
@@ -301,7 +302,7 @@ describe('Game', () => {
     test('no muestra el temporizador en modo 1 jugador', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} enableTimer={true} />
         )
         await waitFor(() => {
@@ -318,7 +319,7 @@ describe('Game', () => {
     test('muestra la pista y deshabilita el botón de pista mientras la pista está activa', async () => {
         const user = userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(async () => {
@@ -340,7 +341,7 @@ describe('Game', () => {
     test('limita el uso de pistas a 3 por partida', async () => {
         const user = userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         const hintButton = await screen.findByRole('button', { name: /pista/i })
@@ -366,11 +367,11 @@ describe('Game', () => {
     test('muestra el mensaje de bienvenida con el nombre del usuario al terminar la partida', async () => {
         const user = userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(async () => {
-            await user.click(screen.getByRole('button', { name: /Terminar partida/i }))
+            await user.click(screen.getByRole('button', { name: /Salir de la partida/i }))
             expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
         })
     })
@@ -385,7 +386,7 @@ describe('Game', () => {
         const onGameEnd = vi.fn()
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} onGameEnd={onGameEnd} />
         )
         await waitFor(() => {
@@ -417,7 +418,7 @@ describe('Game', () => {
         // Recorremos cada dificultad, renderizamos el componente y verificamos la llamada a la API con el tamaño correcto.
         for (const { difficulty, expectedSize } of difficulties) {
             mockFetch()
-            render(
+            renderWithProviders(
                 <Game settings={{ ...baseSettings, difficulty }} username="sara" username2="" twoPlayers={false} stateStart={true} />
             )
             await waitFor(() => {
@@ -435,7 +436,7 @@ describe('Game', () => {
 
     test('en modo online con initialGameId no llama a crear partida', async () => {
         global.fetch = vi.fn().mockResolvedValue(boardStateMock)
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="rival" twoPlayers={true}
                 stateStart={true} onlineMode={true} initialGameId="game-online-1" />
         )
@@ -450,7 +451,7 @@ describe('Game', () => {
 
     test('en modo online con twoPlayers no muestra el botón Deshacer movimiento', async () => {
         global.fetch = vi.fn().mockResolvedValue(boardStateMock)
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="rival" twoPlayers={true}
                 stateStart={true} onlineMode={true} initialGameId="game-online-1" />
         )
@@ -462,7 +463,7 @@ describe('Game', () => {
 
     test('muestra el temporizador en modo online cuando enableTimer está activado', async () => {
         global.fetch = vi.fn().mockResolvedValue(boardStateMock)
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="rival" twoPlayers={true}
                 stateStart={true} onlineMode={true} roomCode="ABC123" initialGameId="game-1"
                 localPlayerIndex={0} enableTimer={true} />
@@ -474,7 +475,7 @@ describe('Game', () => {
 
     test('en modo online recibe turn-skipped y actualiza el turno al rival', async () => {
         global.fetch = vi.fn().mockResolvedValue(boardStateMock)
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="rival" twoPlayers={true}
                 stateStart={true} onlineMode={true} roomCode="ABC123" initialGameId="game-1"
                 localPlayerIndex={0} />
@@ -488,7 +489,7 @@ describe('Game', () => {
         vi.useFakeTimers()
         global.fetch = vi.fn().mockResolvedValue(boardStateMock)
         await act(async () => {
-            render(
+            renderWithProviders(
                 <Game settings={baseSettings} username="sara" username2="rival" twoPlayers={true}
                     stateStart={true} onlineMode={true} roomCode="ABC123" initialGameId="game-1"
                     localPlayerIndex={0} enableTimer={true} />

@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import Home from "../game/Home.tsx";
 import InitialScreen from './InitialScreen';
 import PasswordToggleButton from "../../components/password/PasswordToggleButton.tsx";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 import "./SignUp.css";
 import yoviLogo from "../../../public/yovi_logo.png";
 
 const SignUp: React.FC = () => {
 
-      const [username, setUsername] = useState('');
-      const [password, setPassword] = useState('');
-      const [showPassword, setShowPassword] = useState(false);
-      const [responseMessage, setResponseMessage] = useState<string | null>(null);
-      const [signed, setSigned] = useState(false);
-      const [toLog, setToLog] = useState(false);
-      const [error, setError] = useState<string | null>(null);
-      const [loading, setLoading] = useState(false);
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
+    const [responseMessage, setResponseMessage] = useState<string | null>(null);
+    const [signed, setSigned] = useState(false);
+    const [toLog, setToLog] = useState(false);
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+    const { t } = useLanguageContext();
 
     const handleLogin = async (event: React.FormEvent) => {
         event.preventDefault();
@@ -37,10 +39,10 @@ const SignUp: React.FC = () => {
                 setPassword('');
                 setSigned(true);
             } else {
-                setError(data.error || 'Server error');
+                setError(data.error || t('error.serverError'));
             }
         } catch (err) {
-            setError(err instanceof Error ? err.message : 'Network error');
+            setError(err instanceof Error ? err.message : t('error.networkError'));
         } finally {
             setLoading(false);
         }
@@ -55,16 +57,16 @@ const SignUp: React.FC = () => {
 
     return (
         <div className="signup-screen">
-            <img src={yoviLogo} alt="YOVI Logo" className="signup-screen__logo" />
-            <h1>Bienvenido, regístrate aquí</h1>
-            
+            <img src={yoviLogo} alt={t('common.logoAlt')} className="signup-screen__logo" />
+
             <form onSubmit={handleLogin} className="signup-form">
-                <h1>Crea tu usuario y contraseña para registrarte en Yovi.</h1>
+                <h1>{t('signup.welcome')}</h1>
+                <p>{t('signup.subtitle')}</p>
                 <div className="form-group">
-                    <label htmlFor="username">Usuario</label>
+                    <label htmlFor="username">{t('signup.userlabel')}</label>
                     <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} className="form-input"/>
                     
-                    <label htmlFor="password">Contraseña</label>
+                    <label htmlFor="password">{t('signup.passwlabel')}</label>
                     <div className="password-field">
                         <input
                             type={showPassword ? "text" : "password"}
@@ -80,7 +82,7 @@ const SignUp: React.FC = () => {
                     </div>
                 </div>
                 <button type="submit" className="submit-button" disabled={loading}>
-                    {loading ? 'Creando usuario...' : 'Crear usuario'}
+                    {loading ? t('signup.loadingButton') : t('signup.signupButton')}
                 </button>
 
                 {responseMessage && (
@@ -96,9 +98,9 @@ const SignUp: React.FC = () => {
             </form>
 
             <div className="goBack">
-                <h2>¿Ya tienes usuario? Inicia sesión.</h2>
+                <h2>{t('signup.backlabel')}</h2>
                 <button onClick={() => setToLog(true)}>
-                    Atrás
+                    {t('signup.backbutton')}
                 </button>
             </div>         
         </div>

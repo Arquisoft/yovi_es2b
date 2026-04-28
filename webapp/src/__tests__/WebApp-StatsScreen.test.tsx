@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import GameStatsTotal from '../screens/stats/GameStatsTotal'
 import GameStatsFiltered from '../screens/stats/GameStatsFiltered'
@@ -6,6 +6,7 @@ import GameStatsDiff from '../screens/stats/GameStatsDifficuty'
 import GameStatsStra from '../screens/stats/GameStatsStrategy'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
+import { renderWithProviders } from './test-utils'
 
 /**
  * Imita las respuestas de las APIs de estadísticas para poder testear los componentes sin depender de la base de datos ni del backend.
@@ -46,7 +47,7 @@ describe('GameStats', () => {
      */
     test('GameStatsTotal: muestra el título con el username', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockAllStats }) } as Response)
-        render(<GameStatsTotal username="sara" />)
+        renderWithProviders(<GameStatsTotal username="sara" />)
         expect(screen.getByText(/Todas las estadísticas de:/i)).toBeInTheDocument()
         expect(screen.getByText('sara')).toBeInTheDocument()
     })
@@ -57,7 +58,7 @@ describe('GameStats', () => {
      */
     test('GameStatsTotal: muestra las cabeceras de la tabla', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockAllStats }) } as Response)
-        render(<GameStatsTotal username="sara" />)
+        renderWithProviders(<GameStatsTotal username="sara" />)
         expect(screen.getByText('Dificultad')).toBeInTheDocument()
         expect(screen.getByText('Estrategia')).toBeInTheDocument()
         expect(screen.getByText('Victorias')).toBeInTheDocument()
@@ -72,7 +73,7 @@ describe('GameStats', () => {
      */
     test('GameStatsTotal: muestra los datos incluyendo la fila TOTALES', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockAllStats }) } as Response)
-        render(<GameStatsTotal username="sara" />)
+        renderWithProviders(<GameStatsTotal username="sara" />)
         await waitFor(() => {
             expect(screen.getByText('TOTALES')).toBeInTheDocument()
             expect(screen.getByText('RANDOM')).toBeInTheDocument()
@@ -85,7 +86,7 @@ describe('GameStats', () => {
      */
     test('GameStatsTotal: llama a /allstats con el username correcto', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockAllStats }) } as Response)
-        render(<GameStatsTotal username="sara" />)
+        renderWithProviders(<GameStatsTotal username="sara" />)
         await waitFor(() => {
             expect(global.fetch).toHaveBeenCalledWith(
                 expect.stringContaining('/allstats'),
@@ -101,7 +102,7 @@ describe('GameStats', () => {
     test('GameStatsTotal: navega al pulsar Volver al menú de estadísticas', async () => {
         const user = userEvent.setup()
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockAllStats }) } as Response)
-        render(<GameStatsTotal username="sara" />)
+        renderWithProviders(<GameStatsTotal username="sara" />)
         await user.click(screen.getByRole('button', { name: /Volver al menú de estadísticas/i }))
         await waitFor(() => {
             expect(screen.queryByText(/Todas las estadísticas de:/i)).not.toBeInTheDocument()
@@ -115,7 +116,7 @@ describe('GameStats', () => {
     test('GameStatsTotal: navega al pulsar Volver al menú principal', async () => {
         const user = userEvent.setup()
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockAllStats }) } as Response)
-        render(<GameStatsTotal username="sara" />)
+        renderWithProviders(<GameStatsTotal username="sara" />)
         await user.click(screen.getByRole('button', { name: /Volver al menú principal/i }))
         await waitFor(() => {
             expect(screen.queryByText(/Todas las estadísticas de:/i)).not.toBeInTheDocument()
@@ -132,7 +133,7 @@ describe('GameStats', () => {
         global.fetch = vi.fn()
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
-        render(<GameStatsFiltered username="sara" />)
+        renderWithProviders(<GameStatsFiltered username="sara" />)
         expect(screen.getByText(/Estadísticas filtradas de:/i)).toBeInTheDocument()
         expect(screen.getByText('sara')).toBeInTheDocument()
     })
@@ -145,7 +146,7 @@ describe('GameStats', () => {
         global.fetch = vi.fn()
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
-        render(<GameStatsFiltered username="sara" />)
+        renderWithProviders(<GameStatsFiltered username="sara" />)
         await waitFor(() => {
             expect(screen.getByText('EASY')).toBeInTheDocument()
             expect(screen.getByText('RANDOM')).toBeInTheDocument()
@@ -161,7 +162,7 @@ describe('GameStats', () => {
         global.fetch = vi.fn()
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
-        render(<GameStatsFiltered username="sara" />)
+        renderWithProviders(<GameStatsFiltered username="sara" />)
         await waitFor(() => {
             expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/diffstats'), expect.any(Object))
             expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/stratstats'), expect.any(Object))
@@ -177,7 +178,7 @@ describe('GameStats', () => {
         global.fetch = vi.fn()
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
-        render(<GameStatsFiltered username="sara" />)
+        renderWithProviders(<GameStatsFiltered username="sara" />)
         await user.click(screen.getByRole('button', { name: /Volver al menú de estadísticas/i }))
         await waitFor(() => {
             expect(screen.queryByText(/Estadísticas filtradas de:/i)).not.toBeInTheDocument()
@@ -193,7 +194,7 @@ describe('GameStats', () => {
         global.fetch = vi.fn()
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
             .mockResolvedValueOnce({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
-        render(<GameStatsFiltered username="sara" />)
+        renderWithProviders(<GameStatsFiltered username="sara" />)
         await user.click(screen.getByRole('button', { name: /Volver al menú principal/i }))
         await waitFor(() => {
             expect(screen.queryByText(/Estadísticas filtradas de:/i)).not.toBeInTheDocument()
@@ -208,7 +209,7 @@ describe('GameStats', () => {
      */
     test('GameStatsDifficulty: muestra las cabeceras de la tabla', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
-        render(<GameStatsDiff username="sara" />)
+        renderWithProviders(<GameStatsDiff username="sara" />)
         expect(screen.getByText('Dificultad')).toBeInTheDocument()
         expect(screen.getByText('Victorias')).toBeInTheDocument()
         expect(screen.getByText('Derrotas')).toBeInTheDocument()
@@ -218,11 +219,11 @@ describe('GameStats', () => {
 
     /**
      * Comprueba que se muestra las tres dificultades tras cargar.
-     * El test simula la respuesta de la API de estadísticas de dificultad, renderiza el componente GameStatsDiff, y verifica que se muestren los nombres de las dificultades "EASY", "MEDIUM" y "HARD" presentes en los datos simulados.
+     * El test simula la respuesta de la API de estadísticas de dificultad, renderWithProvidersiza el componente GameStatsDiff, y verifica que se muestren los nombres de las dificultades "EASY", "MEDIUM" y "HARD" presentes en los datos simulados.
      */
     test('GameStatsDifficulty: muestra las tres dificultades tras cargar', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
-        render(<GameStatsDiff username="sara" />)
+        renderWithProviders(<GameStatsDiff username="sara" />)
         await waitFor(() => {
             expect(screen.getByText('EASY')).toBeInTheDocument()
             expect(screen.getByText('MEDIUM')).toBeInTheDocument()
@@ -236,7 +237,7 @@ describe('GameStats', () => {
      */
     test('GameStatsDifficulty: llama a /diffstats con el username correcto', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockDiffStats }) } as Response)
-        render(<GameStatsDiff username="sara" />)
+        renderWithProviders(<GameStatsDiff username="sara" />)
         await waitFor(() => {
             expect(global.fetch).toHaveBeenCalledWith(
                 expect.stringContaining('/diffstats'),
@@ -253,7 +254,7 @@ describe('GameStats', () => {
      */
     test('GameStatsStrategy: muestra las cabeceras de la tabla', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
-        render(<GameStatsStra username="sara" />)
+        renderWithProviders(<GameStatsStra username="sara" />)
         expect(screen.getByText('Estrategia')).toBeInTheDocument()
         expect(screen.getByText('Victorias')).toBeInTheDocument()
         expect(screen.getByText('Derrotas')).toBeInTheDocument()
@@ -267,7 +268,7 @@ describe('GameStats', () => {
      */
     test('GameStatsStrategy: muestra todas las estrategias tras cargar', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
-        render(<GameStatsStra username="sara" />)
+        renderWithProviders(<GameStatsStra username="sara" />)
         await waitFor(() => {
             expect(screen.getByText('RANDOM')).toBeInTheDocument()
             expect(screen.getByText('DEFENSIVO')).toBeInTheDocument()
@@ -284,7 +285,7 @@ describe('GameStats', () => {
      */
     test('GameStatsStrategy: muestra el porcentaje 100% para OFENSIVO', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
-        render(<GameStatsStra username="sara" />)
+        renderWithProviders(<GameStatsStra username="sara" />)
         await waitFor(() => {
             expect(screen.getByText('100.00 %')).toBeInTheDocument()
         })
@@ -296,7 +297,7 @@ describe('GameStats', () => {
      */
     test('GameStatsStrategy: llama a /stratstats con el username correcto', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ stats: mockStratStats }) } as Response)
-        render(<GameStatsStra username="sara" />)
+        renderWithProviders(<GameStatsStra username="sara" />)
         await waitFor(() => {
             expect(global.fetch).toHaveBeenCalledWith(
                 expect.stringContaining('/stratstats'),

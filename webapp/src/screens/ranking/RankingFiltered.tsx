@@ -7,6 +7,7 @@ import RankingDifficulty from "./RankingDifficulty.tsx";
 import RankingStrategy from "./RankingStrategy.tsx";
 import "./RankingFiltered.css";
 import AppHeader from "../../components/header/AppHeader.tsx";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 
 type FilterRule = "general" | "dificultad" | "estrategia";
 export type SortRule = "value" | "percentage";
@@ -98,6 +99,7 @@ export default function RankingFiltered({ username }: Readonly<{ username: strin
     const [goLogin, setGoLogin] = useState(false);
     const [active, setActive] = useState<Set<FilterRule>>(new Set(["general"])); // Estado para controlar qué vistas del ranking filtrado están activas. Por defecto, se muestra la vista general.
     const [sortBy, setSortBy] = useState<SortRule>("value");
+    const { t } = useLanguageContext();
 
     if (goLogin) return <InitialScreen />;
     if (goBack) return <Ranking username={username} />;
@@ -170,7 +172,7 @@ export default function RankingFiltered({ username }: Readonly<{ username: strin
             <AppHeader onLogout={() => setGoLogin(true)} />
 
             <div className="ranking-filtered-header">
-                <h1 className="ranking-filtered-title">Ranking global</h1>
+                <h1 className="ranking-filtered-title">{t("ranking.title")}</h1>
             </div>
 
             {/* menu */}
@@ -178,25 +180,25 @@ export default function RankingFiltered({ username }: Readonly<{ username: strin
                 <div className="ranking-toggle-menu">
                     <button className={getButtonClass("general")} onClick={() => filterRanking("general")}>
                         {active.has("general") && <span className="ranking-toggle-check">✓ </span>}
-                        Por partidas
+                        {t("ranking.bymatches")}
                     </button>
                     <button className={getButtonClass("dificultad")} onClick={() => filterRanking("dificultad")}>
                         {active.has("dificultad") && <span className="ranking-toggle-check">✓ </span>}
-                        Por dificultad
+                        {t("ranking.bydiff")}
                     </button>
                     <button className={getButtonClass("estrategia")} onClick={() => filterRanking("estrategia")}>
                         {active.has("estrategia") && <span className="ranking-toggle-check">✓ </span>}
-                        Por estrategia
+                        {t("ranking.bystrat")}
                     </button>
                 </div>
 
                 <div className="ranking-sort-menu">
-                    <span className="ranking-sort-label">Ordenar</span>
+                    <span className="ranking-sort-label">{t("ranking.sort")}</span>
                     <button className={getSortClass("value")} onClick={() => setSortBy("value")}>
-                        Nº
+                        {t("ranking.number")}
                     </button>
                     <button className={getSortClass("percentage")} onClick={() => setSortBy("percentage")}>
-                        %
+                        {t("ranking.percentage")}
                     </button>
                 </div>
             </div>
@@ -219,17 +221,17 @@ export default function RankingFiltered({ username }: Readonly<{ username: strin
                     </div>
                 )}
                 {active.size === 0 && (
-                    <p className="ranking-empty">Selecciona al menos una categoría del menu superior.</p>
+                    <p className="ranking-empty">{t("ranking.selectCat")}</p>
                 )}
             </div>
 
 
             <div className="btn-menu">
                 <button className="ranking-btn-back-ranking" onClick={() => setGoBack(true)}>
-                    Volver al ranking general
+                    {t("ranking.seepersonalrank")}
                 </button>
                 <button className="ranking-btn-back-menu" onClick={() => setGoHome(true)}>
-                    Volver al menú principal
+                    {t("ranking.back")}
                 </button>
             </div>
 

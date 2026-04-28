@@ -1,10 +1,11 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Game } from '../screens/game/Game'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
 import { Difficulty } from '../components/gameOptions/Difficulty'
 import { Strategy } from '../components/gameOptions/Strategy'
+import { renderWithProviders } from './test-utils'
 
 const baseSettings = {
     strategy: Strategy.RANDOM,
@@ -41,11 +42,11 @@ describe('GameInfo', () => {
     test('muestra la información correcta en modo 2 jugadores', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="iyan" twoPlayers={true} stateStart={true} />
         )
         await waitFor(() => {
-            expect(screen.getByText(/Información de partida/i)).toBeInTheDocument()
+            expect(screen.getByText(/Información de la partida/i)).toBeInTheDocument()
             expect(screen.getByText(/Tamaño del tablero/i)).toBeInTheDocument()
             expect(screen.getByText(/Estado/i)).toBeInTheDocument()
 
@@ -69,11 +70,11 @@ describe('GameInfo', () => {
     test('muestra la información correcta en modo 1 jugador (contra bot)', async () => {
         userEvent.setup()
         mockFetch()
-        render(
+        renderWithProviders(
             <Game settings={baseSettings} username="sara" username2="" twoPlayers={false} stateStart={true} />
         )
         await waitFor(() => {
-            expect(screen.getByText(/Información de partida/i)).toBeInTheDocument()
+            expect(screen.getByText(/Información de la partida/i)).toBeInTheDocument()
 
             // "sara" aparece en "Jugador" y en "Turno actual", usamos getAllByText
             expect(screen.getAllByText(/sara/i).length).toBeGreaterThan(0)

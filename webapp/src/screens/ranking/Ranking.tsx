@@ -4,6 +4,7 @@ import "./Ranking.css";
 import RankingFiltered from "./RankingFiltered";
 import InitialScreen from "../init/InitialScreen";
 import AppHeader from "../../components/header/AppHeader";
+import { useLanguageContext } from "../../i18n/LanguageProvider.tsx";
 
 type RankingApiEntry = {
     username: string;
@@ -12,6 +13,9 @@ type RankingApiEntry = {
 };
 
 export default function Ranking({ username }: Readonly<{ username: string }>) {
+
+    const { t } = useLanguageContext(); // para internacionalizar
+
     const [goBack, setGoBack] = useState(false); // Estado para volver al menú principal
     const [goFiltered, setGoFiltered] = useState(false); // Estado para mostrar el ranking filtrado por victorias (en lugar del global)
     const [goLogin, setGoLogin] = useState(false); // Estado para volver a la pantalla de inicio de sesión
@@ -31,7 +35,7 @@ export default function Ranking({ username }: Readonly<{ username: string }>) {
 
                 const data = await res.json(); // El ranking global se espera que esté en data.ranking
                 if (!res.ok || !Array.isArray(data.ranking)) {
-                    throw new Error("Ranking no disponible");
+                    throw new Error(t("error.rankingError"));
                 }
 
                 // Calcula la posición del usuario en el ranking global, teniendo en cuenta empates.
@@ -73,30 +77,30 @@ export default function Ranking({ username }: Readonly<{ username: string }>) {
     return (
         <div className="ranking-screen">
             <AppHeader onLogout={() => setGoLogin(true)} />
-            <img className="ranking-logo" src="/yovi_logo.png" alt="YOVI Logo" />
-            <h1 className="ranking-screen-title">Ranking global</h1>
+            <img className="ranking-logo" src="/yovi_logo.png" alt={t("common.logoAlt")} />
+            <h1 className="ranking-screen-title">{t("ranking.title")}</h1>
 
             <div className="ranking-position-card">
-                <p className="ranking-position-label">Tu posición en el ranking es...</p>
+                <p className="ranking-position-label">{t("ranking.position")}</p>
                 {loadingPosition && <p className="ranking-position-value">...</p>}
                 {!loadingPosition && !positionError && position !== null && (
                     <p className="ranking-position-value">#{position}</p>
                 )}
                 {!loadingPosition && !positionError && position === null && (
-                    <p className="ranking-position-value">Sin posicion</p>
+                    <p className="ranking-position-value">{t("ranking.noposition")}</p>
                 )}
                 {!loadingPosition && positionError && (
-                    <p className="ranking-position-value">No disponible</p>
+                    <p className="ranking-position-value">{t("ranking.notavailable")}</p>
                 )}
             </div>
 
             <div className="ranking-menu">
                 <button className="ranking-btn-filtered" onClick={() => setGoFiltered(true)}>
-                    Ver ranking
+                    {t("ranking.seerank")}
                 </button>
 
                 <button className="ranking-btn-menu" onClick={() => setGoBack(true)}>
-                    Volver al menú principal
+                    {t("ranking.back")}
                 </button>
             </div>
         </div>

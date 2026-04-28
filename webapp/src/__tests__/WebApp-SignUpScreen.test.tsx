@@ -1,8 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/react'
+import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import SignUp from '../screens/init/SignUp'
 import { afterEach, describe, expect, test, vi } from 'vitest'
 import '@testing-library/jest-dom'
+import { renderWithProviders } from './test-utils'
 
 /**
  * Tests para SignUp que comprueban que:
@@ -19,7 +20,7 @@ describe('SignUp', () => {
      * Comprueba que se muestra el título de bienvenida, los campos de usuario y contraseña, y el botón de crear usuario.
      */
     test('muestra el título y el formulario de registro', () => {
-        render(<SignUp />)
+        renderWithProviders(<SignUp />)
         expect(screen.getByText(/Bienvenido, regístrate aquí/i)).toBeInTheDocument()
         expect(screen.getByText(/Crea tu usuario y contraseña para registrarte en Yovi\./i)).toBeInTheDocument()
         expect(screen.getByLabelText(/Usuario/i)).toBeInTheDocument()
@@ -31,7 +32,7 @@ describe('SignUp', () => {
      * Comprueba que se muestra el enlace de inicio de sesión.
      */
     test('muestra el enlace de inicio de sesión', () => {
-        render(<SignUp />)
+        renderWithProviders(<SignUp />)
         expect(screen.getByText(/¿Ya tienes usuario\? Inicia sesión\./i)).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /Atrás/i })).toBeInTheDocument()
     })
@@ -41,7 +42,7 @@ describe('SignUp', () => {
      */
     test('navega a la pantalla de login al pulsar Atrás', async () => {
         const user = userEvent.setup()
-        render(<SignUp />)
+        renderWithProviders(<SignUp />)
         await waitFor(async () => {
             await user.click(screen.getByRole('button', { name: /Atrás/i }))
             expect(screen.queryByText(/Bienvenido, regístrate aquí/i)).not.toBeInTheDocument()
@@ -54,7 +55,7 @@ describe('SignUp', () => {
      * y verifica que el campo de contraseña cambia su tipo entre "password" y "text" correctamente.
      */
     test('el botón del ojo alterna la visibilidad de la contraseña', async () => {
-        render(<SignUp />)
+        renderWithProviders(<SignUp />)
         const user = userEvent.setup()
         await waitFor(async () => {
             const passwordInput = screen.getByLabelText(/^contraseña$/i)
@@ -76,7 +77,7 @@ describe('SignUp', () => {
  * el botón muestra "Creando usuario..." y está deshabilitado durante la carga.
  */
     test('el botón se deshabilita y muestra texto de carga mientras se procesa el registro', async () => {
-        render(<SignUp />)
+        renderWithProviders(<SignUp />)
         const user = userEvent.setup()
         global.fetch = vi.fn().mockImplementation(() => new Promise(() => { })) // fetch que nunca resuelve
         await waitFor(async () => {
@@ -93,7 +94,7 @@ describe('SignUp', () => {
      * correspondiente en la pantalla.
      */
     test('se muestra error de red si la petición falla', async () => {
-        render(<SignUp />)
+        renderWithProviders(<SignUp />)
         const user = userEvent.setup()
         global.fetch = vi.fn().mockRejectedValue(new Error('Network error'))
         await waitFor(async () => {
