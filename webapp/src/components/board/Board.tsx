@@ -27,27 +27,30 @@ type BoardProps = {
   onOnlineMove?: (x: number, y: number, z: number, player: number) => void;
 };
 
+// Convierte una clave de casilla (e.g. "f2-c1") a coordenadas x,y,z.
 function keyToCoords(key: string, boardSize: number): { x: number; y: number; z: number } {
-  const match = /f(\d+)-c(\d+)/.exec(key);
-  if (!match) throw new Error(`Clave de casilla inválida: ${key}`);
-  const fila = parseInt(match[1]);
+  const match = /f(\d+)-c(\d+)/.exec(key); // Extrae fila y columna de la clave
+  if (!match) throw new Error(`Clave de casilla inválida: ${key}`); // Debería ser del formato "f{fila}-c{columna}"
+  const fila = parseInt(match[1]); 
   const col  = parseInt(match[2]);
-  return { x: boardSize - 1 - fila, y: col, z: fila - col };
+  return { x: boardSize - 1 - fila, y: col, z: fila - col }; // Convierte la fila a coordenada x (invirtiendo el orden), la columna a y, y calcula z como fila - columna
 }
 
+// Convierte el layout de GameY (string con filas separadas por '/') a un objeto de valores para las casillas.
 function layoutToValores(layout: string): Record<string, number> {
-  const valores: Record<string, number> = {};
-  layout.split('/').forEach((fila, filaIdx) => {
-    fila.split('').forEach((celda, colIdx) => {
-      const key = `f${filaIdx}-c${colIdx}`;
-      if      (celda === 'B') valores[key] = 1;
-      else if (celda === 'R') valores[key] = 2;
-      else                    valores[key] = 0;
+  const valores: Record<string, number> = {}; 
+  layout.split('/').forEach((fila, filaIdx) => { // Itera sobre cada fila del layout  
+    fila.split('').forEach((celda, colIdx) => { // Itera sobre cada celda de la fila
+      const key = `f${filaIdx}-c${colIdx}`; // Construye la clave de la casilla correspondiente a esta posición
+      if      (celda === 'B') valores[key] = 1; // 'B' representa al jugador 1 (azul)
+      else if (celda === 'R') valores[key] = 2; // 'R' representa al jugador 2 (rojo)
+      else                    valores[key] = 0; // '-' representa una casilla vacía, o cualquier otro carácter no reconocido también se considera vacía
     });
   });
-  return valores;
+  return valores; // Devuelve el objeto con las claves de casilla y sus valores correspondientes
 }
 
+// Notifica al backend que el jugador ha ganado una partida contra el bot, para actualizar su puntuación.
 async function partidaGanada(username: string, strategy: string, difficulty: string) {
   try {
     const API_URL = import.meta.env.VITE_API_URL_WA ?? 'http://localhost:3000'
@@ -62,23 +65,30 @@ async function partidaGanada(username: string, strategy: string, difficulty: str
   }
 }
 
-
+/**
+ * Función principal del componente Board, que representa el tablero de juego 
+ * Maneja interacción con el backend (GameY) para realizar movimientos, actualizar el estado del tablero y gestionar el turno de los jugadores.
+ */
 export function Board(props: BoardProps) {
 
-  const [bloq, setBloq] = useState(false);
-  const [valores, setValores] = useState<Record<string, number>>({});
-  const [gameOver, setGameOver] = useState(false);
+  const [bloq, setBloq] = useState(false); // Indica si el tablero está bloqueado para evitar movimientos durante la espera de respuesta del servidor
+  const [valores, setValores] = useState<Record<string, number>>({}); // Almacena el estado actual del tablero
+  const [gameOver, setGameOver] = useState(false); // Indica si la partida ha terminado, para evitar más movimientos y mostrar el ganador
 
-  const bloquearTablero   = () => setBloq(true);
-  const desbloquearTablero = () => setBloq(false);
+  const bloquearTablero   = () => setBloq(true); // Función para bloquear el tablero, impidiendo que el jugador realice movimientos mientras se espera la respuesta del servidor
+  const desbloquearTablero = () => setBloq(false); // Función para desbloquear el tablero, permitiendo que el jugador realice movimientos después de recibir la respuesta del servidor
 
-  const selectedDifficulty: DifficultyType = props.difficulty;
-  const selectedStrategy: StrategyType    = props.strategy;
+  const selectedDifficulty: DifficultyType = props.difficulty; // Dificultad seleccionada por el jugador, que determina el tamaño del tablero 
+  const selectedStrategy: StrategyType    = props.strategy; // Estrategia seleccionada por el jugador para el bot, que determina cómo el bot elegirá sus movimientos
 
-  const BOARDHIGHT = getBoardSize(selectedDifficulty);
-  const boardClass = `board board-${BOARDHIGHT}`;
+  const BOARDHIGHT = getBoardSize(selectedDifficulty); // Obtiene el tamaño del tablero según la dificultad seleccionada
+  const boardClass = `board board-${BOARDHIGHT}`; // Clase CSS para el tablero, que puede variar según el tamaño 
 
-  const actualizarTablero = (layout: string) => setValores(layoutToValores(layout));
+  /**
+   * Función para actualizar el estado del tablero a partir del layout recibido del backend (GameY) después de un movimiento.
+   * Convierte el layout (string) a un objeto de valores para las casillas y lo guarda en el estado.
+   */
+  const actualizarTablero = (layout: string) => setValores(layoutToValores(layout)); 
 
   /**
    * Resuelve el nombre del jugador a partir de su índice en GameY (0 o 1).
@@ -86,13 +96,17 @@ export function Board(props: BoardProps) {
    * es siempre el jugador local, no necesariamente el jugador 0 de GameY.
    */
   function getPlayerName(playerIndex: number): string {
-    if (props.onlineMode) {
+    if (props.onlineMode) { // En modo online, el jugador local puede ser el jugador 0 o el jugador 1 en GameY, dependiendo de localPlayerIndex
       return playerIndex === props.localPlayerIndex ? props.username : props.username2;
     }
-    if (playerIndex === 0) return props.username;
+    if (playerIndex === 0) return props.username; // En modo offline, el jugador 0 es siempre username y el jugador 1 es username2 o BOT
     return props.twoPlayers ? props.username2 : "BOT";
   }
 
+  /**
+   * Función para realizar un movimiento en el backend (GameY) enviando las coordenadas x,y,z y el jugador que realiza el movimiento.
+   * Devuelve la respuesta del servidor con el nuevo estado de la partida después de realizar el movimiento.
+   */
   async function peticionMovimiento(x: number, y: number, z: number, player: number): Promise<any> {
     const res = await fetch(`${GAMEY_URL}/v1/games/${props.gameId}/move`, {
       method: 'POST',
@@ -103,12 +117,18 @@ export function Board(props: BoardProps) {
     return res.json();
   }
 
+  /**
+   * Función para obtener el estado actual de la partida desde el backend (GameY), 
+   */
   async function peticionEstadoPartida(): Promise<any> {
-    const res = await fetch(`${GAMEY_URL}/v1/games/${props.gameId}`);
+    const res = await fetch(`${GAMEY_URL}/v1/games/${props.gameId}`); 
     if (!res.ok) throw new Error("Error al obtener el estado de la partida");
     return res.json();
   }
 
+  /**
+   * Función para obtener la estrategia del bot en formato que el backend (GameY) espera, a partir de la estrategia seleccionada por el jugador.
+   */
   function strategyToBotId(strategy: StrategyType): string {
     const map: Record<StrategyType, string> = {
       RANDOM: "random_bot",
@@ -122,6 +142,9 @@ export function Board(props: BoardProps) {
     return map[strategy];
   }
 
+  /**
+   * Función para solicitar al backend (GameY) el movimiento del bot
+   */
   async function peticionMovimientoBot(state: unknown): Promise<any> {
     const params = new URLSearchParams({
       position: JSON.stringify(state),
@@ -132,6 +155,9 @@ export function Board(props: BoardProps) {
     return res.json();
   }
 
+  /**
+   * Funcion para ejecutar una acción del bot (en el backend (GameY) enviando el jugador y la acción a realizar.
+   */
   async function peticionAccionBot(player: number, action: string): Promise<any> {
     const res = await fetch(`${GAMEY_URL}/v1/games/${props.gameId}/action`, {
       method: 'POST',
@@ -142,33 +168,37 @@ export function Board(props: BoardProps) {
     return res.json();
   }
 
+  /**
+   * Funcion  para realizar un movimiento, que se llama tanto al hacer click en una casilla como al ejecutar el movimiento del bot.
+   */
   async function realizarMovimiento(x: number, y: number, z: number, player: number): Promise<void> {
-    bloquearTablero();
+    bloquearTablero(); // Bloquea el tablero para evitar que el jugador realice otro movimiento mientras se procesa este
     try {
-      const data = await peticionMovimiento(x, y, z, player);
-      actualizarTablero(data.state.layout);
+      const data = await peticionMovimiento(x, y, z, player); // Envía el movimiento al backend (GameY) y espera la respuesta con el nuevo estado de la partida
+      actualizarTablero(data.state.layout); // Actualiza el estado del tablero con el layout recibido del backend
 
-      if (data.status.kind === 'Finished') {
+      // Si la partida ha terminado, muestra el ganador y notifica al componente padre
+      if (data.status.kind === 'Finished') { 
         const winnerName = getPlayerName(data.status.winner);
         setGameOver(true);
         props.changeTurno(winnerName);
         props.onGameEnd(winnerName);
-        desbloquearTablero();
-        if (data.status.winner === 0 && !props.twoPlayers) {
-          partidaGanada(props.username, props.strategy, props.difficulty);
+        desbloquearTablero(); // Desbloquea el tablero para permitir que se muestre el estado final, aunque no se puedan hacer más movimientos
+        if (data.status.winner === 0 && !props.twoPlayers) { 
+          partidaGanada(props.username, props.strategy, props.difficulty); 
         }
         return;
       }
-
+       // Si la partida continúa, cambia el turno al siguiente jugador. En modo offline, si el siguiente jugador es el bot, solicita su movimiento automáticamente.
       const nextPlayer: number = data.status.next_player;
       props.changeTurno(getPlayerName(nextPlayer));
 
-      if (!props.twoPlayers && nextPlayer !== 0) {
+      if (!props.twoPlayers && nextPlayer !== 0) { // Si es el turno del bot en una partida contra el bot, solicita su movimiento automáticamente
         const botMove = await peticionMovimientoBot(data.state);
-        if (botMove.action) {
-          const actionData = await peticionAccionBot(nextPlayer, botMove.action);
+        if (botMove.action) { // Si el bot devuelve una acción (en lugar de coordenadas), ejecuta esa acción
+          const actionData = await peticionAccionBot(nextPlayer, botMove.action); // Envía la acción del bot al backend (GameY) y espera la respuesta con el nuevo estado de la partida
           actualizarTablero(actionData.state.layout);
-          if (actionData.status.kind === 'Finished') {
+          if (actionData.status.kind === 'Finished') { // Si la partida ha terminado después de la acción del bot, muestra el ganador y notifica al componente padre
             const winnerName = getPlayerName(actionData.status.winner);
             setGameOver(true);
             props.changeTurno(winnerName);
@@ -176,12 +206,13 @@ export function Board(props: BoardProps) {
           } else {
             props.changeTurno(getPlayerName(actionData.status.next_player));
           }
-          desbloquearTablero();
-        } else {
+          desbloquearTablero(); 
+        } else { //Caso de que el bot devuelva coordenadas directamente, realiza el movimiento con esas coordenadas
           await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, nextPlayer);
+          desbloquearTablero(); 
         }
-      } else {
-        desbloquearTablero();
+      } else { //Caso de partida online o partida offline entre dos jugadores humanos, simplemente desbloquea el tablero para permitir que el siguiente jugador realice su movimiento
+        desbloquearTablero(); 
       }
     } catch (err) {
       console.error("Error en realizarMovimiento:", err);
@@ -197,7 +228,7 @@ export function Board(props: BoardProps) {
     async function cargarEstadoInicial() {
       try {
         const data = await peticionEstadoPartida();
-actualizarTablero(data.state.layout);
+        actualizarTablero(data.state.layout);
 
         if (data.status.kind === 'Ongoing') {
           props.changeTurno(getPlayerName(data.status.next_player));
@@ -219,6 +250,7 @@ actualizarTablero(data.state.layout);
             }
           } else {
             await realizarMovimiento(botMove.coords.x, botMove.coords.y, botMove.coords.z, data.status.next_player);
+            desbloquearTablero();
           }
         }
       } catch (err) {
