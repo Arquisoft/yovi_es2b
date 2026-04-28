@@ -482,8 +482,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_registro_e_inicio_de_sesión">6.1. Registro e inicio de sesión</a></li>
 <li><a href="#_flujo_de_una_partida_completa">6.2. Flujo de una partida completa</a></li>
-<li><a href="#_flujo_de_una_partida_multijugador">6.3. Flujo de una partida multijugador</a></li>
-<li><a href="#_consulta_de_estadísticas_y_ranking">6.4. Consulta de estadísticas y ranking</a></li>
+<li><a href="#_consulta_de_estadísticas_y_ranking">6.3. Consulta de estadísticas y ranking</a></li>
 </ul>
 </li>
 <li><a href="#section-deployment-view">7. Vista de despliegue</a>
@@ -498,9 +497,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_patrones_y_principios_de_diseño">8.2. Patrones y principios de diseño</a></li>
 <li><a href="#_testeabilidad">8.3. Testeabilidad</a></li>
 <li><a href="#_seguridad">8.4. Seguridad</a></li>
-<li><a href="#_monitorización">8.5. Monitorización</a></li>
-<li><a href="#_librerías_y_tecnologías_utilizadas">8.6. Librerías y tecnologías utilizadas</a></li>
-<li><a href="#_aspectos_del_desarrollo">8.7. Aspectos del desarrollo</a></li>
+<li><a href="#_librerías_y_tecnologías_utilizadas">8.5. Librerías y tecnologías utilizadas</a></li>
+<li><a href="#_aspectos_del_desarrollo">8.6. Aspectos del desarrollo</a></li>
 </ul>
 </li>
 <li><a href="#section-design-decisions">9. Decisiones arquitectónicas</a>
@@ -524,9 +522,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_test_del_microservicio_users">12.1. Test del microservicio Users</a></li>
 <li><a href="#_test_del_microservicio_webapp">12.2. Test del microservicio WebApp</a></li>
-<li><a href="#_test_del_microservicio_gamey">12.3. Test del microservicio GameY</a></li>
-<li><a href="#_tests_end_to_end_e2e">12.4. Tests End-to-End (E2E)</a></li>
-<li><a href="#_test_de_carga">12.5. Test de carga</a></li>
+<li><a href="#_test_de_carga">12.3. Test de carga</a></li>
 </ul>
 </li>
 <li><a href="#section-glossary">13. Glosario</a></li>
@@ -871,7 +867,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <p><strong>El frontend web:</strong> Desarrollado en React, hace que la aplicación se pueda ejecutar en el navegador. También se encarga de la presentación visual del juego, es decir, de la interfaz; la gestión de interacciones de los jugadores y la comunicación con el backend.</p>
 </li>
 <li>
-<p><strong>El backend:</strong> Se divide en tres microservicios independientes que gestionan distintas responsabilidades del sistema. El microservicio de GameY, en Rust, que tiene por función el manejo del juego como tal, los turnos del juego, los bots y sus estrategias, etc. El microservicio de usuarios, en Node.js, que resultará más sencillo para la comunicación con la base de datos. Por último, el microservicio de Rooms, también en Node.js, que gestiona las salas de juego multijugador en tiempo real mediante WebSocket (Socket.io), coordinando la creación y unión de salas y retransmitiendo los movimientos entre jugadores a través de GameY.</p>
+<p><strong>El backend:</strong> Se divide en dos microservicios independientes que gestionan distintas responsabilidades del sistema. El microservicio de GameY, en Rust, que tiene por función el manejo del juego como tal, los turnos del juego, los bots y sus estrategias, etc. El otro microservicio es el que maneja los usuarios, aquí, usaremos Node.js, que resultará más sencillo para la cominucación con la base de datos.</p>
 </li>
 <li>
 <p><strong>La persistencia de datos:</strong> Se realiza mediante MongoDB, que almacena la información de los usuarios con sus partidas y resultados. Elegimos el modelo noSQL por la facilidad de despliegue y la capacidad de ver los datos en tiempo real.</p>
@@ -885,7 +881,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 </ul>
 </div>
 <div class="paragraph">
-<p>La comunicación entre el frontend y los microservicios se realiza principalmente mediante una API REST que intercambia mensajes JSON, a excepción del microservicio de Rooms, con el que la comunicación es en tiempo real a través de WebSocket (Socket.io). Esta arquitectura modular y distribuida permite que el sistema sea escalable y extensible para futuras versiones que incluyan variantes adicionales del juego o funcionalidades opcionales avanzadas.</p>
+<p>La comunicación se realiza mediante una API REST que intercambia mensajes JSON. Esta arquitectura modular y distribuida permite que el sistema sea escalable y extensible para futuras versiones que incluyan variantes adicionales del juego, soporte para varios jugadores o funcionalidades opcionales avanzadas.</p>
 </div>
 <div style="page-break-after: always;"></div>
 </div>
@@ -934,12 +930,6 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <li>
 <p><strong>Gatling:</strong> Software que se usará para las pruebas de carga del juego.</p>
 </li>
-<li>
-<p><strong>Prometheus:</strong> Sistema de monitorización y alertas que recopila métricas de los microservicios en intervalos regulares.</p>
-</li>
-<li>
-<p><strong>Grafana:</strong> Plataforma de visualización que conecta con Prometheus para mostrar las métricas del sistema en dashboards en tiempo real.</p>
-</li>
 </ul>
 </div>
 </div>
@@ -983,7 +973,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <div class="sect2">
 <h3 id="_nivel_1_visión_general_del_sistema">5.1. Nivel 1 – Visión general del sistema</h3>
 <div class="paragraph">
-<p>A alto nivel, el sistema está compuesto por cinco bloques principales, uno de frontend, tres de backend y uno de persistencia:</p>
+<p>A alto nivel, el sistema está compuesto por cuatro bloques principales, uno de frontend, dos de backend y uno de persistencia:</p>
 </div>
 <div class="ulist">
 <ul>
@@ -997,15 +987,12 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <p>Microservicio GameY</p>
 </li>
 <li>
-<p>Microservicio Rooms</p>
-</li>
-<li>
 <p>Base de datos</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>Estos componentes interactúan entre sí mediante API REST y mensajes en formato JSON, a excepción del microservicio Rooms, con el que el frontend se comunica a través de WebSocket (Socket.io) para permitir la interacción en tiempo real durante las partidas multijugador.</p>
+<p>Estos componentes interactúan entre sí mediante API REST (modelo, servicio y controlers) y mensajes en formato JSON.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -1015,7 +1002,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <div class="sect3">
 <h4 id="_frontend_web_webapp">5.1.1. Frontend Web: WEBAPP</h4>
 <div class="paragraph">
-<p>El frontend es una aplicación web desarrollada en React y que es ejecutada en el navegador del usuario. Divide el código en screens y componentes, que interactúan directamente con los controllers del juego.</p>
+<p>El frontend es una aplicación web desarrollada en React y que es ejecutada en el navegador del usuario. Divide el códgio en screens y componentes, que interactúan directamente con los controllers del juego</p>
 </div>
 <div class="paragraph">
 <p>Sus responsabilidades principales son:</p>
@@ -1077,7 +1064,7 @@ For documentation of your own system you use better the <em>plain</em> version.<
 <h4 id="_microservicio_gamey">5.1.3. Microservicio GameY</h4>
 <div class="paragraph">
 <p>El microservicio GameY está desarrollado en Rust y contiene toda la lógica principal del juego.
-De nuevo gracias a la API REST usada el frontend envía el estado actual de una partida y recibe como respuesta el nuevo estado del tablero o el siguiente movimiento calculado. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.</p>
+De nuevo gracias a la API REST usada el frontend envia el estado actual de una partida y recibe como respuesta el nuevo estado del tablero o el siguiente movimiento calculado. Al ser la parte que determina el estado del tablero, se asegura de prevenir que el usuario pueda corromper el juego.</p>
 </div>
 <div class="paragraph">
 <p>Sus responsabilidades son:</p>
@@ -1106,38 +1093,7 @@ De nuevo gracias a la API REST usada el frontend envía el estado actual de una 
 </div>
 </div>
 <div class="sect3">
-<h4 id="_microservicio_rooms">5.1.4. Microservicio Rooms</h4>
-<div class="paragraph">
-<p>El microservicio Rooms está implementado en Node.js y se encarga de gestionar las partidas multijugador en tiempo real. A diferencia del resto de microservicios, la comunicación con el frontend no se realiza mediante API REST sino a través de WebSocket (Socket.io), lo que permite una interacción bidireccional e inmediata entre los jugadores.</p>
-</div>
-<div class="paragraph">
-<p>Entre sus responsabilidades se incluyen:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>Crear y gestionar salas de juego identificadas por un código único de seis caracteres.</p>
-</li>
-<li>
-<p>Coordinar la unión de un segundo jugador a una sala existente.</p>
-</li>
-<li>
-<p>Retransmitir los movimientos de cada jugador al microservicio GameY y reenviar el nuevo estado del tablero a ambos jugadores.</p>
-</li>
-<li>
-<p>Gestionar eventos de fin de turno por temporizador, deshacer movimientos y abandono o desconexión de jugadores.</p>
-</li>
-<li>
-<p>Exponer métricas de Prometheus sobre el número de salas creadas y activas.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>El estado de las salas se mantiene en memoria durante el transcurso de la partida. El microservicio se comunica internamente con GameY mediante HTTP REST para crear partidas y validar movimientos.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_base_de_datos">5.1.5. Base de Datos</h4>
+<h4 id="_base_de_datos">5.1.4. Base de Datos</h4>
 <div class="paragraph">
 <p>El sistema utiliza MongoDB como sistema de persistencia.
 Se trata de una base de datos NoSQL orientada a documentos, adecuada para almacenar estructuras de datos flexibles como partidas de juego y estadísticas.</p>
@@ -1150,7 +1106,7 @@ Se trata de una base de datos NoSQL orientada a documentos, adecuada para almace
 </div>
 </div>
 <div class="sect3">
-<h4 id="_esquema_del_sistema">5.1.6. Esquema del sistema</h4>
+<h4 id="_esquema_del_sistema">5.1.5. Esquema del sistema</h4>
 <div class="paragraph">
 <p>Este es el esquema del juego completo:
 image::yovi-estructura.png[componentes-yovi]</p>
@@ -1181,10 +1137,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <p><strong>Gestión de estado:</strong> control del estado actual de la partida y de la sesión del usuario.</p>
 </li>
 <li>
-<p><strong>Peticiones del cliente:</strong> módulo encargado de realizar las peticiones HTTP a los microservicios User y GameY.</p>
-</li>
-<li>
-<p><strong>Cliente WebSocket:</strong> módulo encargado de mantener la conexión con el microservicio Rooms durante las partidas multijugador, emitiendo y recibiendo eventos en tiempo real.</p>
+<p><strong>Peticiones del cliente:</strong> módulo encargado de realizar las peticiones HTTP a los microservicios backend, comunicandose con los controllers.</p>
 </li>
 </ul>
 </div>
@@ -1209,26 +1162,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_microservicio_rooms_2">5.2.3. Microservicio Rooms</h4>
-<div class="paragraph">
-<p>Este microservicio se compone de los siguientes módulos internos:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Servidor Socket.io:</strong> gestiona las conexiones WebSocket de los clientes y enruta los eventos entrantes.</p>
-</li>
-<li>
-<p><strong>Gestor de salas:</strong> mantiene en memoria el estado de cada sala activa, incluyendo los jugadores conectados, el identificador de partida y la configuración elegida.</p>
-</li>
-<li>
-<p><strong>Cliente HTTP de GameY:</strong> realiza las llamadas REST a GameY para crear partidas y retransmitir movimientos o deshacerlos.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_microservicio_gamey_2">5.2.4. Microservicio GameY</h4>
+<h4 id="_microservicio_gamey_2">5.2.3. Microservicio GameY</h4>
 <div class="paragraph">
 <p>Está organizado en las siguientes partes internas:</p>
 </div>
@@ -1253,17 +1187,17 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_beneficios_de_la_arquitectura">5.2.5. Beneficios de la arquitectura</h4>
+<h4 id="_beneficios_de_la_arquitectura">5.2.4. Beneficios de la arquitectura</h4>
 <div class="paragraph">
 <p>Las principales ventajas que proporciona la estructura elegida son:</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Separación clara de responsabilidades</strong> - como cada componente tiene una responsabilidad bien definida, se facilita el mantenimiento del sistema y reduce el acoplamiento entre componentes.</p>
+<p><strong>Separación clara de responsabilidades</strong> - como cada componente tiene una responsabilidad bien definida, se facilita el mantenimiento del sistema y reduce el acoplamiento entre componentes..</p>
 </li>
 <li>
-<p><strong>Escalabilidad</strong>, permitiendo desplegar y escalar cada microservicio de manera independiente, lo que permitirá por ejemplo crear varias instancias del juego.</p>
+<p><strong>Escalabilidad</strong>, permitiendo desplegar y escalar cada microservicio de manera independiente, lo que permitira por ejemplo crear varias instancias del juego</p>
 </li>
 <li>
 <p><strong>Flexibilidad tecnológica</strong>, ya que cada servicio puede desarrollarse con el lenguaje más adecuado según sus necesidades.</p>
@@ -1272,7 +1206,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <p><strong>Extensibilidad</strong>, permitiendo añadir nuevas funcionalidades o variantes del juego sin rediseñar el sistema completo.</p>
 </li>
 <li>
-<p><strong>Despliegue reproducible</strong>, ya que el uso de contenedores Docker permite ejecutar el sistema en diferentes entornos de forma consistente.</p>
+<p><strong>Despliegue reproducible</strong> , ya que el uso de contenedores Docker permite ejecutar el sistema en diferentes entornos de forma consistente.</p>
 </li>
 </ul>
 </div>
@@ -1281,7 +1215,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <div class="sect2">
 <h3 id="_nivel_3_interfaces_entre_componentes">5.3. Nivel 3: Interfaces entre componentes</h3>
 <div class="paragraph">
-<p>Los componentes del sistema se comunican entre sí mediante las interfaces basadas en servicios web y mensajes, que también contribuyen al desacoplamiento y la separación de responsabilidades.</p>
+<p>Los  componentes del sistema se comunican entre sí mediante las interfaces basadas en servicios web y mensajes, que también contribuyen al desacoplamiento y la separación de responabilidades.</p>
 </div>
 <div class="paragraph">
 <p>Las principales interfaces del sistema son las siguientes.</p>
@@ -1333,7 +1267,7 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 <p>POST /ranking/wins/strategy - recuperación del ranking por partidas ganadas por estrategia (vs bot propio)</p>
 </li>
 <li>
-<p>Existen también métodos que no se podrán acceder por usuarios normales, y existen solo para realización de pruebas y tests de la aplicación</p>
+<p>Existen también métodos que no se podrán acceder por usuarios normals, y existen solo para realización de pruebas y tests de la aplicación</p>
 </li>
 </ul>
 </div>
@@ -1344,60 +1278,13 @@ Así, lograr una arquitectura clara y evitar que el cliente deba controlar los a
 </div>
 </div>
 <div class="sect3">
-<h4 id="_interfaz_frontend_microservicio_rooms">5.3.2. Interfaz Frontend – Microservicio Rooms</h4>
+<h4 id="_interfaz_frontend_microservicio_gamey">5.3.2. Interfaz Frontend – Microservicio GameY</h4>
 <div class="paragraph">
-<p>El frontend se comunica con el microservicio Rooms a través de WebSocket (Socket.io) para gestionar las partidas multijugador en tiempo real. Los principales eventos son:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><code>create-room</code> – el jugador crea una sala indicando nombre de usuario, dificultad y si el temporizador está activo. El servidor responde con <code>room-created</code> (código de sala e identificador de partida).</p>
-</li>
-<li>
-<p><code>join-room</code> – el segundo jugador se une a una sala existente con su código. El servidor responde con <code>room-joined</code> y emite <code>game-start</code> a ambos jugadores para iniciar la partida.</p>
-</li>
-<li>
-<p><code>make-move</code> – un jugador envía su movimiento. El servidor lo retransmite a GameY y responde con <code>move-made</code> al resto de la sala.</p>
-</li>
-<li>
-<p><code>undo-move</code> – solicita deshacer los dos últimos movimientos. El servidor responde con el nuevo estado del tablero.</p>
-</li>
-<li>
-<p><code>timer-expired</code> – notifica que el temporizador del turno activo ha expirado. El servidor emite <code>turn-skipped</code> indicando el siguiente jugador.</p>
-</li>
-<li>
-<p><code>abandon-game</code> – un jugador abandona la partida. El servidor emite <code>player-disconnected</code> y elimina la sala.</p>
-</li>
-</ul>
+<p>El frontend interactúa con el microservicio GameY para gestionar el desarrollo de las partidas gracias a la API REST . La información de la partida se representa mediante la notación YEN, que describe el tamaño del tablero, el turno actual y la disposición de las piezas.</p>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_interfaz_rooms_microservicio_gamey">5.3.3. Interfaz Rooms – Microservicio GameY</h4>
-<div class="paragraph">
-<p>El microservicio Rooms se comunica con GameY mediante HTTP REST para delegar en él toda la lógica de juego. Esta interfaz es interna entre microservicios y no es accesible directamente desde el frontend. Las operaciones principales son:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p>POST /v1/games – crea una nueva partida en GameY con el tamaño de tablero correspondiente a la dificultad elegida. Devuelve el identificador de partida que Rooms asocia a la sala.</p>
-</li>
-<li>
-<p>POST /v1/games/{gameId}/move – envía el movimiento de un jugador (coordenadas y índice de jugador) y recibe el nuevo estado del tablero y el estado de la partida.</p>
-</li>
-<li>
-<p>POST /v1/games/{gameId}/undo – deshace el último movimiento registrado en GameY. Rooms lo invoca dos veces seguidas para que ambos jugadores recuperen su turno anterior.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_interfaz_frontend_microservicio_gamey">5.3.4. Interfaz Frontend – Microservicio GameY</h4>
-<div class="paragraph">
-<p>El frontend interactúa con el microservicio GameY para gestionar el desarrollo de las partidas en modo un jugador gracias a la API REST. La información de la partida se representa mediante la notación YEN, que describe el tamaño del tablero, el turno actual y la disposición de las piezas. En el modo multijugador, el frontend no se comunica directamente con GameY: es el microservicio Rooms quien actúa como intermediario.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_interfaz_de_acceso_a_datos">5.3.5. Interfaz de acceso a datos</h4>
+<h4 id="_interfaz_de_acceso_a_datos">5.3.3. Interfaz de acceso a datos</h4>
 <div class="paragraph">
 <p>Los microservicios del sistema acceden a la base de datos de MongoDB para almacenar y recuperar la información persistente. Entre las principales operaciones destacan el almacenamiento de usuarios ya registrados, el registro de las partidas jugadas, la consulta de estadísticas del juego o del ranking, &#8230;&#8203;</p>
 </div>
@@ -1434,9 +1321,6 @@ image::gamey_uml.png[gamey_uml]</p>
 <p><strong>Users Service</strong>: microservicio Node.js en el puerto 3000.</p>
 </li>
 <li>
-<p><strong>Rooms Service</strong>: microservicio Node.js en el puerto 3001, comunicación via WebSocket (Socket.io).</p>
-</li>
-<li>
 <p><strong>GameY Service</strong>: microservicio Rust en el puerto 4000.</p>
 </li>
 <li>
@@ -1467,18 +1351,7 @@ image::gamey_uml.png[gamey_uml]</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_flujo_de_una_partida_multijugador">6.3. Flujo de una partida multijugador</h3>
-<div class="paragraph">
-<p>Para iniciar una partida multijugador, el primer jugador crea una sala a través del Rooms Service, que solicita a GameY la creación de una nueva partida y devuelve un código de sala al jugador. El segundo jugador se une con ese código y, en ese momento, el servidor notifica a ambos que la partida puede comenzar. Cada movimiento es recibido por Rooms, retransmitido a GameY y el nuevo estado del tablero se reenvía a los dos jugadores. Si un jugador abandona o pierde la conexión, el otro recibe una notificación inmediata.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/diagramaFlujoPartidaMultijugador.png" alt="diagramaFlujoPartidaMultijugador">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_consulta_de_estadísticas_y_ranking">6.4. Consulta de estadísticas y ranking</h3>
+<h3 id="_consulta_de_estadísticas_y_ranking">6.3. Consulta de estadísticas y ranking</h3>
 <div class="paragraph">
 <p>Las estadísticas y el ranking se obtienen directamente de MongoDB a través del microservicio de usuarios. No interviene GameY en este flujo.</p>
 </div>
@@ -1525,11 +1398,6 @@ image::gamey_uml.png[gamey_uml]</p>
 <td class="tableblock halign-left valign-top"><p class="tableblock">users (Node.js / Express)</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">3000</p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Microservicio de gestión de usuarios y estadísticas.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock">rooms (Node.js / Socket.io)</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3001</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Microservicio de gestión de salas multijugador. Comunicación con el frontend via WebSocket y con GameY via HTTP REST.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock">gamey (Rust / Axum)</p></td>
@@ -1703,62 +1571,7 @@ image::gamey_uml.png[gamey_uml]</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_monitorización">8.5. Monitorización</h3>
-<div class="paragraph">
-<p>El sistema incorpora una pila de monitorización basada en <strong>Prometheus</strong> y <strong>Grafana</strong> que permite observar el estado de los microservicios en tiempo real sin necesidad de acceder a los logs directamente.</p>
-</div>
-<div class="sect3">
-<h4 id="_recopilación_de_métricas_con_prometheus">8.5.1. Recopilación de métricas con Prometheus</h4>
-<div class="paragraph">
-<p>Prometheus recopila métricas de los microservicios backend mediante scraping del endpoint <code>/metrics</code> de cada uno, con un intervalo de 5 segundos. Los servicios monitorizados son:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>users</strong> (puerto 3000) — métricas HTTP del servicio de usuarios.</p>
-</li>
-<li>
-<p><strong>rooms</strong> (puerto 3001) — métricas del servicio de salas multijugador, incluyendo el número de salas creadas y el número de salas activas en cada momento.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>La configuración de Prometheus está definida en <code>users/monitoring/prometheus/prometheus.yml</code> y se monta en el contenedor mediante un volumen Docker.</p>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_visualización_con_grafana">8.5.2. Visualización con Grafana</h4>
-<div class="paragraph">
-<p>Grafana se conecta a Prometheus como fuente de datos y expone un dashboard predefinido llamado <strong>Monitorización del Sistema</strong>, provisionado automáticamente al arrancar el contenedor a partir de los ficheros en <code>users/monitoring/grafana/provisioning/</code>.</p>
-</div>
-<div class="paragraph">
-<p>El dashboard se organiza en dos secciones:</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>Servicio de Usuarios:</strong> muestra peticiones por minuto, tiempo de respuesta, distribución de respuestas por tipo de código HTTP y tráfico desglosado por endpoint.</p>
-</li>
-<li>
-<p><strong>Servicio de Salas (Rooms):</strong> muestra el ritmo de creación de salas a lo largo del tiempo y el número de salas activas en cada instante.</p>
-</li>
-</ul>
-</div>
-<div class="paragraph">
-<p>Grafana es accesible en el puerto 9091 tanto en local como en producción.</p>
-</div>
-<div class="paragraph">
-<p>En la imagen se puede observar el dashboard en funcionamiento durante una sesión de prueba. En la sección de usuarios se aprecia el pico de peticiones por minuto, los tiempos de respuesta (p90, mediana y media), la distribución de respuestas correctas (2xx) frente a errores de cliente (4xx) y el tráfico desglosado por endpoint. En la sección de salas se puede ver cómo el número de salas activas sube y baja conforme los jugadores crean y terminan partidas, y el ritmo de creación de salas a lo largo del tiempo.</p>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/grafana.png" alt="dashboard grafana monitorización del sistema">
-</div>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_librerías_y_tecnologías_utilizadas">8.6. Librerías y tecnologías utilizadas</h3>
+<h3 id="_librerías_y_tecnologías_utilizadas">8.5. Librerías y tecnologías utilizadas</h3>
 <div class="paragraph">
 <p>El proyecto usa librerías y herramientas distintas según la parte del sistema. Las más destacadas son las siguientes:</p>
 </div>
@@ -1785,12 +1598,6 @@ image::gamey_uml.png[gamey_uml]</p>
 <li>
 <p><strong>OpenAPI:</strong> para documentar los contratos de los servicios.</p>
 </li>
-<li>
-<p><strong>Prometheus:</strong> para la recopilación de métricas de los microservicios mediante scraping periódico.</p>
-</li>
-<li>
-<p><strong>Grafana:</strong> para la visualización de métricas en dashboards provisionados automáticamente.</p>
-</li>
 </ul>
 </div>
 <div class="paragraph">
@@ -1798,7 +1605,7 @@ image::gamey_uml.png[gamey_uml]</p>
 </div>
 </div>
 <div class="sect2">
-<h3 id="_aspectos_del_desarrollo">8.7. Aspectos del desarrollo</h3>
+<h3 id="_aspectos_del_desarrollo">8.6. Aspectos del desarrollo</h3>
 <div class="paragraph">
 <p>Además de lo estrictamente funcional, se han desarrollado otros aspectos que de gran importancia para el proyecto:</p>
 </div>
@@ -1818,9 +1625,6 @@ image::gamey_uml.png[gamey_uml]</p>
 </li>
 <li>
 <p><strong>Detectabilidad de fallos:</strong> la separación entre servicios y la personalización de errores facilita localizar errores y analizar fallos por capas.</p>
-</li>
-<li>
-<p><strong>Observabilidad:</strong> la integración de Prometheus y Grafana permite detectar anomalías de rendimiento y comportamiento sin necesidad de intervención manual sobre los servidores.</p>
 </li>
 </ul>
 </div>
@@ -2178,7 +1982,7 @@ Para ello, separamos los test por funcionalidad en clases <strong>users-service-
 </div>
 <div class="imageblock">
 <div class="content">
-<img src="./images/test_users_stats.PNG" alt="test de statistics de users">
+<img src="./images/test_users_statistics.png" alt="test de statistics de users">
 </div>
 </div>
 <div class="ulist">
@@ -2270,101 +2074,14 @@ Para estas pruebas, separamos los test por funcionalidad en clases <strong>Webap
 </div>
 </div>
 <div class="sect2">
-<h3 id="_test_del_microservicio_gamey">12.3. Test del microservicio GameY</h3>
-<div class="paragraph">
-<p>El microservicio GameY, al estar implementado en Rust, utiliza el framework de testing nativo del lenguaje (<code>cargo test</code>). Los tests están organizados en seis ficheros dentro de la carpeta <code>/gamey/tests/</code>, cada uno orientado a una capa o responsabilidad distinta del sistema.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>core_tests.rs — Tests del núcleo del juego:</strong> prueban directamente la lógica principal a través de la API pública de la librería. Cubren la inicialización del tablero, el flujo de movimientos y alternancia de turnos, las condiciones de victoria (conectar los tres lados), el manejo de errores como celdas ocupadas o turno incorrecto, las acciones especiales de resignación y swap, la serialización y deserialización en notación YEN, el guardado y carga de partidas en ficheros <code>.yen</code>, el sistema de coordenadas tridimensionales y el renderizado del tablero en texto.</p>
-</li>
-<li>
-<p><strong>bot_unit_tests.rs — Tests unitarios de los bots:</strong> verifican el comportamiento de cada estrategia de bot de forma aislada. Para cada bot disponible se comprueba que su nombre es el esperado, que devuelve un movimiento válido cuando hay celdas libres, que las coordenadas elegidas corresponden a una celda existente, y que devuelve <code>None</code> cuando el tablero está completo.</p>
-</li>
-<li>
-<p><strong>game_service_tests.rs — Tests de la capa de servicio:</strong> prueban el ciclo de vida de las partidas en memoria. Incluyen el flujo básico de crear, mover, listar, deshacer y eliminar una partida, la consulta del estado tras una resignación, y el manejo de errores como partida no encontrada, celda ocupada o deshacer sin historial suficiente.</p>
-</li>
-<li>
-<p><strong>game_controller_tests.rs — Tests de los controladores HTTP:</strong> prueban los endpoints REST del servidor Axum usando un router de test sin necesidad de levantar un servidor real. Verifican el flujo completo: creación de partida, listado, consulta de estado, realización de movimiento, deshacer y eliminación.</p>
-</li>
-<li>
-<p><strong>bot_server_tests.rs — Tests de integración del servidor de bots:</strong> prueban el servidor HTTP dedicado al cálculo de movimientos, comprobando los endpoints disponibles, el manejo de parámetros de posición codificados en la URL y la correcta devolución de movimientos.</p>
-</li>
-<li>
-<p><strong>cli_tests.rs — Tests de la interfaz de línea de comandos:</strong> prueban el parsing de comandos de la CLI del motor de juego, verificando que índices válidos, índices fuera de rango, comandos especiales y entradas desconocidas producen el resultado correcto.</p>
-</li>
-</ul>
-</div>
-<div class="imageblock">
-<div class="content">
-<img src="./images/testGamey.png" alt="resultado tests gamey">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_tests_end_to_end_e2e">12.4. Tests End-to-End (E2E)</h3>
-<div class="paragraph">
-<p>Los tests E2E validan el comportamiento de la aplicación completa desde el punto de vista del usuario, simulando interacciones reales en el navegador. Se utilizan <strong>Playwright</strong> para la automatización del navegador y <strong>Cucumber</strong> para definir los escenarios en formato Gherkin (BDD). Los tests están organizados en tres ficheros de features dentro de <code>/webapp/test/e2e/features/</code>.</p>
-</div>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>register-logout-login.feature — Registro, cierre de sesión e inicio de sesión:</strong> valida el flujo básico de autenticación de un usuario nuevo de principio a fin. Un usuario se registra con credenciales nuevas, comprueba que llega a la pantalla principal, cierra sesión, vuelve a la pantalla de inicio de sesión e inicia sesión con las mismas credenciales, verificando que regresa a la pantalla principal.</p>
-</li>
-<li>
-<p><strong>logout-stats.feature — Cierre de sesión desde las pantallas de estadísticas:</strong> verifica que el botón de cierre de sesión funciona correctamente desde cualquiera de las pantallas de estadísticas. Cubre tres escenarios: cierre desde el menú principal de estadísticas, desde la pantalla de todas las estadísticas y desde la pantalla de estadísticas filtradas. En los tres casos se verifica que el usuario es redirigido a la página de inicio de sesión.</p>
-</li>
-<li>
-<p><strong>password-errors.feature — Validación de contraseña en el registro:</strong> comprueba que el formulario de registro muestra el mensaje de error correcto cuando la contraseña no cumple los requisitos. Utiliza un <code>Scenario Outline</code> con una tabla de ejemplos para cubrir los cuatro casos de validación:</p>
-</li>
-</ul>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 66.6667%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Contraseña introducida</th>
-<th class="tableblock halign-left valign-top">Mensaje de error esperado</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>abc</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">La contraseña debe tener 5 o más caracteres.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>abcde</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">La contraseña debe contener al menos una mayúscula.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>ABCDE</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">La contraseña debe contener al menos una minúscula.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>abcDE</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">La contraseña debe contener al menos un número.</p></td>
-</tr>
-</tbody>
-</table>
-<div class="imageblock">
-<div class="content">
-<img src="./images/teste2e.png" alt="resultado tests e2e">
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_test_de_carga">12.5. Test de carga</h3>
+<h3 id="_test_de_carga">12.3. Test de carga</h3>
 <div class="paragraph">
 <p>Estos test analizan el rendimiento de la aplicación y su comportamiento respecto a la ejecución.
 Simularán ciclos de ejecución, y se verá como responde la aplicación dados cierto parámetros en relación a ciertos límites.
 Todo ello, la herramienta, las simulaciones o escenarios, el análisis de resultados y conclusiones se describirán más adelante.</p>
 </div>
 <div class="sect3">
-<h4 id="_diseño_de_test">12.5.1. Diseño de test</h4>
+<h4 id="_diseño_de_test">12.3.1. Diseño de test</h4>
 <div class="paragraph">
 <p>El siguiente apartado se corresponde con como fueron diseñados los test de carga.</p>
 </div>
@@ -2432,7 +2149,7 @@ Como la opción de borrado no está disponible para los usuarios, si no que es e
 </table>
 </div>
 <div class="sect3">
-<h4 id="_herramienta">12.5.2. Herramienta</h4>
+<h4 id="_herramienta">12.3.2. Herramienta</h4>
 <div class="paragraph">
 <p>La herramienta que hemos usado para este análisis de carga es <strong>Gatling</strong>, framework ofrecido por la asignatura para realizar estas pruebas de rendimiento.
 Para estos test se creó un proyecto a parte, indirectamente enlazado con este proyecto de forma local.
@@ -2444,7 +2161,7 @@ Estos interfaces se separan en "index.html", que realiza un análisis general de
 </div>
 </div>
 <div class="sect3">
-<h4 id="_resultados">12.5.3. Resultados</h4>
+<h4 id="_resultados">12.3.3. Resultados</h4>
 <div class="ulist">
 <ul>
 <li>
@@ -2631,7 +2348,7 @@ Estos interfaces se separan en "index.html", que realiza un análisis general de
 </div>
 </div>
 <div class="sect3">
-<h4 id="_conclusiones">12.5.4. Conclusiones</h4>
+<h4 id="_conclusiones">12.3.4. Conclusiones</h4>
 <div class="paragraph">
 <p>Dados los resultados anteriores, podemos obtener varias conclusiones importantes.</p>
 </div>
@@ -2690,64 +2407,24 @@ Estos interfaces se separan en "index.html", que realiza un análisis general de
 <td class="tableblock halign-left valign-top"><p class="tableblock">Algoritmo complejo usado en los bots de nuestra aplicación que evalúa las decisiones (o movimientos) del usuario mediante expresiones matemáticas complejas y costosas para elegir sus movimientos y poder ganar.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>BDD (Behavior Driven Development)</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Metodología de desarrollo orientada al comportamiento que define los requisitos del sistema como escenarios legibles en lenguaje natural mediante el formato Gherkin. Es la base de los tests E2E con Cucumber y Playwright.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Bot</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Oponente artificial controlado por el motor de juego (GameY). Implementa distintas estrategias y niveles de dificultad para simular el comportamiento de un jugador humano.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Docker Compose</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Herramienta que permite definir y orquestar múltiples contenedores Docker a partir de un único fichero de configuración (<code>docker-compose.yml</code>), facilitando el arranque coordinado de todos los servicios del sistema.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Entorno de ejecución (NodeJS)</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Es una plataforma que facilita la ejecución de programas directamente desde el sistema operativo, y que funcione de forma escalable y concurrente.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Grafana</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Plataforma de visualización de métricas que se conecta a Prometheus como fuente de datos y muestra la información en dashboards configurables en tiempo real.</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Microservicio</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Parte de una aplicación (servicio) que maneja esa parte y se comunica con el resto para crear un producto mayor sin necesidad de que esté entero en un solo lenguaje.</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Notación YEN</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Formato propio del proyecto para representar de forma compacta el estado del tablero de juego en un instante dado, incluyendo el tamaño del tablero, el turno actual y la disposición de las piezas de cada jugador.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Prometheus</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Sistema de monitorización y alertas de código abierto que recopila métricas de los microservicios mediante scraping periódico del endpoint <code>/metrics</code> de cada servicio.</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Pruebas de carga</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Pruebas no funcionales para evaluar el comportamiento de la app con una mayor cantidad de usuarios o transacciones actuando al mismo tiempo. Pretenden verificar el rendimiento en condiciones normales (tiempos de respuesta, recursos, &#8230;&#8203;)</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Sala (Room)</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Espacio virtual que agrupa a dos jugadores para disputar una partida multijugador. Cada sala se identifica con un código único de seis caracteres y su estado se mantiene en memoria durante el transcurso de la partida.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Scraping</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Proceso mediante el cual Prometheus consulta periódicamente el endpoint <code>/metrics</code> de cada microservicio para recopilar sus métricas de rendimiento y estado.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Socket.io</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Librería JavaScript que implementa comunicación en tiempo real sobre WebSocket, utilizada por el microservicio Rooms para gestionar la comunicación bidireccional con el frontend durante las partidas multijugador.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Pruebas no funcionales para evaluar el comportamiento de la app con una mayor cantidad de usuarios o transacciones actuando al mismo tiempo. Pretenden verificar el rendimento en condiciones normales (tiempos de respuesta, recursos, &#8230;&#8203;)</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Test E2E</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Tipo de test de extremo a extremo, que pretende abarcar todos los procesos de la aplicación, considerando todos los componentes e iteraciones. Por tanto, son las pruebas que verifican que todo el flujo de la app sea correcto.</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">Tipo de test de extremo a extremo, que pretende abarcar todos los procesos de la aplicación, considerando todos los componentes e iteracciones. Por tanto, son las pruebas que verifican que todo el flujo de la app sea correcto</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>WebApp</strong></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">Aplicación ejecutada desde algún navegador.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>WebSocket</strong></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">Protocolo de comunicación que establece un canal bidireccional y persistente entre cliente y servidor sobre una única conexión TCP, permitiendo el intercambio de mensajes en tiempo real sin necesidad de realizar peticiones HTTP repetidas.</p></td>
 </tr>
 </tbody>
 </table>
@@ -2756,7 +2433,7 @@ Estos interfaces se separan en "index.html", que realiza un análisis general de
 </div>
 <div id="footer">
 <div id="footer-text">
-Last updated 2026-04-27 11:17:03 +0200
+Last updated 2026-04-24 00:28:12 +0200
 </div>
 </div>
 </body>
