@@ -45,7 +45,7 @@ describe('Home', () => {
      * El test renderiza el componente Home con el prop username establecido en "sara", y verifica que se muestre el mensaje de bienvenida "Bienvenido a tu menú principal, sara" en la pantalla.
      */
     test('mensaje de bienvenida adecuado', () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
     })
 
@@ -54,7 +54,7 @@ describe('Home', () => {
      * El test renderiza el componente Home con el prop username establecido en "sara", y verifica que se muestren los botones "Mis estadísticas", "Ranking" y "Cerrar sesión" en la pantalla.
      */
     test('se muestran los botones del menú principal', () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         expect(screen.getByRole('button', { name: /mis estadísticas/i })).toBeInTheDocument()
         expect(screen.getByRole('button', { name: /ranking/i })).toBeInTheDocument()
         //expect(screen.getByRole('button', { name: /empezar partida/i })).toBeInTheDocument()
@@ -65,7 +65,7 @@ describe('Home', () => {
      * El test renderiza el componente Home con el prop username establecido en "sara", y verifica que se muestre el botón "Empezar partida" para iniciar una partida contra el bot en la pantalla.
      */
     test('se muestra el botón de empezar partida contra bot', () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         expect(screen.getByRole('button', { name: /empezar partida$/i })).toBeInTheDocument()
     })
 
@@ -74,7 +74,7 @@ describe('Home', () => {
      * El test renderiza el componente Home con el prop username establecido en "sara", y verifica que se muestre el botón "Empezar partida 2 jugadores" para iniciar una partida contra otro jugador en la pantalla.
      */
     test('se muestra el botón de empezar partida 2 jugadores', () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         expect(screen.getByRole('button', { name: /empezar partida 2 jugadores/i })).toBeInTheDocument()
     })
 
@@ -83,7 +83,7 @@ describe('Home', () => {
      * El test simula un usuario pulsando el botón de empezar partida 2 jugadores sin haber escrito nada en el campo de nombre para jugador 2, y verifica que se muestre el mensaje de error "El nombre del jugador 2 no puede estar vacío" en la pantalla.
      */
     test('se muestra error si se intenta empezar partida 2 jugadores sin nombre para jugador 2', async () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         const user = userEvent.setup()
         await waitFor(async () => {
             await user.click(screen.getByRole('button', { name: /empezar partida 2 jugadores/i }))
@@ -97,7 +97,7 @@ describe('Home', () => {
      */
     test('no se muestra error si el jugador 2 tiene un nombre', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) } as Response)
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         await userEvent.type(screen.getByPlaceholderText(/Nombre del jugador 2/i), 'iyan')
         await userEvent.click(screen.getByRole('button', { name: /empezar partida 2 jugadores/i }))
         expect(screen.queryByText(/El nombre del jugador 2 no puede estar vacío/i)).not.toBeInTheDocument()
@@ -108,7 +108,7 @@ describe('Home', () => {
      * El test simula un usuario pulsando el botón de Mis estadísticas, y verifica que se muestre el mensaje "Eliga que estadísticas desea ver" presente en la pantalla de selección de estadísticas.
      */
     test('se navega a la pantalla de estadísticas al pulsar el botón de Mis estadísticas', async () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         await userEvent.click(screen.getByRole('button', { name: /Mis estadísticas/i }))
         // GameStats se renderiza con el username
         await waitFor(() => {
@@ -122,7 +122,7 @@ describe('Home', () => {
      */
     test('se navega a la pantalla de ranking al pulsar el botón de Ranking', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ ranking: [] }) } as Response)
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         await userEvent.click(screen.getByRole('button', { name: /Ranking/i }))
         await waitFor(() => {
             expect(screen.queryByText(/Ranking global/i)).toBeInTheDocument()
@@ -135,7 +135,7 @@ describe('Home', () => {
      */
     test('se llama a /initmatch al pulsar el botón de empezar partida contra bot', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) } as Response)
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         await userEvent.click(screen.getByRole('button', { name: /Empezar partida$/i }))
         await waitFor(() => {
             expect(global.fetch).toHaveBeenCalledWith(
@@ -150,7 +150,7 @@ describe('Home', () => {
      * El test simula un usuario seleccionando la opción "RANDOM" en el desplegable de selección de estrategia, y verifica que el valor seleccionado en el desplegable se actualice a "RANDOM".
      */
     test('selecciona estrategia actualiza selección', async () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         const select = screen.getByRole('combobox')
         await userEvent.selectOptions(select, 'RANDOM')
         expect((select as HTMLSelectElement).value).toBe('RANDOM')
@@ -163,7 +163,7 @@ describe('Home', () => {
      * verificando que está activo por defecto, se desactiva al primer clic y se reactiva al segundo.
      */
     test('el toggle de temporizador de 2 jugadores cambia de estado', async () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         const user = userEvent.setup()
         await waitFor(async () => {
             const pvpTimerToggle = document.getElementById('timer-enabled-2p') as HTMLElement
@@ -184,7 +184,7 @@ describe('Home', () => {
  * aparecer marcado sin necesidad de interacción del usuario.
  */
     test('el toggle switch de temporizador de 2 jugadores está activado por defecto', () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         expect(screen.getByLabelText(/partida con temporizador activo/i)).toBeChecked()
     })
 
@@ -195,20 +195,20 @@ describe('Home', () => {
      * verificando que el menú principal desaparece.
      */
     test('navega a la pantalla de crear sala online al pulsar Crear sala', async () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         await userEvent.click(screen.getByRole('button', { name: /Crear sala/i }))
         expect(screen.getByText(/Crear sala online/i)).toBeInTheDocument()
     })
 
     test('navega a la pantalla de unirse a sala online al pulsar Unirse a sala', async () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         await userEvent.click(screen.getByRole('button', { name: /Unirse a sala/i }))
         expect(screen.getByText(/Unirse a sala online/i)).toBeInTheDocument()
     })
 
     test('inicia partida online con timerEnabled y muestra el temporizador', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ state: { layout: '0/00/000' }, status: { kind: 'Ongoing', next_player: 0 } }) })
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         await userEvent.click(screen.getByRole('button', { name: /Crear sala/i }))
         act(() => socketEventHandlers['room-created']?.({ code: 'XYZ999', gameId: 'g1', playerIndex: 0 }))
         act(() => socketEventHandlers['game-start']?.({
@@ -224,7 +224,7 @@ describe('Home', () => {
     })
 
     test('inicia partida 2 jugadores con el temporizador desactivado', async () => {
-        render(<Home username="sara" />)
+        renderWithProviders(<Home username="sara" />)
         const user = userEvent.setup()
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ message: 'ok' }) })
         await waitFor(async () => {
