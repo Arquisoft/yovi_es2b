@@ -173,7 +173,7 @@ describe('Ranking', () => {
         renderWithProviders(<Ranking username="sara" />)
         await user.click(screen.getByRole('button', { name: /Volver al menú principal/i }))
         await waitFor(() => {
-            expect(screen.queryByText('Ranking global')).not.toBeInTheDocument()
+            expect(screen.queryByText(/Tu posición en el ranking es/i)).not.toBeInTheDocument()
             expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
 
         })
@@ -326,7 +326,7 @@ describe('Ranking', () => {
         renderWithProviders(<RankingFiltered username="sara" />)
         await user.click(screen.getByRole('button', { name: /Volver al menú principal/i }))
         await waitFor(() => {
-            expect(screen.queryByText('Ranking global')).not.toBeInTheDocument()
+            expect(screen.queryByText(/Tu posición en el ranking es/i)).not.toBeInTheDocument()
             expect(screen.getByText(/Bienvenido a tu menú principal, sara/i)).toBeInTheDocument()
         })
     })

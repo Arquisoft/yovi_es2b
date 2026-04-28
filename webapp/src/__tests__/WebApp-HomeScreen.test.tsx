@@ -75,7 +75,7 @@ describe('Home', () => {
      */
     test('se muestra el botón de empezar partida 2 jugadores', () => {
         renderWithProviders(<Home username="sara" />)
-        expect(screen.getByRole('button', { name: /Juega contra otro jugador local/i })).toBeInTheDocument()
+        expect(screen.getByRole('button', { name: /Empezar partida local/i })).toBeInTheDocument()
     })
 
     /**
@@ -86,7 +86,7 @@ describe('Home', () => {
         renderWithProviders(<Home username="sara" />)
         const user = userEvent.setup()
         await waitFor(async () => {
-            await user.click(screen.getByRole('button', { name: /Juega contra otro jugador local/i }))
+            await user.click(screen.getByRole('button', { name: /Empezar partida local/i }))
             expect(screen.getByText(/El nombre del jugador 2 no puede estar vacío/i)).toBeInTheDocument()
         })
     })
@@ -99,7 +99,7 @@ describe('Home', () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) } as Response)
         renderWithProviders(<Home username="sara" />)
         await userEvent.type(screen.getByPlaceholderText(/Nombre del jugador 2/i), 'iyan')
-        await userEvent.click(screen.getByRole('button', { name: /Juega contra otro jugador local/i }))
+        await userEvent.click(screen.getByRole('button', { name: /Empezar partida local/i }))
         expect(screen.queryByText(/El nombre del jugador 2 no puede estar vacío/i)).not.toBeInTheDocument()
     })
 
@@ -196,7 +196,7 @@ describe('Home', () => {
      */
     test('navega a la pantalla de crear sala online al pulsar Crear sala', async () => {
         renderWithProviders(<Home username="sara" />)
-        await userEvent.click(screen.getByRole('button', { name: /Crear sala/i }))
+        await userEvent.click(screen.getByRole('button', { name: /Crear una partida/i }))
         expect(screen.getByText(/Crear sala online/i)).toBeInTheDocument()
     })
 
@@ -209,7 +209,7 @@ describe('Home', () => {
     test('inicia partida online con timerEnabled y muestra el temporizador', async () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ state: { layout: '0/00/000' }, status: { kind: 'Ongoing', next_player: 0 } }) })
         renderWithProviders(<Home username="sara" />)
-        await userEvent.click(screen.getByRole('button', { name: /Crear sala/i }))
+        await userEvent.click(screen.getByRole('button', { name: /Crear una partida/i }))
         act(() => socketEventHandlers['room-created']?.({ code: 'XYZ999', gameId: 'g1', playerIndex: 0 }))
         act(() => socketEventHandlers['game-start']?.({
             gameId: 'g1',
@@ -229,10 +229,10 @@ describe('Home', () => {
         global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({ message: 'ok' }) })
         await waitFor(async () => {
             await user.click(screen.getByLabelText(/Temporizador/i))
-            expect(screen.getByLabelText(/Partida con temporizador activo/i)).not.toBeChecked()
+            expect(screen.getByLabelText(/Activar temporizador/i)).not.toBeChecked()
 
             await user.type(screen.getByLabelText(/nombre del jugador 2/i), 'iyan')
-            await user.click(screen.getByRole('button', { name: /Juega contra otro jugador local/i }))
+            await user.click(screen.getByRole('button', { name: /Empezar partida local/i }))
             expect(screen.queryByText(/Bienvenido a tu menú principal/i)).not.toBeInTheDocument()
         })
     })

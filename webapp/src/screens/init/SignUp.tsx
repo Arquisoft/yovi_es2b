@@ -58,10 +58,10 @@ const SignUp: React.FC = () => {
     return (
         <div className="signup-screen">
             <img src={yoviLogo} alt={t('common.logoAlt')} className="signup-screen__logo" />
-            <h1>{t('signup.welcome')}</h1>
-            
+
             <form onSubmit={handleLogin} className="signup-form">
                 <h1>{t('signup.welcome')}</h1>
+                <p>{t('signup.subtitle')}</p>
                 <div className="form-group">
                     <label htmlFor="username">{t('signup.userlabel')}</label>
                     <input type="text" id="username" value={username} onChange={(e) => setUsername(e.target.value)} className="form-input"/>
