@@ -9,9 +9,7 @@ export function renderWithProviders(ui: ReactNode) {
 
   return render(
     <LanguageProvider>
-      <Theme>
         {ui}
-      </Theme>
     </LanguageProvider>
   )
 }
